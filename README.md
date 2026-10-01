@@ -123,6 +123,61 @@ The library covers the resources an RFID and materials project needs, read only:
 | Contacts | `async_list_contacts` | `async_iter_contacts` | `async_get_contact` |
 | Contact persons | `async_list_contact_persons` | `async_iter_contact_persons` | `async_get_contact_person` |
 | Contact persons of a contact | `async_list_contact_persons_of_contact` | `async_iter_contact_persons_of_contact` | |
+| Tasks | `async_list_tasks` | `async_iter_tasks` | `async_get_tasks` |
+| Subtasks | `async_list_subtasks` | `async_iter_subtasks` | `async_get_subtasks` |
+| Task assignments | `async_list_task_assignments` | `async_iter_task_assignments` | `async_get_task_assignments` |
+| Task statuses | `async_list_task_statuses` | `async_iter_task_statuses` | `async_get_task_statuses` |
+| Files | `async_list_files` | `async_iter_files` | `async_get_files` |
+| File folders | `async_list_file_folders` | `async_iter_file_folders` | `async_get_file_folders` |
+| Subtasks of a task | `async_list_subtasks_of_task` | `async_iter_subtasks_of_task` |  |
+| Task assignments of a task | `async_list_task_assignments_of_task` | `async_iter_task_assignments_of_task` |  |
+| Files of a task | `async_list_files_of_task` | `async_iter_files_of_task` |  |
+| File folders of a task | `async_list_file_folders_of_task` | `async_iter_file_folders_of_task` |  |
+| Tasks of a contact person | `async_list_tasks_of_contact_person` | `async_iter_tasks_of_contact_person` |  |
+| Tasks of a contact | `async_list_tasks_of_contact` | `async_iter_tasks_of_contact` |  |
+| Tasks of a crew member | `async_list_tasks_of_crew` | `async_iter_tasks_of_crew` |  |
+| Tasks of a material | `async_list_tasks_of_equipment` | `async_iter_tasks_of_equipment` |  |
+| Tasks of an invoice | `async_list_tasks_of_invoice` | `async_iter_tasks_of_invoice` |  |
+| Tasks of a project | `async_list_tasks_of_project` | `async_iter_tasks_of_project` |  |
+| Tasks of a purchase order | `async_list_tasks_of_purchase_order` | `async_iter_tasks_of_purchase_order` |  |
+| Tasks of a quote | `async_list_tasks_of_quote` | `async_iter_tasks_of_quote` |  |
+| Tasks of a repair | `async_list_tasks_of_repair` | `async_iter_tasks_of_repair` |  |
+| Tasks of a serial number | `async_list_tasks_of_serial_number` | `async_iter_tasks_of_serial_number` |  |
+| Tasks of a subrental | `async_list_tasks_of_subrental` | `async_iter_tasks_of_subrental` |  |
+| Tasks of a vehicle | `async_list_tasks_of_vehicle` | `async_iter_tasks_of_vehicle` |  |
+| Tasks of a supplier | `async_list_tasks_of_supplier` | `async_iter_tasks_of_supplier` |  |
+| Files of a contact person | `async_list_files_of_contact_person` | `async_iter_files_of_contact_person` |  |
+| Files of a contact | `async_list_files_of_contact` | `async_iter_files_of_contact` |  |
+| Files of a crew member | `async_list_files_of_crew` | `async_iter_files_of_crew` |  |
+| Files of a material | `async_list_files_of_equipment` | `async_iter_files_of_equipment` |  |
+| Files of an invoice | `async_list_files_of_invoice` | `async_iter_files_of_invoice` |  |
+| Files of a project | `async_list_files_of_project` | `async_iter_files_of_project` |  |
+| Files of a purchase order | `async_list_files_of_purchase_order` | `async_iter_files_of_purchase_order` |  |
+| Files of a quote | `async_list_files_of_quote` | `async_iter_files_of_quote` |  |
+| Files of a repair | `async_list_files_of_repair` | `async_iter_files_of_repair` |  |
+| Files of a serial number | `async_list_files_of_serial_number` | `async_iter_files_of_serial_number` |  |
+| Files of a subrental | `async_list_files_of_subrental` | `async_iter_files_of_subrental` |  |
+| Files of a time registration | `async_list_files_of_time_registration` | `async_iter_files_of_time_registration` |  |
+| Files of a vehicle | `async_list_files_of_vehicle` | `async_iter_files_of_vehicle` |  |
+| Files of a supplier | `async_list_files_of_supplier` | `async_iter_files_of_supplier` |  |
+| File folders of a contact person | `async_list_file_folders_of_contact_person` | `async_iter_file_folders_of_contact_person` |  |
+| File folders of a contact | `async_list_file_folders_of_contact` | `async_iter_file_folders_of_contact` |  |
+| File folders of a crew member | `async_list_file_folders_of_crew` | `async_iter_file_folders_of_crew` |  |
+| File folders of a material | `async_list_file_folders_of_equipment` | `async_iter_file_folders_of_equipment` |  |
+| File folders of a project | `async_list_file_folders_of_project` | `async_iter_file_folders_of_project` |  |
+| File folders of a purchase order | `async_list_file_folders_of_purchase_order` | `async_iter_file_folders_of_purchase_order` |  |
+| File folders of a repair | `async_list_file_folders_of_repair` | `async_iter_file_folders_of_repair` |  |
+| File folders of a serial number | `async_list_file_folders_of_serial_number` | `async_iter_file_folders_of_serial_number` |  |
+| File folders of a subproject | `async_list_file_folders_of_subproject` | `async_iter_file_folders_of_subproject` |  |
+| File folders of a subrental | `async_list_file_folders_of_subrental` | `async_iter_file_folders_of_subrental` |  |
+| File folders of a supplier | `async_list_file_folders_of_supplier` | `async_iter_file_folders_of_supplier` |  |
+| File folders of a vehicle | `async_list_file_folders_of_vehicle` | `async_iter_file_folders_of_vehicle` |  |
+| Rates | `async_list_rates` | `async_iter_rates` | `async_get_rate` |
+| Rate factors | `async_list_rate_factors` | `async_iter_rate_factors` | `async_get_rate_factor` |
+| Rate factors of a rate | `async_list_rate_factors_of_rate` | `async_iter_rate_factors_of_rate` |  |
+| Factors | `async_list_factors` | `async_iter_factors` | `async_get_factor` |
+| Factors of a factor group | `async_list_factors_of_factor_group` | `async_iter_factors_of_factor_group` |  |
+| Factor groups | `async_list_factor_groups` | `async_iter_factor_groups` | `async_get_factor_group` |
 
 ## Token
 

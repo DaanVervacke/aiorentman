@@ -149,6 +149,14 @@ REDACTED_KEYS = {
     "postalcode",
     "mobilephone",
     "location_details",
+    "readable_name",
+    "url",
+    "proxy_url",
+    "name_without_extension",
+    "friendly_name_without_extension",
+    "path_without_file_name",
+    "path_with_file_folders",
+    "title",
 }
 
 

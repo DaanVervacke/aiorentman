@@ -1,0 +1,41 @@
+{
+  "data": [
+    {
+      "id": 98,
+      "created": "2026-10-01T19:32:43.000+02:00",
+      "modified": "2026-10-01T19:32:43.000+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic eaa615f1646d",
+      "readable_name": "Synthetic 3f755bed3bac",
+      "expiration": null,
+      "size": 80749,
+      "image": true,
+      "item": 336,
+      "itemtype": "Equipment",
+      "description": "",
+      "in_documents": false,
+      "in_webshop": true,
+      "classified": false,
+      "public": true,
+      "type": "image/jpeg",
+      "preview_of": null,
+      "previewstatus": "no",
+      "file_item": 0,
+      "file_itemtype": "",
+      "folder": null,
+      "path": "Synthetic b9fa18ae0270",
+      "path_without_file_name": "Synthetic 9fa92fbf0398",
+      "path_with_file_folders": "",
+      "name_without_extension": "Synthetic e6cb215a03e8",
+      "friendly_name_without_extension": "Synthetic fa58088a7cc6",
+      "extension": "jpg",
+      "url": "Synthetic 7daff2c2086d",
+      "proxy_url": "Synthetic 128551997c3f",
+      "updateHash": "9ee769a340f780865d1178f42190a8ee"
+    }
+  ],
+  "itemCount": 1,
+  "limit": 50,
+  "offset": 0,
+  "next_page_url": null
+}

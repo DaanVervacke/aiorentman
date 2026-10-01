@@ -1,0 +1,22 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "created": "2026-10-01T19:32:43+02:00",
+      "modified": "2026-10-01T19:32:43+02:00",
+      "creator": null,
+      "displayname": "Synthetic 7460d8c3b670",
+      "parent": null,
+      "name": "Synthetic 19821d49aa70",
+      "classified": false,
+      "item": 80,
+      "itemtype": "Subproject",
+      "is_template": false,
+      "updateHash": "307824e45b8ce803e6af6461e9969a95"
+    }
+  ],
+  "itemCount": 1,
+  "limit": 50,
+  "offset": 0,
+  "next_page_url": null
+}

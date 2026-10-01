@@ -240,11 +240,201 @@ COLLECTIONS: tuple[tuple[Callable[[RentmanClient], Awaitable[RentmanPage[Any]]],
     (lambda client: client.async_list_leave_mutations(), "/leavemutation"),
     (lambda client: client.async_list_leave_types(), "/leavetypes"),
     (lambda client: client.async_list_contacts(), "/contacts"),
+    (lambda client: client.async_list_contact_persons(), "/contactpersons"),
+    (lambda client: client.async_list_rates(), "/rates"),
+    (lambda client: client.async_list_rate_factors(), "/ratefactors"),
+    (
+        lambda client: client.async_list_rate_factors_of_rate(1),
+        "/rates/1/ratefactors",
+    ),
+    (lambda client: client.async_list_factors(), "/factors"),
+    (
+        lambda client: client.async_list_factors_of_factor_group(1),
+        "/factorgroups/1/factors",
+    ),
+    (lambda client: client.async_list_factor_groups(), "/factorgroups"),
     (
         lambda client: client.async_list_contact_persons_of_contact(3609),
         "/contacts/3609/contactpersons",
     ),
-    (lambda client: client.async_list_contact_persons(), "/contactpersons"),
+    (lambda client: client.async_list_tasks(), "/tasks"),
+    (lambda client: client.async_list_subtasks(), "/subtasks"),
+    (lambda client: client.async_list_task_assignments(), "/taskassignments"),
+    (lambda client: client.async_list_task_statuses(), "/taskstatuses"),
+    (lambda client: client.async_list_files(), "/files"),
+    (lambda client: client.async_list_file_folders(), "/file_folders"),
+    (
+        lambda client: client.async_list_subtasks_of_task(95),
+        "/tasks/95/subtasks",
+    ),
+    (
+        lambda client: client.async_list_task_assignments_of_task(95),
+        "/tasks/95/taskassignments",
+    ),
+    (
+        lambda client: client.async_list_files_of_task(95),
+        "/tasks/95/files",
+    ),
+    (
+        lambda client: client.async_list_file_folders_of_task(95),
+        "/tasks/95/file_folders",
+    ),
+    (
+        lambda client: client.async_list_tasks_of_contact_person(8),
+        "/contactpersons/8/tasks",
+    ),
+    (
+        lambda client: client.async_list_tasks_of_contact(3609),
+        "/contacts/3609/tasks",
+    ),
+    (
+        lambda client: client.async_list_tasks_of_crew(33),
+        "/crew/33/tasks",
+    ),
+    (
+        lambda client: client.async_list_tasks_of_equipment(12),
+        "/equipment/12/tasks",
+    ),
+    (
+        lambda client: client.async_list_tasks_of_invoice(1),
+        "/invoices/1/tasks",
+    ),
+    (
+        lambda client: client.async_list_tasks_of_project(80),
+        "/projects/80/tasks",
+    ),
+    (
+        lambda client: client.async_list_tasks_of_purchase_order(1),
+        "/purchaseorders/1/tasks",
+    ),
+    (
+        lambda client: client.async_list_tasks_of_quote(1),
+        "/quotes/1/tasks",
+    ),
+    (
+        lambda client: client.async_list_tasks_of_repair(220),
+        "/repairs/220/tasks",
+    ),
+    (
+        lambda client: client.async_list_tasks_of_serial_number(41),
+        "/serialnumbers/41/tasks",
+    ),
+    (
+        lambda client: client.async_list_tasks_of_subrental(17),
+        "/subrentals/17/tasks",
+    ),
+    (
+        lambda client: client.async_list_tasks_of_vehicle(7),
+        "/vehicles/7/tasks",
+    ),
+    (
+        lambda client: client.async_list_tasks_of_supplier(1),
+        "/suppliers/1/tasks",
+    ),
+    (
+        lambda client: client.async_list_files_of_contact_person(8),
+        "/contactpersons/8/files",
+    ),
+    (
+        lambda client: client.async_list_files_of_contact(3609),
+        "/contacts/3609/files",
+    ),
+    (
+        lambda client: client.async_list_files_of_crew(33),
+        "/crew/33/files",
+    ),
+    (
+        lambda client: client.async_list_files_of_equipment(12),
+        "/equipment/12/files",
+    ),
+    (
+        lambda client: client.async_list_files_of_invoice(1),
+        "/invoices/1/files",
+    ),
+    (
+        lambda client: client.async_list_files_of_project(80),
+        "/projects/80/files",
+    ),
+    (
+        lambda client: client.async_list_files_of_purchase_order(1),
+        "/purchaseorders/1/files",
+    ),
+    (
+        lambda client: client.async_list_files_of_quote(1),
+        "/quotes/1/files",
+    ),
+    (
+        lambda client: client.async_list_files_of_repair(220),
+        "/repairs/220/files",
+    ),
+    (
+        lambda client: client.async_list_files_of_serial_number(41),
+        "/serialnumbers/41/files",
+    ),
+    (
+        lambda client: client.async_list_files_of_subrental(17),
+        "/subrentals/17/files",
+    ),
+    (
+        lambda client: client.async_list_files_of_time_registration(20),
+        "/timeregistration/20/files",
+    ),
+    (
+        lambda client: client.async_list_files_of_vehicle(7),
+        "/vehicles/7/files",
+    ),
+    (
+        lambda client: client.async_list_files_of_supplier(1),
+        "/suppliers/1/files",
+    ),
+    (
+        lambda client: client.async_list_file_folders_of_contact_person(8),
+        "/contactpersons/8/file_folders",
+    ),
+    (
+        lambda client: client.async_list_file_folders_of_contact(3609),
+        "/contacts/3609/file_folders",
+    ),
+    (
+        lambda client: client.async_list_file_folders_of_crew(33),
+        "/crew/33/file_folders",
+    ),
+    (
+        lambda client: client.async_list_file_folders_of_equipment(12),
+        "/equipment/12/file_folders",
+    ),
+    (
+        lambda client: client.async_list_file_folders_of_project(80),
+        "/projects/80/file_folders",
+    ),
+    (
+        lambda client: client.async_list_file_folders_of_purchase_order(1),
+        "/purchaseorders/1/file_folders",
+    ),
+    (
+        lambda client: client.async_list_file_folders_of_repair(220),
+        "/repairs/220/file_folders",
+    ),
+    (
+        lambda client: client.async_list_file_folders_of_serial_number(41),
+        "/serialnumbers/41/file_folders",
+    ),
+    (
+        lambda client: client.async_list_file_folders_of_subproject(501),
+        "/subprojects/501/file_folders",
+    ),
+    (
+        lambda client: client.async_list_file_folders_of_subrental(17),
+        "/subrentals/17/file_folders",
+    ),
+    (
+        lambda client: client.async_list_file_folders_of_supplier(1),
+        "/suppliers/1/file_folders",
+    ),
+    (
+        lambda client: client.async_list_file_folders_of_vehicle(7),
+        "/vehicles/7/file_folders",
+    ),
 )
 
 ITEMS: tuple[tuple[Callable[[RentmanClient], Awaitable[Any]], str], ...] = (
@@ -309,6 +499,16 @@ ITEMS: tuple[tuple[Callable[[RentmanClient], Awaitable[Any]], str], ...] = (
     (lambda client: client.async_get_leave_type(1), "/leavetypes/1"),
     (lambda client: client.async_get_contact(3609), "/contacts/3609"),
     (lambda client: client.async_get_contact_person(8), "/contactpersons/8"),
+    (lambda client: client.async_get_rate(1), "/rates/1"),
+    (lambda client: client.async_get_rate_factor(1), "/ratefactors/1"),
+    (lambda client: client.async_get_factor(2), "/factors/2"),
+    (lambda client: client.async_get_factor_group(1), "/factorgroups/1"),
+    (lambda client: client.async_get_tasks(95), "/tasks/95"),
+    (lambda client: client.async_get_subtasks(1), "/subtasks/1"),
+    (lambda client: client.async_get_task_assignments(1), "/taskassignments/1"),
+    (lambda client: client.async_get_task_statuses(1), "/taskstatuses/1"),
+    (lambda client: client.async_get_files(26), "/files/26"),
+    (lambda client: client.async_get_file_folders(1), "/file_folders/1"),
 )
 
 ITERATORS: tuple[tuple[Callable[[RentmanClient, Query | None], Any], str], ...] = (
@@ -579,11 +779,204 @@ ITERATORS: tuple[tuple[Callable[[RentmanClient, Query | None], Any], str], ...] 
     (lambda client, query: client.async_iter_leave_mutations(query), "/leavemutation"),
     (lambda client, query: client.async_iter_leave_types(query), "/leavetypes"),
     (lambda client, query: client.async_iter_contacts(query), "/contacts"),
+    (lambda client, query: client.async_iter_contact_persons(query), "/contactpersons"),
+    (lambda client, query: client.async_iter_rates(query), "/rates"),
+    (lambda client, query: client.async_iter_rate_factors(query), "/ratefactors"),
+    (
+        lambda client, query: client.async_iter_rate_factors_of_rate(1, query),
+        "/rates/1/ratefactors",
+    ),
+    (lambda client, query: client.async_iter_factors(query), "/factors"),
+    (
+        lambda client, query: client.async_iter_factors_of_factor_group(1, query),
+        "/factorgroups/1/factors",
+    ),
+    (
+        lambda client, query: client.async_iter_factor_groups(query),
+        "/factorgroups",
+    ),
     (
         lambda client, query: client.async_iter_contact_persons_of_contact(3609, query),
         "/contacts/3609/contactpersons",
     ),
-    (lambda client, query: client.async_iter_contact_persons(query), "/contactpersons"),
+    (lambda client, query: client.async_iter_tasks(query), "/tasks"),
+    (lambda client, query: client.async_iter_subtasks(query), "/subtasks"),
+    (lambda client, query: client.async_iter_task_assignments(query), "/taskassignments"),
+    (lambda client, query: client.async_iter_task_statuses(query), "/taskstatuses"),
+    (lambda client, query: client.async_iter_files(query), "/files"),
+    (lambda client, query: client.async_iter_file_folders(query), "/file_folders"),
+    (
+        lambda client, query: client.async_iter_subtasks_of_task(95, query),
+        "/tasks/95/subtasks",
+    ),
+    (
+        lambda client, query: client.async_iter_task_assignments_of_task(95, query),
+        "/tasks/95/taskassignments",
+    ),
+    (
+        lambda client, query: client.async_iter_files_of_task(95, query),
+        "/tasks/95/files",
+    ),
+    (
+        lambda client, query: client.async_iter_file_folders_of_task(95, query),
+        "/tasks/95/file_folders",
+    ),
+    (
+        lambda client, query: client.async_iter_tasks_of_contact_person(8, query),
+        "/contactpersons/8/tasks",
+    ),
+    (
+        lambda client, query: client.async_iter_tasks_of_contact(3609, query),
+        "/contacts/3609/tasks",
+    ),
+    (
+        lambda client, query: client.async_iter_tasks_of_crew(33, query),
+        "/crew/33/tasks",
+    ),
+    (
+        lambda client, query: client.async_iter_tasks_of_equipment(12, query),
+        "/equipment/12/tasks",
+    ),
+    (
+        lambda client, query: client.async_iter_tasks_of_invoice(1, query),
+        "/invoices/1/tasks",
+    ),
+    (
+        lambda client, query: client.async_iter_tasks_of_project(80, query),
+        "/projects/80/tasks",
+    ),
+    (
+        lambda client, query: client.async_iter_tasks_of_purchase_order(1, query),
+        "/purchaseorders/1/tasks",
+    ),
+    (
+        lambda client, query: client.async_iter_tasks_of_quote(1, query),
+        "/quotes/1/tasks",
+    ),
+    (
+        lambda client, query: client.async_iter_tasks_of_repair(220, query),
+        "/repairs/220/tasks",
+    ),
+    (
+        lambda client, query: client.async_iter_tasks_of_serial_number(41, query),
+        "/serialnumbers/41/tasks",
+    ),
+    (
+        lambda client, query: client.async_iter_tasks_of_subrental(17, query),
+        "/subrentals/17/tasks",
+    ),
+    (
+        lambda client, query: client.async_iter_tasks_of_vehicle(7, query),
+        "/vehicles/7/tasks",
+    ),
+    (
+        lambda client, query: client.async_iter_tasks_of_supplier(1, query),
+        "/suppliers/1/tasks",
+    ),
+    (
+        lambda client, query: client.async_iter_files_of_contact_person(8, query),
+        "/contactpersons/8/files",
+    ),
+    (
+        lambda client, query: client.async_iter_files_of_contact(3609, query),
+        "/contacts/3609/files",
+    ),
+    (
+        lambda client, query: client.async_iter_files_of_crew(33, query),
+        "/crew/33/files",
+    ),
+    (
+        lambda client, query: client.async_iter_files_of_equipment(12, query),
+        "/equipment/12/files",
+    ),
+    (
+        lambda client, query: client.async_iter_files_of_invoice(1, query),
+        "/invoices/1/files",
+    ),
+    (
+        lambda client, query: client.async_iter_files_of_project(80, query),
+        "/projects/80/files",
+    ),
+    (
+        lambda client, query: client.async_iter_files_of_purchase_order(1, query),
+        "/purchaseorders/1/files",
+    ),
+    (
+        lambda client, query: client.async_iter_files_of_quote(1, query),
+        "/quotes/1/files",
+    ),
+    (
+        lambda client, query: client.async_iter_files_of_repair(220, query),
+        "/repairs/220/files",
+    ),
+    (
+        lambda client, query: client.async_iter_files_of_serial_number(41, query),
+        "/serialnumbers/41/files",
+    ),
+    (
+        lambda client, query: client.async_iter_files_of_subrental(17, query),
+        "/subrentals/17/files",
+    ),
+    (
+        lambda client, query: client.async_iter_files_of_time_registration(20, query),
+        "/timeregistration/20/files",
+    ),
+    (
+        lambda client, query: client.async_iter_files_of_vehicle(7, query),
+        "/vehicles/7/files",
+    ),
+    (
+        lambda client, query: client.async_iter_files_of_supplier(1, query),
+        "/suppliers/1/files",
+    ),
+    (
+        lambda client, query: client.async_iter_file_folders_of_contact_person(8, query),
+        "/contactpersons/8/file_folders",
+    ),
+    (
+        lambda client, query: client.async_iter_file_folders_of_contact(3609, query),
+        "/contacts/3609/file_folders",
+    ),
+    (
+        lambda client, query: client.async_iter_file_folders_of_crew(33, query),
+        "/crew/33/file_folders",
+    ),
+    (
+        lambda client, query: client.async_iter_file_folders_of_equipment(12, query),
+        "/equipment/12/file_folders",
+    ),
+    (
+        lambda client, query: client.async_iter_file_folders_of_project(80, query),
+        "/projects/80/file_folders",
+    ),
+    (
+        lambda client, query: client.async_iter_file_folders_of_purchase_order(1, query),
+        "/purchaseorders/1/file_folders",
+    ),
+    (
+        lambda client, query: client.async_iter_file_folders_of_repair(220, query),
+        "/repairs/220/file_folders",
+    ),
+    (
+        lambda client, query: client.async_iter_file_folders_of_serial_number(41, query),
+        "/serialnumbers/41/file_folders",
+    ),
+    (
+        lambda client, query: client.async_iter_file_folders_of_subproject(501, query),
+        "/subprojects/501/file_folders",
+    ),
+    (
+        lambda client, query: client.async_iter_file_folders_of_subrental(17, query),
+        "/subrentals/17/file_folders",
+    ),
+    (
+        lambda client, query: client.async_iter_file_folders_of_supplier(1, query),
+        "/suppliers/1/file_folders",
+    ),
+    (
+        lambda client, query: client.async_iter_file_folders_of_vehicle(7, query),
+        "/vehicles/7/file_folders",
+    ),
 )
 
 

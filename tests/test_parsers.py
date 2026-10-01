@@ -16,6 +16,10 @@ from aiorentman.models import (
     CrewRate,
     Equipment,
     ExtraInputField,
+    Factor,
+    FactorGroup,
+    File,
+    FileFolder,
     Folder,
     Invoice,
     InvoiceLine,
@@ -38,6 +42,8 @@ from aiorentman.models import (
     PurchaseOrderCost,
     PurchaseOrderGlobalCost,
     Quote,
+    Rate,
+    RateFactor,
     RentmanLink,
     RentmanPage,
     SerialNumber,
@@ -47,7 +53,11 @@ from aiorentman.models import (
     Subrental,
     SubrentalEquipment,
     SubrentalEquipmentGroup,
+    Subtask,
     Supplier,
+    Task,
+    TaskAssignment,
+    TaskStatus,
     TaxClass,
     TimeRegistration,
     TimeRegistrationActivity,
@@ -68,6 +78,10 @@ from aiorentman.parsers import (
     parse_envelope_item,
     parse_equipment,
     parse_extra_input_field,
+    parse_factor,
+    parse_factor_group,
+    parse_file,
+    parse_file_folder,
     parse_invitation,
     parse_invoice,
     parse_invoice_line,
@@ -92,11 +106,17 @@ from aiorentman.parsers import (
     parse_purchase_order_cost,
     parse_purchase_order_global_cost,
     parse_quote,
+    parse_rate,
+    parse_rate_factor,
     parse_serial_number,
     parse_subrental,
     parse_subrental_equipment,
     parse_subrental_equipment_group,
+    parse_subtask,
     parse_supplier,
+    parse_task,
+    parse_task_assignment,
+    parse_task_status,
     parse_tax_class,
     parse_time_registration,
     parse_time_registration_activity,
@@ -104,6 +124,53 @@ from aiorentman.parsers import (
 )
 
 from .conftest import cast_response
+
+
+def test_parse_rate_and_factor_keep_their_scalars() -> None:
+    rate = parse_rate({"name": "15 per hour", "type": "cost", "subtype": "flat", "archived": False})
+    assert isinstance(rate, Rate)
+    assert rate.type == "cost"
+    assert rate.subtype == "flat"
+    assert rate.archived is False
+    factor_group = parse_factor_group({"name": "Days"})
+    assert isinstance(factor_group, FactorGroup)
+    assert factor_group.name == "Days"
+
+
+def test_parse_rate_factor_resolves_expanded_rate() -> None:
+    rate_factor = parse_rate_factor(
+        {"rate_id": {"id": 1, "name": "15 per hour"}, "from": 0, "to": 100, "variable": 15}
+    )
+    assert isinstance(rate_factor, RateFactor)
+    assert isinstance(rate_factor.rate_id, Rate)
+    assert rate_factor.rate_id.id == 1
+    assert rate_factor.from_ == 0
+    assert rate_factor.to == 100
+    assert rate_factor.variable == 15
+    assert rate_factor.fixed is None
+
+
+def test_parse_rate_factor_falls_back_to_an_empty_link() -> None:
+    rate_factor = parse_rate_factor({})
+    assert rate_factor.rate_id == RentmanLink("")
+    assert rate_factor.from_ is None
+
+
+def test_parse_factor_resolves_expanded_group() -> None:
+    factor = parse_factor(
+        {"factor": 1, "factor_group": {"id": 1, "name": "Days"}, "from_days": 1, "to_days": 1}
+    )
+    assert isinstance(factor, Factor)
+    assert factor.factor == "1"
+    assert isinstance(factor.factor_group, FactorGroup)
+    assert factor.factor_group.id == 1
+    assert factor.from_days == 1
+
+
+def test_parse_factor_falls_back_to_an_empty_link() -> None:
+    factor = parse_factor({})
+    assert factor.factor_group == RentmanLink("")
+    assert factor.factor == ""
 
 
 def test_parse_equipment_page(load_fixture: Any) -> None:
@@ -950,3 +1017,106 @@ def test_parse_contact_models_fall_back_to_empty_links() -> None:
     assert contact.VAT_code == ""
     assert person.contact == RentmanLink("")
     assert person.email == ""
+
+
+def test_parse_task_coerces_scalars_and_resolves_links() -> None:
+    task = parse_task(
+        {
+            "status": {"id": 1, "name": "To do"},
+            "order": 576,
+            "public": 1,
+            "deadline": "2026-09-30T00:00:00+02:00",
+            "tags": "preparation, trial",
+            "itemtype": "Project",
+        }
+    )
+    assert isinstance(task, Task)
+    assert isinstance(task.status, TaskStatus)
+    assert task.status.id == 1
+    assert task.order == "576"
+    assert task.public == "1"
+    assert task.deadline is not None
+    assert task.tags == ("preparation", "trial")
+    assert task.itemtype == "Project"
+
+
+def test_parse_task_falls_back_to_an_empty_link() -> None:
+    task = parse_task({})
+    assert task.status == RentmanLink("")
+    assert task.recurhoe == ""
+    assert task.recurperiode is None
+    assert task.parent_api_path == ""
+    assert task.custom == {}
+
+
+def test_parse_subtask_and_assignment_resolve_expanded_links() -> None:
+    subtask = parse_subtask({"task": {"id": 95, "name": "Check"}, "completed": True})
+    assert isinstance(subtask, Subtask)
+    assert isinstance(subtask.task, Task)
+    assert subtask.task.id == 95
+    assert subtask.completed is True
+    assignment = parse_task_assignment(
+        {"task": {"id": 95, "name": "Check"}, "crew": {"id": 33, "firstname": "Daan"}}
+    )
+    assert isinstance(assignment, TaskAssignment)
+    assert isinstance(assignment.task, Task)
+    assert isinstance(assignment.crew, Crew)
+    assert assignment.crew.id == 33
+
+
+def test_parse_subtask_and_assignment_fall_back_to_empty_links() -> None:
+    subtask = parse_subtask({})
+    assignment = parse_task_assignment({})
+    assert subtask.task == RentmanLink("")
+    assert assignment.task == RentmanLink("")
+    assert assignment.crew == RentmanLink("")
+
+
+def test_parse_task_status_keeps_its_scalars() -> None:
+    status = parse_task_status({"name": "To do", "color": "00FF00", "type": "todo", "order": 1})
+    assert isinstance(status, TaskStatus)
+    assert status.type == "todo"
+    assert status.color == "00FF00"
+    assert status.order == "1"
+
+
+def test_parse_file_resolves_expanded_folder() -> None:
+    file = parse_file(
+        {
+            "readable_name": "Quotation 10.pdf",
+            "size": 23455,
+            "folder": {"id": 1, "name": "Quotations"},
+            "preview_of": "/files/27",
+            "file_itemtype": "Offerte",
+        }
+    )
+    assert isinstance(file, File)
+    assert file.readable_name == "Quotation 10.pdf"
+    assert file.size == 23455
+    assert isinstance(file.folder, FileFolder)
+    assert file.folder.id == 1
+    assert file.preview_of == RentmanLink("/files/27")
+    assert file.file_itemtype == "Offerte"
+
+
+def test_parse_file_degrades_on_sparse_payloads() -> None:
+    file = parse_file({})
+    assert file.folder is None
+    assert file.preview_of is None
+    assert file.url == ""
+    assert file.parent_api_path == ""
+
+
+def test_parse_file_folder_resolves_self_reference() -> None:
+    folder = parse_file_folder({"parent": {"id": 2, "name": "Root"}, "is_template": False})
+    assert isinstance(folder, FileFolder)
+    assert isinstance(folder.parent, FileFolder)
+    assert folder.parent.id == 2
+    assert folder.is_template is False
+
+
+def test_parse_file_folder_degrades_on_sparse_payloads() -> None:
+    folder = parse_file_folder({})
+    assert folder.parent is None
+    assert folder.name == ""
+    assert folder.parent_api_path == ""

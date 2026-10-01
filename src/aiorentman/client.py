@@ -50,6 +50,43 @@ from ._endpoints import (
     EQUIPMENT_SET_CONTENT_OF_EQUIPMENT,
     EXTRA_INPUT_FIELDS,
     EXTRA_INPUT_FIELDS_ITEM,
+    FACTOR_GROUPS,
+    FACTOR_GROUPS_ITEM,
+    FACTORS,
+    FACTORS_ITEM,
+    FACTORS_OF_FACTOR_GROUP,
+    FILE_FOLDERS,
+    FILE_FOLDERS_ITEM,
+    FILE_FOLDERS_OF_CONTACT,
+    FILE_FOLDERS_OF_CONTACT_PERSON,
+    FILE_FOLDERS_OF_CREW,
+    FILE_FOLDERS_OF_EQUIPMENT,
+    FILE_FOLDERS_OF_PROJECT,
+    FILE_FOLDERS_OF_PURCHASE_ORDER,
+    FILE_FOLDERS_OF_REPAIR,
+    FILE_FOLDERS_OF_SERIAL_NUMBER,
+    FILE_FOLDERS_OF_SUBPROJECT,
+    FILE_FOLDERS_OF_SUBRENTAL,
+    FILE_FOLDERS_OF_SUPPLIER,
+    FILE_FOLDERS_OF_TASK,
+    FILE_FOLDERS_OF_VEHICLE,
+    FILES,
+    FILES_ITEM,
+    FILES_OF_CONTACT,
+    FILES_OF_CONTACT_PERSON,
+    FILES_OF_CREW,
+    FILES_OF_EQUIPMENT,
+    FILES_OF_INVOICE,
+    FILES_OF_PROJECT,
+    FILES_OF_PURCHASE_ORDER,
+    FILES_OF_QUOTE,
+    FILES_OF_REPAIR,
+    FILES_OF_SERIAL_NUMBER,
+    FILES_OF_SUBRENTAL,
+    FILES_OF_SUPPLIER,
+    FILES_OF_TASK,
+    FILES_OF_TIME_REGISTRATION,
+    FILES_OF_VEHICLE,
     FOLDERS,
     FOLDERS_ITEM,
     INVITATIONS,
@@ -125,6 +162,11 @@ from ._endpoints import (
     QUOTES,
     QUOTES_ITEM,
     QUOTES_OF_PROJECT,
+    RATE_FACTORS,
+    RATE_FACTORS_ITEM,
+    RATE_FACTORS_OF_RATE,
+    RATES,
+    RATES_ITEM,
     REPAIRS,
     REPAIRS_ITEM,
     REPAIRS_OF_EQUIPMENT,
@@ -150,9 +192,32 @@ from ._endpoints import (
     SUBRENTAL_EQUIPMENT_OF_SUBRENTAL_EQUIPMENT_GROUP,
     SUBRENTALS,
     SUBRENTALS_ITEM,
+    SUBTASKS,
+    SUBTASKS_ITEM,
+    SUBTASKS_OF_TASK,
     SUPPLIERS,
     SUPPLIERS_ITEM,
     SUPPLIERS_OF_EQUIPMENT,
+    TASK_ASSIGNMENTS,
+    TASK_ASSIGNMENTS_ITEM,
+    TASK_ASSIGNMENTS_OF_TASK,
+    TASK_STATUSES,
+    TASK_STATUSES_ITEM,
+    TASKS,
+    TASKS_ITEM,
+    TASKS_OF_CONTACT,
+    TASKS_OF_CONTACT_PERSON,
+    TASKS_OF_CREW,
+    TASKS_OF_EQUIPMENT,
+    TASKS_OF_INVOICE,
+    TASKS_OF_PROJECT,
+    TASKS_OF_PURCHASE_ORDER,
+    TASKS_OF_QUOTE,
+    TASKS_OF_REPAIR,
+    TASKS_OF_SERIAL_NUMBER,
+    TASKS_OF_SUBRENTAL,
+    TASKS_OF_SUPPLIER,
+    TASKS_OF_VEHICLE,
     TAX_CLASSES,
     TAX_CLASSES_ITEM,
     TIME_REGISTRATION_ACTIVITIES,
@@ -202,6 +267,10 @@ from .models import (
     EquipmentAssignedSerial,
     EquipmentSetContent,
     ExtraInputField,
+    Factor,
+    FactorGroup,
+    File,
+    FileFolder,
     Folder,
     Invitation,
     Invoice,
@@ -227,6 +296,8 @@ from .models import (
     PurchaseOrderCost,
     PurchaseOrderGlobalCost,
     Quote,
+    Rate,
+    RateFactor,
     RentmanPage,
     Repair,
     SerialNumber,
@@ -237,7 +308,11 @@ from .models import (
     Subrental,
     SubrentalEquipment,
     SubrentalEquipmentGroup,
+    Subtask,
     Supplier,
+    Task,
+    TaskAssignment,
+    TaskStatus,
     TaxClass,
     TimeRegistration,
     TimeRegistrationActivity,
@@ -1948,6 +2023,942 @@ class RentmanClient:
     async def async_get_contact_person(self, contact_person_id: int) -> ContactPerson | None:
         """Fetch one contact person by their id."""
         return await self._call(CONTACT_PERSONS_ITEM, ItemArgs(item_id=contact_person_id))
+
+    async def async_list_tasks(self, query: Query | None = None) -> RentmanPage[Task]:
+        """Fetch one page of tasks."""
+        return await self._call(TASKS, CollectionArgs(query=query))
+
+    def async_iter_tasks(self, query: Query | None = None) -> AsyncIterator[Task]:
+        """Yield every task, following the cursor across pages."""
+        return self._iter_collection(TASKS, CollectionArgs(query=query))
+
+    async def async_get_tasks(self, task_id: int) -> Task | None:
+        """Fetch one task by its id."""
+        return await self._call(TASKS_ITEM, ItemArgs(item_id=task_id))
+
+    async def async_list_subtasks(self, query: Query | None = None) -> RentmanPage[Subtask]:
+        """Fetch one page of subtasks."""
+        return await self._call(SUBTASKS, CollectionArgs(query=query))
+
+    def async_iter_subtasks(self, query: Query | None = None) -> AsyncIterator[Subtask]:
+        """Yield every subtask, following the cursor across pages."""
+        return self._iter_collection(SUBTASKS, CollectionArgs(query=query))
+
+    async def async_get_subtasks(self, subtask_id: int) -> Subtask | None:
+        """Fetch one subtask by its id."""
+        return await self._call(SUBTASKS_ITEM, ItemArgs(item_id=subtask_id))
+
+    async def async_list_task_assignments(
+        self, query: Query | None = None
+    ) -> RentmanPage[TaskAssignment]:
+        """Fetch one page of task assignments."""
+        return await self._call(TASK_ASSIGNMENTS, CollectionArgs(query=query))
+
+    def async_iter_task_assignments(
+        self, query: Query | None = None
+    ) -> AsyncIterator[TaskAssignment]:
+        """Yield every task_assignment, following the cursor across pages."""
+        return self._iter_collection(TASK_ASSIGNMENTS, CollectionArgs(query=query))
+
+    async def async_get_task_assignments(self, task_assignment_id: int) -> TaskAssignment | None:
+        """Fetch one task assignment by its id."""
+        return await self._call(TASK_ASSIGNMENTS_ITEM, ItemArgs(item_id=task_assignment_id))
+
+    async def async_list_task_statuses(self, query: Query | None = None) -> RentmanPage[TaskStatus]:
+        """Fetch one page of task statuses."""
+        return await self._call(TASK_STATUSES, CollectionArgs(query=query))
+
+    def async_iter_task_statuses(self, query: Query | None = None) -> AsyncIterator[TaskStatus]:
+        """Yield every task_status, following the cursor across pages."""
+        return self._iter_collection(TASK_STATUSES, CollectionArgs(query=query))
+
+    async def async_get_task_statuses(self, task_status_id: int) -> TaskStatus | None:
+        """Fetch one task status by its id."""
+        return await self._call(TASK_STATUSES_ITEM, ItemArgs(item_id=task_status_id))
+
+    async def async_list_files(self, query: Query | None = None) -> RentmanPage[File]:
+        """Fetch one page of files."""
+        return await self._call(FILES, CollectionArgs(query=query))
+
+    def async_iter_files(self, query: Query | None = None) -> AsyncIterator[File]:
+        """Yield every file, following the cursor across pages."""
+        return self._iter_collection(FILES, CollectionArgs(query=query))
+
+    async def async_get_files(self, file_id: int) -> File | None:
+        """Fetch one file by its id."""
+        return await self._call(FILES_ITEM, ItemArgs(item_id=file_id))
+
+    async def async_list_file_folders(self, query: Query | None = None) -> RentmanPage[FileFolder]:
+        """Fetch one page of file folders."""
+        return await self._call(FILE_FOLDERS, CollectionArgs(query=query))
+
+    def async_iter_file_folders(self, query: Query | None = None) -> AsyncIterator[FileFolder]:
+        """Yield every file_folder, following the cursor across pages."""
+        return self._iter_collection(FILE_FOLDERS, CollectionArgs(query=query))
+
+    async def async_get_file_folders(self, file_folder_id: int) -> FileFolder | None:
+        """Fetch one file folder by its id."""
+        return await self._call(FILE_FOLDERS_ITEM, ItemArgs(item_id=file_folder_id))
+
+    async def async_list_subtasks_of_task(
+        self, task_id: int, query: Query | None = None
+    ) -> RentmanPage[Subtask]:
+        """Fetch one page of subtasks of one task."""
+        return await self._call(
+            SUBTASKS_OF_TASK,
+            ParentCollectionArgs(parent_id=task_id, query=query),
+        )
+
+    def async_iter_subtasks_of_task(
+        self, task_id: int, query: Query | None = None
+    ) -> AsyncIterator[Subtask]:
+        """Yield every subtask of one task, following the cursor."""
+        return self._iter_collection(
+            SUBTASKS_OF_TASK,
+            ParentCollectionArgs(parent_id=task_id, query=query),
+        )
+
+    async def async_list_task_assignments_of_task(
+        self, task_id: int, query: Query | None = None
+    ) -> RentmanPage[TaskAssignment]:
+        """Fetch one page of task assignments of one task."""
+        return await self._call(
+            TASK_ASSIGNMENTS_OF_TASK,
+            ParentCollectionArgs(parent_id=task_id, query=query),
+        )
+
+    def async_iter_task_assignments_of_task(
+        self, task_id: int, query: Query | None = None
+    ) -> AsyncIterator[TaskAssignment]:
+        """Yield every task assignment of one task, following the cursor."""
+        return self._iter_collection(
+            TASK_ASSIGNMENTS_OF_TASK,
+            ParentCollectionArgs(parent_id=task_id, query=query),
+        )
+
+    async def async_list_files_of_task(
+        self, task_id: int, query: Query | None = None
+    ) -> RentmanPage[File]:
+        """Fetch one page of files of one task."""
+        return await self._call(
+            FILES_OF_TASK,
+            ParentCollectionArgs(parent_id=task_id, query=query),
+        )
+
+    def async_iter_files_of_task(
+        self, task_id: int, query: Query | None = None
+    ) -> AsyncIterator[File]:
+        """Yield every file of one task, following the cursor."""
+        return self._iter_collection(
+            FILES_OF_TASK,
+            ParentCollectionArgs(parent_id=task_id, query=query),
+        )
+
+    async def async_list_file_folders_of_task(
+        self, task_id: int, query: Query | None = None
+    ) -> RentmanPage[FileFolder]:
+        """Fetch one page of file folders of one task."""
+        return await self._call(
+            FILE_FOLDERS_OF_TASK,
+            ParentCollectionArgs(parent_id=task_id, query=query),
+        )
+
+    def async_iter_file_folders_of_task(
+        self, task_id: int, query: Query | None = None
+    ) -> AsyncIterator[FileFolder]:
+        """Yield every file folder of one task, following the cursor."""
+        return self._iter_collection(
+            FILE_FOLDERS_OF_TASK,
+            ParentCollectionArgs(parent_id=task_id, query=query),
+        )
+
+    async def async_list_tasks_of_contact_person(
+        self, contact_person_id: int, query: Query | None = None
+    ) -> RentmanPage[Task]:
+        """Fetch one page of tasks of one contact person."""
+        return await self._call(
+            TASKS_OF_CONTACT_PERSON,
+            ParentCollectionArgs(parent_id=contact_person_id, query=query),
+        )
+
+    def async_iter_tasks_of_contact_person(
+        self, contact_person_id: int, query: Query | None = None
+    ) -> AsyncIterator[Task]:
+        """Yield every task of one contact person, following the cursor."""
+        return self._iter_collection(
+            TASKS_OF_CONTACT_PERSON,
+            ParentCollectionArgs(parent_id=contact_person_id, query=query),
+        )
+
+    async def async_list_tasks_of_contact(
+        self, contact_id: int, query: Query | None = None
+    ) -> RentmanPage[Task]:
+        """Fetch one page of tasks of one contact."""
+        return await self._call(
+            TASKS_OF_CONTACT,
+            ParentCollectionArgs(parent_id=contact_id, query=query),
+        )
+
+    def async_iter_tasks_of_contact(
+        self, contact_id: int, query: Query | None = None
+    ) -> AsyncIterator[Task]:
+        """Yield every task of one contact, following the cursor."""
+        return self._iter_collection(
+            TASKS_OF_CONTACT,
+            ParentCollectionArgs(parent_id=contact_id, query=query),
+        )
+
+    async def async_list_tasks_of_crew(
+        self, crew_id: int, query: Query | None = None
+    ) -> RentmanPage[Task]:
+        """Fetch one page of tasks of one crew member."""
+        return await self._call(
+            TASKS_OF_CREW,
+            ParentCollectionArgs(parent_id=crew_id, query=query),
+        )
+
+    def async_iter_tasks_of_crew(
+        self, crew_id: int, query: Query | None = None
+    ) -> AsyncIterator[Task]:
+        """Yield every task of one crew member, following the cursor."""
+        return self._iter_collection(
+            TASKS_OF_CREW,
+            ParentCollectionArgs(parent_id=crew_id, query=query),
+        )
+
+    async def async_list_tasks_of_equipment(
+        self, equipment_id: int, query: Query | None = None
+    ) -> RentmanPage[Task]:
+        """Fetch one page of tasks of one material."""
+        return await self._call(
+            TASKS_OF_EQUIPMENT,
+            ParentCollectionArgs(parent_id=equipment_id, query=query),
+        )
+
+    def async_iter_tasks_of_equipment(
+        self, equipment_id: int, query: Query | None = None
+    ) -> AsyncIterator[Task]:
+        """Yield every task of one material, following the cursor."""
+        return self._iter_collection(
+            TASKS_OF_EQUIPMENT,
+            ParentCollectionArgs(parent_id=equipment_id, query=query),
+        )
+
+    async def async_list_tasks_of_invoice(
+        self, invoice_id: int, query: Query | None = None
+    ) -> RentmanPage[Task]:
+        """Fetch one page of tasks of one invoice."""
+        return await self._call(
+            TASKS_OF_INVOICE,
+            ParentCollectionArgs(parent_id=invoice_id, query=query),
+        )
+
+    def async_iter_tasks_of_invoice(
+        self, invoice_id: int, query: Query | None = None
+    ) -> AsyncIterator[Task]:
+        """Yield every task of one invoice, following the cursor."""
+        return self._iter_collection(
+            TASKS_OF_INVOICE,
+            ParentCollectionArgs(parent_id=invoice_id, query=query),
+        )
+
+    async def async_list_tasks_of_project(
+        self, project_id: int, query: Query | None = None
+    ) -> RentmanPage[Task]:
+        """Fetch one page of tasks of one project."""
+        return await self._call(
+            TASKS_OF_PROJECT,
+            ParentCollectionArgs(parent_id=project_id, query=query),
+        )
+
+    def async_iter_tasks_of_project(
+        self, project_id: int, query: Query | None = None
+    ) -> AsyncIterator[Task]:
+        """Yield every task of one project, following the cursor."""
+        return self._iter_collection(
+            TASKS_OF_PROJECT,
+            ParentCollectionArgs(parent_id=project_id, query=query),
+        )
+
+    async def async_list_tasks_of_purchase_order(
+        self, purchase_order_id: int, query: Query | None = None
+    ) -> RentmanPage[Task]:
+        """Fetch one page of tasks of one purchase order."""
+        return await self._call(
+            TASKS_OF_PURCHASE_ORDER,
+            ParentCollectionArgs(parent_id=purchase_order_id, query=query),
+        )
+
+    def async_iter_tasks_of_purchase_order(
+        self, purchase_order_id: int, query: Query | None = None
+    ) -> AsyncIterator[Task]:
+        """Yield every task of one purchase order, following the cursor."""
+        return self._iter_collection(
+            TASKS_OF_PURCHASE_ORDER,
+            ParentCollectionArgs(parent_id=purchase_order_id, query=query),
+        )
+
+    async def async_list_tasks_of_quote(
+        self, quote_id: int, query: Query | None = None
+    ) -> RentmanPage[Task]:
+        """Fetch one page of tasks of one quote."""
+        return await self._call(
+            TASKS_OF_QUOTE,
+            ParentCollectionArgs(parent_id=quote_id, query=query),
+        )
+
+    def async_iter_tasks_of_quote(
+        self, quote_id: int, query: Query | None = None
+    ) -> AsyncIterator[Task]:
+        """Yield every task of one quote, following the cursor."""
+        return self._iter_collection(
+            TASKS_OF_QUOTE,
+            ParentCollectionArgs(parent_id=quote_id, query=query),
+        )
+
+    async def async_list_tasks_of_repair(
+        self, repair_id: int, query: Query | None = None
+    ) -> RentmanPage[Task]:
+        """Fetch one page of tasks of one repair."""
+        return await self._call(
+            TASKS_OF_REPAIR,
+            ParentCollectionArgs(parent_id=repair_id, query=query),
+        )
+
+    def async_iter_tasks_of_repair(
+        self, repair_id: int, query: Query | None = None
+    ) -> AsyncIterator[Task]:
+        """Yield every task of one repair, following the cursor."""
+        return self._iter_collection(
+            TASKS_OF_REPAIR,
+            ParentCollectionArgs(parent_id=repair_id, query=query),
+        )
+
+    async def async_list_tasks_of_serial_number(
+        self, serial_number_id: int, query: Query | None = None
+    ) -> RentmanPage[Task]:
+        """Fetch one page of tasks of one serial number."""
+        return await self._call(
+            TASKS_OF_SERIAL_NUMBER,
+            ParentCollectionArgs(parent_id=serial_number_id, query=query),
+        )
+
+    def async_iter_tasks_of_serial_number(
+        self, serial_number_id: int, query: Query | None = None
+    ) -> AsyncIterator[Task]:
+        """Yield every task of one serial number, following the cursor."""
+        return self._iter_collection(
+            TASKS_OF_SERIAL_NUMBER,
+            ParentCollectionArgs(parent_id=serial_number_id, query=query),
+        )
+
+    async def async_list_tasks_of_subrental(
+        self, subrental_id: int, query: Query | None = None
+    ) -> RentmanPage[Task]:
+        """Fetch one page of tasks of one subrental."""
+        return await self._call(
+            TASKS_OF_SUBRENTAL,
+            ParentCollectionArgs(parent_id=subrental_id, query=query),
+        )
+
+    def async_iter_tasks_of_subrental(
+        self, subrental_id: int, query: Query | None = None
+    ) -> AsyncIterator[Task]:
+        """Yield every task of one subrental, following the cursor."""
+        return self._iter_collection(
+            TASKS_OF_SUBRENTAL,
+            ParentCollectionArgs(parent_id=subrental_id, query=query),
+        )
+
+    async def async_list_tasks_of_vehicle(
+        self, vehicle_id: int, query: Query | None = None
+    ) -> RentmanPage[Task]:
+        """Fetch one page of tasks of one vehicle."""
+        return await self._call(
+            TASKS_OF_VEHICLE,
+            ParentCollectionArgs(parent_id=vehicle_id, query=query),
+        )
+
+    def async_iter_tasks_of_vehicle(
+        self, vehicle_id: int, query: Query | None = None
+    ) -> AsyncIterator[Task]:
+        """Yield every task of one vehicle, following the cursor."""
+        return self._iter_collection(
+            TASKS_OF_VEHICLE,
+            ParentCollectionArgs(parent_id=vehicle_id, query=query),
+        )
+
+    async def async_list_tasks_of_supplier(
+        self, supplier_id: int, query: Query | None = None
+    ) -> RentmanPage[Task]:
+        """Fetch one page of tasks of one supplier."""
+        return await self._call(
+            TASKS_OF_SUPPLIER,
+            ParentCollectionArgs(parent_id=supplier_id, query=query),
+        )
+
+    def async_iter_tasks_of_supplier(
+        self, supplier_id: int, query: Query | None = None
+    ) -> AsyncIterator[Task]:
+        """Yield every task of one supplier, following the cursor."""
+        return self._iter_collection(
+            TASKS_OF_SUPPLIER,
+            ParentCollectionArgs(parent_id=supplier_id, query=query),
+        )
+
+    async def async_list_files_of_contact_person(
+        self, contact_person_id: int, query: Query | None = None
+    ) -> RentmanPage[File]:
+        """Fetch one page of files of one contact person."""
+        return await self._call(
+            FILES_OF_CONTACT_PERSON,
+            ParentCollectionArgs(parent_id=contact_person_id, query=query),
+        )
+
+    def async_iter_files_of_contact_person(
+        self, contact_person_id: int, query: Query | None = None
+    ) -> AsyncIterator[File]:
+        """Yield every file of one contact person, following the cursor."""
+        return self._iter_collection(
+            FILES_OF_CONTACT_PERSON,
+            ParentCollectionArgs(parent_id=contact_person_id, query=query),
+        )
+
+    async def async_list_files_of_contact(
+        self, contact_id: int, query: Query | None = None
+    ) -> RentmanPage[File]:
+        """Fetch one page of files of one contact."""
+        return await self._call(
+            FILES_OF_CONTACT,
+            ParentCollectionArgs(parent_id=contact_id, query=query),
+        )
+
+    def async_iter_files_of_contact(
+        self, contact_id: int, query: Query | None = None
+    ) -> AsyncIterator[File]:
+        """Yield every file of one contact, following the cursor."""
+        return self._iter_collection(
+            FILES_OF_CONTACT,
+            ParentCollectionArgs(parent_id=contact_id, query=query),
+        )
+
+    async def async_list_files_of_crew(
+        self, crew_id: int, query: Query | None = None
+    ) -> RentmanPage[File]:
+        """Fetch one page of files of one crew member."""
+        return await self._call(
+            FILES_OF_CREW,
+            ParentCollectionArgs(parent_id=crew_id, query=query),
+        )
+
+    def async_iter_files_of_crew(
+        self, crew_id: int, query: Query | None = None
+    ) -> AsyncIterator[File]:
+        """Yield every file of one crew member, following the cursor."""
+        return self._iter_collection(
+            FILES_OF_CREW,
+            ParentCollectionArgs(parent_id=crew_id, query=query),
+        )
+
+    async def async_list_files_of_equipment(
+        self, equipment_id: int, query: Query | None = None
+    ) -> RentmanPage[File]:
+        """Fetch one page of files of one material."""
+        return await self._call(
+            FILES_OF_EQUIPMENT,
+            ParentCollectionArgs(parent_id=equipment_id, query=query),
+        )
+
+    def async_iter_files_of_equipment(
+        self, equipment_id: int, query: Query | None = None
+    ) -> AsyncIterator[File]:
+        """Yield every file of one material, following the cursor."""
+        return self._iter_collection(
+            FILES_OF_EQUIPMENT,
+            ParentCollectionArgs(parent_id=equipment_id, query=query),
+        )
+
+    async def async_list_files_of_invoice(
+        self, invoice_id: int, query: Query | None = None
+    ) -> RentmanPage[File]:
+        """Fetch one page of files of one invoice."""
+        return await self._call(
+            FILES_OF_INVOICE,
+            ParentCollectionArgs(parent_id=invoice_id, query=query),
+        )
+
+    def async_iter_files_of_invoice(
+        self, invoice_id: int, query: Query | None = None
+    ) -> AsyncIterator[File]:
+        """Yield every file of one invoice, following the cursor."""
+        return self._iter_collection(
+            FILES_OF_INVOICE,
+            ParentCollectionArgs(parent_id=invoice_id, query=query),
+        )
+
+    async def async_list_files_of_project(
+        self, project_id: int, query: Query | None = None
+    ) -> RentmanPage[File]:
+        """Fetch one page of files of one project."""
+        return await self._call(
+            FILES_OF_PROJECT,
+            ParentCollectionArgs(parent_id=project_id, query=query),
+        )
+
+    def async_iter_files_of_project(
+        self, project_id: int, query: Query | None = None
+    ) -> AsyncIterator[File]:
+        """Yield every file of one project, following the cursor."""
+        return self._iter_collection(
+            FILES_OF_PROJECT,
+            ParentCollectionArgs(parent_id=project_id, query=query),
+        )
+
+    async def async_list_files_of_purchase_order(
+        self, purchase_order_id: int, query: Query | None = None
+    ) -> RentmanPage[File]:
+        """Fetch one page of files of one purchase order."""
+        return await self._call(
+            FILES_OF_PURCHASE_ORDER,
+            ParentCollectionArgs(parent_id=purchase_order_id, query=query),
+        )
+
+    def async_iter_files_of_purchase_order(
+        self, purchase_order_id: int, query: Query | None = None
+    ) -> AsyncIterator[File]:
+        """Yield every file of one purchase order, following the cursor."""
+        return self._iter_collection(
+            FILES_OF_PURCHASE_ORDER,
+            ParentCollectionArgs(parent_id=purchase_order_id, query=query),
+        )
+
+    async def async_list_files_of_quote(
+        self, quote_id: int, query: Query | None = None
+    ) -> RentmanPage[File]:
+        """Fetch one page of files of one quote."""
+        return await self._call(
+            FILES_OF_QUOTE,
+            ParentCollectionArgs(parent_id=quote_id, query=query),
+        )
+
+    def async_iter_files_of_quote(
+        self, quote_id: int, query: Query | None = None
+    ) -> AsyncIterator[File]:
+        """Yield every file of one quote, following the cursor."""
+        return self._iter_collection(
+            FILES_OF_QUOTE,
+            ParentCollectionArgs(parent_id=quote_id, query=query),
+        )
+
+    async def async_list_files_of_repair(
+        self, repair_id: int, query: Query | None = None
+    ) -> RentmanPage[File]:
+        """Fetch one page of files of one repair."""
+        return await self._call(
+            FILES_OF_REPAIR,
+            ParentCollectionArgs(parent_id=repair_id, query=query),
+        )
+
+    def async_iter_files_of_repair(
+        self, repair_id: int, query: Query | None = None
+    ) -> AsyncIterator[File]:
+        """Yield every file of one repair, following the cursor."""
+        return self._iter_collection(
+            FILES_OF_REPAIR,
+            ParentCollectionArgs(parent_id=repair_id, query=query),
+        )
+
+    async def async_list_files_of_serial_number(
+        self, serial_number_id: int, query: Query | None = None
+    ) -> RentmanPage[File]:
+        """Fetch one page of files of one serial number."""
+        return await self._call(
+            FILES_OF_SERIAL_NUMBER,
+            ParentCollectionArgs(parent_id=serial_number_id, query=query),
+        )
+
+    def async_iter_files_of_serial_number(
+        self, serial_number_id: int, query: Query | None = None
+    ) -> AsyncIterator[File]:
+        """Yield every file of one serial number, following the cursor."""
+        return self._iter_collection(
+            FILES_OF_SERIAL_NUMBER,
+            ParentCollectionArgs(parent_id=serial_number_id, query=query),
+        )
+
+    async def async_list_files_of_subrental(
+        self, subrental_id: int, query: Query | None = None
+    ) -> RentmanPage[File]:
+        """Fetch one page of files of one subrental."""
+        return await self._call(
+            FILES_OF_SUBRENTAL,
+            ParentCollectionArgs(parent_id=subrental_id, query=query),
+        )
+
+    def async_iter_files_of_subrental(
+        self, subrental_id: int, query: Query | None = None
+    ) -> AsyncIterator[File]:
+        """Yield every file of one subrental, following the cursor."""
+        return self._iter_collection(
+            FILES_OF_SUBRENTAL,
+            ParentCollectionArgs(parent_id=subrental_id, query=query),
+        )
+
+    async def async_list_files_of_time_registration(
+        self, time_registration_id: int, query: Query | None = None
+    ) -> RentmanPage[File]:
+        """Fetch one page of files of one time registration."""
+        return await self._call(
+            FILES_OF_TIME_REGISTRATION,
+            ParentCollectionArgs(parent_id=time_registration_id, query=query),
+        )
+
+    def async_iter_files_of_time_registration(
+        self, time_registration_id: int, query: Query | None = None
+    ) -> AsyncIterator[File]:
+        """Yield every file of one time registration, following the cursor."""
+        return self._iter_collection(
+            FILES_OF_TIME_REGISTRATION,
+            ParentCollectionArgs(parent_id=time_registration_id, query=query),
+        )
+
+    async def async_list_files_of_vehicle(
+        self, vehicle_id: int, query: Query | None = None
+    ) -> RentmanPage[File]:
+        """Fetch one page of files of one vehicle."""
+        return await self._call(
+            FILES_OF_VEHICLE,
+            ParentCollectionArgs(parent_id=vehicle_id, query=query),
+        )
+
+    def async_iter_files_of_vehicle(
+        self, vehicle_id: int, query: Query | None = None
+    ) -> AsyncIterator[File]:
+        """Yield every file of one vehicle, following the cursor."""
+        return self._iter_collection(
+            FILES_OF_VEHICLE,
+            ParentCollectionArgs(parent_id=vehicle_id, query=query),
+        )
+
+    async def async_list_files_of_supplier(
+        self, supplier_id: int, query: Query | None = None
+    ) -> RentmanPage[File]:
+        """Fetch one page of files of one supplier."""
+        return await self._call(
+            FILES_OF_SUPPLIER,
+            ParentCollectionArgs(parent_id=supplier_id, query=query),
+        )
+
+    def async_iter_files_of_supplier(
+        self, supplier_id: int, query: Query | None = None
+    ) -> AsyncIterator[File]:
+        """Yield every file of one supplier, following the cursor."""
+        return self._iter_collection(
+            FILES_OF_SUPPLIER,
+            ParentCollectionArgs(parent_id=supplier_id, query=query),
+        )
+
+    async def async_list_file_folders_of_contact_person(
+        self, contact_person_id: int, query: Query | None = None
+    ) -> RentmanPage[FileFolder]:
+        """Fetch one page of file folders of one contact person."""
+        return await self._call(
+            FILE_FOLDERS_OF_CONTACT_PERSON,
+            ParentCollectionArgs(parent_id=contact_person_id, query=query),
+        )
+
+    def async_iter_file_folders_of_contact_person(
+        self, contact_person_id: int, query: Query | None = None
+    ) -> AsyncIterator[FileFolder]:
+        """Yield every file folder of one contact person, following the cursor."""
+        return self._iter_collection(
+            FILE_FOLDERS_OF_CONTACT_PERSON,
+            ParentCollectionArgs(parent_id=contact_person_id, query=query),
+        )
+
+    async def async_list_file_folders_of_contact(
+        self, contact_id: int, query: Query | None = None
+    ) -> RentmanPage[FileFolder]:
+        """Fetch one page of file folders of one contact."""
+        return await self._call(
+            FILE_FOLDERS_OF_CONTACT,
+            ParentCollectionArgs(parent_id=contact_id, query=query),
+        )
+
+    def async_iter_file_folders_of_contact(
+        self, contact_id: int, query: Query | None = None
+    ) -> AsyncIterator[FileFolder]:
+        """Yield every file folder of one contact, following the cursor."""
+        return self._iter_collection(
+            FILE_FOLDERS_OF_CONTACT,
+            ParentCollectionArgs(parent_id=contact_id, query=query),
+        )
+
+    async def async_list_file_folders_of_crew(
+        self, crew_id: int, query: Query | None = None
+    ) -> RentmanPage[FileFolder]:
+        """Fetch one page of file folders of one crew member."""
+        return await self._call(
+            FILE_FOLDERS_OF_CREW,
+            ParentCollectionArgs(parent_id=crew_id, query=query),
+        )
+
+    def async_iter_file_folders_of_crew(
+        self, crew_id: int, query: Query | None = None
+    ) -> AsyncIterator[FileFolder]:
+        """Yield every file folder of one crew member, following the cursor."""
+        return self._iter_collection(
+            FILE_FOLDERS_OF_CREW,
+            ParentCollectionArgs(parent_id=crew_id, query=query),
+        )
+
+    async def async_list_file_folders_of_equipment(
+        self, equipment_id: int, query: Query | None = None
+    ) -> RentmanPage[FileFolder]:
+        """Fetch one page of file folders of one material."""
+        return await self._call(
+            FILE_FOLDERS_OF_EQUIPMENT,
+            ParentCollectionArgs(parent_id=equipment_id, query=query),
+        )
+
+    def async_iter_file_folders_of_equipment(
+        self, equipment_id: int, query: Query | None = None
+    ) -> AsyncIterator[FileFolder]:
+        """Yield every file folder of one material, following the cursor."""
+        return self._iter_collection(
+            FILE_FOLDERS_OF_EQUIPMENT,
+            ParentCollectionArgs(parent_id=equipment_id, query=query),
+        )
+
+    async def async_list_file_folders_of_project(
+        self, project_id: int, query: Query | None = None
+    ) -> RentmanPage[FileFolder]:
+        """Fetch one page of file folders of one project."""
+        return await self._call(
+            FILE_FOLDERS_OF_PROJECT,
+            ParentCollectionArgs(parent_id=project_id, query=query),
+        )
+
+    def async_iter_file_folders_of_project(
+        self, project_id: int, query: Query | None = None
+    ) -> AsyncIterator[FileFolder]:
+        """Yield every file folder of one project, following the cursor."""
+        return self._iter_collection(
+            FILE_FOLDERS_OF_PROJECT,
+            ParentCollectionArgs(parent_id=project_id, query=query),
+        )
+
+    async def async_list_file_folders_of_purchase_order(
+        self, purchase_order_id: int, query: Query | None = None
+    ) -> RentmanPage[FileFolder]:
+        """Fetch one page of file folders of one purchase order."""
+        return await self._call(
+            FILE_FOLDERS_OF_PURCHASE_ORDER,
+            ParentCollectionArgs(parent_id=purchase_order_id, query=query),
+        )
+
+    def async_iter_file_folders_of_purchase_order(
+        self, purchase_order_id: int, query: Query | None = None
+    ) -> AsyncIterator[FileFolder]:
+        """Yield every file folder of one purchase order, following the cursor."""
+        return self._iter_collection(
+            FILE_FOLDERS_OF_PURCHASE_ORDER,
+            ParentCollectionArgs(parent_id=purchase_order_id, query=query),
+        )
+
+    async def async_list_file_folders_of_repair(
+        self, repair_id: int, query: Query | None = None
+    ) -> RentmanPage[FileFolder]:
+        """Fetch one page of file folders of one repair."""
+        return await self._call(
+            FILE_FOLDERS_OF_REPAIR,
+            ParentCollectionArgs(parent_id=repair_id, query=query),
+        )
+
+    def async_iter_file_folders_of_repair(
+        self, repair_id: int, query: Query | None = None
+    ) -> AsyncIterator[FileFolder]:
+        """Yield every file folder of one repair, following the cursor."""
+        return self._iter_collection(
+            FILE_FOLDERS_OF_REPAIR,
+            ParentCollectionArgs(parent_id=repair_id, query=query),
+        )
+
+    async def async_list_file_folders_of_serial_number(
+        self, serial_number_id: int, query: Query | None = None
+    ) -> RentmanPage[FileFolder]:
+        """Fetch one page of file folders of one serial number."""
+        return await self._call(
+            FILE_FOLDERS_OF_SERIAL_NUMBER,
+            ParentCollectionArgs(parent_id=serial_number_id, query=query),
+        )
+
+    def async_iter_file_folders_of_serial_number(
+        self, serial_number_id: int, query: Query | None = None
+    ) -> AsyncIterator[FileFolder]:
+        """Yield every file folder of one serial number, following the cursor."""
+        return self._iter_collection(
+            FILE_FOLDERS_OF_SERIAL_NUMBER,
+            ParentCollectionArgs(parent_id=serial_number_id, query=query),
+        )
+
+    async def async_list_file_folders_of_subproject(
+        self, subproject_id: int, query: Query | None = None
+    ) -> RentmanPage[FileFolder]:
+        """Fetch one page of file folders of one subproject."""
+        return await self._call(
+            FILE_FOLDERS_OF_SUBPROJECT,
+            ParentCollectionArgs(parent_id=subproject_id, query=query),
+        )
+
+    def async_iter_file_folders_of_subproject(
+        self, subproject_id: int, query: Query | None = None
+    ) -> AsyncIterator[FileFolder]:
+        """Yield every file folder of one subproject, following the cursor."""
+        return self._iter_collection(
+            FILE_FOLDERS_OF_SUBPROJECT,
+            ParentCollectionArgs(parent_id=subproject_id, query=query),
+        )
+
+    async def async_list_file_folders_of_subrental(
+        self, subrental_id: int, query: Query | None = None
+    ) -> RentmanPage[FileFolder]:
+        """Fetch one page of file folders of one subrental."""
+        return await self._call(
+            FILE_FOLDERS_OF_SUBRENTAL,
+            ParentCollectionArgs(parent_id=subrental_id, query=query),
+        )
+
+    def async_iter_file_folders_of_subrental(
+        self, subrental_id: int, query: Query | None = None
+    ) -> AsyncIterator[FileFolder]:
+        """Yield every file folder of one subrental, following the cursor."""
+        return self._iter_collection(
+            FILE_FOLDERS_OF_SUBRENTAL,
+            ParentCollectionArgs(parent_id=subrental_id, query=query),
+        )
+
+    async def async_list_file_folders_of_supplier(
+        self, supplier_id: int, query: Query | None = None
+    ) -> RentmanPage[FileFolder]:
+        """Fetch one page of file folders of one supplier."""
+        return await self._call(
+            FILE_FOLDERS_OF_SUPPLIER,
+            ParentCollectionArgs(parent_id=supplier_id, query=query),
+        )
+
+    def async_iter_file_folders_of_supplier(
+        self, supplier_id: int, query: Query | None = None
+    ) -> AsyncIterator[FileFolder]:
+        """Yield every file folder of one supplier, following the cursor."""
+        return self._iter_collection(
+            FILE_FOLDERS_OF_SUPPLIER,
+            ParentCollectionArgs(parent_id=supplier_id, query=query),
+        )
+
+    async def async_list_file_folders_of_vehicle(
+        self, vehicle_id: int, query: Query | None = None
+    ) -> RentmanPage[FileFolder]:
+        """Fetch one page of file folders of one vehicle."""
+        return await self._call(
+            FILE_FOLDERS_OF_VEHICLE,
+            ParentCollectionArgs(parent_id=vehicle_id, query=query),
+        )
+
+    def async_iter_file_folders_of_vehicle(
+        self, vehicle_id: int, query: Query | None = None
+    ) -> AsyncIterator[FileFolder]:
+        """Yield every file folder of one vehicle, following the cursor."""
+        return self._iter_collection(
+            FILE_FOLDERS_OF_VEHICLE,
+            ParentCollectionArgs(parent_id=vehicle_id, query=query),
+        )
+
+    async def async_list_rates(self, query: Query | None = None) -> RentmanPage[Rate]:
+        """Fetch one page of rates."""
+        return await self._call(RATES, CollectionArgs(query=query))
+
+    def async_iter_rates(self, query: Query | None = None) -> AsyncIterator[Rate]:
+        """Yield every rate, following the cursor across pages."""
+        return self._iter_collection(RATES, CollectionArgs(query=query))
+
+    async def async_get_rate(self, rate_id: int) -> Rate | None:
+        """Fetch one rate by its id."""
+        return await self._call(RATES_ITEM, ItemArgs(item_id=rate_id))
+
+    async def async_list_rate_factors(self, query: Query | None = None) -> RentmanPage[RateFactor]:
+        """Fetch one page of rate factors."""
+        return await self._call(RATE_FACTORS, CollectionArgs(query=query))
+
+    def async_iter_rate_factors(self, query: Query | None = None) -> AsyncIterator[RateFactor]:
+        """Yield every rate factor, following the cursor across pages."""
+        return self._iter_collection(RATE_FACTORS, CollectionArgs(query=query))
+
+    async def async_get_rate_factor(self, rate_factor_id: int) -> RateFactor | None:
+        """Fetch one rate factor by its id."""
+        return await self._call(RATE_FACTORS_ITEM, ItemArgs(item_id=rate_factor_id))
+
+    async def async_list_rate_factors_of_rate(
+        self, rate_id: int, query: Query | None = None
+    ) -> RentmanPage[RateFactor]:
+        """Fetch one page of rate factors of one rate."""
+        return await self._call(
+            RATE_FACTORS_OF_RATE,
+            ParentCollectionArgs(parent_id=rate_id, query=query),
+        )
+
+    def async_iter_rate_factors_of_rate(
+        self, rate_id: int, query: Query | None = None
+    ) -> AsyncIterator[RateFactor]:
+        """Yield every rate factor of one rate, following the cursor."""
+        return self._iter_collection(
+            RATE_FACTORS_OF_RATE,
+            ParentCollectionArgs(parent_id=rate_id, query=query),
+        )
+
+    async def async_list_factors(self, query: Query | None = None) -> RentmanPage[Factor]:
+        """Fetch one page of factors."""
+        return await self._call(FACTORS, CollectionArgs(query=query))
+
+    def async_iter_factors(self, query: Query | None = None) -> AsyncIterator[Factor]:
+        """Yield every factor, following the cursor across pages."""
+        return self._iter_collection(FACTORS, CollectionArgs(query=query))
+
+    async def async_get_factor(self, factor_id: int) -> Factor | None:
+        """Fetch one factor by its id."""
+        return await self._call(FACTORS_ITEM, ItemArgs(item_id=factor_id))
+
+    async def async_list_factors_of_factor_group(
+        self, factor_group_id: int, query: Query | None = None
+    ) -> RentmanPage[Factor]:
+        """Fetch one page of factors of one factor group."""
+        return await self._call(
+            FACTORS_OF_FACTOR_GROUP,
+            ParentCollectionArgs(parent_id=factor_group_id, query=query),
+        )
+
+    def async_iter_factors_of_factor_group(
+        self, factor_group_id: int, query: Query | None = None
+    ) -> AsyncIterator[Factor]:
+        """Yield every factor of one factor group, following the cursor."""
+        return self._iter_collection(
+            FACTORS_OF_FACTOR_GROUP,
+            ParentCollectionArgs(parent_id=factor_group_id, query=query),
+        )
+
+    async def async_list_factor_groups(
+        self, query: Query | None = None
+    ) -> RentmanPage[FactorGroup]:
+        """Fetch one page of factor groups."""
+        return await self._call(FACTOR_GROUPS, CollectionArgs(query=query))
+
+    def async_iter_factor_groups(self, query: Query | None = None) -> AsyncIterator[FactorGroup]:
+        """Yield every factor group, following the cursor across pages."""
+        return self._iter_collection(FACTOR_GROUPS, CollectionArgs(query=query))
+
+    async def async_get_factor_group(self, factor_group_id: int) -> FactorGroup | None:
+        """Fetch one factor group by its id."""
+        return await self._call(FACTOR_GROUPS_ITEM, ItemArgs(item_id=factor_group_id))
 
     async def _call[ArgsT, ModelT](
         self,

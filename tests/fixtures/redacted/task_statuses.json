@@ -1,0 +1,44 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": null,
+      "displayname": "Synthetic 2c6cf7a63d8c",
+      "name": "Synthetic 07dfb159f895",
+      "color": "Synthetic ab92e7803933",
+      "type": "todo",
+      "order": 0,
+      "updateHash": "6226e7a79a629fdd68aa9cb8d5478c36"
+    },
+    {
+      "id": 2,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": null,
+      "displayname": "Synthetic dd95c1a739e5",
+      "name": "Synthetic e695211f1e8f",
+      "color": "Synthetic c47674fc4811",
+      "type": "done",
+      "order": 99,
+      "updateHash": "abf79ee83f6c19960de3bb2855bd856f"
+    },
+    {
+      "id": 3,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": null,
+      "displayname": "Synthetic d8d239e01311",
+      "name": "Synthetic 258c1091eadb",
+      "color": "Synthetic e61999f45b22",
+      "type": "custom",
+      "order": 49,
+      "updateHash": "a4998cae6053d85f8703c0634eb48b3c"
+    }
+  ],
+  "itemCount": 3,
+  "limit": 50,
+  "offset": 0,
+  "next_page_url": null
+}

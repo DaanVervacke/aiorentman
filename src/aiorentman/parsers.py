@@ -21,6 +21,10 @@ from .models import (
     EquipmentAssignedSerial,
     EquipmentSetContent,
     ExtraInputField,
+    Factor,
+    FactorGroup,
+    File,
+    FileFolder,
     Folder,
     Invitation,
     Invoice,
@@ -46,6 +50,8 @@ from .models import (
     PurchaseOrderCost,
     PurchaseOrderGlobalCost,
     Quote,
+    Rate,
+    RateFactor,
     RentmanLink,
     RentmanPage,
     Repair,
@@ -57,7 +63,11 @@ from .models import (
     Subrental,
     SubrentalEquipment,
     SubrentalEquipmentGroup,
+    Subtask,
     Supplier,
+    Task,
+    TaskAssignment,
+    TaskStatus,
     TaxClass,
     TimeRegistration,
     TimeRegistrationActivity,
@@ -1827,5 +1837,226 @@ def parse_contact_person(data: Mapping[str, Any]) -> ContactPerson:
         email=_str_field(data, "email"),
         tags=_codes_field(data, "tags"),
         custom=_custom_field(data),
+        raw=dict(data),
+    )
+
+
+def parse_task_status(data: Mapping[str, Any]) -> TaskStatus:
+    """Build the task status model from one status payload."""
+    return TaskStatus(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        name=_str_field(data, "name"),
+        color=_str_field(data, "color"),
+        type=_str_field(data, "type"),
+        order=_coerced_str_field(data, "order"),
+        raw=dict(data),
+    )
+
+
+def parse_task(data: Mapping[str, Any]) -> Task:
+    """Build the task model from one task payload."""
+    return Task(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        recurhoe=_str_field(data, "recurhoe"),
+        recureind=_str_or_none_field(data, "recureind"),
+        recurperiode=_int_field(data, "recurperiode"),
+        is_template=_bool_field(data, "is_template"),
+        name=_str_field(data, "name"),
+        details=_str_field(data, "details"),
+        color=_str_field(data, "color"),
+        priority=_str_field(data, "priority"),
+        order=_coerced_str_field(data, "order"),
+        deadline=_datetime_field(data, "deadline"),
+        deadline_type=_str_field(data, "deadline_type"),
+        deadline_relative_offset_base=_str_field(data, "deadline_relative_offset_base"),
+        deadline_relative_offset_amount=_int_field(data, "deadline_relative_offset_amount"),
+        deadline_relative_offset_unit=_str_field(data, "deadline_relative_offset_unit"),
+        deadline_relative_offset_direction=_str_field(data, "deadline_relative_offset_direction"),
+        completed_at=_datetime_field(data, "completed_at"),
+        status=_link_or_model_field(data, "status", parse_task_status)
+        or RentmanLink(_str_field(data, "status")),
+        item=_int_field(data, "item"),
+        itemtype=_str_or_none_field(data, "itemtype"),
+        synchronization_id=_str_field(data, "synchronization_id"),
+        synchronization_uri=_str_field(data, "synchronization_uri"),
+        public=_coerced_str_field(data, "public"),
+        assignment_type=_str_field(data, "assignment_type"),
+        completed_by=_link_field(data, "completed_by"),
+        expiry_notification_date=_datetime_field(data, "expiry_notification_date"),
+        time_budget=_float_field(data, "time_budget"),
+        tags=_codes_field(data, "tags"),
+        parent_api_path=_str_field(data, "parent_api_path"),
+        custom=_custom_field(data),
+        raw=dict(data),
+    )
+
+
+def parse_subtask(data: Mapping[str, Any]) -> Subtask:
+    """Build the subtask model from one checklist line payload."""
+    return Subtask(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        task=_link_or_model_field(data, "task", parse_task)
+        or RentmanLink(_str_field(data, "task")),
+        title=_str_field(data, "title"),
+        completed=_bool_field(data, "completed"),
+        raw=dict(data),
+    )
+
+
+def parse_task_assignment(data: Mapping[str, Any]) -> TaskAssignment:
+    """Build the task assignment model from one assignment payload."""
+    return TaskAssignment(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        task=_link_or_model_field(data, "task", parse_task)
+        or RentmanLink(_str_field(data, "task")),
+        crew=_link_or_model_field(data, "crew", parse_crew)
+        or RentmanLink(_str_field(data, "crew")),
+        raw=dict(data),
+    )
+
+
+def parse_file_folder(data: Mapping[str, Any]) -> FileFolder:
+    """Build the file folder model from one folder payload."""
+    return FileFolder(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        parent=_link_or_model_field(data, "parent", parse_file_folder),
+        name=_str_field(data, "name"),
+        classified=_bool_field(data, "classified"),
+        item=_int_field(data, "item"),
+        itemtype=_str_or_none_field(data, "itemtype"),
+        is_template=_bool_field(data, "is_template"),
+        parent_api_path=_str_field(data, "parent_api_path"),
+        raw=dict(data),
+    )
+
+
+def parse_file(data: Mapping[str, Any]) -> File:
+    """Build the file model from one stored file payload."""
+    return File(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        readable_name=_str_field(data, "readable_name"),
+        expiration=_datetime_field(data, "expiration"),
+        size=_int_field(data, "size"),
+        image=_bool_field(data, "image"),
+        item=_int_field(data, "item"),
+        itemtype=_str_or_none_field(data, "itemtype"),
+        description=_str_field(data, "description"),
+        in_documents=_bool_field(data, "in_documents"),
+        in_webshop=_bool_field(data, "in_webshop"),
+        classified=_bool_field(data, "classified"),
+        public=_bool_field(data, "public"),
+        type=_str_field(data, "type"),
+        preview_of=_link_field(data, "preview_of"),
+        previewstatus=_str_field(data, "previewstatus"),
+        file_item=_int_field(data, "file_item"),
+        file_itemtype=_str_field(data, "file_itemtype"),
+        folder=_link_or_model_field(data, "folder", parse_file_folder),
+        path=_str_field(data, "path"),
+        path_without_file_name=_str_field(data, "path_without_file_name"),
+        path_with_file_folders=_str_field(data, "path_with_file_folders"),
+        name_without_extension=_str_field(data, "name_without_extension"),
+        friendly_name_without_extension=_str_field(data, "friendly_name_without_extension"),
+        extension=_str_field(data, "extension"),
+        url=_str_field(data, "url"),
+        proxy_url=_str_field(data, "proxy_url"),
+        parent_api_path=_str_field(data, "parent_api_path"),
+        raw=dict(data),
+    )
+
+
+def parse_rate(data: Mapping[str, Any]) -> Rate:
+    """Build the rate model from one rate definition payload."""
+    return Rate(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        name=_str_field(data, "name"),
+        archived=_bool_field(data, "archived"),
+        type=_str_field(data, "type"),
+        subtype=_str_field(data, "subtype"),
+        raw=dict(data),
+    )
+
+
+def parse_rate_factor(data: Mapping[str, Any]) -> RateFactor:
+    """Build the rate factor model from one rate bracket payload."""
+    return RateFactor(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        rate_id=_link_or_model_field(data, "rate_id", parse_rate)
+        or RentmanLink(_str_field(data, "rate_id")),
+        from_=_float_field(data, "from"),
+        to=_float_field(data, "to"),
+        variable=_float_field(data, "variable"),
+        fixed=_float_field(data, "fixed"),
+        raw=dict(data),
+    )
+
+
+def parse_factor_group(data: Mapping[str, Any]) -> FactorGroup:
+    """Build the factor group model from one group payload."""
+    return FactorGroup(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        name=_str_field(data, "name"),
+        raw=dict(data),
+    )
+
+
+def parse_factor(data: Mapping[str, Any]) -> Factor:
+    """Build the factor model from one day bracket payload."""
+    return Factor(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        from_days=_int_field(data, "from_days"),
+        to_days=_int_field(data, "to_days"),
+        factor=_coerced_str_field(data, "factor"),
+        factor_group=_link_or_model_field(data, "factor_group", parse_factor_group)
+        or RentmanLink(_str_field(data, "factor_group")),
         raw=dict(data),
     )

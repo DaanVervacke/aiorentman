@@ -130,6 +130,26 @@ Models
    :members:
 .. autoclass:: aiorentman.ContactPerson
    :members:
+.. autoclass:: aiorentman.Task
+   :members:
+.. autoclass:: aiorentman.Subtask
+   :members:
+.. autoclass:: aiorentman.TaskAssignment
+   :members:
+.. autoclass:: aiorentman.TaskStatus
+   :members:
+.. autoclass:: aiorentman.File
+   :members:
+.. autoclass:: aiorentman.FileFolder
+   :members:
+.. autoclass:: aiorentman.Rate
+   :members:
+.. autoclass:: aiorentman.RateFactor
+   :members:
+.. autoclass:: aiorentman.Factor
+   :members:
+.. autoclass:: aiorentman.FactorGroup
+   :members:
 
 Exceptions
 ----------

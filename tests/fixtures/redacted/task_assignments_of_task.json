@@ -1,0 +1,18 @@
+{
+  "data": [
+    {
+      "id": 11,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic b76df71a3b10",
+      "task": "/tasks/99",
+      "crew": "/crew/33",
+      "updateHash": "7c3db504a726996721a5746e2ea28e23"
+    }
+  ],
+  "itemCount": 1,
+  "limit": 50,
+  "offset": 0,
+  "next_page_url": null
+}

@@ -20,6 +20,10 @@ from .models import (
     EquipmentAssignedSerial,
     EquipmentSetContent,
     ExtraInputField,
+    Factor,
+    FactorGroup,
+    File,
+    FileFolder,
     Folder,
     Invitation,
     Invoice,
@@ -45,6 +49,8 @@ from .models import (
     PurchaseOrderCost,
     PurchaseOrderGlobalCost,
     Quote,
+    Rate,
+    RateFactor,
     RentmanPage,
     Repair,
     SerialNumber,
@@ -55,7 +61,11 @@ from .models import (
     Subrental,
     SubrentalEquipment,
     SubrentalEquipmentGroup,
+    Subtask,
     Supplier,
+    Task,
+    TaskAssignment,
+    TaskStatus,
     TaxClass,
     TimeRegistration,
     TimeRegistrationActivity,
@@ -79,6 +89,10 @@ from .parsers import (
     parse_equipment_assigned_serial,
     parse_equipment_set_content,
     parse_extra_input_field,
+    parse_factor,
+    parse_factor_group,
+    parse_file,
+    parse_file_folder,
     parse_folder,
     parse_invitation,
     parse_invoice,
@@ -105,6 +119,8 @@ from .parsers import (
     parse_purchase_order_cost,
     parse_purchase_order_global_cost,
     parse_quote,
+    parse_rate,
+    parse_rate_factor,
     parse_repair,
     parse_serial_number,
     parse_status,
@@ -114,7 +130,11 @@ from .parsers import (
     parse_subrental,
     parse_subrental_equipment,
     parse_subrental_equipment_group,
+    parse_subtask,
     parse_supplier,
+    parse_task,
+    parse_task_assignment,
+    parse_task_status,
     parse_tax_class,
     parse_time_registration,
     parse_time_registration_activity,
@@ -1649,6 +1669,592 @@ CONTACT_PERSONS_ITEM: Endpoint[ItemArgs, ContactPerson | None] = Endpoint(
     response_schema="ContactPersonResponse",
 )
 
+TASKS: Endpoint[CollectionArgs, RentmanPage[Task]] = Endpoint(
+    name="tasks",
+    method="GET",
+    path=lambda _args: "/tasks",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_task),
+    response_schema="TaskResponse",
+)
+
+SUBTASKS: Endpoint[CollectionArgs, RentmanPage[Subtask]] = Endpoint(
+    name="subtasks",
+    method="GET",
+    path=lambda _args: "/subtasks",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_subtask),
+    response_schema="SubtaskResponse",
+)
+
+TASK_ASSIGNMENTS: Endpoint[CollectionArgs, RentmanPage[TaskAssignment]] = Endpoint(
+    name="task_assignments",
+    method="GET",
+    path=lambda _args: "/taskassignments",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_task_assignment),
+    response_schema="TaskAssignmentResponse",
+)
+
+TASK_STATUSES: Endpoint[CollectionArgs, RentmanPage[TaskStatus]] = Endpoint(
+    name="task_statuses",
+    method="GET",
+    path=lambda _args: "/taskstatuses",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_task_status),
+    response_schema="TaskStatusResponse",
+)
+
+FILES: Endpoint[CollectionArgs, RentmanPage[File]] = Endpoint(
+    name="files",
+    method="GET",
+    path=lambda _args: "/files",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file),
+    response_schema="FileResponse",
+)
+
+FILE_FOLDERS: Endpoint[CollectionArgs, RentmanPage[FileFolder]] = Endpoint(
+    name="file_folders",
+    method="GET",
+    path=lambda _args: "/file_folders",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file_folder),
+    response_schema="FileFolderResponse",
+)
+
+TASKS_ITEM: Endpoint[ItemArgs, Task | None] = Endpoint(
+    name="tasks_item",
+    method="GET",
+    path=lambda args: f"/tasks/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
+    response_schema="TaskResponse",
+)
+
+SUBTASKS_ITEM: Endpoint[ItemArgs, Subtask | None] = Endpoint(
+    name="subtasks_item",
+    method="GET",
+    path=lambda args: f"/subtasks/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_subtask),
+    response_schema="SubtaskResponse",
+)
+
+TASK_ASSIGNMENTS_ITEM: Endpoint[ItemArgs, TaskAssignment | None] = Endpoint(
+    name="task_assignments_item",
+    method="GET",
+    path=lambda args: f"/taskassignments/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task_assignment),
+    response_schema="TaskAssignmentResponse",
+)
+
+TASK_STATUSES_ITEM: Endpoint[ItemArgs, TaskStatus | None] = Endpoint(
+    name="task_statuses_item",
+    method="GET",
+    path=lambda args: f"/taskstatuses/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task_status),
+    response_schema="TaskStatusResponse",
+)
+
+FILES_ITEM: Endpoint[ItemArgs, File | None] = Endpoint(
+    name="files_item",
+    method="GET",
+    path=lambda args: f"/files/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_file),
+    response_schema="FileResponse",
+)
+
+FILE_FOLDERS_ITEM: Endpoint[ItemArgs, FileFolder | None] = Endpoint(
+    name="file_folders_item",
+    method="GET",
+    path=lambda args: f"/file_folders/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_file_folder),
+    response_schema="FileFolderResponse",
+)
+
+SUBTASKS_OF_TASK: Endpoint[ParentCollectionArgs, RentmanPage[Subtask]] = Endpoint(
+    name="subtasks_of_task",
+    method="GET",
+    path=lambda args: f"/tasks/{args.parent_id}/subtasks",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_subtask),
+    response_schema="SubtaskResponse",
+)
+
+TASK_ASSIGNMENTS_OF_TASK: Endpoint[ParentCollectionArgs, RentmanPage[TaskAssignment]] = Endpoint(
+    name="task_assignments_of_task",
+    method="GET",
+    path=lambda args: f"/tasks/{args.parent_id}/taskassignments",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_task_assignment),
+    response_schema="TaskAssignmentResponse",
+)
+
+FILES_OF_TASK: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint(
+    name="files_of_task",
+    method="GET",
+    path=lambda args: f"/tasks/{args.parent_id}/files",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file),
+    response_schema="FileResponse",
+)
+
+FILE_FOLDERS_OF_TASK: Endpoint[ParentCollectionArgs, RentmanPage[FileFolder]] = Endpoint(
+    name="file_folders_of_task",
+    method="GET",
+    path=lambda args: f"/tasks/{args.parent_id}/file_folders",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file_folder),
+    response_schema="FileFolderResponse",
+)
+
+TASKS_OF_CONTACT_PERSON: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = Endpoint(
+    name="tasks_of_contact_person",
+    method="GET",
+    path=lambda args: f"/contactpersons/{args.parent_id}/tasks",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_task),
+    response_schema="TaskResponse",
+)
+
+TASKS_OF_CONTACT: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = Endpoint(
+    name="tasks_of_contact",
+    method="GET",
+    path=lambda args: f"/contacts/{args.parent_id}/tasks",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_task),
+    response_schema="TaskResponse",
+)
+
+TASKS_OF_CREW: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = Endpoint(
+    name="tasks_of_crew",
+    method="GET",
+    path=lambda args: f"/crew/{args.parent_id}/tasks",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_task),
+    response_schema="TaskResponse",
+)
+
+TASKS_OF_EQUIPMENT: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = Endpoint(
+    name="tasks_of_equipment",
+    method="GET",
+    path=lambda args: f"/equipment/{args.parent_id}/tasks",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_task),
+    response_schema="TaskResponse",
+)
+
+TASKS_OF_INVOICE: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = Endpoint(
+    name="tasks_of_invoice",
+    method="GET",
+    path=lambda args: f"/invoices/{args.parent_id}/tasks",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_task),
+    response_schema="TaskResponse",
+)
+
+TASKS_OF_PROJECT: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = Endpoint(
+    name="tasks_of_project",
+    method="GET",
+    path=lambda args: f"/projects/{args.parent_id}/tasks",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_task),
+    response_schema="TaskResponse",
+)
+
+TASKS_OF_PURCHASE_ORDER: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = Endpoint(
+    name="tasks_of_purchase_order",
+    method="GET",
+    path=lambda args: f"/purchaseorders/{args.parent_id}/tasks",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_task),
+    response_schema="TaskResponse",
+)
+
+TASKS_OF_QUOTE: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = Endpoint(
+    name="tasks_of_quote",
+    method="GET",
+    path=lambda args: f"/quotes/{args.parent_id}/tasks",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_task),
+    response_schema="TaskResponse",
+)
+
+TASKS_OF_REPAIR: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = Endpoint(
+    name="tasks_of_repair",
+    method="GET",
+    path=lambda args: f"/repairs/{args.parent_id}/tasks",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_task),
+    response_schema="TaskResponse",
+)
+
+TASKS_OF_SERIAL_NUMBER: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = Endpoint(
+    name="tasks_of_serial_number",
+    method="GET",
+    path=lambda args: f"/serialnumbers/{args.parent_id}/tasks",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_task),
+    response_schema="TaskResponse",
+)
+
+TASKS_OF_SUBRENTAL: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = Endpoint(
+    name="tasks_of_subrental",
+    method="GET",
+    path=lambda args: f"/subrentals/{args.parent_id}/tasks",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_task),
+    response_schema="TaskResponse",
+)
+
+TASKS_OF_VEHICLE: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = Endpoint(
+    name="tasks_of_vehicle",
+    method="GET",
+    path=lambda args: f"/vehicles/{args.parent_id}/tasks",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_task),
+    response_schema="TaskResponse",
+)
+
+TASKS_OF_SUPPLIER: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = Endpoint(
+    name="tasks_of_supplier",
+    method="GET",
+    path=lambda args: f"/suppliers/{args.parent_id}/tasks",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_task),
+    response_schema="TaskResponse",
+)
+
+FILES_OF_CONTACT_PERSON: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint(
+    name="files_of_contact_person",
+    method="GET",
+    path=lambda args: f"/contactpersons/{args.parent_id}/files",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file),
+    response_schema="FileResponse",
+)
+
+FILES_OF_CONTACT: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint(
+    name="files_of_contact",
+    method="GET",
+    path=lambda args: f"/contacts/{args.parent_id}/files",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file),
+    response_schema="FileResponse",
+)
+
+FILES_OF_CREW: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint(
+    name="files_of_crew",
+    method="GET",
+    path=lambda args: f"/crew/{args.parent_id}/files",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file),
+    response_schema="FileResponse",
+)
+
+FILES_OF_EQUIPMENT: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint(
+    name="files_of_equipment",
+    method="GET",
+    path=lambda args: f"/equipment/{args.parent_id}/files",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file),
+    response_schema="FileResponse",
+)
+
+FILES_OF_INVOICE: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint(
+    name="files_of_invoice",
+    method="GET",
+    path=lambda args: f"/invoices/{args.parent_id}/files",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file),
+    response_schema="FileResponse",
+)
+
+FILES_OF_PROJECT: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint(
+    name="files_of_project",
+    method="GET",
+    path=lambda args: f"/projects/{args.parent_id}/files",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file),
+    response_schema="FileResponse",
+)
+
+FILES_OF_PURCHASE_ORDER: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint(
+    name="files_of_purchase_order",
+    method="GET",
+    path=lambda args: f"/purchaseorders/{args.parent_id}/files",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file),
+    response_schema="FileResponse",
+)
+
+FILES_OF_QUOTE: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint(
+    name="files_of_quote",
+    method="GET",
+    path=lambda args: f"/quotes/{args.parent_id}/files",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file),
+    response_schema="FileResponse",
+)
+
+FILES_OF_REPAIR: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint(
+    name="files_of_repair",
+    method="GET",
+    path=lambda args: f"/repairs/{args.parent_id}/files",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file),
+    response_schema="FileResponse",
+)
+
+FILES_OF_SERIAL_NUMBER: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint(
+    name="files_of_serial_number",
+    method="GET",
+    path=lambda args: f"/serialnumbers/{args.parent_id}/files",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file),
+    response_schema="FileResponse",
+)
+
+FILES_OF_SUBRENTAL: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint(
+    name="files_of_subrental",
+    method="GET",
+    path=lambda args: f"/subrentals/{args.parent_id}/files",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file),
+    response_schema="FileResponse",
+)
+
+FILES_OF_TIME_REGISTRATION: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint(
+    name="files_of_time_registration",
+    method="GET",
+    path=lambda args: f"/timeregistration/{args.parent_id}/files",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file),
+    response_schema="FileResponse",
+)
+
+FILES_OF_VEHICLE: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint(
+    name="files_of_vehicle",
+    method="GET",
+    path=lambda args: f"/vehicles/{args.parent_id}/files",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file),
+    response_schema="FileResponse",
+)
+
+FILES_OF_SUPPLIER: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint(
+    name="files_of_supplier",
+    method="GET",
+    path=lambda args: f"/suppliers/{args.parent_id}/files",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file),
+    response_schema="FileResponse",
+)
+
+FILE_FOLDERS_OF_CONTACT_PERSON: Endpoint[ParentCollectionArgs, RentmanPage[FileFolder]] = Endpoint(
+    name="file_folders_of_contact_person",
+    method="GET",
+    path=lambda args: f"/contactpersons/{args.parent_id}/file_folders",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file_folder),
+    response_schema="FileFolderResponse",
+)
+
+FILE_FOLDERS_OF_CONTACT: Endpoint[ParentCollectionArgs, RentmanPage[FileFolder]] = Endpoint(
+    name="file_folders_of_contact",
+    method="GET",
+    path=lambda args: f"/contacts/{args.parent_id}/file_folders",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file_folder),
+    response_schema="FileFolderResponse",
+)
+
+FILE_FOLDERS_OF_CREW: Endpoint[ParentCollectionArgs, RentmanPage[FileFolder]] = Endpoint(
+    name="file_folders_of_crew",
+    method="GET",
+    path=lambda args: f"/crew/{args.parent_id}/file_folders",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file_folder),
+    response_schema="FileFolderResponse",
+)
+
+FILE_FOLDERS_OF_EQUIPMENT: Endpoint[ParentCollectionArgs, RentmanPage[FileFolder]] = Endpoint(
+    name="file_folders_of_equipment",
+    method="GET",
+    path=lambda args: f"/equipment/{args.parent_id}/file_folders",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file_folder),
+    response_schema="FileFolderResponse",
+)
+
+FILE_FOLDERS_OF_PROJECT: Endpoint[ParentCollectionArgs, RentmanPage[FileFolder]] = Endpoint(
+    name="file_folders_of_project",
+    method="GET",
+    path=lambda args: f"/projects/{args.parent_id}/file_folders",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file_folder),
+    response_schema="FileFolderResponse",
+)
+
+FILE_FOLDERS_OF_PURCHASE_ORDER: Endpoint[ParentCollectionArgs, RentmanPage[FileFolder]] = Endpoint(
+    name="file_folders_of_purchase_order",
+    method="GET",
+    path=lambda args: f"/purchaseorders/{args.parent_id}/file_folders",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file_folder),
+    response_schema="FileFolderResponse",
+)
+
+FILE_FOLDERS_OF_REPAIR: Endpoint[ParentCollectionArgs, RentmanPage[FileFolder]] = Endpoint(
+    name="file_folders_of_repair",
+    method="GET",
+    path=lambda args: f"/repairs/{args.parent_id}/file_folders",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file_folder),
+    response_schema="FileFolderResponse",
+)
+
+FILE_FOLDERS_OF_SERIAL_NUMBER: Endpoint[ParentCollectionArgs, RentmanPage[FileFolder]] = Endpoint(
+    name="file_folders_of_serial_number",
+    method="GET",
+    path=lambda args: f"/serialnumbers/{args.parent_id}/file_folders",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file_folder),
+    response_schema="FileFolderResponse",
+)
+
+FILE_FOLDERS_OF_SUBPROJECT: Endpoint[ParentCollectionArgs, RentmanPage[FileFolder]] = Endpoint(
+    name="file_folders_of_subproject",
+    method="GET",
+    path=lambda args: f"/subprojects/{args.parent_id}/file_folders",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file_folder),
+    response_schema="FileFolderResponse",
+)
+
+FILE_FOLDERS_OF_SUBRENTAL: Endpoint[ParentCollectionArgs, RentmanPage[FileFolder]] = Endpoint(
+    name="file_folders_of_subrental",
+    method="GET",
+    path=lambda args: f"/subrentals/{args.parent_id}/file_folders",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file_folder),
+    response_schema="FileFolderResponse",
+)
+
+FILE_FOLDERS_OF_SUPPLIER: Endpoint[ParentCollectionArgs, RentmanPage[FileFolder]] = Endpoint(
+    name="file_folders_of_supplier",
+    method="GET",
+    path=lambda args: f"/suppliers/{args.parent_id}/file_folders",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file_folder),
+    response_schema="FileFolderResponse",
+)
+
+FILE_FOLDERS_OF_VEHICLE: Endpoint[ParentCollectionArgs, RentmanPage[FileFolder]] = Endpoint(
+    name="file_folders_of_vehicle",
+    method="GET",
+    path=lambda args: f"/vehicles/{args.parent_id}/file_folders",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file_folder),
+    response_schema="FileFolderResponse",
+)
+
+
+RATES: Endpoint[CollectionArgs, RentmanPage[Rate]] = Endpoint(
+    name="rates",
+    method="GET",
+    path=lambda _args: "/rates",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_rate),
+    response_schema="CrewRateResponse",
+)
+
+RATES_ITEM: Endpoint[ItemArgs, Rate | None] = Endpoint(
+    name="rates_item",
+    method="GET",
+    path=lambda args: f"/rates/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_rate),
+    response_schema="CrewRateResponse",
+)
+
+RATE_FACTORS: Endpoint[CollectionArgs, RentmanPage[RateFactor]] = Endpoint(
+    name="rate_factors",
+    method="GET",
+    path=lambda _args: "/ratefactors",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_rate_factor),
+    response_schema="CrewRateFactorResponse",
+)
+
+RATE_FACTORS_ITEM: Endpoint[ItemArgs, RateFactor | None] = Endpoint(
+    name="rate_factors_item",
+    method="GET",
+    path=lambda args: f"/ratefactors/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_rate_factor),
+    response_schema="CrewRateFactorResponse",
+)
+
+RATE_FACTORS_OF_RATE: Endpoint[ParentCollectionArgs, RentmanPage[RateFactor]] = Endpoint(
+    name="rate_factors_of_rate",
+    method="GET",
+    path=lambda args: f"/rates/{args.parent_id}/ratefactors",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_rate_factor),
+    response_schema="CrewRateFactorResponse",
+)
+
+FACTORS: Endpoint[CollectionArgs, RentmanPage[Factor]] = Endpoint(
+    name="factors",
+    method="GET",
+    path=lambda _args: "/factors",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_factor),
+    response_schema="FactorsResponse",
+)
+
+FACTORS_ITEM: Endpoint[ItemArgs, Factor | None] = Endpoint(
+    name="factors_item",
+    method="GET",
+    path=lambda args: f"/factors/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_factor),
+    response_schema="FactorsResponse",
+)
+
+FACTORS_OF_FACTOR_GROUP: Endpoint[ParentCollectionArgs, RentmanPage[Factor]] = Endpoint(
+    name="factors_of_factor_group",
+    method="GET",
+    path=lambda args: f"/factorgroups/{args.parent_id}/factors",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_factor),
+    response_schema="FactorsResponse",
+)
+
+FACTOR_GROUPS: Endpoint[CollectionArgs, RentmanPage[FactorGroup]] = Endpoint(
+    name="factor_groups",
+    method="GET",
+    path=lambda _args: "/factorgroups",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_factor_group),
+    response_schema="FactorGroupsResponse",
+)
+
+FACTOR_GROUPS_ITEM: Endpoint[ItemArgs, FactorGroup | None] = Endpoint(
+    name="factor_groups_item",
+    method="GET",
+    path=lambda args: f"/factorgroups/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_factor_group),
+    response_schema="FactorGroupsResponse",
+)
+
 CATALOG: tuple[Endpoint[Any, Any], ...] = (
     ACTUAL_CONTENT,
     ACTUAL_CONTENT_ITEM,
@@ -1807,4 +2413,69 @@ CATALOG: tuple[Endpoint[Any, Any], ...] = (
     CONTACT_PERSONS_OF_CONTACT,
     CONTACT_PERSONS,
     CONTACT_PERSONS_ITEM,
+    RATES,
+    RATES_ITEM,
+    RATE_FACTORS,
+    RATE_FACTORS_ITEM,
+    RATE_FACTORS_OF_RATE,
+    FACTORS,
+    FACTORS_ITEM,
+    FACTORS_OF_FACTOR_GROUP,
+    FACTOR_GROUPS,
+    FACTOR_GROUPS_ITEM,
+    TASKS,
+    SUBTASKS,
+    TASK_ASSIGNMENTS,
+    TASK_STATUSES,
+    FILES,
+    FILE_FOLDERS,
+    TASKS_ITEM,
+    SUBTASKS_ITEM,
+    TASK_ASSIGNMENTS_ITEM,
+    TASK_STATUSES_ITEM,
+    FILES_ITEM,
+    FILE_FOLDERS_ITEM,
+    SUBTASKS_OF_TASK,
+    TASK_ASSIGNMENTS_OF_TASK,
+    FILES_OF_TASK,
+    FILE_FOLDERS_OF_TASK,
+    TASKS_OF_CONTACT_PERSON,
+    TASKS_OF_CONTACT,
+    TASKS_OF_CREW,
+    TASKS_OF_EQUIPMENT,
+    TASKS_OF_INVOICE,
+    TASKS_OF_PROJECT,
+    TASKS_OF_PURCHASE_ORDER,
+    TASKS_OF_QUOTE,
+    TASKS_OF_REPAIR,
+    TASKS_OF_SERIAL_NUMBER,
+    TASKS_OF_SUBRENTAL,
+    TASKS_OF_VEHICLE,
+    TASKS_OF_SUPPLIER,
+    FILES_OF_CONTACT_PERSON,
+    FILES_OF_CONTACT,
+    FILES_OF_CREW,
+    FILES_OF_EQUIPMENT,
+    FILES_OF_INVOICE,
+    FILES_OF_PROJECT,
+    FILES_OF_PURCHASE_ORDER,
+    FILES_OF_QUOTE,
+    FILES_OF_REPAIR,
+    FILES_OF_SERIAL_NUMBER,
+    FILES_OF_SUBRENTAL,
+    FILES_OF_TIME_REGISTRATION,
+    FILES_OF_VEHICLE,
+    FILES_OF_SUPPLIER,
+    FILE_FOLDERS_OF_CONTACT_PERSON,
+    FILE_FOLDERS_OF_CONTACT,
+    FILE_FOLDERS_OF_CREW,
+    FILE_FOLDERS_OF_EQUIPMENT,
+    FILE_FOLDERS_OF_PROJECT,
+    FILE_FOLDERS_OF_PURCHASE_ORDER,
+    FILE_FOLDERS_OF_REPAIR,
+    FILE_FOLDERS_OF_SERIAL_NUMBER,
+    FILE_FOLDERS_OF_SUBPROJECT,
+    FILE_FOLDERS_OF_SUBRENTAL,
+    FILE_FOLDERS_OF_SUPPLIER,
+    FILE_FOLDERS_OF_VEHICLE,
 )

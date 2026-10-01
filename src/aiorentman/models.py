@@ -1626,3 +1626,218 @@ class ContactPerson:
     tags: tuple[str, ...]
     custom: dict[str, Any]
     raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class TaskStatus:
+    """One status that a task can carry."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    name: str
+    color: str
+    type: str
+    order: str
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class Task:
+    """One task tracked against one item in the account."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    recurhoe: str
+    recureind: str | None
+    recurperiode: int | None
+    is_template: bool
+    name: str
+    details: str
+    color: str
+    priority: str
+    order: str
+    deadline: datetime | None
+    deadline_type: str
+    deadline_relative_offset_base: str
+    deadline_relative_offset_amount: int | None
+    deadline_relative_offset_unit: str
+    deadline_relative_offset_direction: str
+    completed_at: datetime | None
+    status: RentmanLink | TaskStatus
+    item: int | None
+    itemtype: str | None
+    synchronization_id: str
+    synchronization_uri: str
+    public: str
+    assignment_type: str
+    completed_by: RentmanLink | None
+    expiry_notification_date: datetime | None
+    time_budget: float | None
+    tags: tuple[str, ...]
+    parent_api_path: str
+    custom: dict[str, Any]
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class Subtask:
+    """One checklist line inside one task."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    task: RentmanLink | Task
+    title: str
+    completed: bool
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class TaskAssignment:
+    """One crew member assigned to one task."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    task: RentmanLink | Task
+    crew: RentmanLink | Crew
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class FileFolder:
+    """One folder that groups the files of one item."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    parent: RentmanLink | FileFolder | None
+    name: str
+    classified: bool
+    item: int | None
+    itemtype: str | None
+    is_template: bool
+    parent_api_path: str
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class File:
+    """One file stored against one item in the account."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    readable_name: str
+    expiration: datetime | None
+    size: int | None
+    image: bool
+    item: int | None
+    itemtype: str | None
+    description: str
+    in_documents: bool
+    in_webshop: bool
+    classified: bool
+    public: bool
+    type: str
+    preview_of: RentmanLink | None
+    previewstatus: str
+    file_item: int | None
+    file_itemtype: str
+    folder: RentmanLink | FileFolder | None
+    path: str
+    path_without_file_name: str
+    path_with_file_folders: str
+    name_without_extension: str
+    friendly_name_without_extension: str
+    extension: str
+    url: str
+    proxy_url: str
+    parent_api_path: str
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class Rate:
+    """One rate definition that prices or costs book against."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    name: str
+    archived: bool
+    type: str
+    subtype: str
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class RateFactor:
+    """One bracket inside the price or cost table of a rate."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    rate_id: RentmanLink | Rate
+    from_: float | None
+    to: float | None
+    variable: float | None
+    fixed: float | None
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class FactorGroup:
+    """One group of day factors applied to rental prices."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    name: str
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class Factor:
+    """One day bracket inside a factor group."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    from_days: int | None
+    to_days: int | None
+    factor: str
+    factor_group: RentmanLink | FactorGroup
+    raw: dict[str, Any] | None = None
