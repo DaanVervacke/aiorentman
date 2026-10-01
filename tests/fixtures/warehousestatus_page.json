@@ -1,0 +1,24 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "created": "2024-11-02T08:10:00+00:00",
+      "modified": "2024-11-02T08:10:00+00:00",
+      "creator": "/crew/237",
+      "displayname": "In warehouse",
+      "name": "In warehouse"
+    },
+    {
+      "id": 2,
+      "created": "2024-11-02T08:11:00+00:00",
+      "modified": "2024-11-02T08:11:00+00:00",
+      "creator": "/crew/237",
+      "displayname": "On location",
+      "name": "On location"
+    }
+  ],
+  "itemCount": 2,
+  "limit": 300,
+  "offset": 0,
+  "next_page_url": null
+}

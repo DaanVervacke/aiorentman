@@ -1,0 +1,17 @@
+{
+  "data": [
+    {
+      "id": 900,
+      "created": "2025-05-20T10:00:00+00:00",
+      "modified": "2025-05-20T10:00:00+00:00",
+      "creator": "/crew/237",
+      "displayname": "Amplifier 1 in rack 3",
+      "combination": "/serialnumbers/43",
+      "serialnumber": "/serialnumbers/45"
+    }
+  ],
+  "itemCount": 1,
+  "limit": 300,
+  "offset": 0,
+  "next_page_url": null
+}

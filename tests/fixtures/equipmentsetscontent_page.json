@@ -1,0 +1,21 @@
+{
+  "data": [
+    {
+      "id": 550,
+      "created": "2025-05-19T15:00:00+00:00",
+      "modified": "2025-05-19T15:00:00+00:00",
+      "creator": "/crew/237",
+      "displayname": "Amplifier in rack",
+      "quantity": "2",
+      "parent_equipment": "/equipment/34",
+      "order": "10",
+      "equipment": "/equipment/35",
+      "is_fixed": "1",
+      "is_physically_connected": "1"
+    }
+  ],
+  "itemCount": 1,
+  "limit": 300,
+  "offset": 0,
+  "next_page_url": null
+}

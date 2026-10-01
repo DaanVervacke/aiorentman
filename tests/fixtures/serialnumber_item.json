@@ -1,0 +1,31 @@
+{
+  "data": {
+    "id": 41,
+    "created": "2025-03-05T09:00:00+00:00",
+    "modified": "2026-02-11T08:31:00+00:00",
+    "creator": "/crew/237",
+    "displayname": "Yamaha QL5 Mixer 41",
+    "equipment": "/equipment/12",
+    "serial": "QL5-000041",
+    "purchasedate": "2023-01-12T00:00:00+00:00",
+    "depreciation_monthly": 100.0,
+    "book_value": 4800.0,
+    "residual_value": 500.0,
+    "purchase_costs": 6000.0,
+    "active": true,
+    "remark": "",
+    "ref": "SR-041",
+    "asset_location": "/stocklocations/2",
+    "image": null,
+    "current_book_value": 4700.0,
+    "next_inspection": "2026-06-01T00:00:00+00:00",
+    "qrcodes": "E28068900000000000000001",
+    "tags": "",
+    "last_subproject": "/subprojects/501",
+    "sealed": false,
+    "custom": {}
+  },
+  "itemCount": 1,
+  "limit": 300,
+  "offset": 0
+}

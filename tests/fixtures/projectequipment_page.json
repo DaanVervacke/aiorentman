@@ -1,0 +1,42 @@
+{
+  "data": [
+    {
+      "id": 850,
+      "created": "2026-01-15T09:00:00+00:00",
+      "modified": "2026-02-05T10:10:00+00:00",
+      "creator": "/crew/237",
+      "displayname": "Yamaha QL5 Mixer on Spring Festival / Rental",
+      "equipment": "/equipment/12",
+      "parent": null,
+      "ledger": "/ledgercodes/7",
+      "ledger_debit": "/ledgercodes/8",
+      "quantity": "2",
+      "quantity_total": 2,
+      "equipment_group": "/projectequipmentgroup/9",
+      "discount": 0.0,
+      "is_option": false,
+      "factor": "1",
+      "order": "100",
+      "unit_price": 150.0,
+      "name": "Yamaha QL5 Mixer",
+      "external_remark": "",
+      "internal_remark": "",
+      "delay_notified": false,
+      "duration": 6.0,
+      "is_delayed": false,
+      "planperiod_start": "2026-02-10T08:00:00+00:00",
+      "planperiod_end": "2026-02-17T18:00:00+00:00",
+      "usageperiod_start": "2026-02-11T09:00:00+00:00",
+      "usageperiod_end": "2026-02-16T23:00:00+00:00",
+      "has_missings": false,
+      "warehouse_reservations": 2,
+      "subrent_reservations": 0,
+      "serial_number_ids": "41,42",
+      "custom": {}
+    }
+  ],
+  "itemCount": 1,
+  "limit": 300,
+  "offset": 0,
+  "next_page_url": null
+}

@@ -1,0 +1,35 @@
+{
+  "data": [
+    {
+      "id": 220,
+      "created": "2026-01-20T13:00:00+00:00",
+      "modified": "2026-01-27T09:15:00+00:00",
+      "creator": "/crew/238",
+      "displayname": "Repair of QL5-000042",
+      "internal_name": "Repair of QL5-000042",
+      "equipment": "/equipment/12",
+      "serialnumber": "/serialnumbers/42",
+      "reporter": "/crew/238",
+      "assignee": "/crew/240",
+      "external_repairer": null,
+      "number": "REP-2026-014",
+      "repairperiod_start": "2026-01-20T13:00:00+00:00",
+      "repairperiod_end": "2026-01-27T09:15:00+00:00",
+      "amount": 1,
+      "remark": "Left XLR port replaced.",
+      "repair_costs": 85.0,
+      "is_usable": "1",
+      "costs_charged_to_customer": null,
+      "subproject": null,
+      "stock_location": "/stocklocations/2",
+      "repair_status": "3",
+      "unrepairable_of": null,
+      "tags": "audio",
+      "custom": {}
+    }
+  ],
+  "itemCount": 1,
+  "limit": 300,
+  "offset": 0,
+  "next_page_url": null
+}

@@ -1,0 +1,30 @@
+{
+  "data": [
+    {
+      "id": 700,
+      "created": "2026-02-11T09:00:00+00:00",
+      "modified": "2026-02-11T09:00:00+00:00",
+      "creator": "/crew/237",
+      "displayname": "Lab gruppen amplifier in rack 3",
+      "equipment": "/equipment/35",
+      "serial": "/serialnumbers/45",
+      "quantity": "1",
+      "combination_serial": "/serialnumbers/43"
+    },
+    {
+      "id": 701,
+      "created": "2026-02-11T09:05:00+00:00",
+      "modified": "2026-02-11T09:05:00+00:00",
+      "creator": "/crew/237",
+      "displayname": "Power distributor in rack 3",
+      "equipment": "/equipment/36",
+      "serial": null,
+      "quantity": "1",
+      "combination_serial": "/serialnumbers/43"
+    }
+  ],
+  "itemCount": 2,
+  "limit": 300,
+  "offset": 0,
+  "next_page_url": null
+}

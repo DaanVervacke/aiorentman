@@ -1,0 +1,32 @@
+{
+  "data": [
+    {
+      "id": 3,
+      "created": "2024-11-01T08:00:00+00:00",
+      "modified": "2025-01-06T11:20:00+00:00",
+      "creator": "/crew/237",
+      "displayname": "Audio",
+      "parent": null,
+      "name": "Audio",
+      "order": "10",
+      "itemtype": "0",
+      "path": "Audio"
+    },
+    {
+      "id": 4,
+      "created": "2024-11-01T08:05:00+00:00",
+      "modified": "2025-01-06T11:25:00+00:00",
+      "creator": "/crew/237",
+      "displayname": "Audio / Amplifiers",
+      "parent": "/folders/3",
+      "name": "Amplifiers",
+      "order": "20",
+      "itemtype": "0",
+      "path": "Audio / Amplifiers"
+    }
+  ],
+  "itemCount": 2,
+  "limit": 300,
+  "offset": 0,
+  "next_page_url": null
+}
