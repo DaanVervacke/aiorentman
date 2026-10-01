@@ -12,6 +12,7 @@ Before 1.0, breaking changes ship as minor bumps.
 
 - Validate against the live API and add redacted fixtures
 - Add the equipment adjacent resources
+- Add the project planning resources
 
 ## [0.1.0] - 2026-10-01
 
