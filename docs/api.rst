@@ -104,6 +104,32 @@ Models
    :members:
 .. autoclass:: aiorentman.PurchaseOrderGlobalCost
    :members:
+.. autoclass:: aiorentman.Crew
+   :members:
+.. autoclass:: aiorentman.CrewAvailability
+   :members:
+.. autoclass:: aiorentman.CrewRate
+   :members:
+.. autoclass:: aiorentman.Appointment
+   :members:
+.. autoclass:: aiorentman.AppointmentCrew
+   :members:
+.. autoclass:: aiorentman.Invitation
+   :members:
+.. autoclass:: aiorentman.TimeRegistration
+   :members:
+.. autoclass:: aiorentman.TimeRegistrationActivity
+   :members:
+.. autoclass:: aiorentman.LeaveRequest
+   :members:
+.. autoclass:: aiorentman.LeaveMutation
+   :members:
+.. autoclass:: aiorentman.LeaveType
+   :members:
+.. autoclass:: aiorentman.Contact
+   :members:
+.. autoclass:: aiorentman.ContactPerson
+   :members:
 
 Exceptions
 ----------

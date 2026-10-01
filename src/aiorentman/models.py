@@ -1248,3 +1248,381 @@ class PurchaseOrderGlobalCost:
     quantity: int | None
     taxclass: RentmanLink | TaxClass | None
     raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class Crew:
+    """One crew member registered in the account."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    folder: RentmanLink | Folder | None
+    street: str
+    housenumber: str
+    unit_number: str
+    district: str
+    city: str
+    postal_code: str
+    addressline2: str
+    extraaddressline: str
+    state: str
+    country: str
+    birthdate: datetime | None
+    passport_number: str
+    emergency_contact: str
+    remark: str
+    driving_license: str
+    contract: str
+    bank: str
+    contract_date: datetime | None
+    company_name: str
+    vat_code: str
+    coc_code: str
+    firstname: str
+    middle_name: str
+    lastname: str
+    email: str
+    phone: str
+    active: bool
+    avatar: RentmanLink | None
+    vt_fullname: str
+    default_warehouse: RentmanLink | StockLocation | None
+    external_reference: str
+    tags: tuple[str, ...]
+    custom: dict[str, Any]
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class CrewAvailability:
+    """One availability window registered for one crew member."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    last_updater: RentmanLink | None
+    last_updated: datetime | None
+    start: datetime | None
+    end: datetime | None
+    crewmember: RentmanLink | Crew
+    status: str
+    remark: str
+    recurrence_interval_unit: str
+    recurrence_enddate: datetime | None
+    recurrence_interval: int | None
+    recurrent_group: int | None
+    recurrence_weekdays: str
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class CrewRate:
+    """One cost rate assigned to one crew member."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    naam: str
+    cost_rate: RentmanLink | None
+    medewerker: RentmanLink | Crew
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class Appointment:
+    """One calendar appointment in the crew planner."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    name: str
+    start: datetime | None
+    end: datetime | None
+    color: str
+    location: str
+    remark: str
+    is_public: bool
+    is_plannable: bool
+    recurrence_interval_unit: str
+    recurrence_enddate: datetime | None
+    recurrence_interval: int | None
+    recurrence_group: int | None
+    recurrence_weekdays: str | None
+    synchronization_id: str
+    synchronisation_uri: str
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class AppointmentCrew:
+    """One crew member attached to one appointment."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    appointment: RentmanLink | Appointment
+    crew: RentmanLink | Crew
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class Invitation:
+    """One planning invitation sent to one crew member."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    type: str
+    accepted: bool
+    responded_timestamp: datetime | None
+    expiration_date: datetime | None
+    start: datetime | None
+    end: datetime | None
+    function: RentmanLink | None
+    projectcrew: RentmanLink | None
+    crewmember: RentmanLink | Crew
+    remark: str
+    emailstatus: str
+    last_reminder: datetime | None
+    location_details: str
+    auto_reminder_date: datetime | None
+    auto_reminder_sent: int | None
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class LeaveType:
+    """One leave type that time registration books to."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    type: str
+    name: str
+    payroll_code: str
+    color: str
+    requires_approval: bool
+    affects_availability: bool
+    has_balance: bool
+    balance_start_date: datetime | None
+    is_labor: str
+    has_calculated_duration: bool
+    can_have_activities: bool
+    counts_in_totals: bool
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class LeaveRequest:
+    """One leave request submitted by one crew member."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    description: str
+    approval_status: str
+    requested_for: RentmanLink | Crew
+    reviewed_on: datetime | None
+    reviewer: RentmanLink | None
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class LeaveMutation:
+    """One leave balance mutation for one crew member."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    description: str
+    duration: float | None
+    crewmember: RentmanLink | Crew
+    leavetype: RentmanLink | LeaveType
+    mutation_date: datetime | None
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class TimeRegistration:
+    """One worked or leave time registration of one crew member."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    crewmember: RentmanLink | Crew | None
+    start: datetime | None
+    end: datetime | None
+    distance: float | None
+    is_lunch_included: bool
+    leavetype: RentmanLink | LeaveType | None
+    leaverequest: RentmanLink | LeaveRequest | None
+    duration: float | None
+    break_duration: float | None
+    travel_time: float | None
+    correction_duration: float | None
+    remark: str
+    status: str
+    break_duration_with_start_end: float | None
+    custom: dict[str, Any]
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class TimeRegistrationActivity:
+    """One activity line inside one time registration."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    time_registration: RentmanLink | TimeRegistration
+    project_function: RentmanLink | ProjectFunction | None
+    subproject_function: RentmanLink | ProjectFunction | None
+    description: str
+    duration: float | None
+    is_activity: bool
+    from_: datetime | None
+    to: datetime | None
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class Contact:
+    """One customer or supplier contact registered in the account."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    folder: RentmanLink | Folder | None
+    type: str
+    ext_name_line: str
+    firstname: str
+    distance: float | None
+    travel_time: float | None
+    surfix: str
+    surname: str
+    longitude: float | None
+    latitude: float | None
+    code: str
+    accounting_code: str
+    vendor_accounting_code: str
+    name: str
+    gender: str
+    mailing_city: str
+    mailing_street: str
+    mailing_number: str
+    mailing_unit_number: str
+    mailing_district: str
+    mailing_extra_address_line: str
+    mailing_postalcode: str
+    mailing_state: str
+    mailing_country: str
+    visit_city: str
+    visit_street: str
+    visit_number: str
+    visit_unit_number: str
+    visit_district: str
+    visit_extra_address_line: str
+    visit_postalcode: str
+    visit_state: str
+    country: str
+    invoice_city: str
+    invoice_street: str
+    invoice_number: str
+    invoice_unit_number: str
+    invoice_district: str
+    invoice_extra_address_line: str
+    invoice_postalcode: str
+    invoice_state: str
+    invoice_country: str
+    phone_1: str
+    phone_2: str
+    email_1: str
+    email_2: str
+    website: str
+    VAT_code: str
+    fiscal_code: str
+    commerce_code: str
+    purchase_number: str
+    bic: str
+    bank_account: str
+    default_person: RentmanLink | ContactPerson | None
+    admin_contactperson: RentmanLink | None
+    discount_crew: float | None
+    discount_transport: float | None
+    discount_rental: float | None
+    discount_sale: float | None
+    discount_total: float | None
+    projectnote: str
+    projectnote_title: str
+    contact_warning: str
+    discount_subrent: float | None
+    image: RentmanLink | None
+    tags: tuple[str, ...]
+    custom: dict[str, Any]
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class ContactPerson:
+    """One person working at one contact."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    contact: RentmanLink | Contact
+    firstname: str
+    middle_name: str
+    lastname: str
+    function: str
+    phone: str
+    street: str
+    number: str
+    postalcode: str
+    city: str
+    state: str
+    country: str
+    mobilephone: str
+    email: str
+    tags: tuple[str, ...]
+    custom: dict[str, Any]
+    raw: dict[str, Any] | None = None

@@ -1,0 +1,151 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": null,
+      "displayname": "Synthetic 371f40247e38",
+      "naam": "Synthetic 7236ddedabe8",
+      "cost_rate": "/rates/541",
+      "medewerker": "/crew/33",
+      "updateHash": "6226e7a79a629fdd68aa9cb8d5478c36"
+    },
+    {
+      "id": 2,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": null,
+      "displayname": "Synthetic 4da93d96842e",
+      "naam": "Synthetic 12db0d67f52c",
+      "cost_rate": "/rates/542",
+      "medewerker": "/crew/227",
+      "updateHash": "abf79ee83f6c19960de3bb2855bd856f"
+    },
+    {
+      "id": 3,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": null,
+      "displayname": "Synthetic 4da93d96842e",
+      "naam": "Synthetic 12db0d67f52c",
+      "cost_rate": "/rates/543",
+      "medewerker": "/crew/223",
+      "updateHash": "a4998cae6053d85f8703c0634eb48b3c"
+    },
+    {
+      "id": 4,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": null,
+      "displayname": "Synthetic 4da93d96842e",
+      "naam": "Synthetic 12db0d67f52c",
+      "cost_rate": "/rates/544",
+      "medewerker": "/crew/224",
+      "updateHash": "9b6db6957a2a690bd193621d41f648cf"
+    },
+    {
+      "id": 6,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": null,
+      "displayname": "Synthetic 4da93d96842e",
+      "naam": "Synthetic 12db0d67f52c",
+      "cost_rate": "/rates/545",
+      "medewerker": "/crew/226",
+      "updateHash": "a8faf0388f1feefdd0ab053a974e7c51"
+    },
+    {
+      "id": 7,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": null,
+      "displayname": "Synthetic 371f40247e38",
+      "naam": "Synthetic 7236ddedabe8",
+      "cost_rate": "/rates/546",
+      "medewerker": "/crew/228",
+      "updateHash": "b53fb674dbcca47fad085295e9830776"
+    },
+    {
+      "id": 8,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": null,
+      "displayname": "Synthetic 371f40247e38",
+      "naam": "Synthetic 7236ddedabe8",
+      "cost_rate": "/rates/547",
+      "medewerker": "/crew/229",
+      "updateHash": "118aa0318f6ac81c486ff9d532097a75"
+    },
+    {
+      "id": 9,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": null,
+      "displayname": "Synthetic 371f40247e38",
+      "naam": "Synthetic 7236ddedabe8",
+      "cost_rate": "/rates/548",
+      "medewerker": "/crew/230",
+      "updateHash": "9d6e9e17b3186e48f65707766ffbf2e9"
+    },
+    {
+      "id": 10,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": null,
+      "displayname": "Synthetic 371f40247e38",
+      "naam": "Synthetic 7236ddedabe8",
+      "cost_rate": "/rates/549",
+      "medewerker": "/crew/231",
+      "updateHash": "64d1606945a8bfa4bd48c14278b52f4b"
+    },
+    {
+      "id": 11,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 4da93d96842e",
+      "naam": "Synthetic 12db0d67f52c",
+      "cost_rate": "/rates/550",
+      "medewerker": "/crew/225",
+      "updateHash": "7c3db504a726996721a5746e2ea28e23"
+    },
+    {
+      "id": 12,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic a527c5dd3193",
+      "naam": "Synthetic 2e320bc7c966",
+      "cost_rate": "/rates/551",
+      "medewerker": "/crew/237",
+      "updateHash": "ced77b686a9c3e4d712f4f4683ad7df7"
+    },
+    {
+      "id": 13,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic a527c5dd3193",
+      "naam": "Synthetic 2e320bc7c966",
+      "cost_rate": "/rates/552",
+      "medewerker": "/crew/238",
+      "updateHash": "e843231e5d88c4cf6cf48d065f52ab8a"
+    },
+    {
+      "id": 14,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic a527c5dd3193",
+      "naam": "Synthetic 2e320bc7c966",
+      "cost_rate": "/rates/553",
+      "medewerker": "/crew/239",
+      "updateHash": "fd643c05b258f1497c680f38b57a018d"
+    }
+  ],
+  "itemCount": 13,
+  "limit": 50,
+  "offset": 0,
+  "next_page_url": null
+}

@@ -209,6 +209,42 @@ COLLECTIONS: tuple[tuple[Callable[[RentmanClient], Awaitable[RentmanPage[Any]]],
     ),
     (lambda client: client.async_list_purchase_order_costs(), "/purchaseordercosts"),
     (lambda client: client.async_list_purchase_order_global_costs(), "/purchaseorderglobalcosts"),
+    (lambda client: client.async_list_crew(), "/crew"),
+    (lambda client: client.async_list_appointments_of_crew(33), "/crew/33/appointments"),
+    (lambda client: client.async_list_crew_availability_of_crew(33), "/crew/33/crewavailability"),
+    (lambda client: client.async_list_crew_rates_of_crew(33), "/crew/33/crewrates"),
+    (lambda client: client.async_list_invitations_of_crew(33), "/crew/33/invitations"),
+    (lambda client: client.async_list_crew_availability(), "/crewavailability"),
+    (lambda client: client.async_list_crew_rates(), "/crewrates"),
+    (lambda client: client.async_list_invitations(), "/invitations"),
+    (lambda client: client.async_list_appointments(), "/appointments"),
+    (
+        lambda client: client.async_list_appointment_crew_of_appointment(28),
+        "/appointments/28/appointmentcrew",
+    ),
+    (lambda client: client.async_list_appointment_crew(), "/appointmentcrew"),
+    (lambda client: client.async_list_time_registrations(), "/timeregistration"),
+    (
+        lambda client: client.async_list_time_registration_activities_of_time_registration(20),
+        "/timeregistration/20/timeregistrationactivities",
+    ),
+    (
+        lambda client: client.async_list_time_registration_activities(),
+        "/timeregistrationactivities",
+    ),
+    (lambda client: client.async_list_leave_requests(), "/leaverequest"),
+    (
+        lambda client: client.async_list_time_registrations_of_leave_request(1),
+        "/leaverequest/1/timeregistration",
+    ),
+    (lambda client: client.async_list_leave_mutations(), "/leavemutation"),
+    (lambda client: client.async_list_leave_types(), "/leavetypes"),
+    (lambda client: client.async_list_contacts(), "/contacts"),
+    (
+        lambda client: client.async_list_contact_persons_of_contact(3609),
+        "/contacts/3609/contactpersons",
+    ),
+    (lambda client: client.async_list_contact_persons(), "/contactpersons"),
 )
 
 ITEMS: tuple[tuple[Callable[[RentmanClient], Awaitable[Any]], str], ...] = (
@@ -257,6 +293,22 @@ ITEMS: tuple[tuple[Callable[[RentmanClient], Awaitable[Any]], str], ...] = (
     (lambda client: client.async_get_purchase_order(1), "/purchaseorders/1"),
     (lambda client: client.async_get_purchase_order_cost(1), "/purchaseordercosts/1"),
     (lambda client: client.async_get_purchase_order_global_cost(1), "/purchaseorderglobalcosts/1"),
+    (lambda client: client.async_get_crew(33), "/crew/33"),
+    (lambda client: client.async_get_crew_availability(1), "/crewavailability/1"),
+    (lambda client: client.async_get_crew_rate(1), "/crewrates/1"),
+    (lambda client: client.async_get_invitation(1), "/invitations/1"),
+    (lambda client: client.async_get_appointment(25), "/appointments/25"),
+    (lambda client: client.async_get_appointment_crew(2), "/appointmentcrew/2"),
+    (lambda client: client.async_get_time_registration(20), "/timeregistration/20"),
+    (
+        lambda client: client.async_get_time_registration_activity(1),
+        "/timeregistrationactivities/1",
+    ),
+    (lambda client: client.async_get_leave_request(1), "/leaverequest/1"),
+    (lambda client: client.async_get_leave_mutation(1), "/leavemutation/1"),
+    (lambda client: client.async_get_leave_type(1), "/leavetypes/1"),
+    (lambda client: client.async_get_contact(3609), "/contacts/3609"),
+    (lambda client: client.async_get_contact_person(8), "/contactpersons/8"),
 )
 
 ITERATORS: tuple[tuple[Callable[[RentmanClient, Query | None], Any], str], ...] = (
@@ -485,6 +537,53 @@ ITERATORS: tuple[tuple[Callable[[RentmanClient, Query | None], Any], str], ...] 
         lambda client, query: client.async_iter_purchase_order_global_costs(query),
         "/purchaseorderglobalcosts",
     ),
+    (lambda client, query: client.async_iter_crew(query), "/crew"),
+    (
+        lambda client, query: client.async_iter_appointments_of_crew(33, query),
+        "/crew/33/appointments",
+    ),
+    (
+        lambda client, query: client.async_iter_crew_availability_of_crew(33, query),
+        "/crew/33/crewavailability",
+    ),
+    (lambda client, query: client.async_iter_crew_rates_of_crew(33, query), "/crew/33/crewrates"),
+    (
+        lambda client, query: client.async_iter_invitations_of_crew(33, query),
+        "/crew/33/invitations",
+    ),
+    (lambda client, query: client.async_iter_crew_availability(query), "/crewavailability"),
+    (lambda client, query: client.async_iter_crew_rates(query), "/crewrates"),
+    (lambda client, query: client.async_iter_invitations(query), "/invitations"),
+    (lambda client, query: client.async_iter_appointments(query), "/appointments"),
+    (
+        lambda client, query: client.async_iter_appointment_crew_of_appointment(28, query),
+        "/appointments/28/appointmentcrew",
+    ),
+    (lambda client, query: client.async_iter_appointment_crew(query), "/appointmentcrew"),
+    (lambda client, query: client.async_iter_time_registrations(query), "/timeregistration"),
+    (
+        lambda client, query: client.async_iter_time_registration_activities_of_time_registration(
+            20, query
+        ),
+        "/timeregistration/20/timeregistrationactivities",
+    ),
+    (
+        lambda client, query: client.async_iter_time_registration_activities(query),
+        "/timeregistrationactivities",
+    ),
+    (lambda client, query: client.async_iter_leave_requests(query), "/leaverequest"),
+    (
+        lambda client, query: client.async_iter_time_registrations_of_leave_request(1, query),
+        "/leaverequest/1/timeregistration",
+    ),
+    (lambda client, query: client.async_iter_leave_mutations(query), "/leavemutation"),
+    (lambda client, query: client.async_iter_leave_types(query), "/leavetypes"),
+    (lambda client, query: client.async_iter_contacts(query), "/contacts"),
+    (
+        lambda client, query: client.async_iter_contact_persons_of_contact(3609, query),
+        "/contacts/3609/contactpersons",
+    ),
+    (lambda client, query: client.async_iter_contact_persons(query), "/contactpersons"),
 )
 
 

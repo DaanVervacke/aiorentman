@@ -6,12 +6,22 @@ from typing import Any
 from aiorentman.models import (
     Accessory,
     Alternative,
+    Appointment,
+    AppointmentCrew,
+    Contact,
+    ContactPerson,
     Contract,
+    Crew,
+    CrewAvailability,
+    CrewRate,
     Equipment,
     ExtraInputField,
     Folder,
     Invoice,
     InvoiceLine,
+    LeaveMutation,
+    LeaveRequest,
+    LeaveType,
     LedgerCode,
     Payment,
     Project,
@@ -39,18 +49,31 @@ from aiorentman.models import (
     SubrentalEquipmentGroup,
     Supplier,
     TaxClass,
+    TimeRegistration,
+    TimeRegistrationActivity,
     Vehicle,
 )
 from aiorentman.parsers import (
     parse_accessory,
     parse_actual_content,
     parse_alternative,
+    parse_appointment,
+    parse_appointment_crew,
+    parse_contact,
+    parse_contact_person,
     parse_contract,
+    parse_crew,
+    parse_crew_availability,
+    parse_crew_rate,
     parse_envelope_item,
     parse_equipment,
     parse_extra_input_field,
+    parse_invitation,
     parse_invoice,
     parse_invoice_line,
+    parse_leave_mutation,
+    parse_leave_request,
+    parse_leave_type,
     parse_ledger_code,
     parse_page,
     parse_payment,
@@ -75,6 +98,8 @@ from aiorentman.parsers import (
     parse_subrental_equipment_group,
     parse_supplier,
     parse_tax_class,
+    parse_time_registration,
+    parse_time_registration_activity,
     parse_vehicle,
 )
 
@@ -750,3 +775,178 @@ def test_parse_purchase_order_global_cost_falls_back_to_an_empty_link() -> None:
     global_cost = parse_purchase_order_global_cost({})
     assert global_cost.purchase_order == RentmanLink("")
     assert global_cost.taxclass is None
+
+
+def test_parse_crew_coerces_contract_and_resolves_links() -> None:
+    member = parse_crew(
+        {
+            "contract": 40,
+            "folder": {"id": 40, "name": "Crew"},
+            "default_warehouse": {"id": 1, "name": "Main warehouse"},
+            "tags": "trial",
+        }
+    )
+    assert isinstance(member, Crew)
+    assert member.contract == "40"
+    assert isinstance(member.folder, Folder)
+    assert member.folder.id == 40
+    assert isinstance(member.default_warehouse, StockLocation)
+    assert member.default_warehouse.id == 1
+    assert member.email == ""
+    assert member.custom == {}
+
+
+def test_parse_crew_models_keep_required_crew_links() -> None:
+    availability = parse_crew_availability(
+        {"crewmember": {"id": 230, "firstname": "Stage"}, "status": "N"}
+    )
+    assert isinstance(availability, CrewAvailability)
+    assert isinstance(availability.crewmember, Crew)
+    assert availability.crewmember.id == 230
+    assert availability.status == "N"
+    rate = parse_crew_rate({"cost_rate": "/rates/541", "medewerker": "/crew/33"})
+    assert isinstance(rate, CrewRate)
+    assert rate.cost_rate == RentmanLink("/rates/541")
+    assert rate.medewerker == RentmanLink("/crew/33")
+
+
+def test_parse_crew_models_fall_back_to_empty_links() -> None:
+    availability = parse_crew_availability({})
+    rate = parse_crew_rate({})
+    invitation = parse_invitation({})
+    assert availability.crewmember == RentmanLink("")
+    assert rate.medewerker == RentmanLink("")
+    assert invitation.crewmember == RentmanLink("")
+    assert invitation.function is None
+    assert invitation.projectcrew is None
+
+
+def test_parse_appointment_and_crew_resolves_expanded_links() -> None:
+    attachment = parse_appointment_crew(
+        {
+            "appointment": {"id": 28, "name": "Dentist"},
+            "crew": {"id": 223, "firstname": "Brian"},
+        }
+    )
+    assert isinstance(attachment, AppointmentCrew)
+    assert isinstance(attachment.appointment, Appointment)
+    assert attachment.appointment.id == 28
+    assert isinstance(attachment.crew, Crew)
+    assert attachment.crew.id == 223
+
+
+def test_parse_appointment_and_crew_fall_back_to_empty_links() -> None:
+    attachment = parse_appointment_crew({})
+    assert attachment.appointment == RentmanLink("")
+    assert attachment.crew == RentmanLink("")
+    appointment = parse_appointment({"start": "2026-10-05T10:00:00+02:00"})
+    assert isinstance(appointment, Appointment)
+    assert appointment.start is not None
+    assert appointment.recurrence_weekdays is None
+
+
+def test_parse_leave_models_keep_their_links() -> None:
+    request = parse_leave_request(
+        {"requested_for": {"id": 228, "firstname": "Crew"}, "reviewer": "/crew/33"}
+    )
+    assert isinstance(request, LeaveRequest)
+    assert isinstance(request.requested_for, Crew)
+    assert request.requested_for.id == 228
+    assert request.reviewer == RentmanLink("/crew/33")
+    mutation = parse_leave_mutation(
+        {"leavetype": {"id": 2, "name": "Vakantie"}, "crewmember": "/crew/228"}
+    )
+    assert isinstance(mutation, LeaveMutation)
+    assert isinstance(mutation.leavetype, LeaveType)
+    assert mutation.leavetype.id == 2
+    assert mutation.crewmember == RentmanLink("/crew/228")
+
+
+def test_parse_leave_models_fall_back_to_empty_links() -> None:
+    request = parse_leave_request({})
+    mutation = parse_leave_mutation({})
+    assert request.requested_for == RentmanLink("")
+    assert mutation.leavetype == RentmanLink("")
+    assert mutation.crewmember == RentmanLink("")
+    leave_type = parse_leave_type({"type": "G", "is_labor": "worked"})
+    assert isinstance(leave_type, LeaveType)
+    assert leave_type.type == "G"
+    assert leave_type.is_labor == "worked"
+
+
+def test_parse_time_registration_resolves_expanded_links() -> None:
+    registration = parse_time_registration(
+        {
+            "crewmember": {"id": 226, "firstname": "Stage"},
+            "leavetype": {"id": 1, "name": "Gewerkt"},
+            "leaverequest": "/leaverequest/1",
+            "status": "approved",
+        }
+    )
+    assert isinstance(registration, TimeRegistration)
+    assert isinstance(registration.crewmember, Crew)
+    assert registration.crewmember.id == 226
+    assert isinstance(registration.leavetype, LeaveType)
+    assert registration.leavetype.id == 1
+    assert registration.leaverequest == RentmanLink("/leaverequest/1")
+
+
+def test_parse_time_registration_activity_keeps_keyword_times() -> None:
+    activity = parse_time_registration_activity(
+        {
+            "time_registration": {"id": 20, "status": "approved"},
+            "project_function": "/projectfunctions/490",
+            "from": "2026-09-19T14:00:00+02:00",
+            "to": "2026-09-19T16:00:00+02:00",
+        }
+    )
+    assert isinstance(activity, TimeRegistrationActivity)
+    assert isinstance(activity.time_registration, TimeRegistration)
+    assert activity.time_registration.id == 20
+    assert activity.project_function == RentmanLink("/projectfunctions/490")
+    assert activity.from_ is not None
+    assert activity.to is not None
+
+
+def test_parse_time_registration_activity_falls_back_to_an_empty_link() -> None:
+    activity = parse_time_registration_activity({})
+    assert activity.time_registration == RentmanLink("")
+    assert activity.from_ is None
+    assert activity.subproject_function is None
+
+
+def test_parse_contact_resolves_expanded_links() -> None:
+    contact = parse_contact(
+        {
+            "folder": {"id": 32, "name": "Customers"},
+            "default_person": {"id": 8, "firstname": "Luke"},
+            "VAT_code": "NL1234567890",
+            "type": "company",
+        }
+    )
+    assert isinstance(contact, Contact)
+    assert isinstance(contact.folder, Folder)
+    assert contact.folder.id == 32
+    assert isinstance(contact.default_person, ContactPerson)
+    assert contact.default_person.id == 8
+    assert contact.VAT_code == "NL1234567890"
+    assert contact.type == "company"
+
+
+def test_parse_contact_person_resolves_expanded_contact() -> None:
+    person = parse_contact_person(
+        {"contact": {"id": 3609, "name": "Wow Music"}, "firstname": "Luke"}
+    )
+    assert isinstance(person, ContactPerson)
+    assert isinstance(person.contact, Contact)
+    assert person.contact.id == 3609
+    assert person.function == ""
+
+
+def test_parse_contact_models_fall_back_to_empty_links() -> None:
+    contact = parse_contact({})
+    person = parse_contact_person({})
+    assert contact.default_person is None
+    assert contact.VAT_code == ""
+    assert person.contact == RentmanLink("")
+    assert person.email == ""

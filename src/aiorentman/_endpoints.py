@@ -8,14 +8,25 @@ from .models import (
     Accessory,
     ActualContent,
     Alternative,
+    Appointment,
+    AppointmentCrew,
+    Contact,
+    ContactPerson,
     Contract,
+    Crew,
+    CrewAvailability,
+    CrewRate,
     Equipment,
     EquipmentAssignedSerial,
     EquipmentSetContent,
     ExtraInputField,
     Folder,
+    Invitation,
     Invoice,
     InvoiceLine,
+    LeaveMutation,
+    LeaveRequest,
+    LeaveType,
     LedgerCode,
     Payment,
     Project,
@@ -46,6 +57,8 @@ from .models import (
     SubrentalEquipmentGroup,
     Supplier,
     TaxClass,
+    TimeRegistration,
+    TimeRegistrationActivity,
     Vehicle,
     WarehouseStatus,
 )
@@ -53,15 +66,26 @@ from .parsers import (
     parse_accessory,
     parse_actual_content,
     parse_alternative,
+    parse_appointment,
+    parse_appointment_crew,
+    parse_contact,
+    parse_contact_person,
     parse_contract,
+    parse_crew,
+    parse_crew_availability,
+    parse_crew_rate,
     parse_envelope_item,
     parse_equipment,
     parse_equipment_assigned_serial,
     parse_equipment_set_content,
     parse_extra_input_field,
     parse_folder,
+    parse_invitation,
     parse_invoice,
     parse_invoice_line,
+    parse_leave_mutation,
+    parse_leave_request,
+    parse_leave_type,
     parse_ledger_code,
     parse_page,
     parse_payment,
@@ -92,6 +116,8 @@ from .parsers import (
     parse_subrental_equipment_group,
     parse_supplier,
     parse_tax_class,
+    parse_time_registration,
+    parse_time_registration_activity,
     parse_vehicle,
     parse_warehouse_status,
 )
@@ -1309,6 +1335,320 @@ PURCHASE_ORDER_GLOBAL_COSTS_ITEM: Endpoint[ItemArgs, PurchaseOrderGlobalCost | N
     response_schema="PurchaseOrderGlobalCostResponse",
 )
 
+CREW: Endpoint[CollectionArgs, RentmanPage[Crew]] = Endpoint(
+    name="crew",
+    method="GET",
+    path=lambda _args: "/crew",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_crew),
+    response_schema="CrewResponse",
+)
+
+CREW_ITEM: Endpoint[ItemArgs, Crew | None] = Endpoint(
+    name="crew_item",
+    method="GET",
+    path=lambda args: f"/crew/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_crew),
+    response_schema="CrewResponse",
+)
+
+APPOINTMENTS_OF_CREW: Endpoint[ParentCollectionArgs, RentmanPage[Appointment]] = Endpoint(
+    name="appointments_of_crew",
+    method="GET",
+    path=lambda args: f"/crew/{args.parent_id}/appointments",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_appointment),
+    response_schema="AppointmentResponse",
+)
+
+CREW_AVAILABILITY_OF_CREW: Endpoint[ParentCollectionArgs, RentmanPage[CrewAvailability]] = Endpoint(
+    name="crew_availability_of_crew",
+    method="GET",
+    path=lambda args: f"/crew/{args.parent_id}/crewavailability",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_crew_availability),
+    response_schema="CrewAvailabilityResponse",
+)
+
+CREW_RATES_OF_CREW: Endpoint[ParentCollectionArgs, RentmanPage[CrewRate]] = Endpoint(
+    name="crew_rates_of_crew",
+    method="GET",
+    path=lambda args: f"/crew/{args.parent_id}/crewrates",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_crew_rate),
+    response_schema="CrewRatesResponse",
+)
+
+INVITATIONS_OF_CREW: Endpoint[ParentCollectionArgs, RentmanPage[Invitation]] = Endpoint(
+    name="invitations_of_crew",
+    method="GET",
+    path=lambda args: f"/crew/{args.parent_id}/invitations",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_invitation),
+    response_schema="InvitationsResponse",
+)
+
+CREW_AVAILABILITY: Endpoint[CollectionArgs, RentmanPage[CrewAvailability]] = Endpoint(
+    name="crew_availability",
+    method="GET",
+    path=lambda _args: "/crewavailability",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_crew_availability),
+    response_schema="CrewAvailabilityResponse",
+)
+
+CREW_AVAILABILITY_ITEM: Endpoint[ItemArgs, CrewAvailability | None] = Endpoint(
+    name="crew_availability_item",
+    method="GET",
+    path=lambda args: f"/crewavailability/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_crew_availability),
+    response_schema="CrewAvailabilityResponse",
+)
+
+CREW_RATES: Endpoint[CollectionArgs, RentmanPage[CrewRate]] = Endpoint(
+    name="crew_rates",
+    method="GET",
+    path=lambda _args: "/crewrates",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_crew_rate),
+    response_schema="CrewRatesResponse",
+)
+
+CREW_RATES_ITEM: Endpoint[ItemArgs, CrewRate | None] = Endpoint(
+    name="crew_rates_item",
+    method="GET",
+    path=lambda args: f"/crewrates/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_crew_rate),
+    response_schema="CrewRatesResponse",
+)
+
+INVITATIONS: Endpoint[CollectionArgs, RentmanPage[Invitation]] = Endpoint(
+    name="invitations",
+    method="GET",
+    path=lambda _args: "/invitations",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_invitation),
+    response_schema="InvitationsResponse",
+)
+
+INVITATIONS_ITEM: Endpoint[ItemArgs, Invitation | None] = Endpoint(
+    name="invitations_item",
+    method="GET",
+    path=lambda args: f"/invitations/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_invitation),
+    response_schema="InvitationsResponse",
+)
+
+APPOINTMENTS: Endpoint[CollectionArgs, RentmanPage[Appointment]] = Endpoint(
+    name="appointments",
+    method="GET",
+    path=lambda _args: "/appointments",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_appointment),
+    response_schema="AppointmentResponse",
+)
+
+APPOINTMENTS_ITEM: Endpoint[ItemArgs, Appointment | None] = Endpoint(
+    name="appointments_item",
+    method="GET",
+    path=lambda args: f"/appointments/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_appointment),
+    response_schema="AppointmentResponse",
+)
+
+APPOINTMENT_CREW_OF_APPOINTMENT: Endpoint[ParentCollectionArgs, RentmanPage[AppointmentCrew]] = (
+    Endpoint(
+        name="appointment_crew_of_appointment",
+        method="GET",
+        path=lambda args: f"/appointments/{args.parent_id}/appointmentcrew",
+        params=_linked_collection_params,
+        parse=lambda payload, _args: parse_page(payload, parse_appointment_crew),
+        response_schema="AppointmentCrewResponse",
+    )
+)
+
+APPOINTMENT_CREW: Endpoint[CollectionArgs, RentmanPage[AppointmentCrew]] = Endpoint(
+    name="appointment_crew",
+    method="GET",
+    path=lambda _args: "/appointmentcrew",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_appointment_crew),
+    response_schema="AppointmentCrewResponse",
+)
+
+APPOINTMENT_CREW_ITEM: Endpoint[ItemArgs, AppointmentCrew | None] = Endpoint(
+    name="appointment_crew_item",
+    method="GET",
+    path=lambda args: f"/appointmentcrew/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_appointment_crew),
+    response_schema="AppointmentCrewResponse",
+)
+
+TIME_REGISTRATIONS: Endpoint[CollectionArgs, RentmanPage[TimeRegistration]] = Endpoint(
+    name="time_registrations",
+    method="GET",
+    path=lambda _args: "/timeregistration",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_time_registration),
+    response_schema="TimeRegistrationResponse",
+)
+
+TIME_REGISTRATIONS_ITEM: Endpoint[ItemArgs, TimeRegistration | None] = Endpoint(
+    name="time_registrations_item",
+    method="GET",
+    path=lambda args: f"/timeregistration/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_time_registration),
+    response_schema="TimeRegistrationResponse",
+)
+
+TIME_REGISTRATION_ACTIVITIES_OF_TIME_REGISTRATION: Endpoint[
+    ParentCollectionArgs, RentmanPage[TimeRegistrationActivity]
+] = Endpoint(
+    name="time_registration_activities_of_time_registration",
+    method="GET",
+    path=lambda args: f"/timeregistration/{args.parent_id}/timeregistrationactivities",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_time_registration_activity),
+    response_schema="TimeRegistrationActivityResponse",
+)
+
+TIME_REGISTRATION_ACTIVITIES: Endpoint[CollectionArgs, RentmanPage[TimeRegistrationActivity]] = (
+    Endpoint(
+        name="time_registration_activities",
+        method="GET",
+        path=lambda _args: "/timeregistrationactivities",
+        params=_collection_params,
+        parse=lambda payload, _args: parse_page(payload, parse_time_registration_activity),
+        response_schema="TimeRegistrationActivityResponse",
+    )
+)
+
+TIME_REGISTRATION_ACTIVITIES_ITEM: Endpoint[ItemArgs, TimeRegistrationActivity | None] = Endpoint(
+    name="time_registration_activities_item",
+    method="GET",
+    path=lambda args: f"/timeregistrationactivities/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_time_registration_activity),
+    response_schema="TimeRegistrationActivityResponse",
+)
+
+LEAVE_REQUESTS: Endpoint[CollectionArgs, RentmanPage[LeaveRequest]] = Endpoint(
+    name="leave_requests",
+    method="GET",
+    path=lambda _args: "/leaverequest",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_leave_request),
+    response_schema="LeaveRequestResponse",
+)
+
+LEAVE_REQUESTS_ITEM: Endpoint[ItemArgs, LeaveRequest | None] = Endpoint(
+    name="leave_requests_item",
+    method="GET",
+    path=lambda args: f"/leaverequest/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_leave_request),
+    response_schema="LeaveRequestResponse",
+)
+
+TIME_REGISTRATIONS_OF_LEAVE_REQUEST: Endpoint[
+    ParentCollectionArgs, RentmanPage[TimeRegistration]
+] = Endpoint(
+    name="time_registrations_of_leave_request",
+    method="GET",
+    path=lambda args: f"/leaverequest/{args.parent_id}/timeregistration",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_time_registration),
+    response_schema="TimeRegistrationResponse",
+)
+
+LEAVE_MUTATIONS: Endpoint[CollectionArgs, RentmanPage[LeaveMutation]] = Endpoint(
+    name="leave_mutations",
+    method="GET",
+    path=lambda _args: "/leavemutation",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_leave_mutation),
+    response_schema="LeaveMutationsResponse",
+)
+
+LEAVE_MUTATIONS_ITEM: Endpoint[ItemArgs, LeaveMutation | None] = Endpoint(
+    name="leave_mutations_item",
+    method="GET",
+    path=lambda args: f"/leavemutation/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_leave_mutation),
+    response_schema="LeaveMutationsResponse",
+)
+
+LEAVE_TYPES: Endpoint[CollectionArgs, RentmanPage[LeaveType]] = Endpoint(
+    name="leave_types",
+    method="GET",
+    path=lambda _args: "/leavetypes",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_leave_type),
+    response_schema="LeaveTypesResponse",
+)
+
+LEAVE_TYPES_ITEM: Endpoint[ItemArgs, LeaveType | None] = Endpoint(
+    name="leave_types_item",
+    method="GET",
+    path=lambda args: f"/leavetypes/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_leave_type),
+    response_schema="LeaveTypesResponse",
+)
+
+CONTACTS: Endpoint[CollectionArgs, RentmanPage[Contact]] = Endpoint(
+    name="contacts",
+    method="GET",
+    path=lambda _args: "/contacts",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_contact),
+    response_schema="ContactResponse",
+)
+
+CONTACTS_ITEM: Endpoint[ItemArgs, Contact | None] = Endpoint(
+    name="contacts_item",
+    method="GET",
+    path=lambda args: f"/contacts/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_contact),
+    response_schema="ContactResponse",
+)
+
+CONTACT_PERSONS_OF_CONTACT: Endpoint[ParentCollectionArgs, RentmanPage[ContactPerson]] = Endpoint(
+    name="contact_persons_of_contact",
+    method="GET",
+    path=lambda args: f"/contacts/{args.parent_id}/contactpersons",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_contact_person),
+    response_schema="ContactPersonResponse",
+)
+
+CONTACT_PERSONS: Endpoint[CollectionArgs, RentmanPage[ContactPerson]] = Endpoint(
+    name="contact_persons",
+    method="GET",
+    path=lambda _args: "/contactpersons",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_contact_person),
+    response_schema="ContactPersonResponse",
+)
+
+CONTACT_PERSONS_ITEM: Endpoint[ItemArgs, ContactPerson | None] = Endpoint(
+    name="contact_persons_item",
+    method="GET",
+    path=lambda args: f"/contactpersons/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_contact_person),
+    response_schema="ContactPersonResponse",
+)
+
 CATALOG: tuple[Endpoint[Any, Any], ...] = (
     ACTUAL_CONTENT,
     ACTUAL_CONTENT_ITEM,
@@ -1433,4 +1773,38 @@ CATALOG: tuple[Endpoint[Any, Any], ...] = (
     PURCHASE_ORDER_COSTS_ITEM,
     PURCHASE_ORDER_GLOBAL_COSTS,
     PURCHASE_ORDER_GLOBAL_COSTS_ITEM,
+    CREW,
+    CREW_ITEM,
+    APPOINTMENTS_OF_CREW,
+    CREW_AVAILABILITY_OF_CREW,
+    CREW_RATES_OF_CREW,
+    INVITATIONS_OF_CREW,
+    CREW_AVAILABILITY,
+    CREW_AVAILABILITY_ITEM,
+    CREW_RATES,
+    CREW_RATES_ITEM,
+    INVITATIONS,
+    INVITATIONS_ITEM,
+    APPOINTMENTS,
+    APPOINTMENTS_ITEM,
+    APPOINTMENT_CREW_OF_APPOINTMENT,
+    APPOINTMENT_CREW,
+    APPOINTMENT_CREW_ITEM,
+    TIME_REGISTRATIONS,
+    TIME_REGISTRATIONS_ITEM,
+    TIME_REGISTRATION_ACTIVITIES_OF_TIME_REGISTRATION,
+    TIME_REGISTRATION_ACTIVITIES,
+    TIME_REGISTRATION_ACTIVITIES_ITEM,
+    LEAVE_REQUESTS,
+    LEAVE_REQUESTS_ITEM,
+    TIME_REGISTRATIONS_OF_LEAVE_REQUEST,
+    LEAVE_MUTATIONS,
+    LEAVE_MUTATIONS_ITEM,
+    LEAVE_TYPES,
+    LEAVE_TYPES_ITEM,
+    CONTACTS,
+    CONTACTS_ITEM,
+    CONTACT_PERSONS_OF_CONTACT,
+    CONTACT_PERSONS,
+    CONTACT_PERSONS_ITEM,
 )

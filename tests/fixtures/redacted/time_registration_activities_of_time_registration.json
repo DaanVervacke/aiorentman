@@ -1,0 +1,24 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 0fc1d6a2884c",
+      "time_registration": "/timeregistration/20",
+      "project_function": "/projectfunctions/490",
+      "subproject_function": null,
+      "description": "Synthetic ffb3a41b55ea",
+      "duration": 18000,
+      "is_activity": true,
+      "from": null,
+      "to": null,
+      "updateHash": "6226e7a79a629fdd68aa9cb8d5478c36"
+    }
+  ],
+  "itemCount": 1,
+  "limit": 50,
+  "offset": 0,
+  "next_page_url": null
+}

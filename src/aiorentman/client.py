@@ -18,9 +18,28 @@ from ._endpoints import (
     ALTERNATIVES,
     ALTERNATIVES_ITEM,
     ALTERNATIVES_OF_EQUIPMENT,
+    APPOINTMENT_CREW,
+    APPOINTMENT_CREW_ITEM,
+    APPOINTMENT_CREW_OF_APPOINTMENT,
+    APPOINTMENTS,
+    APPOINTMENTS_ITEM,
+    APPOINTMENTS_OF_CREW,
+    CONTACT_PERSONS,
+    CONTACT_PERSONS_ITEM,
+    CONTACT_PERSONS_OF_CONTACT,
+    CONTACTS,
+    CONTACTS_ITEM,
     CONTRACTS,
     CONTRACTS_ITEM,
     CONTRACTS_OF_PROJECT,
+    CREW,
+    CREW_AVAILABILITY,
+    CREW_AVAILABILITY_ITEM,
+    CREW_AVAILABILITY_OF_CREW,
+    CREW_ITEM,
+    CREW_RATES,
+    CREW_RATES_ITEM,
+    CREW_RATES_OF_CREW,
     EQUIPMENT,
     EQUIPMENT_ASSIGNED_SERIALS,
     EQUIPMENT_ASSIGNED_SERIALS_ITEM,
@@ -33,6 +52,9 @@ from ._endpoints import (
     EXTRA_INPUT_FIELDS_ITEM,
     FOLDERS,
     FOLDERS_ITEM,
+    INVITATIONS,
+    INVITATIONS_ITEM,
+    INVITATIONS_OF_CREW,
     INVOICE_LINES,
     INVOICE_LINES_ITEM,
     INVOICE_LINES_OF_INVOICE,
@@ -40,6 +62,12 @@ from ._endpoints import (
     INVOICE_LINES_OF_QUOTE,
     INVOICES,
     INVOICES_ITEM,
+    LEAVE_MUTATIONS,
+    LEAVE_MUTATIONS_ITEM,
+    LEAVE_REQUESTS,
+    LEAVE_REQUESTS_ITEM,
+    LEAVE_TYPES,
+    LEAVE_TYPES_ITEM,
     LEDGER_CODES,
     LEDGER_CODES_ITEM,
     PAYMENTS,
@@ -127,6 +155,12 @@ from ._endpoints import (
     SUPPLIERS_OF_EQUIPMENT,
     TAX_CLASSES,
     TAX_CLASSES_ITEM,
+    TIME_REGISTRATION_ACTIVITIES,
+    TIME_REGISTRATION_ACTIVITIES_ITEM,
+    TIME_REGISTRATION_ACTIVITIES_OF_TIME_REGISTRATION,
+    TIME_REGISTRATIONS,
+    TIME_REGISTRATIONS_ITEM,
+    TIME_REGISTRATIONS_OF_LEAVE_REQUEST,
     VEHICLES,
     VEHICLES_ITEM,
     VEHICLES_OF_STOCK_LOCATION,
@@ -156,14 +190,25 @@ from .models import (
     Accessory,
     ActualContent,
     Alternative,
+    Appointment,
+    AppointmentCrew,
+    Contact,
+    ContactPerson,
     Contract,
+    Crew,
+    CrewAvailability,
+    CrewRate,
     Equipment,
     EquipmentAssignedSerial,
     EquipmentSetContent,
     ExtraInputField,
     Folder,
+    Invitation,
     Invoice,
     InvoiceLine,
+    LeaveMutation,
+    LeaveRequest,
+    LeaveType,
     LedgerCode,
     Payment,
     Project,
@@ -194,6 +239,8 @@ from .models import (
     SubrentalEquipmentGroup,
     Supplier,
     TaxClass,
+    TimeRegistration,
+    TimeRegistrationActivity,
     Vehicle,
     WarehouseStatus,
 )
@@ -1571,6 +1618,336 @@ class RentmanClient:
             PURCHASE_ORDER_GLOBAL_COSTS_ITEM,
             ItemArgs(item_id=purchase_order_global_cost_id),
         )
+
+    async def async_list_crew(self, query: Query | None = None) -> RentmanPage[Crew]:
+        """Fetch one page of crew members."""
+        return await self._call(CREW, CollectionArgs(query=query))
+
+    def async_iter_crew(self, query: Query | None = None) -> AsyncIterator[Crew]:
+        """Yield every crew member, following the cursor across pages."""
+        return self._iter_collection(CREW, CollectionArgs(query=query))
+
+    async def async_get_crew(self, crew_id: int) -> Crew | None:
+        """Fetch one crew member by their id."""
+        return await self._call(CREW_ITEM, ItemArgs(item_id=crew_id))
+
+    async def async_list_appointments_of_crew(
+        self, crew_id: int, query: Query | None = None
+    ) -> RentmanPage[Appointment]:
+        """Fetch one page of appointments of one crew member."""
+        return await self._call(
+            APPOINTMENTS_OF_CREW,
+            ParentCollectionArgs(parent_id=crew_id, query=query),
+        )
+
+    def async_iter_appointments_of_crew(
+        self, crew_id: int, query: Query | None = None
+    ) -> AsyncIterator[Appointment]:
+        """Yield every appointment of one crew member, following the cursor."""
+        return self._iter_collection(
+            APPOINTMENTS_OF_CREW,
+            ParentCollectionArgs(parent_id=crew_id, query=query),
+        )
+
+    async def async_list_crew_availability_of_crew(
+        self, crew_id: int, query: Query | None = None
+    ) -> RentmanPage[CrewAvailability]:
+        """Fetch one page of availability windows of one crew member."""
+        return await self._call(
+            CREW_AVAILABILITY_OF_CREW,
+            ParentCollectionArgs(parent_id=crew_id, query=query),
+        )
+
+    def async_iter_crew_availability_of_crew(
+        self, crew_id: int, query: Query | None = None
+    ) -> AsyncIterator[CrewAvailability]:
+        """Yield every availability window of one crew member, following the cursor."""
+        return self._iter_collection(
+            CREW_AVAILABILITY_OF_CREW,
+            ParentCollectionArgs(parent_id=crew_id, query=query),
+        )
+
+    async def async_list_crew_rates_of_crew(
+        self, crew_id: int, query: Query | None = None
+    ) -> RentmanPage[CrewRate]:
+        """Fetch one page of rates of one crew member."""
+        return await self._call(
+            CREW_RATES_OF_CREW,
+            ParentCollectionArgs(parent_id=crew_id, query=query),
+        )
+
+    def async_iter_crew_rates_of_crew(
+        self, crew_id: int, query: Query | None = None
+    ) -> AsyncIterator[CrewRate]:
+        """Yield every rate of one crew member, following the cursor."""
+        return self._iter_collection(
+            CREW_RATES_OF_CREW,
+            ParentCollectionArgs(parent_id=crew_id, query=query),
+        )
+
+    async def async_list_invitations_of_crew(
+        self, crew_id: int, query: Query | None = None
+    ) -> RentmanPage[Invitation]:
+        """Fetch one page of invitations of one crew member."""
+        return await self._call(
+            INVITATIONS_OF_CREW,
+            ParentCollectionArgs(parent_id=crew_id, query=query),
+        )
+
+    def async_iter_invitations_of_crew(
+        self, crew_id: int, query: Query | None = None
+    ) -> AsyncIterator[Invitation]:
+        """Yield every invitation of one crew member, following the cursor."""
+        return self._iter_collection(
+            INVITATIONS_OF_CREW,
+            ParentCollectionArgs(parent_id=crew_id, query=query),
+        )
+
+    async def async_list_crew_availability(
+        self, query: Query | None = None
+    ) -> RentmanPage[CrewAvailability]:
+        """Fetch one page of availability windows."""
+        return await self._call(CREW_AVAILABILITY, CollectionArgs(query=query))
+
+    def async_iter_crew_availability(
+        self, query: Query | None = None
+    ) -> AsyncIterator[CrewAvailability]:
+        """Yield every availability window, following the cursor across pages."""
+        return self._iter_collection(CREW_AVAILABILITY, CollectionArgs(query=query))
+
+    async def async_get_crew_availability(self, availability_id: int) -> CrewAvailability | None:
+        """Fetch one availability window by its id."""
+        return await self._call(CREW_AVAILABILITY_ITEM, ItemArgs(item_id=availability_id))
+
+    async def async_list_crew_rates(self, query: Query | None = None) -> RentmanPage[CrewRate]:
+        """Fetch one page of crew rates."""
+        return await self._call(CREW_RATES, CollectionArgs(query=query))
+
+    def async_iter_crew_rates(self, query: Query | None = None) -> AsyncIterator[CrewRate]:
+        """Yield every crew rate, following the cursor across pages."""
+        return self._iter_collection(CREW_RATES, CollectionArgs(query=query))
+
+    async def async_get_crew_rate(self, crew_rate_id: int) -> CrewRate | None:
+        """Fetch one crew rate by its id."""
+        return await self._call(CREW_RATES_ITEM, ItemArgs(item_id=crew_rate_id))
+
+    async def async_list_invitations(self, query: Query | None = None) -> RentmanPage[Invitation]:
+        """Fetch one page of planning invitations."""
+        return await self._call(INVITATIONS, CollectionArgs(query=query))
+
+    def async_iter_invitations(self, query: Query | None = None) -> AsyncIterator[Invitation]:
+        """Yield every planning invitation, following the cursor across pages."""
+        return self._iter_collection(INVITATIONS, CollectionArgs(query=query))
+
+    async def async_get_invitation(self, invitation_id: int) -> Invitation | None:
+        """Fetch one planning invitation by its id."""
+        return await self._call(INVITATIONS_ITEM, ItemArgs(item_id=invitation_id))
+
+    async def async_list_appointments(self, query: Query | None = None) -> RentmanPage[Appointment]:
+        """Fetch one page of appointments."""
+        return await self._call(APPOINTMENTS, CollectionArgs(query=query))
+
+    def async_iter_appointments(self, query: Query | None = None) -> AsyncIterator[Appointment]:
+        """Yield every appointment, following the cursor across pages."""
+        return self._iter_collection(APPOINTMENTS, CollectionArgs(query=query))
+
+    async def async_get_appointment(self, appointment_id: int) -> Appointment | None:
+        """Fetch one appointment by its id."""
+        return await self._call(APPOINTMENTS_ITEM, ItemArgs(item_id=appointment_id))
+
+    async def async_list_appointment_crew_of_appointment(
+        self, appointment_id: int, query: Query | None = None
+    ) -> RentmanPage[AppointmentCrew]:
+        """Fetch one page of crew attached to one appointment."""
+        return await self._call(
+            APPOINTMENT_CREW_OF_APPOINTMENT,
+            ParentCollectionArgs(parent_id=appointment_id, query=query),
+        )
+
+    def async_iter_appointment_crew_of_appointment(
+        self, appointment_id: int, query: Query | None = None
+    ) -> AsyncIterator[AppointmentCrew]:
+        """Yield every crew member attached to one appointment, following the cursor."""
+        return self._iter_collection(
+            APPOINTMENT_CREW_OF_APPOINTMENT,
+            ParentCollectionArgs(parent_id=appointment_id, query=query),
+        )
+
+    async def async_list_appointment_crew(
+        self, query: Query | None = None
+    ) -> RentmanPage[AppointmentCrew]:
+        """Fetch one page of appointment crew attachments."""
+        return await self._call(APPOINTMENT_CREW, CollectionArgs(query=query))
+
+    def async_iter_appointment_crew(
+        self, query: Query | None = None
+    ) -> AsyncIterator[AppointmentCrew]:
+        """Yield every appointment crew attachment, following the cursor across pages."""
+        return self._iter_collection(APPOINTMENT_CREW, CollectionArgs(query=query))
+
+    async def async_get_appointment_crew(self, appointment_crew_id: int) -> AppointmentCrew | None:
+        """Fetch one appointment crew attachment by its id."""
+        return await self._call(APPOINTMENT_CREW_ITEM, ItemArgs(item_id=appointment_crew_id))
+
+    async def async_list_time_registrations(
+        self, query: Query | None = None
+    ) -> RentmanPage[TimeRegistration]:
+        """Fetch one page of time registrations."""
+        return await self._call(TIME_REGISTRATIONS, CollectionArgs(query=query))
+
+    def async_iter_time_registrations(
+        self, query: Query | None = None
+    ) -> AsyncIterator[TimeRegistration]:
+        """Yield every time registration, following the cursor across pages."""
+        return self._iter_collection(TIME_REGISTRATIONS, CollectionArgs(query=query))
+
+    async def async_get_time_registration(
+        self, time_registration_id: int
+    ) -> TimeRegistration | None:
+        """Fetch one time registration by its id."""
+        return await self._call(TIME_REGISTRATIONS_ITEM, ItemArgs(item_id=time_registration_id))
+
+    async def async_list_time_registration_activities_of_time_registration(
+        self, time_registration_id: int, query: Query | None = None
+    ) -> RentmanPage[TimeRegistrationActivity]:
+        """Fetch one page of activities of one time registration."""
+        return await self._call(
+            TIME_REGISTRATION_ACTIVITIES_OF_TIME_REGISTRATION,
+            ParentCollectionArgs(parent_id=time_registration_id, query=query),
+        )
+
+    def async_iter_time_registration_activities_of_time_registration(
+        self, time_registration_id: int, query: Query | None = None
+    ) -> AsyncIterator[TimeRegistrationActivity]:
+        """Yield every activity of one time registration, following the cursor."""
+        return self._iter_collection(
+            TIME_REGISTRATION_ACTIVITIES_OF_TIME_REGISTRATION,
+            ParentCollectionArgs(parent_id=time_registration_id, query=query),
+        )
+
+    async def async_list_time_registration_activities(
+        self, query: Query | None = None
+    ) -> RentmanPage[TimeRegistrationActivity]:
+        """Fetch one page of time registration activities."""
+        return await self._call(TIME_REGISTRATION_ACTIVITIES, CollectionArgs(query=query))
+
+    def async_iter_time_registration_activities(
+        self, query: Query | None = None
+    ) -> AsyncIterator[TimeRegistrationActivity]:
+        """Yield every time registration activity, following the cursor across pages."""
+        return self._iter_collection(TIME_REGISTRATION_ACTIVITIES, CollectionArgs(query=query))
+
+    async def async_get_time_registration_activity(
+        self, activity_id: int
+    ) -> TimeRegistrationActivity | None:
+        """Fetch one time registration activity by its id."""
+        return await self._call(TIME_REGISTRATION_ACTIVITIES_ITEM, ItemArgs(item_id=activity_id))
+
+    async def async_list_leave_requests(
+        self, query: Query | None = None
+    ) -> RentmanPage[LeaveRequest]:
+        """Fetch one page of leave requests."""
+        return await self._call(LEAVE_REQUESTS, CollectionArgs(query=query))
+
+    def async_iter_leave_requests(self, query: Query | None = None) -> AsyncIterator[LeaveRequest]:
+        """Yield every leave request, following the cursor across pages."""
+        return self._iter_collection(LEAVE_REQUESTS, CollectionArgs(query=query))
+
+    async def async_get_leave_request(self, leave_request_id: int) -> LeaveRequest | None:
+        """Fetch one leave request by its id."""
+        return await self._call(LEAVE_REQUESTS_ITEM, ItemArgs(item_id=leave_request_id))
+
+    async def async_list_time_registrations_of_leave_request(
+        self, leave_request_id: int, query: Query | None = None
+    ) -> RentmanPage[TimeRegistration]:
+        """Fetch one page of time registrations of one leave request."""
+        return await self._call(
+            TIME_REGISTRATIONS_OF_LEAVE_REQUEST,
+            ParentCollectionArgs(parent_id=leave_request_id, query=query),
+        )
+
+    def async_iter_time_registrations_of_leave_request(
+        self, leave_request_id: int, query: Query | None = None
+    ) -> AsyncIterator[TimeRegistration]:
+        """Yield every time registration of one leave request, following the cursor."""
+        return self._iter_collection(
+            TIME_REGISTRATIONS_OF_LEAVE_REQUEST,
+            ParentCollectionArgs(parent_id=leave_request_id, query=query),
+        )
+
+    async def async_list_leave_mutations(
+        self, query: Query | None = None
+    ) -> RentmanPage[LeaveMutation]:
+        """Fetch one page of leave balance mutations."""
+        return await self._call(LEAVE_MUTATIONS, CollectionArgs(query=query))
+
+    def async_iter_leave_mutations(
+        self, query: Query | None = None
+    ) -> AsyncIterator[LeaveMutation]:
+        """Yield every leave balance mutation, following the cursor across pages."""
+        return self._iter_collection(LEAVE_MUTATIONS, CollectionArgs(query=query))
+
+    async def async_get_leave_mutation(self, leave_mutation_id: int) -> LeaveMutation | None:
+        """Fetch one leave balance mutation by its id."""
+        return await self._call(LEAVE_MUTATIONS_ITEM, ItemArgs(item_id=leave_mutation_id))
+
+    async def async_list_leave_types(self, query: Query | None = None) -> RentmanPage[LeaveType]:
+        """Fetch one page of leave types."""
+        return await self._call(LEAVE_TYPES, CollectionArgs(query=query))
+
+    def async_iter_leave_types(self, query: Query | None = None) -> AsyncIterator[LeaveType]:
+        """Yield every leave type, following the cursor across pages."""
+        return self._iter_collection(LEAVE_TYPES, CollectionArgs(query=query))
+
+    async def async_get_leave_type(self, leave_type_id: int) -> LeaveType | None:
+        """Fetch one leave type by its id."""
+        return await self._call(LEAVE_TYPES_ITEM, ItemArgs(item_id=leave_type_id))
+
+    async def async_list_contacts(self, query: Query | None = None) -> RentmanPage[Contact]:
+        """Fetch one page of contacts."""
+        return await self._call(CONTACTS, CollectionArgs(query=query))
+
+    def async_iter_contacts(self, query: Query | None = None) -> AsyncIterator[Contact]:
+        """Yield every contact, following the cursor across pages."""
+        return self._iter_collection(CONTACTS, CollectionArgs(query=query))
+
+    async def async_get_contact(self, contact_id: int) -> Contact | None:
+        """Fetch one contact by its id."""
+        return await self._call(CONTACTS_ITEM, ItemArgs(item_id=contact_id))
+
+    async def async_list_contact_persons_of_contact(
+        self, contact_id: int, query: Query | None = None
+    ) -> RentmanPage[ContactPerson]:
+        """Fetch one page of contact persons of one contact."""
+        return await self._call(
+            CONTACT_PERSONS_OF_CONTACT,
+            ParentCollectionArgs(parent_id=contact_id, query=query),
+        )
+
+    def async_iter_contact_persons_of_contact(
+        self, contact_id: int, query: Query | None = None
+    ) -> AsyncIterator[ContactPerson]:
+        """Yield every contact person of one contact, following the cursor."""
+        return self._iter_collection(
+            CONTACT_PERSONS_OF_CONTACT,
+            ParentCollectionArgs(parent_id=contact_id, query=query),
+        )
+
+    async def async_list_contact_persons(
+        self, query: Query | None = None
+    ) -> RentmanPage[ContactPerson]:
+        """Fetch one page of contact persons."""
+        return await self._call(CONTACT_PERSONS, CollectionArgs(query=query))
+
+    def async_iter_contact_persons(
+        self, query: Query | None = None
+    ) -> AsyncIterator[ContactPerson]:
+        """Yield every contact person, following the cursor across pages."""
+        return self._iter_collection(CONTACT_PERSONS, CollectionArgs(query=query))
+
+    async def async_get_contact_person(self, contact_person_id: int) -> ContactPerson | None:
+        """Fetch one contact person by their id."""
+        return await self._call(CONTACT_PERSONS_ITEM, ItemArgs(item_id=contact_person_id))
 
     async def _call[ArgsT, ModelT](
         self,

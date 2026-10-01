@@ -66,6 +66,19 @@ COLLECTIONS: tuple[tuple[str, str], ...] = (
     ("purchase_orders", "/purchaseorders"),
     ("purchase_order_costs", "/purchaseordercosts"),
     ("purchase_order_global_costs", "/purchaseorderglobalcosts"),
+    ("crew", "/crew"),
+    ("crew_availability", "/crewavailability"),
+    ("crew_rates", "/crewrates"),
+    ("invitations", "/invitations"),
+    ("appointments", "/appointments"),
+    ("appointment_crew", "/appointmentcrew"),
+    ("time_registrations", "/timeregistration"),
+    ("time_registration_activities", "/timeregistrationactivities"),
+    ("leave_requests", "/leaverequest"),
+    ("leave_mutations", "/leavemutation"),
+    ("leave_types", "/leavetypes"),
+    ("contacts", "/contacts"),
+    ("contact_persons", "/contactpersons"),
 )
 
 LINKED_COLLECTIONS: tuple[tuple[str, str, str, str], ...] = (
@@ -179,6 +192,39 @@ LINKED_COLLECTIONS: tuple[tuple[str, str, str, str], ...] = (
         "/purchaseorders/{}/purchaseorderglobalcosts",
         "purchase_orders.json",
         "id",
+    ),
+    ("appointments_of_crew", "/crew/{}/appointments", "crew.json", "id"),
+    (
+        "crew_availability_of_crew",
+        "/crew/{}/crewavailability",
+        "crew_availability.json",
+        "crewmember",
+    ),
+    ("crew_rates_of_crew", "/crew/{}/crewrates", "crew_rates.json", "medewerker"),
+    ("invitations_of_crew", "/crew/{}/invitations", "invitations.json", "crewmember"),
+    (
+        "appointment_crew_of_appointment",
+        "/appointments/{}/appointmentcrew",
+        "appointment_crew.json",
+        "appointment",
+    ),
+    (
+        "time_registration_activities_of_time_registration",
+        "/timeregistration/{}/timeregistrationactivities",
+        "time_registration_activities.json",
+        "time_registration",
+    ),
+    (
+        "time_registrations_of_leave_request",
+        "/leaverequest/{}/timeregistration",
+        "time_registrations.json",
+        "leaverequest",
+    ),
+    (
+        "contact_persons_of_contact",
+        "/contacts/{}/contactpersons",
+        "contact_persons.json",
+        "contact",
     ),
 )
 

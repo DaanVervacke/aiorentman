@@ -102,6 +102,27 @@ The library covers the resources an RFID and materials project needs, read only:
 | Costs of a purchase order | `async_list_purchase_order_costs_of_purchase_order` | `async_iter_purchase_order_costs_of_purchase_order` | |
 | Purchase order global costs | `async_list_purchase_order_global_costs` | `async_iter_purchase_order_global_costs` | `async_get_purchase_order_global_cost` |
 | Global costs of a purchase order | `async_list_purchase_order_global_costs_of_purchase_order` | `async_iter_purchase_order_global_costs_of_purchase_order` | |
+| Crew | `async_list_crew` | `async_iter_crew` | `async_get_crew` |
+| Appointments of a crew member | `async_list_appointments_of_crew` | `async_iter_appointments_of_crew` | |
+| Crew availability | `async_list_crew_availability` | `async_iter_crew_availability` | `async_get_crew_availability` |
+| Availability of a crew member | `async_list_crew_availability_of_crew` | `async_iter_crew_availability_of_crew` | |
+| Crew rates | `async_list_crew_rates` | `async_iter_crew_rates` | `async_get_crew_rate` |
+| Rates of a crew member | `async_list_crew_rates_of_crew` | `async_iter_crew_rates_of_crew` | |
+| Invitations | `async_list_invitations` | `async_iter_invitations` | `async_get_invitation` |
+| Invitations of a crew member | `async_list_invitations_of_crew` | `async_iter_invitations_of_crew` | |
+| Appointments | `async_list_appointments` | `async_iter_appointments` | `async_get_appointment` |
+| Appointment crew | `async_list_appointment_crew` | `async_iter_appointment_crew` | `async_get_appointment_crew` |
+| Crew of an appointment | `async_list_appointment_crew_of_appointment` | `async_iter_appointment_crew_of_appointment` | |
+| Time registrations | `async_list_time_registrations` | `async_iter_time_registrations` | `async_get_time_registration` |
+| Time registration activities | `async_list_time_registration_activities` | `async_iter_time_registration_activities` | `async_get_time_registration_activity` |
+| Activities of a time registration | `async_list_time_registration_activities_of_time_registration` | `async_iter_time_registration_activities_of_time_registration` | |
+| Leave requests | `async_list_leave_requests` | `async_iter_leave_requests` | `async_get_leave_request` |
+| Time registrations of a leave request | `async_list_time_registrations_of_leave_request` | `async_iter_time_registrations_of_leave_request` | |
+| Leave mutations | `async_list_leave_mutations` | `async_iter_leave_mutations` | `async_get_leave_mutation` |
+| Leave types | `async_list_leave_types` | `async_iter_leave_types` | `async_get_leave_type` |
+| Contacts | `async_list_contacts` | `async_iter_contacts` | `async_get_contact` |
+| Contact persons | `async_list_contact_persons` | `async_iter_contact_persons` | `async_get_contact_person` |
+| Contact persons of a contact | `async_list_contact_persons_of_contact` | `async_iter_contact_persons_of_contact` | |
 
 ## Token
 

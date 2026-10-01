@@ -1,0 +1,18 @@
+{
+  "data": [
+    {
+      "id": 2,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 91a784e199c3",
+      "appointment": "/appointments/28",
+      "crew": "/crew/223",
+      "updateHash": "abf79ee83f6c19960de3bb2855bd856f"
+    }
+  ],
+  "itemCount": 1,
+  "limit": 50,
+  "offset": 0,
+  "next_page_url": null
+}

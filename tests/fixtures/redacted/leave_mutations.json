@@ -1,0 +1,60 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:48+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 09c662b3f120",
+      "description": "",
+      "duration": 705600,
+      "crewmember": "/crew/228",
+      "leavetype": "/leavetypes/2",
+      "mutation_date": "2027-12-22T00:00:00+01:00",
+      "updateHash": "17ffcf291d2f0df0aa526920ed277746"
+    },
+    {
+      "id": 2,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:48+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 8fe3f1654b28",
+      "description": "",
+      "duration": 392400,
+      "crewmember": "/crew/230",
+      "leavetype": "/leavetypes/2",
+      "mutation_date": "2027-12-22T00:00:00+01:00",
+      "updateHash": "d5f783bf35c7d0f1794ffbced20fb44f"
+    },
+    {
+      "id": 3,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:48+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 62309b00ae06",
+      "description": "",
+      "duration": 828000,
+      "crewmember": "/crew/230",
+      "leavetype": "/leavetypes/6",
+      "mutation_date": "2027-12-22T00:00:00+01:00",
+      "updateHash": "966d4eafee24fee36cadbf51c0764597"
+    },
+    {
+      "id": 4,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:48+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 69009ce8ed6b",
+      "description": "",
+      "duration": 252000,
+      "crewmember": "/crew/231",
+      "leavetype": "/leavetypes/2",
+      "mutation_date": "2027-12-22T00:00:00+01:00",
+      "updateHash": "3aa6f3a776a2fc7a2007bd0dad8552dd"
+    }
+  ],
+  "itemCount": 4,
+  "limit": 50,
+  "offset": 0,
+  "next_page_url": null
+}

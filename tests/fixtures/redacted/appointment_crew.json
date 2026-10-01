@@ -1,0 +1,108 @@
+{
+  "data": [
+    {
+      "id": 2,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 91a784e199c3",
+      "appointment": "/appointments/28",
+      "crew": "/crew/223",
+      "updateHash": "abf79ee83f6c19960de3bb2855bd856f"
+    },
+    {
+      "id": 3,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 9f6941d15e8b",
+      "appointment": "/appointments/30",
+      "crew": "/crew/225",
+      "updateHash": "a4998cae6053d85f8703c0634eb48b3c"
+    },
+    {
+      "id": 4,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 0b10e141b6fc",
+      "appointment": "/appointments/27",
+      "crew": "/crew/228",
+      "updateHash": "9b6db6957a2a690bd193621d41f648cf"
+    },
+    {
+      "id": 5,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 313ed8d0023d",
+      "appointment": "/appointments/25",
+      "crew": "/crew/228",
+      "updateHash": "91d6dfc433f0a8a5e8a992a60b7970a0"
+    },
+    {
+      "id": 6,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 6ac973ccd6e2",
+      "appointment": "/appointments/33",
+      "crew": "/crew/33",
+      "updateHash": "a8faf0388f1feefdd0ab053a974e7c51"
+    },
+    {
+      "id": 7,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 04a75d33970e",
+      "appointment": "/appointments/26",
+      "crew": "/crew/229",
+      "updateHash": "b53fb674dbcca47fad085295e9830776"
+    },
+    {
+      "id": 8,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 3b1323d8cdbc",
+      "appointment": "/appointments/31",
+      "crew": "/crew/231",
+      "updateHash": "118aa0318f6ac81c486ff9d532097a75"
+    },
+    {
+      "id": 9,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic d30bcd0a5371",
+      "appointment": "/appointments/32",
+      "crew": "/crew/33",
+      "updateHash": "9d6e9e17b3186e48f65707766ffbf2e9"
+    },
+    {
+      "id": 10,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 2c8bafbffda8",
+      "appointment": "/appointments/29",
+      "crew": "/crew/228",
+      "updateHash": "64d1606945a8bfa4bd48c14278b52f4b"
+    },
+    {
+      "id": 11,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 1d63fd4de55b",
+      "appointment": "/appointments/34",
+      "crew": "/crew/230",
+      "updateHash": "7c3db504a726996721a5746e2ea28e23"
+    }
+  ],
+  "itemCount": 10,
+  "limit": 50,
+  "offset": 0,
+  "next_page_url": null
+}

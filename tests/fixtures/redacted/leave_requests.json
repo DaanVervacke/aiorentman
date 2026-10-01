@@ -1,0 +1,73 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:48+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic f55cdba0ac6d",
+      "description": "Synthetic 10c63d51d9d7",
+      "approval_status": "approved",
+      "requested_for": "/crew/228",
+      "reviewed_on": "2027-12-22T14:47:00+01:00",
+      "reviewer": "/crew/33",
+      "updateHash": "17ffcf291d2f0df0aa526920ed277746"
+    },
+    {
+      "id": 2,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:48+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic e2e559593382",
+      "description": "",
+      "approval_status": "approved",
+      "requested_for": "/crew/230",
+      "reviewed_on": "2027-12-22T14:47:00+01:00",
+      "reviewer": "/crew/33",
+      "updateHash": "d5f783bf35c7d0f1794ffbced20fb44f"
+    },
+    {
+      "id": 3,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:48+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 74902963fdf8",
+      "description": "",
+      "approval_status": "pending",
+      "requested_for": "/crew/230",
+      "reviewed_on": null,
+      "reviewer": null,
+      "updateHash": "966d4eafee24fee36cadbf51c0764597"
+    },
+    {
+      "id": 4,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:48+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic e637d03fd9d8",
+      "description": "",
+      "approval_status": "canceled",
+      "requested_for": "/crew/230",
+      "reviewed_on": null,
+      "reviewer": null,
+      "updateHash": "3aa6f3a776a2fc7a2007bd0dad8552dd"
+    },
+    {
+      "id": 5,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:48+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 0cb05bafb71e",
+      "description": "",
+      "approval_status": "pending",
+      "requested_for": "/crew/231",
+      "reviewed_on": null,
+      "reviewer": null,
+      "updateHash": "812deb2a46aba5ab7c0741e1e0bea00e"
+    }
+  ],
+  "itemCount": 5,
+  "limit": 50,
+  "offset": 0,
+  "next_page_url": null
+}

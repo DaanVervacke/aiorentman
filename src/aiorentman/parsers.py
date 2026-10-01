@@ -9,14 +9,25 @@ from .models import (
     Accessory,
     ActualContent,
     Alternative,
+    Appointment,
+    AppointmentCrew,
+    Contact,
+    ContactPerson,
     Contract,
+    Crew,
+    CrewAvailability,
+    CrewRate,
     Equipment,
     EquipmentAssignedSerial,
     EquipmentSetContent,
     ExtraInputField,
     Folder,
+    Invitation,
     Invoice,
     InvoiceLine,
+    LeaveMutation,
+    LeaveRequest,
+    LeaveType,
     LedgerCode,
     Payment,
     Project,
@@ -48,6 +59,8 @@ from .models import (
     SubrentalEquipmentGroup,
     Supplier,
     TaxClass,
+    TimeRegistration,
+    TimeRegistrationActivity,
     Vehicle,
     WarehouseStatus,
 )
@@ -1424,5 +1437,395 @@ def parse_purchase_order_global_cost(data: Mapping[str, Any]) -> PurchaseOrderGl
         unit_purchase_cost=_float_field(data, "unit_purchase_cost"),
         quantity=_int_field(data, "quantity"),
         taxclass=_link_or_model_field(data, "taxclass", parse_tax_class),
+        raw=dict(data),
+    )
+
+
+def parse_crew(data: Mapping[str, Any]) -> Crew:
+    """Build the crew model from one crew member payload."""
+    return Crew(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        folder=_link_or_model_field(data, "folder", parse_folder),
+        street=_str_field(data, "street"),
+        housenumber=_str_field(data, "housenumber"),
+        unit_number=_str_field(data, "unit_number"),
+        district=_str_field(data, "district"),
+        city=_str_field(data, "city"),
+        postal_code=_str_field(data, "postal_code"),
+        addressline2=_str_field(data, "addressline2"),
+        extraaddressline=_str_field(data, "extraaddressline"),
+        state=_str_field(data, "state"),
+        country=_str_field(data, "country"),
+        birthdate=_datetime_field(data, "birthdate"),
+        passport_number=_str_field(data, "passport_number"),
+        emergency_contact=_str_field(data, "emergency_contact"),
+        remark=_str_field(data, "remark"),
+        driving_license=_str_field(data, "driving_license"),
+        contract=_coerced_str_field(data, "contract"),
+        bank=_str_field(data, "bank"),
+        contract_date=_datetime_field(data, "contract_date"),
+        company_name=_str_field(data, "company_name"),
+        vat_code=_str_field(data, "vat_code"),
+        coc_code=_str_field(data, "coc_code"),
+        firstname=_str_field(data, "firstname"),
+        middle_name=_str_field(data, "middle_name"),
+        lastname=_str_field(data, "lastname"),
+        email=_str_field(data, "email"),
+        phone=_str_field(data, "phone"),
+        active=_bool_field(data, "active"),
+        avatar=_link_field(data, "avatar"),
+        vt_fullname=_str_field(data, "vt_fullname"),
+        default_warehouse=_link_or_model_field(data, "default_warehouse", parse_stock_location),
+        external_reference=_str_field(data, "external_reference"),
+        tags=_codes_field(data, "tags"),
+        custom=_custom_field(data),
+        raw=dict(data),
+    )
+
+
+def parse_crew_availability(data: Mapping[str, Any]) -> CrewAvailability:
+    """Build the availability model from one availability window payload."""
+    return CrewAvailability(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        last_updater=_link_field(data, "last_updater"),
+        last_updated=_datetime_field(data, "last_updated"),
+        start=_datetime_field(data, "start"),
+        end=_datetime_field(data, "end"),
+        crewmember=_link_or_model_field(data, "crewmember", parse_crew)
+        or RentmanLink(_str_field(data, "crewmember")),
+        status=_str_field(data, "status"),
+        remark=_str_field(data, "remark"),
+        recurrence_interval_unit=_str_field(data, "recurrence_interval_unit"),
+        recurrence_enddate=_datetime_field(data, "recurrence_enddate"),
+        recurrence_interval=_int_field(data, "recurrence_interval"),
+        recurrent_group=_int_field(data, "recurrent_group"),
+        recurrence_weekdays=_str_field(data, "recurrence_weekdays"),
+        raw=dict(data),
+    )
+
+
+def parse_crew_rate(data: Mapping[str, Any]) -> CrewRate:
+    """Build the crew rate model from one crew rate payload."""
+    return CrewRate(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        naam=_str_field(data, "naam"),
+        cost_rate=_link_field(data, "cost_rate"),
+        medewerker=_link_or_model_field(data, "medewerker", parse_crew)
+        or RentmanLink(_str_field(data, "medewerker")),
+        raw=dict(data),
+    )
+
+
+def parse_appointment(data: Mapping[str, Any]) -> Appointment:
+    """Build the appointment model from one appointment payload."""
+    return Appointment(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        name=_str_field(data, "name"),
+        start=_datetime_field(data, "start"),
+        end=_datetime_field(data, "end"),
+        color=_str_field(data, "color"),
+        location=_str_field(data, "location"),
+        remark=_str_field(data, "remark"),
+        is_public=_bool_field(data, "is_public"),
+        is_plannable=_bool_field(data, "is_plannable"),
+        recurrence_interval_unit=_str_field(data, "recurrence_interval_unit"),
+        recurrence_enddate=_datetime_field(data, "recurrence_enddate"),
+        recurrence_interval=_int_field(data, "recurrence_interval"),
+        recurrence_group=_int_field(data, "recurrence_group"),
+        recurrence_weekdays=_str_or_none_field(data, "recurrence_weekdays"),
+        synchronization_id=_str_field(data, "synchronization_id"),
+        synchronisation_uri=_str_field(data, "synchronisation_uri"),
+        raw=dict(data),
+    )
+
+
+def parse_appointment_crew(data: Mapping[str, Any]) -> AppointmentCrew:
+    """Build the appointment crew model from one attachment payload."""
+    return AppointmentCrew(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        appointment=_link_or_model_field(data, "appointment", parse_appointment)
+        or RentmanLink(_str_field(data, "appointment")),
+        crew=_link_or_model_field(data, "crew", parse_crew)
+        or RentmanLink(_str_field(data, "crew")),
+        raw=dict(data),
+    )
+
+
+def parse_invitation(data: Mapping[str, Any]) -> Invitation:
+    """Build the invitation model from one planning invitation payload."""
+    return Invitation(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        type=_str_field(data, "type"),
+        accepted=_bool_field(data, "accepted"),
+        responded_timestamp=_datetime_field(data, "responded_timestamp"),
+        expiration_date=_datetime_field(data, "expiration_date"),
+        start=_datetime_field(data, "start"),
+        end=_datetime_field(data, "end"),
+        function=_link_field(data, "function"),
+        projectcrew=_link_field(data, "projectcrew"),
+        crewmember=_link_or_model_field(data, "crewmember", parse_crew)
+        or RentmanLink(_str_field(data, "crewmember")),
+        remark=_str_field(data, "remark"),
+        emailstatus=_str_field(data, "emailstatus"),
+        last_reminder=_datetime_field(data, "last_reminder"),
+        location_details=_str_field(data, "location_details"),
+        auto_reminder_date=_datetime_field(data, "auto_reminder_date"),
+        auto_reminder_sent=_int_field(data, "auto_reminder_sent"),
+        raw=dict(data),
+    )
+
+
+def parse_leave_type(data: Mapping[str, Any]) -> LeaveType:
+    """Build the leave type model from one leave type payload."""
+    return LeaveType(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        type=_str_field(data, "type"),
+        name=_str_field(data, "name"),
+        payroll_code=_str_field(data, "payroll_code"),
+        color=_str_field(data, "color"),
+        requires_approval=_bool_field(data, "requires_approval"),
+        affects_availability=_bool_field(data, "affects_availability"),
+        has_balance=_bool_field(data, "has_balance"),
+        balance_start_date=_datetime_field(data, "balance_start_date"),
+        is_labor=_str_field(data, "is_labor"),
+        has_calculated_duration=_bool_field(data, "has_calculated_duration"),
+        can_have_activities=_bool_field(data, "can_have_activities"),
+        counts_in_totals=_bool_field(data, "counts_in_totals"),
+        raw=dict(data),
+    )
+
+
+def parse_leave_request(data: Mapping[str, Any]) -> LeaveRequest:
+    """Build the leave request model from one leave request payload."""
+    return LeaveRequest(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        description=_str_field(data, "description"),
+        approval_status=_str_field(data, "approval_status"),
+        requested_for=_link_or_model_field(data, "requested_for", parse_crew)
+        or RentmanLink(_str_field(data, "requested_for")),
+        reviewed_on=_datetime_field(data, "reviewed_on"),
+        reviewer=_link_field(data, "reviewer"),
+        raw=dict(data),
+    )
+
+
+def parse_leave_mutation(data: Mapping[str, Any]) -> LeaveMutation:
+    """Build the leave mutation model from one balance mutation payload."""
+    return LeaveMutation(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        description=_str_field(data, "description"),
+        duration=_float_field(data, "duration"),
+        crewmember=_link_or_model_field(data, "crewmember", parse_crew)
+        or RentmanLink(_str_field(data, "crewmember")),
+        leavetype=_link_or_model_field(data, "leavetype", parse_leave_type)
+        or RentmanLink(_str_field(data, "leavetype")),
+        mutation_date=_datetime_field(data, "mutation_date"),
+        raw=dict(data),
+    )
+
+
+def parse_time_registration(data: Mapping[str, Any]) -> TimeRegistration:
+    """Build the time registration model from one registration payload."""
+    return TimeRegistration(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        crewmember=_link_or_model_field(data, "crewmember", parse_crew),
+        start=_datetime_field(data, "start"),
+        end=_datetime_field(data, "end"),
+        distance=_float_field(data, "distance"),
+        is_lunch_included=_bool_field(data, "is_lunch_included"),
+        leavetype=_link_or_model_field(data, "leavetype", parse_leave_type),
+        leaverequest=_link_or_model_field(data, "leaverequest", parse_leave_request),
+        duration=_float_field(data, "duration"),
+        break_duration=_float_field(data, "break_duration"),
+        travel_time=_float_field(data, "travel_time"),
+        correction_duration=_float_field(data, "correction_duration"),
+        remark=_str_field(data, "remark"),
+        status=_str_field(data, "status"),
+        break_duration_with_start_end=_float_field(data, "break_duration_with_start_end"),
+        custom=_custom_field(data),
+        raw=dict(data),
+    )
+
+
+def parse_time_registration_activity(data: Mapping[str, Any]) -> TimeRegistrationActivity:
+    """Build the activity model from one activity line payload."""
+    return TimeRegistrationActivity(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        time_registration=_link_or_model_field(data, "time_registration", parse_time_registration)
+        or RentmanLink(_str_field(data, "time_registration")),
+        project_function=_link_or_model_field(data, "project_function", parse_project_function),
+        subproject_function=_link_or_model_field(
+            data, "subproject_function", parse_project_function
+        ),
+        description=_str_field(data, "description"),
+        duration=_float_field(data, "duration"),
+        is_activity=_bool_field(data, "is_activity"),
+        from_=_datetime_field(data, "from"),
+        to=_datetime_field(data, "to"),
+        raw=dict(data),
+    )
+
+
+def parse_contact(data: Mapping[str, Any]) -> Contact:
+    """Build the contact model from one contact payload."""
+    return Contact(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        folder=_link_or_model_field(data, "folder", parse_folder),
+        type=_str_field(data, "type"),
+        ext_name_line=_str_field(data, "ext_name_line"),
+        firstname=_str_field(data, "firstname"),
+        distance=_float_field(data, "distance"),
+        travel_time=_float_field(data, "travel_time"),
+        surfix=_str_field(data, "surfix"),
+        surname=_str_field(data, "surname"),
+        longitude=_float_field(data, "longitude"),
+        latitude=_float_field(data, "latitude"),
+        code=_str_field(data, "code"),
+        accounting_code=_str_field(data, "accounting_code"),
+        vendor_accounting_code=_str_field(data, "vendor_accounting_code"),
+        name=_str_field(data, "name"),
+        gender=_str_field(data, "gender"),
+        mailing_city=_str_field(data, "mailing_city"),
+        mailing_street=_str_field(data, "mailing_street"),
+        mailing_number=_str_field(data, "mailing_number"),
+        mailing_unit_number=_str_field(data, "mailing_unit_number"),
+        mailing_district=_str_field(data, "mailing_district"),
+        mailing_extra_address_line=_str_field(data, "mailing_extra_address_line"),
+        mailing_postalcode=_str_field(data, "mailing_postalcode"),
+        mailing_state=_str_field(data, "mailing_state"),
+        mailing_country=_str_field(data, "mailing_country"),
+        visit_city=_str_field(data, "visit_city"),
+        visit_street=_str_field(data, "visit_street"),
+        visit_number=_str_field(data, "visit_number"),
+        visit_unit_number=_str_field(data, "visit_unit_number"),
+        visit_district=_str_field(data, "visit_district"),
+        visit_extra_address_line=_str_field(data, "visit_extra_address_line"),
+        visit_postalcode=_str_field(data, "visit_postalcode"),
+        visit_state=_str_field(data, "visit_state"),
+        country=_str_field(data, "country"),
+        invoice_city=_str_field(data, "invoice_city"),
+        invoice_street=_str_field(data, "invoice_street"),
+        invoice_number=_str_field(data, "invoice_number"),
+        invoice_unit_number=_str_field(data, "invoice_unit_number"),
+        invoice_district=_str_field(data, "invoice_district"),
+        invoice_extra_address_line=_str_field(data, "invoice_extra_address_line"),
+        invoice_postalcode=_str_field(data, "invoice_postalcode"),
+        invoice_state=_str_field(data, "invoice_state"),
+        invoice_country=_str_field(data, "invoice_country"),
+        phone_1=_str_field(data, "phone_1"),
+        phone_2=_str_field(data, "phone_2"),
+        email_1=_str_field(data, "email_1"),
+        email_2=_str_field(data, "email_2"),
+        website=_str_field(data, "website"),
+        VAT_code=_str_field(data, "VAT_code"),
+        fiscal_code=_str_field(data, "fiscal_code"),
+        commerce_code=_str_field(data, "commerce_code"),
+        purchase_number=_str_field(data, "purchase_number"),
+        bic=_str_field(data, "bic"),
+        bank_account=_str_field(data, "bank_account"),
+        default_person=_link_or_model_field(data, "default_person", parse_contact_person),
+        admin_contactperson=_link_field(data, "admin_contactperson"),
+        discount_crew=_float_field(data, "discount_crew"),
+        discount_transport=_float_field(data, "discount_transport"),
+        discount_rental=_float_field(data, "discount_rental"),
+        discount_sale=_float_field(data, "discount_sale"),
+        discount_total=_float_field(data, "discount_total"),
+        projectnote=_str_field(data, "projectnote"),
+        projectnote_title=_str_field(data, "projectnote_title"),
+        contact_warning=_str_field(data, "contact_warning"),
+        discount_subrent=_float_field(data, "discount_subrent"),
+        image=_link_field(data, "image"),
+        tags=_codes_field(data, "tags"),
+        custom=_custom_field(data),
+        raw=dict(data),
+    )
+
+
+def parse_contact_person(data: Mapping[str, Any]) -> ContactPerson:
+    """Build the contact person model from one contact person payload."""
+    return ContactPerson(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        contact=_link_or_model_field(data, "contact", parse_contact)
+        or RentmanLink(_str_field(data, "contact")),
+        firstname=_str_field(data, "firstname"),
+        middle_name=_str_field(data, "middle_name"),
+        lastname=_str_field(data, "lastname"),
+        function=_str_field(data, "function"),
+        phone=_str_field(data, "phone"),
+        street=_str_field(data, "street"),
+        number=_str_field(data, "number"),
+        postalcode=_str_field(data, "postalcode"),
+        city=_str_field(data, "city"),
+        state=_str_field(data, "state"),
+        country=_str_field(data, "country"),
+        mobilephone=_str_field(data, "mobilephone"),
+        email=_str_field(data, "email"),
+        tags=_codes_field(data, "tags"),
+        custom=_custom_field(data),
         raw=dict(data),
     )
