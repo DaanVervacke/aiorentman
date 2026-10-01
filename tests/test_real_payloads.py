@@ -10,6 +10,7 @@ from collections.abc import Callable, Mapping
 from pathlib import Path
 from typing import Any
 
+from aiorentman.models import RentmanLink
 from aiorentman.parsers import (
     parse_accessory,
     parse_actual_content,
@@ -21,7 +22,17 @@ from aiorentman.parsers import (
     parse_folder,
     parse_page,
     parse_project,
+    parse_project_cost,
+    parse_project_crew,
     parse_project_equipment,
+    parse_project_equipment_group,
+    parse_project_function,
+    parse_project_function_group,
+    parse_project_request,
+    parse_project_request_equipment,
+    parse_project_status,
+    parse_project_type,
+    parse_project_vehicle,
     parse_repair,
     parse_serial_number,
     parse_status,
@@ -59,6 +70,31 @@ PARSERS: dict[str, Callable[[Mapping[str, Any]], Any]] = {
     "suppliers.json": parse_supplier,
     "vehicles.json": parse_vehicle,
     "warehouse_statuses.json": parse_warehouse_status,
+    "project_costs.json": parse_project_cost,
+    "project_costs_of_project.json": parse_project_cost,
+    "project_crew.json": parse_project_crew,
+    "project_crew_of_project.json": parse_project_crew,
+    "project_crew_of_project_function.json": parse_project_crew,
+    "project_crew_of_subproject.json": parse_project_crew,
+    "project_equipment_group_of_project.json": parse_project_equipment_group,
+    "project_equipment_group_of_subproject.json": parse_project_equipment_group,
+    "project_equipment_groups.json": parse_project_equipment_group,
+    "project_equipment_of_project_equipment_group.json": parse_project_equipment,
+    "project_function_group_of_project.json": parse_project_function_group,
+    "project_function_group_of_subproject.json": parse_project_function_group,
+    "project_function_groups.json": parse_project_function_group,
+    "project_functions.json": parse_project_function,
+    "project_functions_of_project.json": parse_project_function,
+    "project_functions_of_project_function_group.json": parse_project_function,
+    "project_request_equipment.json": parse_project_request_equipment,
+    "project_request_equipment_of_project_request.json": parse_project_request_equipment,
+    "project_requests.json": parse_project_request,
+    "project_statuses.json": parse_project_status,
+    "project_types.json": parse_project_type,
+    "project_vehicles.json": parse_project_vehicle,
+    "project_vehicles_of_project.json": parse_project_vehicle,
+    "project_vehicles_of_project_function.json": parse_project_vehicle,
+    "project_vehicles_of_subproject.json": parse_project_vehicle,
 }
 
 EMPTY_CAPTURES = {"stock_location_vehicles.json"}
@@ -109,3 +145,25 @@ def test_real_wire_accessory_orders_coerce_to_text() -> None:
     payload = json.loads((REDACTED / "accessories.json").read_text())
     page = parse_page(payload, parse_accessory)
     assert all(isinstance(accessory.order, str) for accessory in page.items)
+
+
+def test_real_wire_planning_scalars_coerce_to_text() -> None:
+    payload = json.loads((REDACTED / "project_functions.json").read_text())
+    functions = parse_page(payload, parse_project_function)
+    assert all(isinstance(function.order, str) for function in functions.items)
+    payload = json.loads((REDACTED / "project_costs.json").read_text())
+    costs = parse_page(payload, parse_project_cost)
+    assert all(isinstance(cost.order, str) for cost in costs.items)
+    payload = json.loads((REDACTED / "project_request_equipment.json").read_text())
+    lines = parse_page(payload, parse_project_request_equipment)
+    assert all(isinstance(line.factor, str) for line in lines.items)
+    assert all(isinstance(line.order, str) for line in lines.items)
+
+
+def test_real_wire_rate_links_parse_as_links() -> None:
+    payload = json.loads((REDACTED / "project_functions.json").read_text())
+    functions = parse_page(payload, parse_project_function)
+    assert all(isinstance(function.cost_rate, RentmanLink) for function in functions.items)
+    payload = json.loads((REDACTED / "project_crew.json").read_text())
+    crew = parse_page(payload, parse_project_crew)
+    assert all(isinstance(member.cost_rate, RentmanLink) for member in crew.items)

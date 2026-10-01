@@ -1,0 +1,74 @@
+{
+  "data": [
+    {
+      "id": 104,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": null,
+      "displayname": "Synthetic 655420d80ee6",
+      "name": "Synthetic b3a03306b032",
+      "color": "Synthetic ea83411cb78d",
+      "type": "regular",
+      "updateHash": "75b73e37f11736aa2d7b1005e29506b7"
+    },
+    {
+      "id": 105,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": null,
+      "displayname": "Synthetic aae6e65619f4",
+      "name": "Synthetic 2644e31bd224",
+      "color": "Synthetic 0594ab1089a9",
+      "type": "regular",
+      "updateHash": "7ef3e134e39bfb8055003b952167f1d0"
+    },
+    {
+      "id": 106,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": null,
+      "displayname": "Synthetic d080d4250bab",
+      "name": "Synthetic 54ed042722e7",
+      "color": "Synthetic 17dca50c4202",
+      "type": "regular",
+      "updateHash": "e44bd9e86ca7f6dc98ac7dea92a2e5c3"
+    },
+    {
+      "id": 107,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic ca8e7cd46989",
+      "name": "Synthetic be09a1e33776",
+      "color": "Synthetic 34a507440af1",
+      "type": "regular",
+      "updateHash": "fb045ffb57346bc6ccebab1d2b1a071b"
+    },
+    {
+      "id": 109,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": null,
+      "displayname": "Synthetic ed7a61ef32e5",
+      "name": "Synthetic 18f97eafedf0",
+      "color": "Synthetic 538113a0c4e9",
+      "type": "supplier",
+      "updateHash": "ea3d5a9093b920ab1321d7c05df83c1f"
+    },
+    {
+      "id": 110,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": null,
+      "displayname": "Synthetic ab620784e969",
+      "name": "Synthetic f3fa6cebfe4a",
+      "color": "Synthetic 538113a0c4e9",
+      "type": "transfer",
+      "updateHash": "81efac77faeae33f8c926111c8b61987"
+    }
+  ],
+  "itemCount": 6,
+  "limit": 50,
+  "offset": 0,
+  "next_page_url": null
+}

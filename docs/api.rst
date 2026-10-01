@@ -58,6 +58,26 @@ Models
    :members:
 .. autoclass:: aiorentman.ExtraInputField
    :members:
+.. autoclass:: aiorentman.ProjectStatus
+   :members:
+.. autoclass:: aiorentman.ProjectType
+   :members:
+.. autoclass:: aiorentman.ProjectFunctionGroup
+   :members:
+.. autoclass:: aiorentman.ProjectFunction
+   :members:
+.. autoclass:: aiorentman.ProjectCrew
+   :members:
+.. autoclass:: aiorentman.ProjectVehicle
+   :members:
+.. autoclass:: aiorentman.ProjectEquipmentGroup
+   :members:
+.. autoclass:: aiorentman.ProjectCost
+   :members:
+.. autoclass:: aiorentman.ProjectRequest
+   :members:
+.. autoclass:: aiorentman.ProjectRequestEquipment
+   :members:
 
 Exceptions
 ----------

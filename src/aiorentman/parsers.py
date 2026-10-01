@@ -15,7 +15,17 @@ from .models import (
     ExtraInputField,
     Folder,
     Project,
+    ProjectCost,
+    ProjectCrew,
     ProjectEquipment,
+    ProjectEquipmentGroup,
+    ProjectFunction,
+    ProjectFunctionGroup,
+    ProjectRequest,
+    ProjectRequestEquipment,
+    ProjectStatus,
+    ProjectType,
+    ProjectVehicle,
     RentmanLink,
     RentmanPage,
     Repair,
@@ -700,5 +710,337 @@ def parse_extra_input_field(data: Mapping[str, Any]) -> ExtraInputField:
         search_include=_bool_field(data, "search_include"),
         search_minlength=_int_field(data, "search_minlength"),
         is_customfield_mandatory=_bool_field(data, "is_customfield_mandatory"),
+        raw=dict(data),
+    )
+
+
+def parse_project_status(data: Mapping[str, Any]) -> ProjectStatus:
+    """Build the project status model from one status payload."""
+    return ProjectStatus(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        name=_str_field(data, "name"),
+        raw=dict(data),
+    )
+
+
+def parse_project_type(data: Mapping[str, Any]) -> ProjectType:
+    """Build the project type model from one type payload."""
+    return ProjectType(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        name=_str_field(data, "name"),
+        color=_str_field(data, "color"),
+        type=_str_field(data, "type"),
+        raw=dict(data),
+    )
+
+
+def parse_project_function_group(data: Mapping[str, Any]) -> ProjectFunctionGroup:
+    """Build the function group model from one group payload."""
+    return ProjectFunctionGroup(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        name=_str_field(data, "name"),
+        project=_link_or_model_field(data, "project", parse_project)
+        or RentmanLink(_str_field(data, "project")),
+        subproject=_link_or_model_field(data, "subproject", parse_subproject)
+        or RentmanLink(_str_field(data, "subproject")),
+        duration=_float_field(data, "duration"),
+        planperiod_start_schedule_is_start=_str_field(data, "planperiod_start_schedule_is_start"),
+        usageperiod_start_schedule_is_start=_str_field(data, "usageperiod_start_schedule_is_start"),
+        planperiod_end_schedule_is_start=_str_field(data, "planperiod_end_schedule_is_start"),
+        usageperiod_end_schedule_is_start=_str_field(data, "usageperiod_end_schedule_is_start"),
+        usageperiod_start=_datetime_field(data, "usageperiod_start"),
+        usageperiod_end=_datetime_field(data, "usageperiod_end"),
+        planperiod_start=_datetime_field(data, "planperiod_start"),
+        planperiod_end=_datetime_field(data, "planperiod_end"),
+        remark=_str_field(data, "remark"),
+        raw=dict(data),
+    )
+
+
+def parse_project_function(data: Mapping[str, Any]) -> ProjectFunction:
+    """Build the function model from one planned function payload."""
+    return ProjectFunction(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        cost_rate=_link_field(data, "cost_rate"),
+        cost_accommodation=_float_field(data, "cost_accommodation"),
+        cost_catering=_float_field(data, "cost_catering"),
+        cost_travel=_float_field(data, "cost_travel"),
+        cost_other=_float_field(data, "cost_other"),
+        price_rate=_link_field(data, "price_rate"),
+        price_accommodation=_float_field(data, "price_accommodation"),
+        price_catering=_float_field(data, "price_catering"),
+        price_travel=_float_field(data, "price_travel"),
+        price_other=_float_field(data, "price_other"),
+        project=_link_or_model_field(data, "project", parse_project)
+        or RentmanLink(_str_field(data, "project")),
+        subproject=_link_or_model_field(data, "subproject", parse_subproject)
+        or RentmanLink(_str_field(data, "subproject")),
+        is_template=_bool_field(data, "is_template"),
+        group=_link_or_model_field(data, "group", parse_project_function_group),
+        name_external=_str_field(data, "name_external"),
+        name=_str_field(data, "name"),
+        travel_time_before=_float_field(data, "travel_time_before"),
+        travel_time_after=_float_field(data, "travel_time_after"),
+        use_travel_time_from_location=_bool_field(data, "use_travel_time_from_location"),
+        use_distance_from_location=_bool_field(data, "use_distance_from_location"),
+        usageperiod_start=_datetime_field(data, "usageperiod_start"),
+        planperiod_start_schedule_is_start=_str_field(data, "planperiod_start_schedule_is_start"),
+        usageperiod_start_schedule_is_start=_str_field(data, "usageperiod_start_schedule_is_start"),
+        planperiod_end_schedule_is_start=_str_field(data, "planperiod_end_schedule_is_start"),
+        usageperiod_end_schedule_is_start=_str_field(data, "usageperiod_end_schedule_is_start"),
+        usageperiod_end=_datetime_field(data, "usageperiod_end"),
+        planperiod_start=_datetime_field(data, "planperiod_start"),
+        planperiod_end=_datetime_field(data, "planperiod_end"),
+        type=_str_field(data, "type"),
+        duration=_float_field(data, "duration"),
+        amount=_int_field(data, "amount"),
+        break_=_float_field(data, "break"),
+        distance=_float_field(data, "distance"),
+        twoway=_bool_field(data, "twoway"),
+        taxclass=_link_field(data, "taxclass"),
+        ledger=_link_field(data, "ledger"),
+        ledger_debit=_link_field(data, "ledger_debit"),
+        order=_coerced_str_field(data, "order"),
+        remark_client=_str_field(data, "remark_client"),
+        remark_planner=_str_field(data, "remark_planner"),
+        remark_crew=_str_field(data, "remark_crew"),
+        in_financial=_bool_field(data, "in_financial"),
+        in_planning=_bool_field(data, "in_planning"),
+        is_plannable=_bool_field(data, "is_plannable"),
+        recurrence_group=_int_field(data, "recurrence_group"),
+        recurrence_enddate=_datetime_field(data, "recurrence_enddate"),
+        recurrence_interval_unit=_str_field(data, "recurrence_interval_unit"),
+        recurrence_interval=_int_field(data, "recurrence_interval"),
+        recurrence_weekdays=_str_or_none_field(data, "recurrence_weekdays"),
+        price_fixed=_float_field(data, "price_fixed"),
+        price_variable=_float_field(data, "price_variable"),
+        costs_fixed=_float_field(data, "costs_fixed"),
+        costs_variable=_float_field(data, "costs_variable"),
+        price_total=_float_field(data, "price_total"),
+        costs_total=_float_field(data, "costs_total"),
+        tags=_codes_field(data, "tags"),
+        custom=_custom_field(data),
+        raw=dict(data),
+    )
+
+
+def parse_project_crew(data: Mapping[str, Any]) -> ProjectCrew:
+    """Build the project crew model from one crew planning payload."""
+    return ProjectCrew(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        cost_rate=_link_field(data, "cost_rate"),
+        cost_accommodation=_float_field(data, "cost_accommodation"),
+        cost_catering=_float_field(data, "cost_catering"),
+        cost_travel=_float_field(data, "cost_travel"),
+        cost_other=_float_field(data, "cost_other"),
+        function=_link_or_model_field(data, "function", parse_project_function)
+        or RentmanLink(_str_field(data, "function")),
+        crewmember=_link_field(data, "crewmember") or RentmanLink(_str_field(data, "crewmember")),
+        visible=_bool_field(data, "visible"),
+        planperiod_start=_datetime_field(data, "planperiod_start"),
+        planperiod_end=_datetime_field(data, "planperiod_end"),
+        transport=_str_field(data, "transport"),
+        remark=_str_field(data, "remark"),
+        remark_planner=_str_field(data, "remark_planner"),
+        invoice_reference=_str_field(data, "invoice_reference"),
+        project_leader=_bool_field(data, "project_leader"),
+        is_visible_on_dashboard=_bool_field(data, "is_visible_on_dashboard"),
+        costs=_float_field(data, "costs"),
+        cost_actual=_float_field(data, "cost_actual"),
+        hours_registered=_float_field(data, "hours_registered"),
+        hours_planned=_float_field(data, "hours_planned"),
+        cost_planned=_float_field(data, "cost_planned"),
+        diff_cost=_float_field(data, "diff_cost"),
+        diff_hours=_float_field(data, "diff_hours"),
+        activity_status=_str_field(data, "activity_status"),
+        custom=_custom_field(data),
+        raw=dict(data),
+    )
+
+
+def parse_project_vehicle(data: Mapping[str, Any]) -> ProjectVehicle:
+    """Build the project vehicle model from one transport planning payload."""
+    return ProjectVehicle(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        cost_rate=_link_field(data, "cost_rate"),
+        function=_link_or_model_field(data, "function", parse_project_function)
+        or RentmanLink(_str_field(data, "function")),
+        transport=_str_field(data, "transport"),
+        vehicle=_link_or_model_field(data, "vehicle", parse_vehicle)
+        or RentmanLink(_str_field(data, "vehicle")),
+        planningperiod_start=_datetime_field(data, "planningperiod_start"),
+        planningperiod_end=_datetime_field(data, "planningperiod_end"),
+        remark=_str_field(data, "remark"),
+        remark_planner=_str_field(data, "remark_planner"),
+        costs=_float_field(data, "costs"),
+        custom=_custom_field(data),
+        raw=dict(data),
+    )
+
+
+def parse_project_equipment_group(data: Mapping[str, Any]) -> ProjectEquipmentGroup:
+    """Build the equipment group model from one group payload."""
+    return ProjectEquipmentGroup(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        project=_link_or_model_field(data, "project", parse_project)
+        or RentmanLink(_str_field(data, "project")),
+        subproject=_link_or_model_field(data, "subproject", parse_subproject)
+        or RentmanLink(_str_field(data, "subproject")),
+        additional_scanned=_bool_field(data, "additional_scanned"),
+        name=_str_field(data, "name"),
+        usageperiod_start=_datetime_field(data, "usageperiod_start"),
+        usageperiod_end=_datetime_field(data, "usageperiod_end"),
+        duration=_float_field(data, "duration"),
+        planperiod_start=_datetime_field(data, "planperiod_start"),
+        planperiod_end=_datetime_field(data, "planperiod_end"),
+        is_delayed=_bool_field(data, "is_delayed"),
+        order=_coerced_str_field(data, "order"),
+        in_price_calculation=_bool_field(data, "in_price_calculation"),
+        remark=_str_field(data, "remark"),
+        weight=_float_field(data, "weight"),
+        power=_float_field(data, "power"),
+        current=_float_field(data, "current"),
+        volume=_float_field(data, "volume"),
+        total_new_price=_float_field(data, "total_new_price"),
+        raw=dict(data),
+    )
+
+
+def parse_project_cost(data: Mapping[str, Any]) -> ProjectCost:
+    """Build the project cost model from one cost line payload."""
+    return ProjectCost(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        name=_str_field(data, "name"),
+        remark=_str_field(data, "remark"),
+        project=_link_or_model_field(data, "project", parse_project)
+        or RentmanLink(_str_field(data, "project")),
+        quantity=_int_field(data, "quantity"),
+        discount=_float_field(data, "discount"),
+        order=_coerced_str_field(data, "order"),
+        subproject=_link_or_model_field(data, "subproject", parse_subproject)
+        or RentmanLink(_str_field(data, "subproject")),
+        is_template=_bool_field(data, "is_template"),
+        taxclass=_link_field(data, "taxclass"),
+        ledger=_link_field(data, "ledger"),
+        ledger_debit=_link_field(data, "ledger_debit"),
+        sale_price=_float_field(data, "sale_price"),
+        purchase_price=_float_field(data, "purchase_price"),
+        custom=_custom_field(data),
+        raw=dict(data),
+    )
+
+
+def parse_project_request(data: Mapping[str, Any]) -> ProjectRequest:
+    """Build the project request model from one request payload."""
+    return ProjectRequest(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        linked_contact=_link_field(data, "linked_contact"),
+        contact_mailing_number=_str_field(data, "contact_mailing_number"),
+        contact_mailing_country=_str_field(data, "contact_mailing_country"),
+        contact_name=_str_field(data, "contact_name"),
+        contact_mailing_postalcode=_str_field(data, "contact_mailing_postalcode"),
+        contact_phone=_str_field(data, "contact_phone"),
+        contact_mailing_city=_str_field(data, "contact_mailing_city"),
+        contact_mailing_street=_str_field(data, "contact_mailing_street"),
+        linked_contact_person=_link_field(data, "linked_contact_person"),
+        contact_person_lastname=_str_field(data, "contact_person_lastname"),
+        contact_person_email=_str_field(data, "contact_person_email"),
+        contact_person_middle_name=_str_field(data, "contact_person_middle_name"),
+        contact_person_first_name=_str_field(data, "contact_person_first_name"),
+        usageperiod_end=_datetime_field(data, "usageperiod_end"),
+        usageperiod_start=_datetime_field(data, "usageperiod_start"),
+        is_paid=_bool_field(data, "is_paid"),
+        language=_str_field(data, "language"),
+        in_=_datetime_field(data, "in"),
+        out_=_datetime_field(data, "out"),
+        linked_location=_link_field(data, "linked_location"),
+        location_mailing_number=_str_field(data, "location_mailing_number"),
+        location_mailing_country=_str_field(data, "location_mailing_country"),
+        location_name=_str_field(data, "location_name"),
+        location_mailing_postalcode=_str_field(data, "location_mailing_postalcode"),
+        location_mailing_city=_str_field(data, "location_mailing_city"),
+        location_mailing_street=_str_field(data, "location_mailing_street"),
+        location_phone=_str_field(data, "location_phone"),
+        name=_str_field(data, "name"),
+        external_reference=_int_field(data, "external_reference"),
+        remark=_str_field(data, "remark"),
+        planperiod_end=_datetime_field(data, "planperiod_end"),
+        planperiod_start=_datetime_field(data, "planperiod_start"),
+        price=_float_field(data, "price"),
+        linked_project=_link_or_model_field(data, "linked_project", parse_project),
+        source=_str_field(data, "source"),
+        status=_str_field(data, "status"),
+        raw=dict(data),
+    )
+
+
+def parse_project_request_equipment(data: Mapping[str, Any]) -> ProjectRequestEquipment:
+    """Build the request equipment model from one requested line payload."""
+    return ProjectRequestEquipment(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        quantity=_int_field(data, "quantity"),
+        quantity_total=_int_field(data, "quantity_total"),
+        is_comment=_bool_field(data, "is_comment"),
+        is_kit=_bool_field(data, "is_kit"),
+        discount=_float_field(data, "discount"),
+        linked_equipment=_link_or_model_field(data, "linked_equipment", parse_equipment),
+        name=_str_field(data, "name"),
+        external_remark=_str_field(data, "external_remark"),
+        parent=_link_or_model_field(data, "parent", parse_project_request_equipment),
+        unit_price=_float_field(data, "unit_price"),
+        project_request=_link_or_model_field(data, "project_request", parse_project_request)
+        or RentmanLink(_str_field(data, "project_request")),
+        factor=_coerced_str_field(data, "factor"),
+        order=_coerced_str_field(data, "order"),
         raw=dict(data),
     )

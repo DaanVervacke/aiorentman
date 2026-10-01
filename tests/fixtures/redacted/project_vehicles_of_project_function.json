@@ -1,0 +1,26 @@
+{
+  "data": [
+    {
+      "id": 11,
+      "created": "2026-10-01T19:32:44.000+02:00",
+      "modified": "2026-10-01T19:32:48.940+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic a42455eaf6e3",
+      "cost_rate": "/rates/558",
+      "function": "/projectfunctions/43",
+      "transport": "No transport",
+      "vehicle": "/vehicles/9",
+      "planningperiod_start": "2026-10-07T16:00:00+02:00",
+      "planningperiod_end": "2026-10-07T23:00:00+02:00",
+      "remark": "",
+      "remark_planner": "",
+      "costs": 80,
+      "updateHash": "914dd32dfa43d2cabe75757b019f5046",
+      "custom": {}
+    }
+  ],
+  "itemCount": 1,
+  "limit": 50,
+  "offset": 0,
+  "next_page_url": null
+}

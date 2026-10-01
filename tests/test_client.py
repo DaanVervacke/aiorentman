@@ -100,6 +100,73 @@ COLLECTIONS: tuple[tuple[Callable[[RentmanClient], Awaitable[RentmanPage[Any]]],
         "/stocklocations/2/vehicles",
     ),
     (lambda client: client.async_list_extra_input_fields(), "/extrainputfields"),
+    (lambda client: client.async_list_project_statuses(), "/projectstatuses"),
+    (lambda client: client.async_list_project_types(), "/projecttypes"),
+    (
+        lambda client: client.async_list_project_function_groups(),
+        "/projectfunctiongroups",
+    ),
+    (
+        lambda client: client.async_list_project_function_groups_of_project(80),
+        "/projects/80/projectfunctiongroups",
+    ),
+    (
+        lambda client: client.async_list_project_function_groups_of_subproject(80),
+        "/subprojects/80/projectfunctiongroups",
+    ),
+    (lambda client: client.async_list_project_functions(), "/projectfunctions"),
+    (
+        lambda client: client.async_list_project_functions_of_project(80),
+        "/projects/80/projectfunctions",
+    ),
+    (
+        lambda client: client.async_list_project_functions_of_project_function_group(10),
+        "/projectfunctiongroups/10/projectfunctions",
+    ),
+    (lambda client: client.async_list_project_crew(), "/projectcrew"),
+    (lambda client: client.async_list_project_crew_of_project(80), "/projects/80/projectcrew"),
+    (
+        lambda client: client.async_list_project_crew_of_subproject(80),
+        "/subprojects/80/projectcrew",
+    ),
+    (
+        lambda client: client.async_list_project_crew_of_project_function(8),
+        "/projectfunctions/8/projectcrew",
+    ),
+    (lambda client: client.async_list_project_vehicles(), "/projectvehicles"),
+    (
+        lambda client: client.async_list_project_vehicles_of_project(80),
+        "/projects/80/projectvehicles",
+    ),
+    (
+        lambda client: client.async_list_project_vehicles_of_subproject(80),
+        "/subprojects/80/projectvehicles",
+    ),
+    (
+        lambda client: client.async_list_project_vehicles_of_project_function(43),
+        "/projectfunctions/43/projectvehicles",
+    ),
+    (lambda client: client.async_list_project_equipment_groups(), "/projectequipmentgroup"),
+    (
+        lambda client: client.async_list_project_equipment_groups_of_project(80),
+        "/projects/80/projectequipmentgroup",
+    ),
+    (
+        lambda client: client.async_list_project_equipment_groups_of_subproject(80),
+        "/subprojects/80/projectequipmentgroup",
+    ),
+    (
+        lambda client: client.async_list_project_equipment_of_project_equipment_group(150),
+        "/projectequipmentgroup/150/projectequipment",
+    ),
+    (lambda client: client.async_list_project_costs(), "/costs"),
+    (lambda client: client.async_list_project_costs_of_project(80), "/projects/80/costs"),
+    (lambda client: client.async_list_project_requests(), "/projectrequests"),
+    (lambda client: client.async_list_project_request_equipment(), "/projectrequestequipment"),
+    (
+        lambda client: client.async_list_project_request_equipment_of_project_request(1),
+        "/projectrequests/1/projectrequestequipment",
+    ),
 )
 
 ITEMS: tuple[tuple[Callable[[RentmanClient], Awaitable[Any]], str], ...] = (
@@ -125,6 +192,16 @@ ITEMS: tuple[tuple[Callable[[RentmanClient], Awaitable[Any]], str], ...] = (
     (lambda client: client.async_get_supplier(1), "/suppliers/1"),
     (lambda client: client.async_get_vehicle(7), "/vehicles/7"),
     (lambda client: client.async_get_extra_input_field(1), "/extrainputfields/1"),
+    (lambda client: client.async_get_project_status(1), "/projectstatuses/1"),
+    (lambda client: client.async_get_project_type(104), "/projecttypes/104"),
+    (lambda client: client.async_get_project_function_group(3), "/projectfunctiongroups/3"),
+    (lambda client: client.async_get_project_function(8), "/projectfunctions/8"),
+    (lambda client: client.async_get_project_crew(1), "/projectcrew/1"),
+    (lambda client: client.async_get_project_vehicle(11), "/projectvehicles/11"),
+    (lambda client: client.async_get_project_equipment_group(150), "/projectequipmentgroup/150"),
+    (lambda client: client.async_get_project_cost(7), "/costs/7"),
+    (lambda client: client.async_get_project_request(1), "/projectrequests/1"),
+    (lambda client: client.async_get_project_request_equipment(1), "/projectrequestequipment/1"),
 )
 
 ITERATORS: tuple[tuple[Callable[[RentmanClient, Query | None], Any], str], ...] = (
@@ -204,6 +281,91 @@ ITERATORS: tuple[tuple[Callable[[RentmanClient, Query | None], Any], str], ...] 
         "/stocklocations/2/vehicles",
     ),
     (lambda client, query: client.async_iter_extra_input_fields(query), "/extrainputfields"),
+    (lambda client, query: client.async_iter_project_statuses(query), "/projectstatuses"),
+    (lambda client, query: client.async_iter_project_types(query), "/projecttypes"),
+    (
+        lambda client, query: client.async_iter_project_function_groups(query),
+        "/projectfunctiongroups",
+    ),
+    (
+        lambda client, query: client.async_iter_project_function_groups_of_project(80, query),
+        "/projects/80/projectfunctiongroups",
+    ),
+    (
+        lambda client, query: client.async_iter_project_function_groups_of_subproject(80, query),
+        "/subprojects/80/projectfunctiongroups",
+    ),
+    (lambda client, query: client.async_iter_project_functions(query), "/projectfunctions"),
+    (
+        lambda client, query: client.async_iter_project_functions_of_project(80, query),
+        "/projects/80/projectfunctions",
+    ),
+    (
+        lambda client, query: client.async_iter_project_functions_of_project_function_group(
+            10, query
+        ),
+        "/projectfunctiongroups/10/projectfunctions",
+    ),
+    (lambda client, query: client.async_iter_project_crew(query), "/projectcrew"),
+    (
+        lambda client, query: client.async_iter_project_crew_of_project(80, query),
+        "/projects/80/projectcrew",
+    ),
+    (
+        lambda client, query: client.async_iter_project_crew_of_subproject(80, query),
+        "/subprojects/80/projectcrew",
+    ),
+    (
+        lambda client, query: client.async_iter_project_crew_of_project_function(8, query),
+        "/projectfunctions/8/projectcrew",
+    ),
+    (lambda client, query: client.async_iter_project_vehicles(query), "/projectvehicles"),
+    (
+        lambda client, query: client.async_iter_project_vehicles_of_project(80, query),
+        "/projects/80/projectvehicles",
+    ),
+    (
+        lambda client, query: client.async_iter_project_vehicles_of_subproject(80, query),
+        "/subprojects/80/projectvehicles",
+    ),
+    (
+        lambda client, query: client.async_iter_project_vehicles_of_project_function(43, query),
+        "/projectfunctions/43/projectvehicles",
+    ),
+    (
+        lambda client, query: client.async_iter_project_equipment_groups(query),
+        "/projectequipmentgroup",
+    ),
+    (
+        lambda client, query: client.async_iter_project_equipment_groups_of_project(80, query),
+        "/projects/80/projectequipmentgroup",
+    ),
+    (
+        lambda client, query: client.async_iter_project_equipment_groups_of_subproject(80, query),
+        "/subprojects/80/projectequipmentgroup",
+    ),
+    (
+        lambda client, query: client.async_iter_project_equipment_of_project_equipment_group(
+            150, query
+        ),
+        "/projectequipmentgroup/150/projectequipment",
+    ),
+    (lambda client, query: client.async_iter_project_costs(query), "/costs"),
+    (
+        lambda client, query: client.async_iter_project_costs_of_project(80, query),
+        "/projects/80/costs",
+    ),
+    (lambda client, query: client.async_iter_project_requests(query), "/projectrequests"),
+    (
+        lambda client, query: client.async_iter_project_request_equipment(query),
+        "/projectrequestequipment",
+    ),
+    (
+        lambda client, query: client.async_iter_project_request_equipment_of_project_request(
+            1, query
+        ),
+        "/projectrequests/1/projectrequestequipment",
+    ),
 )
 
 

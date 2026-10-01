@@ -1,0 +1,41 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "created": "2026-10-01T19:32:44.000+02:00",
+      "modified": "2026-10-01T19:32:48.889+02:00",
+      "creator": null,
+      "displayname": "Synthetic f22ea368a8f5",
+      "cost_rate": "/rates/546",
+      "cost_accommodation": 0,
+      "cost_catering": 0,
+      "cost_travel": 0,
+      "cost_other": 0,
+      "function": "/projectfunctions/8",
+      "crewmember": "/crew/228",
+      "visible": true,
+      "planperiod_start": "2026-09-30T14:00:00+02:00",
+      "planperiod_end": "2026-10-01T03:00:00+02:00",
+      "transport": "no_transport",
+      "remark": "",
+      "remark_planner": "",
+      "invoice_reference": "",
+      "project_leader": false,
+      "is_visible_on_dashboard": true,
+      "costs": 0,
+      "cost_actual": 0,
+      "hours_registered": 0,
+      "hours_planned": 46800,
+      "cost_planned": 325,
+      "diff_cost": -325,
+      "diff_hours": -46800,
+      "activity_status": "no_registration",
+      "updateHash": "c82431ff18fdd7bae099f60782e5fc37",
+      "custom": {}
+    }
+  ],
+  "itemCount": 1,
+  "limit": 50,
+  "offset": 0,
+  "next_page_url": null
+}

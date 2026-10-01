@@ -30,10 +30,45 @@ from ._endpoints import (
     EXTRA_INPUT_FIELDS_ITEM,
     FOLDERS,
     FOLDERS_ITEM,
+    PROJECT_COSTS,
+    PROJECT_COSTS_ITEM,
+    PROJECT_COSTS_OF_PROJECT,
+    PROJECT_CREW,
+    PROJECT_CREW_ITEM,
+    PROJECT_CREW_OF_PROJECT,
+    PROJECT_CREW_OF_PROJECT_FUNCTION,
+    PROJECT_CREW_OF_SUBPROJECT,
     PROJECT_EQUIPMENT,
+    PROJECT_EQUIPMENT_GROUPS,
+    PROJECT_EQUIPMENT_GROUPS_ITEM,
+    PROJECT_EQUIPMENT_GROUPS_OF_PROJECT,
+    PROJECT_EQUIPMENT_GROUPS_OF_SUBPROJECT,
     PROJECT_EQUIPMENT_ITEM,
     PROJECT_EQUIPMENT_OF_PROJECT,
+    PROJECT_EQUIPMENT_OF_PROJECT_EQUIPMENT_GROUP,
     PROJECT_EQUIPMENT_OF_SUBPROJECT,
+    PROJECT_FUNCTION_GROUPS,
+    PROJECT_FUNCTION_GROUPS_ITEM,
+    PROJECT_FUNCTION_GROUPS_OF_PROJECT,
+    PROJECT_FUNCTION_GROUPS_OF_SUBPROJECT,
+    PROJECT_FUNCTIONS,
+    PROJECT_FUNCTIONS_ITEM,
+    PROJECT_FUNCTIONS_OF_PROJECT,
+    PROJECT_FUNCTIONS_OF_PROJECT_FUNCTION_GROUP,
+    PROJECT_REQUEST_EQUIPMENT,
+    PROJECT_REQUEST_EQUIPMENT_ITEM,
+    PROJECT_REQUEST_EQUIPMENT_OF_PROJECT_REQUEST,
+    PROJECT_REQUESTS,
+    PROJECT_REQUESTS_ITEM,
+    PROJECT_STATUSES,
+    PROJECT_STATUSES_ITEM,
+    PROJECT_TYPES,
+    PROJECT_TYPES_ITEM,
+    PROJECT_VEHICLES,
+    PROJECT_VEHICLES_ITEM,
+    PROJECT_VEHICLES_OF_PROJECT,
+    PROJECT_VEHICLES_OF_PROJECT_FUNCTION,
+    PROJECT_VEHICLES_OF_SUBPROJECT,
     PROJECTS,
     PROJECTS_ITEM,
     REPAIRS,
@@ -90,7 +125,17 @@ from .models import (
     ExtraInputField,
     Folder,
     Project,
+    ProjectCost,
+    ProjectCrew,
     ProjectEquipment,
+    ProjectEquipmentGroup,
+    ProjectFunction,
+    ProjectFunctionGroup,
+    ProjectRequest,
+    ProjectRequestEquipment,
+    ProjectStatus,
+    ProjectType,
+    ProjectVehicle,
     RentmanPage,
     Repair,
     SerialNumber,
@@ -653,6 +698,435 @@ class RentmanClient:
         return await self._call(
             EXTRA_INPUT_FIELDS_ITEM,
             ItemArgs(item_id=extra_input_field_id),
+        )
+
+    async def async_list_project_statuses(
+        self, query: Query | None = None
+    ) -> RentmanPage[ProjectStatus]:
+        """Fetch one page of project statuses."""
+        return await self._call(PROJECT_STATUSES, CollectionArgs(query=query))
+
+    def async_iter_project_statuses(
+        self, query: Query | None = None
+    ) -> AsyncIterator[ProjectStatus]:
+        """Yield every project status, following the cursor across pages."""
+        return self._iter_collection(PROJECT_STATUSES, CollectionArgs(query=query))
+
+    async def async_get_project_status(self, project_status_id: int) -> ProjectStatus | None:
+        """Fetch one project status by its id."""
+        return await self._call(PROJECT_STATUSES_ITEM, ItemArgs(item_id=project_status_id))
+
+    async def async_list_project_types(
+        self, query: Query | None = None
+    ) -> RentmanPage[ProjectType]:
+        """Fetch one page of project types."""
+        return await self._call(PROJECT_TYPES, CollectionArgs(query=query))
+
+    def async_iter_project_types(self, query: Query | None = None) -> AsyncIterator[ProjectType]:
+        """Yield every project type, following the cursor across pages."""
+        return self._iter_collection(PROJECT_TYPES, CollectionArgs(query=query))
+
+    async def async_get_project_type(self, project_type_id: int) -> ProjectType | None:
+        """Fetch one project type by its id."""
+        return await self._call(PROJECT_TYPES_ITEM, ItemArgs(item_id=project_type_id))
+
+    async def async_list_project_function_groups(
+        self, query: Query | None = None
+    ) -> RentmanPage[ProjectFunctionGroup]:
+        """Fetch one page of project function groups."""
+        return await self._call(PROJECT_FUNCTION_GROUPS, CollectionArgs(query=query))
+
+    def async_iter_project_function_groups(
+        self, query: Query | None = None
+    ) -> AsyncIterator[ProjectFunctionGroup]:
+        """Yield every project function group, following the cursor across pages."""
+        return self._iter_collection(PROJECT_FUNCTION_GROUPS, CollectionArgs(query=query))
+
+    async def async_get_project_function_group(self, group_id: int) -> ProjectFunctionGroup | None:
+        """Fetch one project function group by its id."""
+        return await self._call(PROJECT_FUNCTION_GROUPS_ITEM, ItemArgs(item_id=group_id))
+
+    async def async_list_project_function_groups_of_project(
+        self, project_id: int, query: Query | None = None
+    ) -> RentmanPage[ProjectFunctionGroup]:
+        """Fetch one page of function groups of one project."""
+        return await self._call(
+            PROJECT_FUNCTION_GROUPS_OF_PROJECT,
+            ParentCollectionArgs(parent_id=project_id, query=query),
+        )
+
+    def async_iter_project_function_groups_of_project(
+        self, project_id: int, query: Query | None = None
+    ) -> AsyncIterator[ProjectFunctionGroup]:
+        """Yield every function group of one project, following the cursor."""
+        return self._iter_collection(
+            PROJECT_FUNCTION_GROUPS_OF_PROJECT,
+            ParentCollectionArgs(parent_id=project_id, query=query),
+        )
+
+    async def async_list_project_function_groups_of_subproject(
+        self, subproject_id: int, query: Query | None = None
+    ) -> RentmanPage[ProjectFunctionGroup]:
+        """Fetch one page of function groups of one subproject."""
+        return await self._call(
+            PROJECT_FUNCTION_GROUPS_OF_SUBPROJECT,
+            ParentCollectionArgs(parent_id=subproject_id, query=query),
+        )
+
+    def async_iter_project_function_groups_of_subproject(
+        self, subproject_id: int, query: Query | None = None
+    ) -> AsyncIterator[ProjectFunctionGroup]:
+        """Yield every function group of one subproject, following the cursor."""
+        return self._iter_collection(
+            PROJECT_FUNCTION_GROUPS_OF_SUBPROJECT,
+            ParentCollectionArgs(parent_id=subproject_id, query=query),
+        )
+
+    async def async_list_project_functions(
+        self, query: Query | None = None
+    ) -> RentmanPage[ProjectFunction]:
+        """Fetch one page of project functions."""
+        return await self._call(PROJECT_FUNCTIONS, CollectionArgs(query=query))
+
+    def async_iter_project_functions(
+        self, query: Query | None = None
+    ) -> AsyncIterator[ProjectFunction]:
+        """Yield every project function, following the cursor across pages."""
+        return self._iter_collection(PROJECT_FUNCTIONS, CollectionArgs(query=query))
+
+    async def async_get_project_function(self, function_id: int) -> ProjectFunction | None:
+        """Fetch one project function by its id."""
+        return await self._call(PROJECT_FUNCTIONS_ITEM, ItemArgs(item_id=function_id))
+
+    async def async_list_project_functions_of_project(
+        self, project_id: int, query: Query | None = None
+    ) -> RentmanPage[ProjectFunction]:
+        """Fetch one page of functions of one project."""
+        return await self._call(
+            PROJECT_FUNCTIONS_OF_PROJECT,
+            ParentCollectionArgs(parent_id=project_id, query=query),
+        )
+
+    def async_iter_project_functions_of_project(
+        self, project_id: int, query: Query | None = None
+    ) -> AsyncIterator[ProjectFunction]:
+        """Yield every function of one project, following the cursor."""
+        return self._iter_collection(
+            PROJECT_FUNCTIONS_OF_PROJECT,
+            ParentCollectionArgs(parent_id=project_id, query=query),
+        )
+
+    async def async_list_project_functions_of_project_function_group(
+        self, group_id: int, query: Query | None = None
+    ) -> RentmanPage[ProjectFunction]:
+        """Fetch one page of functions of one function group."""
+        return await self._call(
+            PROJECT_FUNCTIONS_OF_PROJECT_FUNCTION_GROUP,
+            ParentCollectionArgs(parent_id=group_id, query=query),
+        )
+
+    def async_iter_project_functions_of_project_function_group(
+        self, group_id: int, query: Query | None = None
+    ) -> AsyncIterator[ProjectFunction]:
+        """Yield every function of one function group, following the cursor."""
+        return self._iter_collection(
+            PROJECT_FUNCTIONS_OF_PROJECT_FUNCTION_GROUP,
+            ParentCollectionArgs(parent_id=group_id, query=query),
+        )
+
+    async def async_list_project_crew(self, query: Query | None = None) -> RentmanPage[ProjectCrew]:
+        """Fetch one page of planned crew."""
+        return await self._call(PROJECT_CREW, CollectionArgs(query=query))
+
+    def async_iter_project_crew(self, query: Query | None = None) -> AsyncIterator[ProjectCrew]:
+        """Yield every planned crew member, following the cursor across pages."""
+        return self._iter_collection(PROJECT_CREW, CollectionArgs(query=query))
+
+    async def async_get_project_crew(self, project_crew_id: int) -> ProjectCrew | None:
+        """Fetch one planned crew member by its id."""
+        return await self._call(PROJECT_CREW_ITEM, ItemArgs(item_id=project_crew_id))
+
+    async def async_list_project_crew_of_project(
+        self, project_id: int, query: Query | None = None
+    ) -> RentmanPage[ProjectCrew]:
+        """Fetch one page of planned crew of one project."""
+        return await self._call(
+            PROJECT_CREW_OF_PROJECT,
+            ParentCollectionArgs(parent_id=project_id, query=query),
+        )
+
+    def async_iter_project_crew_of_project(
+        self, project_id: int, query: Query | None = None
+    ) -> AsyncIterator[ProjectCrew]:
+        """Yield every planned crew member of one project, following the cursor."""
+        return self._iter_collection(
+            PROJECT_CREW_OF_PROJECT,
+            ParentCollectionArgs(parent_id=project_id, query=query),
+        )
+
+    async def async_list_project_crew_of_subproject(
+        self, subproject_id: int, query: Query | None = None
+    ) -> RentmanPage[ProjectCrew]:
+        """Fetch one page of planned crew of one subproject."""
+        return await self._call(
+            PROJECT_CREW_OF_SUBPROJECT,
+            ParentCollectionArgs(parent_id=subproject_id, query=query),
+        )
+
+    def async_iter_project_crew_of_subproject(
+        self, subproject_id: int, query: Query | None = None
+    ) -> AsyncIterator[ProjectCrew]:
+        """Yield every planned crew member of one subproject, following the cursor."""
+        return self._iter_collection(
+            PROJECT_CREW_OF_SUBPROJECT,
+            ParentCollectionArgs(parent_id=subproject_id, query=query),
+        )
+
+    async def async_list_project_crew_of_project_function(
+        self, function_id: int, query: Query | None = None
+    ) -> RentmanPage[ProjectCrew]:
+        """Fetch one page of crew planned on one function."""
+        return await self._call(
+            PROJECT_CREW_OF_PROJECT_FUNCTION,
+            ParentCollectionArgs(parent_id=function_id, query=query),
+        )
+
+    def async_iter_project_crew_of_project_function(
+        self, function_id: int, query: Query | None = None
+    ) -> AsyncIterator[ProjectCrew]:
+        """Yield every crew member planned on one function, following the cursor."""
+        return self._iter_collection(
+            PROJECT_CREW_OF_PROJECT_FUNCTION,
+            ParentCollectionArgs(parent_id=function_id, query=query),
+        )
+
+    async def async_list_project_vehicles(
+        self, query: Query | None = None
+    ) -> RentmanPage[ProjectVehicle]:
+        """Fetch one page of planned vehicles."""
+        return await self._call(PROJECT_VEHICLES, CollectionArgs(query=query))
+
+    def async_iter_project_vehicles(
+        self, query: Query | None = None
+    ) -> AsyncIterator[ProjectVehicle]:
+        """Yield every planned vehicle, following the cursor across pages."""
+        return self._iter_collection(PROJECT_VEHICLES, CollectionArgs(query=query))
+
+    async def async_get_project_vehicle(self, project_vehicle_id: int) -> ProjectVehicle | None:
+        """Fetch one planned vehicle by its id."""
+        return await self._call(PROJECT_VEHICLES_ITEM, ItemArgs(item_id=project_vehicle_id))
+
+    async def async_list_project_vehicles_of_project(
+        self, project_id: int, query: Query | None = None
+    ) -> RentmanPage[ProjectVehicle]:
+        """Fetch one page of planned vehicles of one project."""
+        return await self._call(
+            PROJECT_VEHICLES_OF_PROJECT,
+            ParentCollectionArgs(parent_id=project_id, query=query),
+        )
+
+    def async_iter_project_vehicles_of_project(
+        self, project_id: int, query: Query | None = None
+    ) -> AsyncIterator[ProjectVehicle]:
+        """Yield every planned vehicle of one project, following the cursor."""
+        return self._iter_collection(
+            PROJECT_VEHICLES_OF_PROJECT,
+            ParentCollectionArgs(parent_id=project_id, query=query),
+        )
+
+    async def async_list_project_vehicles_of_subproject(
+        self, subproject_id: int, query: Query | None = None
+    ) -> RentmanPage[ProjectVehicle]:
+        """Fetch one page of planned vehicles of one subproject."""
+        return await self._call(
+            PROJECT_VEHICLES_OF_SUBPROJECT,
+            ParentCollectionArgs(parent_id=subproject_id, query=query),
+        )
+
+    def async_iter_project_vehicles_of_subproject(
+        self, subproject_id: int, query: Query | None = None
+    ) -> AsyncIterator[ProjectVehicle]:
+        """Yield every planned vehicle of one subproject, following the cursor."""
+        return self._iter_collection(
+            PROJECT_VEHICLES_OF_SUBPROJECT,
+            ParentCollectionArgs(parent_id=subproject_id, query=query),
+        )
+
+    async def async_list_project_vehicles_of_project_function(
+        self, function_id: int, query: Query | None = None
+    ) -> RentmanPage[ProjectVehicle]:
+        """Fetch one page of vehicles planned on one function."""
+        return await self._call(
+            PROJECT_VEHICLES_OF_PROJECT_FUNCTION,
+            ParentCollectionArgs(parent_id=function_id, query=query),
+        )
+
+    def async_iter_project_vehicles_of_project_function(
+        self, function_id: int, query: Query | None = None
+    ) -> AsyncIterator[ProjectVehicle]:
+        """Yield every vehicle planned on one function, following the cursor."""
+        return self._iter_collection(
+            PROJECT_VEHICLES_OF_PROJECT_FUNCTION,
+            ParentCollectionArgs(parent_id=function_id, query=query),
+        )
+
+    async def async_list_project_equipment_groups(
+        self, query: Query | None = None
+    ) -> RentmanPage[ProjectEquipmentGroup]:
+        """Fetch one page of project equipment groups."""
+        return await self._call(PROJECT_EQUIPMENT_GROUPS, CollectionArgs(query=query))
+
+    def async_iter_project_equipment_groups(
+        self, query: Query | None = None
+    ) -> AsyncIterator[ProjectEquipmentGroup]:
+        """Yield every project equipment group, following the cursor across pages."""
+        return self._iter_collection(PROJECT_EQUIPMENT_GROUPS, CollectionArgs(query=query))
+
+    async def async_get_project_equipment_group(
+        self, group_id: int
+    ) -> ProjectEquipmentGroup | None:
+        """Fetch one project equipment group by its id."""
+        return await self._call(PROJECT_EQUIPMENT_GROUPS_ITEM, ItemArgs(item_id=group_id))
+
+    async def async_list_project_equipment_groups_of_project(
+        self, project_id: int, query: Query | None = None
+    ) -> RentmanPage[ProjectEquipmentGroup]:
+        """Fetch one page of equipment groups of one project."""
+        return await self._call(
+            PROJECT_EQUIPMENT_GROUPS_OF_PROJECT,
+            ParentCollectionArgs(parent_id=project_id, query=query),
+        )
+
+    def async_iter_project_equipment_groups_of_project(
+        self, project_id: int, query: Query | None = None
+    ) -> AsyncIterator[ProjectEquipmentGroup]:
+        """Yield every equipment group of one project, following the cursor."""
+        return self._iter_collection(
+            PROJECT_EQUIPMENT_GROUPS_OF_PROJECT,
+            ParentCollectionArgs(parent_id=project_id, query=query),
+        )
+
+    async def async_list_project_equipment_groups_of_subproject(
+        self, subproject_id: int, query: Query | None = None
+    ) -> RentmanPage[ProjectEquipmentGroup]:
+        """Fetch one page of equipment groups of one subproject."""
+        return await self._call(
+            PROJECT_EQUIPMENT_GROUPS_OF_SUBPROJECT,
+            ParentCollectionArgs(parent_id=subproject_id, query=query),
+        )
+
+    def async_iter_project_equipment_groups_of_subproject(
+        self, subproject_id: int, query: Query | None = None
+    ) -> AsyncIterator[ProjectEquipmentGroup]:
+        """Yield every equipment group of one subproject, following the cursor."""
+        return self._iter_collection(
+            PROJECT_EQUIPMENT_GROUPS_OF_SUBPROJECT,
+            ParentCollectionArgs(parent_id=subproject_id, query=query),
+        )
+
+    async def async_list_project_equipment_of_project_equipment_group(
+        self, group_id: int, query: Query | None = None
+    ) -> RentmanPage[ProjectEquipment]:
+        """Fetch one page of planned equipment of one equipment group."""
+        return await self._call(
+            PROJECT_EQUIPMENT_OF_PROJECT_EQUIPMENT_GROUP,
+            ParentCollectionArgs(parent_id=group_id, query=query),
+        )
+
+    def async_iter_project_equipment_of_project_equipment_group(
+        self, group_id: int, query: Query | None = None
+    ) -> AsyncIterator[ProjectEquipment]:
+        """Yield every planned equipment line of one equipment group, following the cursor."""
+        return self._iter_collection(
+            PROJECT_EQUIPMENT_OF_PROJECT_EQUIPMENT_GROUP,
+            ParentCollectionArgs(parent_id=group_id, query=query),
+        )
+
+    async def async_list_project_costs(
+        self, query: Query | None = None
+    ) -> RentmanPage[ProjectCost]:
+        """Fetch one page of project cost lines."""
+        return await self._call(PROJECT_COSTS, CollectionArgs(query=query))
+
+    def async_iter_project_costs(self, query: Query | None = None) -> AsyncIterator[ProjectCost]:
+        """Yield every project cost line, following the cursor across pages."""
+        return self._iter_collection(PROJECT_COSTS, CollectionArgs(query=query))
+
+    async def async_get_project_cost(self, project_cost_id: int) -> ProjectCost | None:
+        """Fetch one project cost line by its id."""
+        return await self._call(PROJECT_COSTS_ITEM, ItemArgs(item_id=project_cost_id))
+
+    async def async_list_project_costs_of_project(
+        self, project_id: int, query: Query | None = None
+    ) -> RentmanPage[ProjectCost]:
+        """Fetch one page of cost lines of one project."""
+        return await self._call(
+            PROJECT_COSTS_OF_PROJECT,
+            ParentCollectionArgs(parent_id=project_id, query=query),
+        )
+
+    def async_iter_project_costs_of_project(
+        self, project_id: int, query: Query | None = None
+    ) -> AsyncIterator[ProjectCost]:
+        """Yield every cost line of one project, following the cursor."""
+        return self._iter_collection(
+            PROJECT_COSTS_OF_PROJECT,
+            ParentCollectionArgs(parent_id=project_id, query=query),
+        )
+
+    async def async_list_project_requests(
+        self, query: Query | None = None
+    ) -> RentmanPage[ProjectRequest]:
+        """Fetch one page of project requests."""
+        return await self._call(PROJECT_REQUESTS, CollectionArgs(query=query))
+
+    def async_iter_project_requests(
+        self, query: Query | None = None
+    ) -> AsyncIterator[ProjectRequest]:
+        """Yield every project request, following the cursor across pages."""
+        return self._iter_collection(PROJECT_REQUESTS, CollectionArgs(query=query))
+
+    async def async_get_project_request(self, project_request_id: int) -> ProjectRequest | None:
+        """Fetch one project request by its id."""
+        return await self._call(PROJECT_REQUESTS_ITEM, ItemArgs(item_id=project_request_id))
+
+    async def async_list_project_request_equipment(
+        self, query: Query | None = None
+    ) -> RentmanPage[ProjectRequestEquipment]:
+        """Fetch one page of requested equipment lines."""
+        return await self._call(PROJECT_REQUEST_EQUIPMENT, CollectionArgs(query=query))
+
+    def async_iter_project_request_equipment(
+        self, query: Query | None = None
+    ) -> AsyncIterator[ProjectRequestEquipment]:
+        """Yield every requested equipment line, following the cursor across pages."""
+        return self._iter_collection(PROJECT_REQUEST_EQUIPMENT, CollectionArgs(query=query))
+
+    async def async_get_project_request_equipment(
+        self, project_request_equipment_id: int
+    ) -> ProjectRequestEquipment | None:
+        """Fetch one requested equipment line by its id."""
+        return await self._call(
+            PROJECT_REQUEST_EQUIPMENT_ITEM,
+            ItemArgs(item_id=project_request_equipment_id),
+        )
+
+    async def async_list_project_request_equipment_of_project_request(
+        self, project_request_id: int, query: Query | None = None
+    ) -> RentmanPage[ProjectRequestEquipment]:
+        """Fetch one page of requested equipment of one project request."""
+        return await self._call(
+            PROJECT_REQUEST_EQUIPMENT_OF_PROJECT_REQUEST,
+            ParentCollectionArgs(parent_id=project_request_id, query=query),
+        )
+
+    def async_iter_project_request_equipment_of_project_request(
+        self, project_request_id: int, query: Query | None = None
+    ) -> AsyncIterator[ProjectRequestEquipment]:
+        """Yield every requested equipment line of one project request, following the cursor."""
+        return self._iter_collection(
+            PROJECT_REQUEST_EQUIPMENT_OF_PROJECT_REQUEST,
+            ParentCollectionArgs(parent_id=project_request_id, query=query),
         )
 
     async def _call[ArgsT, ModelT](

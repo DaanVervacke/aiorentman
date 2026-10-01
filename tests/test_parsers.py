@@ -9,10 +9,21 @@ from aiorentman.models import (
     Equipment,
     ExtraInputField,
     Folder,
+    Project,
+    ProjectCost,
+    ProjectCrew,
+    ProjectEquipmentGroup,
+    ProjectFunction,
+    ProjectFunctionGroup,
+    ProjectRequest,
+    ProjectRequestEquipment,
+    ProjectStatus,
+    ProjectVehicle,
     RentmanLink,
     RentmanPage,
     SerialNumber,
     StockLocation,
+    Subproject,
     Supplier,
     Vehicle,
 )
@@ -24,7 +35,17 @@ from aiorentman.parsers import (
     parse_equipment,
     parse_extra_input_field,
     parse_page,
+    parse_project_cost,
+    parse_project_crew,
     parse_project_equipment,
+    parse_project_equipment_group,
+    parse_project_function,
+    parse_project_function_group,
+    parse_project_request,
+    parse_project_request_equipment,
+    parse_project_status,
+    parse_project_type,
+    parse_project_vehicle,
     parse_serial_number,
     parse_supplier,
     parse_vehicle,
@@ -301,3 +322,157 @@ def test_parse_extra_input_field_resolves_an_expanded_parent() -> None:
     field = parse_extra_input_field({"id": 2, "parent": {"id": 1, "type": "text"}})
     assert isinstance(field.parent, ExtraInputField)
     assert field.parent.id == 1
+
+
+def test_parse_project_function_resolves_expanded_links() -> None:
+    function = parse_project_function(
+        {
+            "project": {"id": 80, "name": "Festival"},
+            "subproject": {"id": 81, "name": "Main stage"},
+            "group": {"id": 10, "name": "Setup"},
+            "cost_rate": "/rates/31",
+            "break": 30,
+            "order": 9,
+        }
+    )
+    assert isinstance(function, ProjectFunction)
+    assert isinstance(function.project, Project)
+    assert function.project.id == 80
+    assert isinstance(function.subproject, Subproject)
+    assert function.subproject.id == 81
+    assert isinstance(function.group, ProjectFunctionGroup)
+    assert function.group.id == 10
+    assert function.cost_rate == RentmanLink("/rates/31")
+    assert function.break_ == 30.0
+    assert function.order == "9"
+    assert function.tags == ()
+    assert function.custom == {}
+
+
+def test_parse_project_function_group_falls_back_to_empty_links() -> None:
+    group = parse_project_function_group({})
+    assert group.project == RentmanLink("")
+    assert group.subproject == RentmanLink("")
+    assert group.remark == ""
+    assert group.duration is None
+
+
+def test_parse_project_crew_resolves_expanded_links() -> None:
+    member = parse_project_crew(
+        {
+            "function": {"id": 8, "name": "Stagehand"},
+            "crewmember": "/crew/228",
+            "cost_rate": "/rates/546",
+            "planperiod_start": "2026-09-30T14:00:00+02:00",
+        }
+    )
+    assert isinstance(member, ProjectCrew)
+    assert isinstance(member.function, ProjectFunction)
+    assert member.function.id == 8
+    assert member.crewmember == RentmanLink("/crew/228")
+    assert member.cost_rate == RentmanLink("/rates/546")
+    assert member.planperiod_start is not None
+
+
+def test_parse_project_crew_falls_back_to_empty_links() -> None:
+    member = parse_project_crew({})
+    assert member.function == RentmanLink("")
+    assert member.crewmember == RentmanLink("")
+    assert member.hours_planned is None
+
+
+def test_parse_project_vehicle_resolves_expanded_links() -> None:
+    planned = parse_project_vehicle(
+        {
+            "function": {"id": 43, "name": "Transport"},
+            "vehicle": {"id": 9, "name": "Truck"},
+        }
+    )
+    assert isinstance(planned, ProjectVehicle)
+    assert isinstance(planned.function, ProjectFunction)
+    assert planned.function.id == 43
+    assert isinstance(planned.vehicle, Vehicle)
+    assert planned.vehicle.id == 9
+
+
+def test_parse_project_vehicle_falls_back_to_empty_links() -> None:
+    planned = parse_project_vehicle({})
+    assert planned.function == RentmanLink("")
+    assert planned.vehicle == RentmanLink("")
+    assert planned.costs is None
+
+
+def test_parse_project_equipment_group_falls_back_to_empty_links() -> None:
+    group = parse_project_equipment_group({})
+    assert isinstance(group, ProjectEquipmentGroup)
+    assert group.project == RentmanLink("")
+    assert group.subproject == RentmanLink("")
+    assert group.order == ""
+    assert group.total_new_price is None
+
+
+def test_parse_project_cost_falls_back_to_empty_links() -> None:
+    cost = parse_project_cost({})
+    assert isinstance(cost, ProjectCost)
+    assert cost.project == RentmanLink("")
+    assert cost.subproject == RentmanLink("")
+    assert cost.order == ""
+    assert cost.quantity is None
+
+
+def test_parse_project_request_keeps_keyword_checkins() -> None:
+    request = parse_project_request(
+        {
+            "in": "2026-10-06T08:00:00+02:00",
+            "out": "2026-10-06T18:00:00+02:00",
+            "linked_project": {"id": 480, "name": "Festival"},
+        }
+    )
+    assert isinstance(request, ProjectRequest)
+    assert request.in_ is not None
+    assert request.out_ is not None
+    assert isinstance(request.linked_project, Project)
+    assert request.linked_project.id == 480
+
+
+def test_parse_project_request_degrades_on_sparse_payloads() -> None:
+    request = parse_project_request({})
+    assert request.in_ is None
+    assert request.out_ is None
+    assert request.linked_project is None
+    assert request.contact_name == ""
+    assert request.external_reference is None
+
+
+def test_parse_project_request_equipment_resolves_links() -> None:
+    line = parse_project_request_equipment(
+        {
+            "linked_equipment": {"id": 12, "code": "AUD-001"},
+            "parent": "/projectrequestequipment/2",
+            "project_request": "/projectrequests/1",
+            "factor": 4.2,
+            "order": 1,
+        }
+    )
+    assert isinstance(line, ProjectRequestEquipment)
+    assert isinstance(line.linked_equipment, Equipment)
+    assert line.linked_equipment.id == 12
+    assert line.parent == RentmanLink("/projectrequestequipment/2")
+    assert line.project_request == RentmanLink("/projectrequests/1")
+    assert line.factor == "4.2"
+    assert line.order == "1"
+
+
+def test_parse_project_request_equipment_falls_back_to_an_empty_link() -> None:
+    line = parse_project_request_equipment({})
+    assert line.project_request == RentmanLink("")
+    assert line.parent is None
+
+
+def test_parse_project_status_and_type_keep_their_scalars() -> None:
+    status = parse_project_status({"id": 1, "name": "Option"})
+    assert isinstance(status, ProjectStatus)
+    assert status.name == "Option"
+    project_type = parse_project_type({"id": 104, "color": "FF6729", "type": "regular"})
+    assert project_type.color == "FF6729"
+    assert project_type.type == "regular"

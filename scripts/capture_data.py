@@ -43,6 +43,16 @@ COLLECTIONS: tuple[tuple[str, str], ...] = (
     ("suppliers", "/suppliers"),
     ("vehicles", "/vehicles"),
     ("extra_input_fields", "/extrainputfields"),
+    ("project_statuses", "/projectstatuses"),
+    ("project_types", "/projecttypes"),
+    ("project_crew", "/projectcrew"),
+    ("project_function_groups", "/projectfunctiongroups"),
+    ("project_functions", "/projectfunctions"),
+    ("project_vehicles", "/projectvehicles"),
+    ("project_equipment_groups", "/projectequipmentgroup"),
+    ("project_costs", "/costs"),
+    ("project_requests", "/projectrequests"),
+    ("project_request_equipment", "/projectrequestequipment"),
 )
 
 LINKED_COLLECTIONS: tuple[tuple[str, str, str, str], ...] = (
@@ -50,6 +60,71 @@ LINKED_COLLECTIONS: tuple[tuple[str, str, str, str], ...] = (
     ("equipment_alternatives", "/equipment/{}/alternatives", "alternatives.json", "equipment"),
     ("equipment_suppliers", "/equipment/{}/suppliers", "suppliers.json", "equipment"),
     ("stock_location_vehicles", "/stocklocations/{}/vehicles", "stock_locations.json", "id"),
+    ("project_costs_of_project", "/projects/{}/costs", "project_costs.json", "project"),
+    ("project_crew_of_project", "/projects/{}/projectcrew", "projects.json", "id"),
+    ("project_crew_of_subproject", "/subprojects/{}/projectcrew", "subprojects.json", "id"),
+    (
+        "project_equipment_group_of_project",
+        "/projects/{}/projectequipmentgroup",
+        "project_equipment_groups.json",
+        "project",
+    ),
+    (
+        "project_equipment_group_of_subproject",
+        "/subprojects/{}/projectequipmentgroup",
+        "project_equipment_groups.json",
+        "subproject",
+    ),
+    (
+        "project_function_group_of_project",
+        "/projects/{}/projectfunctiongroups",
+        "project_function_groups.json",
+        "project",
+    ),
+    (
+        "project_function_group_of_subproject",
+        "/subprojects/{}/projectfunctiongroups",
+        "project_function_groups.json",
+        "subproject",
+    ),
+    (
+        "project_functions_of_project",
+        "/projects/{}/projectfunctions",
+        "project_functions.json",
+        "project",
+    ),
+    (
+        "project_functions_of_project_function_group",
+        "/projectfunctiongroups/{}/projectfunctions",
+        "project_functions.json",
+        "group",
+    ),
+    (
+        "project_crew_of_project_function",
+        "/projectfunctions/{}/projectcrew",
+        "project_crew.json",
+        "function",
+    ),
+    ("project_vehicles_of_project", "/projects/{}/projectvehicles", "projects.json", "id"),
+    ("project_vehicles_of_subproject", "/subprojects/{}/projectvehicles", "subprojects.json", "id"),
+    (
+        "project_vehicles_of_project_function",
+        "/projectfunctions/{}/projectvehicles",
+        "project_vehicles.json",
+        "function",
+    ),
+    (
+        "project_equipment_of_project_equipment_group",
+        "/projectequipmentgroup/{}/projectequipment",
+        "project_equipment.json",
+        "equipment_group",
+    ),
+    (
+        "project_request_equipment_of_project_request",
+        "/projectrequests/{}/projectrequestequipment",
+        "project_request_equipment.json",
+        "project_request",
+    ),
 )
 
 

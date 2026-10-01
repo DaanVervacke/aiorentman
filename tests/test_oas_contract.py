@@ -24,7 +24,17 @@ from aiorentman.models import (
     ExtraInputField,
     Folder,
     Project,
+    ProjectCost,
+    ProjectCrew,
     ProjectEquipment,
+    ProjectEquipmentGroup,
+    ProjectFunction,
+    ProjectFunctionGroup,
+    ProjectRequest,
+    ProjectRequestEquipment,
+    ProjectStatus,
+    ProjectType,
+    ProjectVehicle,
     Repair,
     SerialNumber,
     Status,
@@ -38,6 +48,12 @@ from aiorentman.models import (
 
 FIXTURE = Path(__file__).parent / "fixtures" / "rentman_oas_1.16.0.json"
 
+WIRE_ALIASES: dict[str, str] = {
+    "break_": "break",
+    "in_": "in",
+    "out_": "out",
+}
+
 MODEL_SCHEMAS: dict[type, str] = {
     Accessory: "AccessoryResponse",
     ActualContent: "ActualContentResponse",
@@ -48,7 +64,17 @@ MODEL_SCHEMAS: dict[type, str] = {
     ExtraInputField: "ExtraInputFieldResponse",
     Folder: "FolderResponse",
     Project: "ProjectResponse",
+    ProjectCost: "ProjectCostResponse",
+    ProjectCrew: "ProjectCrewResponse",
     ProjectEquipment: "ProjectEquipmentResponse",
+    ProjectEquipmentGroup: "ProjectEquipmentGroupResponse",
+    ProjectFunction: "ProjectFunctionResponse",
+    ProjectFunctionGroup: "ProjectFunctionGroupResponse",
+    ProjectRequest: "ProjectRequestResponse",
+    ProjectRequestEquipment: "ProjectRequestEquipmentResponse",
+    ProjectStatus: "ProjectStatusResponse",
+    ProjectType: "ProjectTypeResponse",
+    ProjectVehicle: "ProjectVehicleResponse",
     Repair: "RepairResponse",
     SerialNumber: "SerialNumberResponse",
     Status: "StatusResponse",
@@ -121,7 +147,7 @@ def test_model_fields_match_the_spec_properties(spec: dict[str, Any]) -> None:
     schemas = spec["components"]["schemas"]
     for model, schema_name in MODEL_SCHEMAS.items():
         properties = set(schemas[schema_name]["properties"])
-        fields = {field.name for field in dataclasses.fields(model)}
+        fields = {WIRE_ALIASES.get(field.name, field.name) for field in dataclasses.fields(model)}
         assert fields - {"raw", "update_hash"} == properties, (
             f"{model.__name__} disagrees with {schema_name}"
         )
@@ -132,12 +158,22 @@ def test_spec_has_no_undocumented_in_scope_resources(spec: dict[str, Any]) -> No
         "/accessories",
         "/actualcontent",
         "/alternatives",
+        "/costs",
         "/equipment",
         "/equipmentassignedserials",
         "/equipmentsetscontent",
         "/extrainputfields",
         "/folders",
+        "/projectcrew",
         "/projectequipment",
+        "/projectequipmentgroup",
+        "/projectfunctiongroups",
+        "/projectfunctions",
+        "/projectrequestequipment",
+        "/projectrequests",
+        "/projectstatuses",
+        "/projecttypes",
+        "/projectvehicles",
         "/projects",
         "/repairs",
         "/serialnumbers",

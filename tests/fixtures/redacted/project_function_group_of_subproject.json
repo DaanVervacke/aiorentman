@@ -1,0 +1,50 @@
+{
+  "data": [
+    {
+      "id": 3,
+      "created": "2026-10-01T19:32:44.000+02:00",
+      "modified": "2026-10-01T19:32:48.216+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic a467730b87df",
+      "name": "Synthetic eec44291a0ba",
+      "project": "/projects/111",
+      "subproject": "/subprojects/108",
+      "duration": 25200,
+      "planperiod_start_schedule_is_start": "is_start",
+      "usageperiod_start_schedule_is_start": "is_start",
+      "planperiod_end_schedule_is_start": "is_end",
+      "usageperiod_end_schedule_is_start": "is_end",
+      "usageperiod_start": "1990-10-04T16:00:00+01:00",
+      "usageperiod_end": "1990-10-04T23:00:00+01:00",
+      "planperiod_start": "1990-10-04T16:00:00+01:00",
+      "planperiod_end": "1990-10-04T23:00:00+01:00",
+      "remark": null,
+      "updateHash": "cad57568432b2b42fe16b9c35926103a"
+    },
+    {
+      "id": 4,
+      "created": "2026-10-01T19:32:44.000+02:00",
+      "modified": "2026-10-01T19:32:48.216+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 10bbf2c2b8df",
+      "name": "Synthetic 891b7483741b",
+      "project": "/projects/111",
+      "subproject": "/subprojects/108",
+      "duration": 21600,
+      "planperiod_start_schedule_is_start": "is_start",
+      "usageperiod_start_schedule_is_start": "is_start",
+      "planperiod_end_schedule_is_start": "is_end",
+      "usageperiod_end_schedule_is_start": "is_end",
+      "usageperiod_start": "1990-10-06T10:00:00+01:00",
+      "usageperiod_end": "1990-10-06T16:00:00+01:00",
+      "planperiod_start": "1990-10-06T10:00:00+01:00",
+      "planperiod_end": "1990-10-06T16:00:00+01:00",
+      "remark": null,
+      "updateHash": "c84177b2acde72699bd23fccc398df48"
+    }
+  ],
+  "itemCount": 2,
+  "limit": 50,
+  "offset": 0,
+  "next_page_url": null
+}

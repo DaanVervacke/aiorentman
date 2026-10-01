@@ -14,7 +14,17 @@ from .models import (
     ExtraInputField,
     Folder,
     Project,
+    ProjectCost,
+    ProjectCrew,
     ProjectEquipment,
+    ProjectEquipmentGroup,
+    ProjectFunction,
+    ProjectFunctionGroup,
+    ProjectRequest,
+    ProjectRequestEquipment,
+    ProjectStatus,
+    ProjectType,
+    ProjectVehicle,
     RentmanPage,
     Repair,
     SerialNumber,
@@ -38,7 +48,17 @@ from .parsers import (
     parse_folder,
     parse_page,
     parse_project,
+    parse_project_cost,
+    parse_project_crew,
     parse_project_equipment,
+    parse_project_equipment_group,
+    parse_project_function,
+    parse_project_function_group,
+    parse_project_request,
+    parse_project_request_equipment,
+    parse_project_status,
+    parse_project_type,
+    parse_project_vehicle,
     parse_repair,
     parse_serial_number,
     parse_status,
@@ -575,6 +595,345 @@ EXTRA_INPUT_FIELDS_ITEM: Endpoint[ItemArgs, ExtraInputField | None] = Endpoint(
     response_schema="ExtraInputFieldResponse",
 )
 
+PROJECT_STATUSES: Endpoint[CollectionArgs, RentmanPage[ProjectStatus]] = Endpoint(
+    name="project_statuses",
+    method="GET",
+    path=lambda _args: "/projectstatuses",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_project_status),
+    response_schema="ProjectStatusResponse",
+)
+
+PROJECT_STATUSES_ITEM: Endpoint[ItemArgs, ProjectStatus | None] = Endpoint(
+    name="project_statuses_item",
+    method="GET",
+    path=lambda args: f"/projectstatuses/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_status),
+    response_schema="ProjectStatusResponse",
+)
+
+PROJECT_TYPES: Endpoint[CollectionArgs, RentmanPage[ProjectType]] = Endpoint(
+    name="project_types",
+    method="GET",
+    path=lambda _args: "/projecttypes",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_project_type),
+    response_schema="ProjectTypeResponse",
+)
+
+PROJECT_TYPES_ITEM: Endpoint[ItemArgs, ProjectType | None] = Endpoint(
+    name="project_types_item",
+    method="GET",
+    path=lambda args: f"/projecttypes/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_type),
+    response_schema="ProjectTypeResponse",
+)
+
+PROJECT_FUNCTION_GROUPS: Endpoint[CollectionArgs, RentmanPage[ProjectFunctionGroup]] = Endpoint(
+    name="project_function_groups",
+    method="GET",
+    path=lambda _args: "/projectfunctiongroups",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_project_function_group),
+    response_schema="ProjectFunctionGroupResponse",
+)
+
+PROJECT_FUNCTION_GROUPS_ITEM: Endpoint[ItemArgs, ProjectFunctionGroup | None] = Endpoint(
+    name="project_function_groups_item",
+    method="GET",
+    path=lambda args: f"/projectfunctiongroups/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_function_group),
+    response_schema="ProjectFunctionGroupResponse",
+)
+
+PROJECT_FUNCTION_GROUPS_OF_PROJECT: Endpoint[
+    ParentCollectionArgs, RentmanPage[ProjectFunctionGroup]
+] = Endpoint(
+    name="project_function_groups_of_project",
+    method="GET",
+    path=lambda args: f"/projects/{args.parent_id}/projectfunctiongroups",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_project_function_group),
+    response_schema="ProjectFunctionGroupResponse",
+)
+
+PROJECT_FUNCTION_GROUPS_OF_SUBPROJECT: Endpoint[
+    ParentCollectionArgs, RentmanPage[ProjectFunctionGroup]
+] = Endpoint(
+    name="project_function_groups_of_subproject",
+    method="GET",
+    path=lambda args: f"/subprojects/{args.parent_id}/projectfunctiongroups",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_project_function_group),
+    response_schema="ProjectFunctionGroupResponse",
+)
+
+PROJECT_FUNCTIONS: Endpoint[CollectionArgs, RentmanPage[ProjectFunction]] = Endpoint(
+    name="project_functions",
+    method="GET",
+    path=lambda _args: "/projectfunctions",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_project_function),
+    response_schema="ProjectFunctionResponse",
+)
+
+PROJECT_FUNCTIONS_ITEM: Endpoint[ItemArgs, ProjectFunction | None] = Endpoint(
+    name="project_functions_item",
+    method="GET",
+    path=lambda args: f"/projectfunctions/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_function),
+    response_schema="ProjectFunctionResponse",
+)
+
+PROJECT_FUNCTIONS_OF_PROJECT: Endpoint[ParentCollectionArgs, RentmanPage[ProjectFunction]] = (
+    Endpoint(
+        name="project_functions_of_project",
+        method="GET",
+        path=lambda args: f"/projects/{args.parent_id}/projectfunctions",
+        params=_linked_collection_params,
+        parse=lambda payload, _args: parse_page(payload, parse_project_function),
+        response_schema="ProjectFunctionResponse",
+    )
+)
+
+PROJECT_FUNCTIONS_OF_PROJECT_FUNCTION_GROUP: Endpoint[
+    ParentCollectionArgs, RentmanPage[ProjectFunction]
+] = Endpoint(
+    name="project_functions_of_project_function_group",
+    method="GET",
+    path=lambda args: f"/projectfunctiongroups/{args.parent_id}/projectfunctions",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_project_function),
+    response_schema="ProjectFunctionResponse",
+)
+
+PROJECT_CREW: Endpoint[CollectionArgs, RentmanPage[ProjectCrew]] = Endpoint(
+    name="project_crew",
+    method="GET",
+    path=lambda _args: "/projectcrew",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_project_crew),
+    response_schema="ProjectCrewResponse",
+)
+
+PROJECT_CREW_ITEM: Endpoint[ItemArgs, ProjectCrew | None] = Endpoint(
+    name="project_crew_item",
+    method="GET",
+    path=lambda args: f"/projectcrew/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_crew),
+    response_schema="ProjectCrewResponse",
+)
+
+PROJECT_CREW_OF_PROJECT: Endpoint[ParentCollectionArgs, RentmanPage[ProjectCrew]] = Endpoint(
+    name="project_crew_of_project",
+    method="GET",
+    path=lambda args: f"/projects/{args.parent_id}/projectcrew",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_project_crew),
+    response_schema="ProjectCrewResponse",
+)
+
+PROJECT_CREW_OF_SUBPROJECT: Endpoint[ParentCollectionArgs, RentmanPage[ProjectCrew]] = Endpoint(
+    name="project_crew_of_subproject",
+    method="GET",
+    path=lambda args: f"/subprojects/{args.parent_id}/projectcrew",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_project_crew),
+    response_schema="ProjectCrewResponse",
+)
+
+PROJECT_CREW_OF_PROJECT_FUNCTION: Endpoint[ParentCollectionArgs, RentmanPage[ProjectCrew]] = (
+    Endpoint(
+        name="project_crew_of_project_function",
+        method="GET",
+        path=lambda args: f"/projectfunctions/{args.parent_id}/projectcrew",
+        params=_linked_collection_params,
+        parse=lambda payload, _args: parse_page(payload, parse_project_crew),
+        response_schema="ProjectCrewResponse",
+    )
+)
+
+PROJECT_VEHICLES: Endpoint[CollectionArgs, RentmanPage[ProjectVehicle]] = Endpoint(
+    name="project_vehicles",
+    method="GET",
+    path=lambda _args: "/projectvehicles",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_project_vehicle),
+    response_schema="ProjectVehicleResponse",
+)
+
+PROJECT_VEHICLES_ITEM: Endpoint[ItemArgs, ProjectVehicle | None] = Endpoint(
+    name="project_vehicles_item",
+    method="GET",
+    path=lambda args: f"/projectvehicles/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_vehicle),
+    response_schema="ProjectVehicleResponse",
+)
+
+PROJECT_VEHICLES_OF_PROJECT: Endpoint[ParentCollectionArgs, RentmanPage[ProjectVehicle]] = Endpoint(
+    name="project_vehicles_of_project",
+    method="GET",
+    path=lambda args: f"/projects/{args.parent_id}/projectvehicles",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_project_vehicle),
+    response_schema="ProjectVehicleResponse",
+)
+
+PROJECT_VEHICLES_OF_SUBPROJECT: Endpoint[ParentCollectionArgs, RentmanPage[ProjectVehicle]] = (
+    Endpoint(
+        name="project_vehicles_of_subproject",
+        method="GET",
+        path=lambda args: f"/subprojects/{args.parent_id}/projectvehicles",
+        params=_linked_collection_params,
+        parse=lambda payload, _args: parse_page(payload, parse_project_vehicle),
+        response_schema="ProjectVehicleResponse",
+    )
+)
+
+PROJECT_VEHICLES_OF_PROJECT_FUNCTION: Endpoint[
+    ParentCollectionArgs, RentmanPage[ProjectVehicle]
+] = Endpoint(
+    name="project_vehicles_of_project_function",
+    method="GET",
+    path=lambda args: f"/projectfunctions/{args.parent_id}/projectvehicles",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_project_vehicle),
+    response_schema="ProjectVehicleResponse",
+)
+
+PROJECT_EQUIPMENT_GROUPS: Endpoint[CollectionArgs, RentmanPage[ProjectEquipmentGroup]] = Endpoint(
+    name="project_equipment_groups",
+    method="GET",
+    path=lambda _args: "/projectequipmentgroup",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_project_equipment_group),
+    response_schema="ProjectEquipmentGroupResponse",
+)
+
+PROJECT_EQUIPMENT_GROUPS_ITEM: Endpoint[ItemArgs, ProjectEquipmentGroup | None] = Endpoint(
+    name="project_equipment_groups_item",
+    method="GET",
+    path=lambda args: f"/projectequipmentgroup/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_equipment_group),
+    response_schema="ProjectEquipmentGroupResponse",
+)
+
+PROJECT_EQUIPMENT_GROUPS_OF_PROJECT: Endpoint[
+    ParentCollectionArgs, RentmanPage[ProjectEquipmentGroup]
+] = Endpoint(
+    name="project_equipment_groups_of_project",
+    method="GET",
+    path=lambda args: f"/projects/{args.parent_id}/projectequipmentgroup",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_project_equipment_group),
+    response_schema="ProjectEquipmentGroupResponse",
+)
+
+PROJECT_EQUIPMENT_GROUPS_OF_SUBPROJECT: Endpoint[
+    ParentCollectionArgs, RentmanPage[ProjectEquipmentGroup]
+] = Endpoint(
+    name="project_equipment_groups_of_subproject",
+    method="GET",
+    path=lambda args: f"/subprojects/{args.parent_id}/projectequipmentgroup",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_project_equipment_group),
+    response_schema="ProjectEquipmentGroupResponse",
+)
+
+PROJECT_EQUIPMENT_OF_PROJECT_EQUIPMENT_GROUP: Endpoint[
+    ParentCollectionArgs, RentmanPage[ProjectEquipment]
+] = Endpoint(
+    name="project_equipment_of_project_equipment_group",
+    method="GET",
+    path=lambda args: f"/projectequipmentgroup/{args.parent_id}/projectequipment",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_project_equipment),
+    response_schema="ProjectEquipmentResponse",
+)
+
+PROJECT_COSTS: Endpoint[CollectionArgs, RentmanPage[ProjectCost]] = Endpoint(
+    name="project_costs",
+    method="GET",
+    path=lambda _args: "/costs",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_project_cost),
+    response_schema="ProjectCostResponse",
+)
+
+PROJECT_COSTS_ITEM: Endpoint[ItemArgs, ProjectCost | None] = Endpoint(
+    name="project_costs_item",
+    method="GET",
+    path=lambda args: f"/costs/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_cost),
+    response_schema="ProjectCostResponse",
+)
+
+PROJECT_COSTS_OF_PROJECT: Endpoint[ParentCollectionArgs, RentmanPage[ProjectCost]] = Endpoint(
+    name="project_costs_of_project",
+    method="GET",
+    path=lambda args: f"/projects/{args.parent_id}/costs",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_project_cost),
+    response_schema="ProjectCostResponse",
+)
+
+PROJECT_REQUESTS: Endpoint[CollectionArgs, RentmanPage[ProjectRequest]] = Endpoint(
+    name="project_requests",
+    method="GET",
+    path=lambda _args: "/projectrequests",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_project_request),
+    response_schema="ProjectRequestResponse",
+)
+
+PROJECT_REQUESTS_ITEM: Endpoint[ItemArgs, ProjectRequest | None] = Endpoint(
+    name="project_requests_item",
+    method="GET",
+    path=lambda args: f"/projectrequests/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_request),
+    response_schema="ProjectRequestResponse",
+)
+
+PROJECT_REQUEST_EQUIPMENT: Endpoint[CollectionArgs, RentmanPage[ProjectRequestEquipment]] = (
+    Endpoint(
+        name="project_request_equipment",
+        method="GET",
+        path=lambda _args: "/projectrequestequipment",
+        params=_collection_params,
+        parse=lambda payload, _args: parse_page(payload, parse_project_request_equipment),
+        response_schema="ProjectRequestEquipmentResponse",
+    )
+)
+
+PROJECT_REQUEST_EQUIPMENT_ITEM: Endpoint[ItemArgs, ProjectRequestEquipment | None] = Endpoint(
+    name="project_request_equipment_item",
+    method="GET",
+    path=lambda args: f"/projectrequestequipment/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_request_equipment),
+    response_schema="ProjectRequestEquipmentResponse",
+)
+
+PROJECT_REQUEST_EQUIPMENT_OF_PROJECT_REQUEST: Endpoint[
+    ParentCollectionArgs, RentmanPage[ProjectRequestEquipment]
+] = Endpoint(
+    name="project_request_equipment_of_project_request",
+    method="GET",
+    path=lambda args: f"/projectrequests/{args.parent_id}/projectrequestequipment",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_project_request_equipment),
+    response_schema="ProjectRequestEquipmentResponse",
+)
+
 CATALOG: tuple[Endpoint[Any, Any], ...] = (
     ACTUAL_CONTENT,
     ACTUAL_CONTENT_ITEM,
@@ -627,4 +986,39 @@ CATALOG: tuple[Endpoint[Any, Any], ...] = (
     VEHICLES_OF_STOCK_LOCATION,
     EXTRA_INPUT_FIELDS,
     EXTRA_INPUT_FIELDS_ITEM,
+    PROJECT_STATUSES,
+    PROJECT_STATUSES_ITEM,
+    PROJECT_TYPES,
+    PROJECT_TYPES_ITEM,
+    PROJECT_FUNCTION_GROUPS,
+    PROJECT_FUNCTION_GROUPS_ITEM,
+    PROJECT_FUNCTION_GROUPS_OF_PROJECT,
+    PROJECT_FUNCTION_GROUPS_OF_SUBPROJECT,
+    PROJECT_FUNCTIONS,
+    PROJECT_FUNCTIONS_ITEM,
+    PROJECT_FUNCTIONS_OF_PROJECT,
+    PROJECT_FUNCTIONS_OF_PROJECT_FUNCTION_GROUP,
+    PROJECT_CREW,
+    PROJECT_CREW_ITEM,
+    PROJECT_CREW_OF_PROJECT,
+    PROJECT_CREW_OF_SUBPROJECT,
+    PROJECT_CREW_OF_PROJECT_FUNCTION,
+    PROJECT_VEHICLES,
+    PROJECT_VEHICLES_ITEM,
+    PROJECT_VEHICLES_OF_PROJECT,
+    PROJECT_VEHICLES_OF_SUBPROJECT,
+    PROJECT_VEHICLES_OF_PROJECT_FUNCTION,
+    PROJECT_EQUIPMENT_GROUPS,
+    PROJECT_EQUIPMENT_GROUPS_ITEM,
+    PROJECT_EQUIPMENT_GROUPS_OF_PROJECT,
+    PROJECT_EQUIPMENT_GROUPS_OF_SUBPROJECT,
+    PROJECT_EQUIPMENT_OF_PROJECT_EQUIPMENT_GROUP,
+    PROJECT_COSTS,
+    PROJECT_COSTS_ITEM,
+    PROJECT_COSTS_OF_PROJECT,
+    PROJECT_REQUESTS,
+    PROJECT_REQUESTS_ITEM,
+    PROJECT_REQUEST_EQUIPMENT,
+    PROJECT_REQUEST_EQUIPMENT_ITEM,
+    PROJECT_REQUEST_EQUIPMENT_OF_PROJECT_REQUEST,
 )

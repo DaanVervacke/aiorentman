@@ -53,6 +53,31 @@ The library covers the resources an RFID and materials project needs, read only:
 | Vehicles | `async_list_vehicles` | `async_iter_vehicles` | `async_get_vehicle` |
 | Vehicles of a stock location | `async_list_vehicles_of_stock_location` | `async_iter_vehicles_of_stock_location` | |
 | Extra input fields | `async_list_extra_input_fields` | `async_iter_extra_input_fields` | `async_get_extra_input_field` |
+| Project statuses | `async_list_project_statuses` | `async_iter_project_statuses` | `async_get_project_status` |
+| Project types | `async_list_project_types` | `async_iter_project_types` | `async_get_project_type` |
+| Project function groups | `async_list_project_function_groups` | `async_iter_project_function_groups` | `async_get_project_function_group` |
+| Function groups of a project | `async_list_project_function_groups_of_project` | `async_iter_project_function_groups_of_project` | |
+| Function groups of a subproject | `async_list_project_function_groups_of_subproject` | `async_iter_project_function_groups_of_subproject` | |
+| Project functions | `async_list_project_functions` | `async_iter_project_functions` | `async_get_project_function` |
+| Functions of a project | `async_list_project_functions_of_project` | `async_iter_project_functions_of_project` | |
+| Functions of a function group | `async_list_project_functions_of_project_function_group` | `async_iter_project_functions_of_project_function_group` | |
+| Project crew | `async_list_project_crew` | `async_iter_project_crew` | `async_get_project_crew` |
+| Crew of a project | `async_list_project_crew_of_project` | `async_iter_project_crew_of_project` | |
+| Crew of a subproject | `async_list_project_crew_of_subproject` | `async_iter_project_crew_of_subproject` | |
+| Crew of a project function | `async_list_project_crew_of_project_function` | `async_iter_project_crew_of_project_function` | |
+| Project vehicles | `async_list_project_vehicles` | `async_iter_project_vehicles` | `async_get_project_vehicle` |
+| Vehicles of a project | `async_list_project_vehicles_of_project` | `async_iter_project_vehicles_of_project` | |
+| Vehicles of a subproject | `async_list_project_vehicles_of_subproject` | `async_iter_project_vehicles_of_subproject` | |
+| Vehicles of a project function | `async_list_project_vehicles_of_project_function` | `async_iter_project_vehicles_of_project_function` | |
+| Project equipment groups | `async_list_project_equipment_groups` | `async_iter_project_equipment_groups` | `async_get_project_equipment_group` |
+| Equipment groups of a project | `async_list_project_equipment_groups_of_project` | `async_iter_project_equipment_groups_of_project` | |
+| Equipment groups of a subproject | `async_list_project_equipment_groups_of_subproject` | `async_iter_project_equipment_groups_of_subproject` | |
+| Project equipment of an equipment group | `async_list_project_equipment_of_project_equipment_group` | `async_iter_project_equipment_of_project_equipment_group` | |
+| Project costs | `async_list_project_costs` | `async_iter_project_costs` | `async_get_project_cost` |
+| Costs of a project | `async_list_project_costs_of_project` | `async_iter_project_costs_of_project` | |
+| Project requests | `async_list_project_requests` | `async_iter_project_requests` | `async_get_project_request` |
+| Project request equipment | `async_list_project_request_equipment` | `async_iter_project_request_equipment` | `async_get_project_request_equipment` |
+| Request equipment of a project request | `async_list_project_request_equipment_of_project_request` | `async_iter_project_request_equipment_of_project_request` | |
 
 ## Token
 

@@ -570,3 +570,323 @@ class ExtraInputField:
     search_minlength: int | None
     is_customfield_mandatory: bool
     raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class ProjectStatus:
+    """One status that a project can carry in the planning workflow."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    name: str
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class ProjectType:
+    """One project type that groups projects by kind."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    name: str
+    color: str
+    type: str
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class ProjectFunctionGroup:
+    """One group of functions inside a subproject plan."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    name: str
+    project: RentmanLink | Project
+    subproject: RentmanLink | Subproject
+    duration: float | None
+    planperiod_start_schedule_is_start: str
+    usageperiod_start_schedule_is_start: str
+    planperiod_end_schedule_is_start: str
+    usageperiod_end_schedule_is_start: str
+    usageperiod_start: datetime | None
+    usageperiod_end: datetime | None
+    planperiod_start: datetime | None
+    planperiod_end: datetime | None
+    remark: str
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class ProjectFunction:
+    """One planned crew or transport function on a subproject."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    cost_rate: RentmanLink | None
+    cost_accommodation: float | None
+    cost_catering: float | None
+    cost_travel: float | None
+    cost_other: float | None
+    price_rate: RentmanLink | None
+    price_accommodation: float | None
+    price_catering: float | None
+    price_travel: float | None
+    price_other: float | None
+    project: RentmanLink | Project
+    subproject: RentmanLink | Subproject
+    is_template: bool
+    group: RentmanLink | ProjectFunctionGroup | None
+    name_external: str
+    name: str
+    travel_time_before: float | None
+    travel_time_after: float | None
+    use_travel_time_from_location: bool
+    use_distance_from_location: bool
+    usageperiod_start: datetime | None
+    planperiod_start_schedule_is_start: str
+    usageperiod_start_schedule_is_start: str
+    planperiod_end_schedule_is_start: str
+    usageperiod_end_schedule_is_start: str
+    usageperiod_end: datetime | None
+    planperiod_start: datetime | None
+    planperiod_end: datetime | None
+    type: str
+    duration: float | None
+    amount: int | None
+    break_: float | None
+    distance: float | None
+    twoway: bool
+    taxclass: RentmanLink | None
+    ledger: RentmanLink | None
+    ledger_debit: RentmanLink | None
+    order: str
+    remark_client: str
+    remark_planner: str
+    remark_crew: str
+    in_financial: bool
+    in_planning: bool
+    is_plannable: bool
+    recurrence_group: int | None
+    recurrence_enddate: datetime | None
+    recurrence_interval_unit: str
+    recurrence_interval: int | None
+    recurrence_weekdays: str | None
+    price_fixed: float | None
+    price_variable: float | None
+    costs_fixed: float | None
+    costs_variable: float | None
+    price_total: float | None
+    costs_total: float | None
+    tags: tuple[str, ...]
+    custom: dict[str, Any]
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class ProjectCrew:
+    """One crew member planned on a project function."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    cost_rate: RentmanLink | None
+    cost_accommodation: float | None
+    cost_catering: float | None
+    cost_travel: float | None
+    cost_other: float | None
+    function: RentmanLink | ProjectFunction
+    crewmember: RentmanLink
+    visible: bool
+    planperiod_start: datetime | None
+    planperiod_end: datetime | None
+    transport: str
+    remark: str
+    remark_planner: str
+    invoice_reference: str
+    project_leader: bool
+    is_visible_on_dashboard: bool
+    costs: float | None
+    cost_actual: float | None
+    hours_registered: float | None
+    hours_planned: float | None
+    cost_planned: float | None
+    diff_cost: float | None
+    diff_hours: float | None
+    activity_status: str
+    custom: dict[str, Any]
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class ProjectVehicle:
+    """One vehicle planned on a project function."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    cost_rate: RentmanLink | None
+    function: RentmanLink | ProjectFunction
+    transport: str
+    vehicle: RentmanLink | Vehicle
+    planningperiod_start: datetime | None
+    planningperiod_end: datetime | None
+    remark: str
+    remark_planner: str
+    costs: float | None
+    custom: dict[str, Any]
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class ProjectEquipmentGroup:
+    """One equipment group inside a subproject plan."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    project: RentmanLink | Project
+    subproject: RentmanLink | Subproject
+    additional_scanned: bool
+    name: str
+    usageperiod_start: datetime | None
+    usageperiod_end: datetime | None
+    duration: float | None
+    planperiod_start: datetime | None
+    planperiod_end: datetime | None
+    is_delayed: bool
+    order: str
+    in_price_calculation: bool
+    remark: str
+    weight: float | None
+    power: float | None
+    current: float | None
+    volume: float | None
+    total_new_price: float | None
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class ProjectCost:
+    """One additional cost line on a subproject."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    name: str
+    remark: str
+    project: RentmanLink | Project
+    quantity: int | None
+    discount: float | None
+    order: str
+    subproject: RentmanLink | Subproject
+    is_template: bool
+    taxclass: RentmanLink | None
+    ledger: RentmanLink | None
+    ledger_debit: RentmanLink | None
+    sale_price: float | None
+    purchase_price: float | None
+    custom: dict[str, Any]
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class ProjectRequest:
+    """One equipment request submitted by a customer."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    linked_contact: RentmanLink | None
+    contact_mailing_number: str
+    contact_mailing_country: str
+    contact_name: str
+    contact_mailing_postalcode: str
+    contact_phone: str
+    contact_mailing_city: str
+    contact_mailing_street: str
+    linked_contact_person: RentmanLink | None
+    contact_person_lastname: str
+    contact_person_email: str
+    contact_person_middle_name: str
+    contact_person_first_name: str
+    usageperiod_end: datetime | None
+    usageperiod_start: datetime | None
+    is_paid: bool
+    language: str
+    in_: datetime | None
+    out_: datetime | None
+    linked_location: RentmanLink | None
+    location_mailing_number: str
+    location_mailing_country: str
+    location_name: str
+    location_mailing_postalcode: str
+    location_mailing_city: str
+    location_mailing_street: str
+    location_phone: str
+    name: str
+    external_reference: int | None
+    remark: str
+    planperiod_end: datetime | None
+    planperiod_start: datetime | None
+    price: float | None
+    linked_project: RentmanLink | Project | None
+    source: str
+    status: str
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class ProjectRequestEquipment:
+    """One equipment line on a project request."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    quantity: int | None
+    quantity_total: int | None
+    is_comment: bool
+    is_kit: bool
+    discount: float | None
+    linked_equipment: RentmanLink | Equipment | None
+    name: str
+    external_remark: str
+    parent: RentmanLink | ProjectRequestEquipment | None
+    unit_price: float | None
+    project_request: RentmanLink | ProjectRequest
+    factor: str
+    order: str
+    raw: dict[str, Any] | None = None
