@@ -8,11 +8,16 @@ from .models import (
     Accessory,
     ActualContent,
     Alternative,
+    Contract,
     Equipment,
     EquipmentAssignedSerial,
     EquipmentSetContent,
     ExtraInputField,
     Folder,
+    Invoice,
+    InvoiceLine,
+    LedgerCode,
+    Payment,
     Project,
     ProjectCost,
     ProjectCrew,
@@ -25,6 +30,7 @@ from .models import (
     ProjectStatus,
     ProjectType,
     ProjectVehicle,
+    Quote,
     RentmanPage,
     Repair,
     SerialNumber,
@@ -33,6 +39,7 @@ from .models import (
     StockMovement,
     Subproject,
     Supplier,
+    TaxClass,
     Vehicle,
     WarehouseStatus,
 )
@@ -40,13 +47,18 @@ from .parsers import (
     parse_accessory,
     parse_actual_content,
     parse_alternative,
+    parse_contract,
     parse_envelope_item,
     parse_equipment,
     parse_equipment_assigned_serial,
     parse_equipment_set_content,
     parse_extra_input_field,
     parse_folder,
+    parse_invoice,
+    parse_invoice_line,
+    parse_ledger_code,
     parse_page,
+    parse_payment,
     parse_project,
     parse_project_cost,
     parse_project_crew,
@@ -59,6 +71,7 @@ from .parsers import (
     parse_project_status,
     parse_project_type,
     parse_project_vehicle,
+    parse_quote,
     parse_repair,
     parse_serial_number,
     parse_status,
@@ -66,6 +79,7 @@ from .parsers import (
     parse_stock_movement,
     parse_subproject,
     parse_supplier,
+    parse_tax_class,
     parse_vehicle,
     parse_warehouse_status,
 )
@@ -934,6 +948,177 @@ PROJECT_REQUEST_EQUIPMENT_OF_PROJECT_REQUEST: Endpoint[
     response_schema="ProjectRequestEquipmentResponse",
 )
 
+QUOTES: Endpoint[CollectionArgs, RentmanPage[Quote]] = Endpoint(
+    name="quotes",
+    method="GET",
+    path=lambda _args: "/quotes",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_quote),
+    response_schema="QuotationResponse",
+)
+
+QUOTES_ITEM: Endpoint[ItemArgs, Quote | None] = Endpoint(
+    name="quotes_item",
+    method="GET",
+    path=lambda args: f"/quotes/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_quote),
+    response_schema="QuotationResponse",
+)
+
+QUOTES_OF_PROJECT: Endpoint[ParentCollectionArgs, RentmanPage[Quote]] = Endpoint(
+    name="quotes_of_project",
+    method="GET",
+    path=lambda args: f"/projects/{args.parent_id}/quotes",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_quote),
+    response_schema="QuotationResponse",
+)
+
+INVOICE_LINES_OF_QUOTE: Endpoint[ParentCollectionArgs, RentmanPage[InvoiceLine]] = Endpoint(
+    name="invoice_lines_of_quote",
+    method="GET",
+    path=lambda args: f"/quotes/{args.parent_id}/invoicelines",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_invoice_line),
+    response_schema="InvoiceLineResponse",
+)
+
+CONTRACTS: Endpoint[CollectionArgs, RentmanPage[Contract]] = Endpoint(
+    name="contracts",
+    method="GET",
+    path=lambda _args: "/contracts",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_contract),
+    response_schema="ContractResponse",
+)
+
+CONTRACTS_ITEM: Endpoint[ItemArgs, Contract | None] = Endpoint(
+    name="contracts_item",
+    method="GET",
+    path=lambda args: f"/contracts/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_contract),
+    response_schema="ContractResponse",
+)
+
+CONTRACTS_OF_PROJECT: Endpoint[ParentCollectionArgs, RentmanPage[Contract]] = Endpoint(
+    name="contracts_of_project",
+    method="GET",
+    path=lambda args: f"/projects/{args.parent_id}/contracts",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_contract),
+    response_schema="ContractResponse",
+)
+
+INVOICES: Endpoint[CollectionArgs, RentmanPage[Invoice]] = Endpoint(
+    name="invoices",
+    method="GET",
+    path=lambda _args: "/invoices",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_invoice),
+    response_schema="FactuurResponse",
+)
+
+INVOICES_ITEM: Endpoint[ItemArgs, Invoice | None] = Endpoint(
+    name="invoices_item",
+    method="GET",
+    path=lambda args: f"/invoices/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_invoice),
+    response_schema="FactuurResponse",
+)
+
+INVOICE_LINES_OF_INVOICE: Endpoint[ParentCollectionArgs, RentmanPage[InvoiceLine]] = Endpoint(
+    name="invoice_lines_of_invoice",
+    method="GET",
+    path=lambda args: f"/invoices/{args.parent_id}/invoicelines",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_invoice_line),
+    response_schema="InvoiceLineResponse",
+)
+
+PAYMENTS_OF_INVOICE: Endpoint[ParentCollectionArgs, RentmanPage[Payment]] = Endpoint(
+    name="payments_of_invoice",
+    method="GET",
+    path=lambda args: f"/invoices/{args.parent_id}/payments",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_payment),
+    response_schema="PaymentResponse",
+)
+
+INVOICE_LINES: Endpoint[CollectionArgs, RentmanPage[InvoiceLine]] = Endpoint(
+    name="invoice_lines",
+    method="GET",
+    path=lambda _args: "/invoicelines",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_invoice_line),
+    response_schema="InvoiceLineResponse",
+)
+
+INVOICE_LINES_ITEM: Endpoint[ItemArgs, InvoiceLine | None] = Endpoint(
+    name="invoice_lines_item",
+    method="GET",
+    path=lambda args: f"/invoicelines/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_invoice_line),
+    response_schema="InvoiceLineResponse",
+)
+
+PAYMENTS: Endpoint[CollectionArgs, RentmanPage[Payment]] = Endpoint(
+    name="payments",
+    method="GET",
+    path=lambda _args: "/payments",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_payment),
+    response_schema="PaymentResponse",
+)
+
+PAYMENTS_ITEM: Endpoint[ItemArgs, Payment | None] = Endpoint(
+    name="payments_item",
+    method="GET",
+    path=lambda args: f"/payments/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_payment),
+    response_schema="PaymentResponse",
+)
+
+LEDGER_CODES: Endpoint[CollectionArgs, RentmanPage[LedgerCode]] = Endpoint(
+    name="ledger_codes",
+    method="GET",
+    path=lambda _args: "/ledgercodes",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_ledger_code),
+    response_schema="LedgerResponse",
+)
+
+LEDGER_CODES_ITEM: Endpoint[ItemArgs, LedgerCode | None] = Endpoint(
+    name="ledger_codes_item",
+    method="GET",
+    path=lambda args: f"/ledgercodes/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_ledger_code),
+    response_schema="LedgerResponse",
+)
+
+TAX_CLASSES: Endpoint[CollectionArgs, RentmanPage[TaxClass]] = Endpoint(
+    name="tax_classes",
+    method="GET",
+    path=lambda _args: "/taxclasses",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_tax_class),
+    response_schema="TaxClassResponse",
+)
+
+TAX_CLASSES_ITEM: Endpoint[ItemArgs, TaxClass | None] = Endpoint(
+    name="tax_classes_item",
+    method="GET",
+    path=lambda args: f"/taxclasses/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_tax_class),
+    response_schema="TaxClassResponse",
+)
+
 CATALOG: tuple[Endpoint[Any, Any], ...] = (
     ACTUAL_CONTENT,
     ACTUAL_CONTENT_ITEM,
@@ -1021,4 +1206,23 @@ CATALOG: tuple[Endpoint[Any, Any], ...] = (
     PROJECT_REQUEST_EQUIPMENT,
     PROJECT_REQUEST_EQUIPMENT_ITEM,
     PROJECT_REQUEST_EQUIPMENT_OF_PROJECT_REQUEST,
+    QUOTES,
+    QUOTES_ITEM,
+    QUOTES_OF_PROJECT,
+    INVOICE_LINES_OF_QUOTE,
+    CONTRACTS,
+    CONTRACTS_ITEM,
+    CONTRACTS_OF_PROJECT,
+    INVOICES,
+    INVOICES_ITEM,
+    INVOICE_LINES_OF_INVOICE,
+    PAYMENTS_OF_INVOICE,
+    INVOICE_LINES,
+    INVOICE_LINES_ITEM,
+    PAYMENTS,
+    PAYMENTS_ITEM,
+    LEDGER_CODES,
+    LEDGER_CODES_ITEM,
+    TAX_CLASSES,
+    TAX_CLASSES_ITEM,
 )

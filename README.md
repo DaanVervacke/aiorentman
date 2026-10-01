@@ -78,6 +78,18 @@ The library covers the resources an RFID and materials project needs, read only:
 | Project requests | `async_list_project_requests` | `async_iter_project_requests` | `async_get_project_request` |
 | Project request equipment | `async_list_project_request_equipment` | `async_iter_project_request_equipment` | `async_get_project_request_equipment` |
 | Request equipment of a project request | `async_list_project_request_equipment_of_project_request` | `async_iter_project_request_equipment_of_project_request` | |
+| Quotes | `async_list_quotes` | `async_iter_quotes` | `async_get_quote` |
+| Quotes of a project | `async_list_quotes_of_project` | `async_iter_quotes_of_project` | |
+| Invoice lines of a quote | `async_list_invoice_lines_of_quote` | `async_iter_invoice_lines_of_quote` | |
+| Contracts | `async_list_contracts` | `async_iter_contracts` | `async_get_contract` |
+| Contracts of a project | `async_list_contracts_of_project` | `async_iter_contracts_of_project` | |
+| Invoices | `async_list_invoices` | `async_iter_invoices` | `async_get_invoice` |
+| Invoice lines of an invoice | `async_list_invoice_lines_of_invoice` | `async_iter_invoice_lines_of_invoice` | |
+| Payments of an invoice | `async_list_payments_of_invoice` | `async_iter_payments_of_invoice` | |
+| Invoice lines | `async_list_invoice_lines` | `async_iter_invoice_lines` | `async_get_invoice_line` |
+| Payments | `async_list_payments` | `async_iter_payments` | `async_get_payment` |
+| Ledger codes | `async_list_ledger_codes` | `async_iter_ledger_codes` | `async_get_ledger_code` |
+| Tax classes | `async_list_tax_classes` | `async_iter_tax_classes` | `async_get_tax_class` |
 
 ## Token
 

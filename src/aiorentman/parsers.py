@@ -9,11 +9,16 @@ from .models import (
     Accessory,
     ActualContent,
     Alternative,
+    Contract,
     Equipment,
     EquipmentAssignedSerial,
     EquipmentSetContent,
     ExtraInputField,
     Folder,
+    Invoice,
+    InvoiceLine,
+    LedgerCode,
+    Payment,
     Project,
     ProjectCost,
     ProjectCrew,
@@ -26,6 +31,7 @@ from .models import (
     ProjectStatus,
     ProjectType,
     ProjectVehicle,
+    Quote,
     RentmanLink,
     RentmanPage,
     Repair,
@@ -35,6 +41,7 @@ from .models import (
     StockMovement,
     Subproject,
     Supplier,
+    TaxClass,
     Vehicle,
     WarehouseStatus,
 )
@@ -1042,5 +1049,200 @@ def parse_project_request_equipment(data: Mapping[str, Any]) -> ProjectRequestEq
         or RentmanLink(_str_field(data, "project_request")),
         factor=_coerced_str_field(data, "factor"),
         order=_coerced_str_field(data, "order"),
+        raw=dict(data),
+    )
+
+
+def parse_quote(data: Mapping[str, Any]) -> Quote:
+    """Build the quote model from one quotation payload."""
+    return Quote(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        number=_str_field(data, "number"),
+        customer=_link_field(data, "customer"),
+        contact=_link_field(data, "contact"),
+        date=_datetime_field(data, "date"),
+        expiration_date=_datetime_field(data, "expiration_date"),
+        version=_int_field(data, "version"),
+        subject=_str_field(data, "subject"),
+        show_tax=_bool_field(data, "show_tax"),
+        project=_link_or_model_field(data, "project", parse_project)
+        or RentmanLink(_str_field(data, "project")),
+        filename=_str_field(data, "filename"),
+        project_total_price=_float_field(data, "project_total_price"),
+        project_total_price_cancelled=_float_field(data, "project_total_price_cancelled"),
+        project_rental_price=_float_field(data, "project_rental_price"),
+        project_sale_price=_float_field(data, "project_sale_price"),
+        project_crew_price=_float_field(data, "project_crew_price"),
+        project_transport_price=_float_field(data, "project_transport_price"),
+        project_other_price=_float_field(data, "project_other_price"),
+        project_insurance_price=_float_field(data, "project_insurance_price"),
+        project_services_price=_float_field(data, "project_services_price"),
+        price=_float_field(data, "price"),
+        price_invat=_float_field(data, "price_invat"),
+        vat_amount=_float_field(data, "vat_amount"),
+        tags=_codes_field(data, "tags"),
+        raw=dict(data),
+    )
+
+
+def parse_contract(data: Mapping[str, Any]) -> Contract:
+    """Build the contract model from one contract payload."""
+    return Contract(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        number=_str_field(data, "number"),
+        customer=_link_field(data, "customer"),
+        contact=_link_field(data, "contact"),
+        date=_datetime_field(data, "date"),
+        expiration_date=_datetime_field(data, "expiration_date"),
+        version=_int_field(data, "version"),
+        subject=_str_field(data, "subject"),
+        show_tax=_bool_field(data, "show_tax"),
+        project=_link_or_model_field(data, "project", parse_project)
+        or RentmanLink(_str_field(data, "project")),
+        filename=_str_field(data, "filename"),
+        project_total_price=_float_field(data, "project_total_price"),
+        project_total_price_cancelled=_float_field(data, "project_total_price_cancelled"),
+        project_rental_price=_float_field(data, "project_rental_price"),
+        project_sale_price=_float_field(data, "project_sale_price"),
+        project_crew_price=_float_field(data, "project_crew_price"),
+        project_transport_price=_float_field(data, "project_transport_price"),
+        project_other_price=_float_field(data, "project_other_price"),
+        project_insurance_price=_float_field(data, "project_insurance_price"),
+        project_services_price=_float_field(data, "project_services_price"),
+        price=_float_field(data, "price"),
+        price_invat=_float_field(data, "price_invat"),
+        vat_amount=_float_field(data, "vat_amount"),
+        raw=dict(data),
+    )
+
+
+def parse_invoice(data: Mapping[str, Any]) -> Invoice:
+    """Build the invoice model from one invoice payload."""
+    return Invoice(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        customer=_link_field(data, "customer"),
+        account_manager=_link_field(data, "account_manager"),
+        contact=_link_field(data, "contact"),
+        expiration=_datetime_field(data, "expiration"),
+        date=_datetime_field(data, "date"),
+        number=_str_field(data, "number"),
+        procent=_float_field(data, "procent"),
+        from_project=_bool_field(data, "from_project"),
+        subject=_str_field(data, "subject"),
+        finalized=_bool_field(data, "finalized"),
+        integration_reference_id=_str_or_none_field(data, "integration_reference_id"),
+        project=_link_or_model_field(data, "project", parse_project),
+        filename=_str_field(data, "filename"),
+        project_total_price=_float_field(data, "project_total_price"),
+        project_total_price_cancelled=_float_field(data, "project_total_price_cancelled"),
+        project_rental_price=_float_field(data, "project_rental_price"),
+        project_sale_price=_float_field(data, "project_sale_price"),
+        project_crew_price=_float_field(data, "project_crew_price"),
+        project_transport_price=_float_field(data, "project_transport_price"),
+        project_other_price=_float_field(data, "project_other_price"),
+        project_insurance_price=_float_field(data, "project_insurance_price"),
+        project_services_price=_float_field(data, "project_services_price"),
+        sum_factuurregels=_float_field(data, "sum_factuurregels"),
+        price=_float_field(data, "price"),
+        price_invat=_float_field(data, "price_invat"),
+        vat_amount=_float_field(data, "vat_amount"),
+        invoicetype=_str_field(data, "invoicetype"),
+        outstanding_balance=_float_field(data, "outstanding_balance"),
+        total_paid=_float_field(data, "total_paid"),
+        is_paid=_bool_field(data, "is_paid"),
+        date_sent=_datetime_field(data, "date_sent"),
+        payment_reminder_sent=_int_field(data, "payment_reminder_sent"),
+        final_payment_reminder_sent=_datetime_field(data, "final_payment_reminder_sent"),
+        payment_date=_datetime_field(data, "payment_date"),
+        days_after_expiry=_int_field(data, "days_after_expiry"),
+        tags=_codes_field(data, "tags"),
+        raw=dict(data),
+    )
+
+
+def parse_ledger_code(data: Mapping[str, Any]) -> LedgerCode:
+    """Build the ledger code model from one ledger account payload."""
+    return LedgerCode(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        code=_str_field(data, "code"),
+        is_credit=_bool_field(data, "is_credit"),
+        is_debit=_bool_field(data, "is_debit"),
+        raw=dict(data),
+    )
+
+
+def parse_tax_class(data: Mapping[str, Any]) -> TaxClass:
+    """Build the tax class model from one tax class payload."""
+    return TaxClass(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        name=_str_field(data, "name"),
+        code=_str_field(data, "code"),
+        type=_str_field(data, "type"),
+        raw=dict(data),
+    )
+
+
+def parse_invoice_line(data: Mapping[str, Any]) -> InvoiceLine:
+    """Build the invoice line model from one VAT line payload."""
+    return InvoiceLine(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        item=_int_field(data, "item"),
+        base=_float_field(data, "base"),
+        ledger=_link_or_model_field(data, "ledger", parse_ledger_code)
+        or RentmanLink(_str_field(data, "ledger")),
+        vatrate=_float_field(data, "vatrate"),
+        vatamount=_float_field(data, "vatamount"),
+        priceincl=_float_field(data, "priceincl"),
+        ledgercode=_str_field(data, "ledgercode"),
+        parent_api_path=_str_field(data, "parent_api_path"),
+        raw=dict(data),
+    )
+
+
+def parse_payment(data: Mapping[str, Any]) -> Payment:
+    """Build the payment model from one payment payload."""
+    return Payment(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        invoice=_link_or_model_field(data, "invoice", parse_invoice)
+        or RentmanLink(_str_field(data, "invoice")),
+        moment=_datetime_field(data, "moment"),
+        amount=_float_field(data, "amount"),
+        description=_str_field(data, "description"),
+        payment_import_source=_str_field(data, "payment_import_source"),
         raw=dict(data),
     )

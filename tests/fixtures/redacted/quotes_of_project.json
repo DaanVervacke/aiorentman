@@ -1,0 +1,30 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "created": "2026-10-01T19:32:44.000+02:00",
+      "modified": "2026-10-01T19:32:48.654+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic fcc085b15a81",
+      "number": "Synthetic c3ee433491ee",
+      "customer": "/contacts/3623",
+      "contact": "/contactpersons/20",
+      "date": "2027-11-28T00:00:00+01:00",
+      "expiration_date": "2027-12-12T00:00:00+01:00",
+      "version": 1,
+      "subject": "Synthetic 7b5ebfb07eff",
+      "show_tax": true,
+      "project": "/projects/128",
+      "filename": "Synthetic 395448c3a356",
+      "price": 61670,
+      "price_invat": 74620.7,
+      "vat_amount": 12950.7,
+      "tags": "Synthetic c5dfde6ba241",
+      "updateHash": "ff866a6e4caedc7c6aca51115f237e57"
+    }
+  ],
+  "itemCount": 1,
+  "limit": 50,
+  "offset": 0,
+  "next_page_url": null
+}

@@ -167,6 +167,18 @@ COLLECTIONS: tuple[tuple[Callable[[RentmanClient], Awaitable[RentmanPage[Any]]],
         lambda client: client.async_list_project_request_equipment_of_project_request(1),
         "/projectrequests/1/projectrequestequipment",
     ),
+    (lambda client: client.async_list_quotes(), "/quotes"),
+    (lambda client: client.async_list_quotes_of_project(128), "/projects/128/quotes"),
+    (lambda client: client.async_list_invoice_lines_of_quote(1), "/quotes/1/invoicelines"),
+    (lambda client: client.async_list_contracts(), "/contracts"),
+    (lambda client: client.async_list_contracts_of_project(128), "/projects/128/contracts"),
+    (lambda client: client.async_list_invoices(), "/invoices"),
+    (lambda client: client.async_list_invoice_lines_of_invoice(1), "/invoices/1/invoicelines"),
+    (lambda client: client.async_list_payments_of_invoice(1), "/invoices/1/payments"),
+    (lambda client: client.async_list_invoice_lines(), "/invoicelines"),
+    (lambda client: client.async_list_payments(), "/payments"),
+    (lambda client: client.async_list_ledger_codes(), "/ledgercodes"),
+    (lambda client: client.async_list_tax_classes(), "/taxclasses"),
 )
 
 ITEMS: tuple[tuple[Callable[[RentmanClient], Awaitable[Any]], str], ...] = (
@@ -202,6 +214,13 @@ ITEMS: tuple[tuple[Callable[[RentmanClient], Awaitable[Any]], str], ...] = (
     (lambda client: client.async_get_project_cost(7), "/costs/7"),
     (lambda client: client.async_get_project_request(1), "/projectrequests/1"),
     (lambda client: client.async_get_project_request_equipment(1), "/projectrequestequipment/1"),
+    (lambda client: client.async_get_quote(1), "/quotes/1"),
+    (lambda client: client.async_get_contract(1), "/contracts/1"),
+    (lambda client: client.async_get_invoice(1), "/invoices/1"),
+    (lambda client: client.async_get_invoice_line(99), "/invoicelines/99"),
+    (lambda client: client.async_get_payment(1), "/payments/1"),
+    (lambda client: client.async_get_ledger_code(1), "/ledgercodes/1"),
+    (lambda client: client.async_get_tax_class(2), "/taxclasses/2"),
 )
 
 ITERATORS: tuple[tuple[Callable[[RentmanClient, Query | None], Any], str], ...] = (
@@ -366,6 +385,30 @@ ITERATORS: tuple[tuple[Callable[[RentmanClient, Query | None], Any], str], ...] 
         ),
         "/projectrequests/1/projectrequestequipment",
     ),
+    (lambda client, query: client.async_iter_quotes(query), "/quotes"),
+    (lambda client, query: client.async_iter_quotes_of_project(128, query), "/projects/128/quotes"),
+    (
+        lambda client, query: client.async_iter_invoice_lines_of_quote(1, query),
+        "/quotes/1/invoicelines",
+    ),
+    (lambda client, query: client.async_iter_contracts(query), "/contracts"),
+    (
+        lambda client, query: client.async_iter_contracts_of_project(128, query),
+        "/projects/128/contracts",
+    ),
+    (lambda client, query: client.async_iter_invoices(query), "/invoices"),
+    (
+        lambda client, query: client.async_iter_invoice_lines_of_invoice(1, query),
+        "/invoices/1/invoicelines",
+    ),
+    (
+        lambda client, query: client.async_iter_payments_of_invoice(1, query),
+        "/invoices/1/payments",
+    ),
+    (lambda client, query: client.async_iter_invoice_lines(query), "/invoicelines"),
+    (lambda client, query: client.async_iter_payments(query), "/payments"),
+    (lambda client, query: client.async_iter_ledger_codes(query), "/ledgercodes"),
+    (lambda client, query: client.async_iter_tax_classes(query), "/taxclasses"),
 )
 
 

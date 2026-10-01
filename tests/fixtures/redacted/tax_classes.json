@@ -1,0 +1,41 @@
+{
+  "data": [
+    {
+      "id": 2,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": null,
+      "displayname": "Synthetic 2bd2a736719c",
+      "name": "Synthetic 6ef79f8d55a5",
+      "code": "",
+      "type": "vat",
+      "updateHash": "abf79ee83f6c19960de3bb2855bd856f"
+    },
+    {
+      "id": 3,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": null,
+      "displayname": "Synthetic df2ec961a211",
+      "name": "Synthetic e44154bacd1c",
+      "code": "20",
+      "type": "vat",
+      "updateHash": "a4998cae6053d85f8703c0634eb48b3c"
+    },
+    {
+      "id": 4,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": null,
+      "displayname": "Synthetic 681066e5c605",
+      "name": "Synthetic 6cbb40e66cd0",
+      "code": "00",
+      "type": "vat",
+      "updateHash": "9b6db6957a2a690bd193621d41f648cf"
+    }
+  ],
+  "itemCount": 3,
+  "limit": 50,
+  "offset": 0,
+  "next_page_url": null
+}

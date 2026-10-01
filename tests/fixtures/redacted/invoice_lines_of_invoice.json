@@ -1,0 +1,38 @@
+{
+  "data": [
+    {
+      "id": 99,
+      "created": "2026-10-01T19:32:43+02:00",
+      "modified": "2026-10-01T19:32:43+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 464afc014a40",
+      "item": 1,
+      "base": 1350,
+      "ledger": "/ledgercodes/1",
+      "vatrate": 0.21,
+      "vatamount": 283.5,
+      "priceincl": 1633.5,
+      "ledgercode": "Rental",
+      "updateHash": "1af5842e76aaebe36b802d2fe2cf2f9c"
+    },
+    {
+      "id": 100,
+      "created": "2026-10-01T19:32:43+02:00",
+      "modified": "2026-10-01T19:32:43+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 99a0fb5d113b",
+      "item": 1,
+      "base": 455,
+      "ledger": "/ledgercodes/3",
+      "vatrate": 0.21,
+      "vatamount": 95.55,
+      "priceincl": 550.55,
+      "ledgercode": "Crew",
+      "updateHash": "91939dd5e08074ff96d98b426cd6dfaf"
+    }
+  ],
+  "itemCount": 2,
+  "limit": 50,
+  "offset": 0,
+  "next_page_url": null
+}

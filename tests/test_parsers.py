@@ -6,9 +6,14 @@ from typing import Any
 from aiorentman.models import (
     Accessory,
     Alternative,
+    Contract,
     Equipment,
     ExtraInputField,
     Folder,
+    Invoice,
+    InvoiceLine,
+    LedgerCode,
+    Payment,
     Project,
     ProjectCost,
     ProjectCrew,
@@ -19,22 +24,29 @@ from aiorentman.models import (
     ProjectRequestEquipment,
     ProjectStatus,
     ProjectVehicle,
+    Quote,
     RentmanLink,
     RentmanPage,
     SerialNumber,
     StockLocation,
     Subproject,
     Supplier,
+    TaxClass,
     Vehicle,
 )
 from aiorentman.parsers import (
     parse_accessory,
     parse_actual_content,
     parse_alternative,
+    parse_contract,
     parse_envelope_item,
     parse_equipment,
     parse_extra_input_field,
+    parse_invoice,
+    parse_invoice_line,
+    parse_ledger_code,
     parse_page,
+    parse_payment,
     parse_project_cost,
     parse_project_crew,
     parse_project_equipment,
@@ -46,8 +58,10 @@ from aiorentman.parsers import (
     parse_project_status,
     parse_project_type,
     parse_project_vehicle,
+    parse_quote,
     parse_serial_number,
     parse_supplier,
+    parse_tax_class,
     parse_vehicle,
 )
 
@@ -476,3 +490,116 @@ def test_parse_project_status_and_type_keep_their_scalars() -> None:
     project_type = parse_project_type({"id": 104, "color": "FF6729", "type": "regular"})
     assert project_type.color == "FF6729"
     assert project_type.type == "regular"
+
+
+def test_parse_quote_resolves_expanded_links() -> None:
+    quote = parse_quote(
+        {
+            "project": {"id": 128, "name": "Festival"},
+            "customer": "/contacts/3623",
+            "date": "2027-11-28T00:00:00+01:00",
+            "tags": "trial, priority",
+        }
+    )
+    assert isinstance(quote, Quote)
+    assert isinstance(quote.project, Project)
+    assert quote.project.id == 128
+    assert quote.customer == RentmanLink("/contacts/3623")
+    assert quote.date is not None
+    assert quote.tags == ("trial", "priority")
+
+
+def test_parse_quote_and_contract_fall_back_to_empty_links() -> None:
+    quote = parse_quote({})
+    contract = parse_contract({})
+    assert isinstance(contract, Contract)
+    assert quote.project == RentmanLink("")
+    assert contract.project == RentmanLink("")
+    assert quote.project_total_price is None
+    assert contract.vat_amount is None
+    assert quote.version is None
+
+
+def test_parse_invoice_resolves_expanded_links() -> None:
+    invoice = parse_invoice(
+        {
+            "project": {"id": 113, "name": "Dry hire"},
+            "invoicetype": "F",
+            "is_paid": True,
+            "date_sent": "2026-09-20T00:00:00+02:00",
+        }
+    )
+    assert isinstance(invoice, Invoice)
+    assert isinstance(invoice.project, Project)
+    assert invoice.project.id == 113
+    assert invoice.invoicetype == "F"
+    assert invoice.is_paid is True
+    assert invoice.date_sent is not None
+
+
+def test_parse_invoice_degrades_on_sparse_payloads() -> None:
+    invoice = parse_invoice({})
+    assert invoice.project is None
+    assert invoice.integration_reference_id is None
+    assert invoice.days_after_expiry is None
+    assert invoice.tags == ()
+
+
+def test_parse_invoice_line_resolves_expanded_ledger() -> None:
+    line = parse_invoice_line(
+        {
+            "item": 1,
+            "base": 1350,
+            "ledger": {"id": 1, "code": "Rental"},
+            "vatrate": 0.21,
+            "ledgercode": "Rental",
+        }
+    )
+    assert isinstance(line, InvoiceLine)
+    assert isinstance(line.ledger, LedgerCode)
+    assert line.ledger.id == 1
+    assert line.ledgercode == "Rental"
+    assert line.vatrate == 0.21
+    assert line.parent_api_path == ""
+
+
+def test_parse_invoice_line_falls_back_to_an_empty_link() -> None:
+    line = parse_invoice_line({})
+    assert line.ledger == RentmanLink("")
+    assert line.item is None
+    assert line.priceincl is None
+
+
+def test_parse_payment_resolves_expanded_invoice() -> None:
+    payment = parse_payment(
+        {
+            "invoice": {"id": 4, "number": "4"},
+            "moment": "2026-09-25T10:00:00+02:00",
+            "amount": 120.5,
+            "payment_import_source": "publicapi",
+        }
+    )
+    assert isinstance(payment, Payment)
+    assert isinstance(payment.invoice, Invoice)
+    assert payment.invoice.id == 4
+    assert payment.moment is not None
+    assert payment.amount == 120.5
+    assert payment.payment_import_source == "publicapi"
+
+
+def test_parse_payment_falls_back_to_an_empty_link() -> None:
+    payment = parse_payment({})
+    assert payment.invoice == RentmanLink("")
+    assert payment.moment is None
+    assert payment.description == ""
+
+
+def test_parse_ledger_code_and_tax_class_keep_their_scalars() -> None:
+    ledger = parse_ledger_code({"id": 1, "code": "Rental", "is_credit": True})
+    assert isinstance(ledger, LedgerCode)
+    assert ledger.code == "Rental"
+    assert ledger.is_credit is True
+    assert ledger.is_debit is False
+    tax_class = parse_tax_class({"id": 2, "name": "Laag tarief", "type": "vat"})
+    assert isinstance(tax_class, TaxClass)
+    assert tax_class.type == "vat"

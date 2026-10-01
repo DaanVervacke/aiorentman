@@ -53,6 +53,13 @@ COLLECTIONS: tuple[tuple[str, str], ...] = (
     ("project_costs", "/costs"),
     ("project_requests", "/projectrequests"),
     ("project_request_equipment", "/projectrequestequipment"),
+    ("quotes", "/quotes"),
+    ("contracts", "/contracts"),
+    ("invoices", "/invoices"),
+    ("invoice_lines", "/invoicelines"),
+    ("payments", "/payments"),
+    ("ledger_codes", "/ledgercodes"),
+    ("tax_classes", "/taxclasses"),
 )
 
 LINKED_COLLECTIONS: tuple[tuple[str, str, str, str], ...] = (
@@ -125,6 +132,12 @@ LINKED_COLLECTIONS: tuple[tuple[str, str, str, str], ...] = (
         "project_request_equipment.json",
         "project_request",
     ),
+    ("invoice_lines_of_quote", "/quotes/{}/invoicelines", "quotes.json", "id"),
+    ("invoice_lines_of_contract", "/contracts/{}/invoicelines", "contracts.json", "id"),
+    ("invoice_lines_of_invoice", "/invoices/{}/invoicelines", "invoices.json", "id"),
+    ("payments_of_invoice", "/invoices/{}/payments", "invoices.json", "id"),
+    ("quotes_of_project", "/projects/{}/quotes", "quotes.json", "project"),
+    ("contracts_of_project", "/projects/{}/contracts", "projects.json", "id"),
 )
 
 

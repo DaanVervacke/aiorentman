@@ -78,6 +78,20 @@ Models
    :members:
 .. autoclass:: aiorentman.ProjectRequestEquipment
    :members:
+.. autoclass:: aiorentman.Quote
+   :members:
+.. autoclass:: aiorentman.Contract
+   :members:
+.. autoclass:: aiorentman.Invoice
+   :members:
+.. autoclass:: aiorentman.InvoiceLine
+   :members:
+.. autoclass:: aiorentman.Payment
+   :members:
+.. autoclass:: aiorentman.LedgerCode
+   :members:
+.. autoclass:: aiorentman.TaxClass
+   :members:
 
 Exceptions
 ----------

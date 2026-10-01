@@ -15,12 +15,17 @@ from aiorentman.parsers import (
     parse_accessory,
     parse_actual_content,
     parse_alternative,
+    parse_contract,
     parse_equipment,
     parse_equipment_assigned_serial,
     parse_equipment_set_content,
     parse_extra_input_field,
     parse_folder,
+    parse_invoice,
+    parse_invoice_line,
+    parse_ledger_code,
     parse_page,
+    parse_payment,
     parse_project,
     parse_project_cost,
     parse_project_crew,
@@ -33,6 +38,7 @@ from aiorentman.parsers import (
     parse_project_status,
     parse_project_type,
     parse_project_vehicle,
+    parse_quote,
     parse_repair,
     parse_serial_number,
     parse_status,
@@ -40,6 +46,7 @@ from aiorentman.parsers import (
     parse_stock_movement,
     parse_subproject,
     parse_supplier,
+    parse_tax_class,
     parse_vehicle,
     parse_warehouse_status,
 )
@@ -95,9 +102,28 @@ PARSERS: dict[str, Callable[[Mapping[str, Any]], Any]] = {
     "project_vehicles_of_project.json": parse_project_vehicle,
     "project_vehicles_of_project_function.json": parse_project_vehicle,
     "project_vehicles_of_subproject.json": parse_project_vehicle,
+    "quotes.json": parse_quote,
+    "quotes_of_project.json": parse_quote,
+    "invoice_lines_of_quote.json": parse_invoice_line,
+    "contracts.json": parse_contract,
+    "contracts_of_project.json": parse_contract,
+    "invoices.json": parse_invoice,
+    "invoice_lines_of_invoice.json": parse_invoice_line,
+    "payments_of_invoice.json": parse_payment,
+    "invoice_lines.json": parse_invoice_line,
+    "payments.json": parse_payment,
+    "ledger_codes.json": parse_ledger_code,
+    "tax_classes.json": parse_tax_class,
 }
 
-EMPTY_CAPTURES = {"stock_location_vehicles.json"}
+EMPTY_CAPTURES = {
+    "stock_location_vehicles.json",
+    "payments.json",
+    "contracts.json",
+    "invoice_lines_of_quote.json",
+    "payments_of_invoice.json",
+    "contracts_of_project.json",
+}
 
 
 def test_every_redacted_capture_parses() -> None:

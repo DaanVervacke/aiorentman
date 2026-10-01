@@ -18,6 +18,9 @@ from ._endpoints import (
     ALTERNATIVES,
     ALTERNATIVES_ITEM,
     ALTERNATIVES_OF_EQUIPMENT,
+    CONTRACTS,
+    CONTRACTS_ITEM,
+    CONTRACTS_OF_PROJECT,
     EQUIPMENT,
     EQUIPMENT_ASSIGNED_SERIALS,
     EQUIPMENT_ASSIGNED_SERIALS_ITEM,
@@ -30,6 +33,17 @@ from ._endpoints import (
     EXTRA_INPUT_FIELDS_ITEM,
     FOLDERS,
     FOLDERS_ITEM,
+    INVOICE_LINES,
+    INVOICE_LINES_ITEM,
+    INVOICE_LINES_OF_INVOICE,
+    INVOICE_LINES_OF_QUOTE,
+    INVOICES,
+    INVOICES_ITEM,
+    LEDGER_CODES,
+    LEDGER_CODES_ITEM,
+    PAYMENTS,
+    PAYMENTS_ITEM,
+    PAYMENTS_OF_INVOICE,
     PROJECT_COSTS,
     PROJECT_COSTS_ITEM,
     PROJECT_COSTS_OF_PROJECT,
@@ -71,6 +85,9 @@ from ._endpoints import (
     PROJECT_VEHICLES_OF_SUBPROJECT,
     PROJECTS,
     PROJECTS_ITEM,
+    QUOTES,
+    QUOTES_ITEM,
+    QUOTES_OF_PROJECT,
     REPAIRS,
     REPAIRS_ITEM,
     REPAIRS_OF_EQUIPMENT,
@@ -90,6 +107,8 @@ from ._endpoints import (
     SUPPLIERS,
     SUPPLIERS_ITEM,
     SUPPLIERS_OF_EQUIPMENT,
+    TAX_CLASSES,
+    TAX_CLASSES_ITEM,
     VEHICLES,
     VEHICLES_ITEM,
     VEHICLES_OF_STOCK_LOCATION,
@@ -119,11 +138,16 @@ from .models import (
     Accessory,
     ActualContent,
     Alternative,
+    Contract,
     Equipment,
     EquipmentAssignedSerial,
     EquipmentSetContent,
     ExtraInputField,
     Folder,
+    Invoice,
+    InvoiceLine,
+    LedgerCode,
+    Payment,
     Project,
     ProjectCost,
     ProjectCrew,
@@ -136,6 +160,7 @@ from .models import (
     ProjectStatus,
     ProjectType,
     ProjectVehicle,
+    Quote,
     RentmanPage,
     Repair,
     SerialNumber,
@@ -144,6 +169,7 @@ from .models import (
     StockMovement,
     Subproject,
     Supplier,
+    TaxClass,
     Vehicle,
     WarehouseStatus,
 )
@@ -1128,6 +1154,182 @@ class RentmanClient:
             PROJECT_REQUEST_EQUIPMENT_OF_PROJECT_REQUEST,
             ParentCollectionArgs(parent_id=project_request_id, query=query),
         )
+
+    async def async_list_quotes(self, query: Query | None = None) -> RentmanPage[Quote]:
+        """Fetch one page of quotes."""
+        return await self._call(QUOTES, CollectionArgs(query=query))
+
+    def async_iter_quotes(self, query: Query | None = None) -> AsyncIterator[Quote]:
+        """Yield every quote, following the cursor across pages."""
+        return self._iter_collection(QUOTES, CollectionArgs(query=query))
+
+    async def async_get_quote(self, quote_id: int) -> Quote | None:
+        """Fetch one quote by its id."""
+        return await self._call(QUOTES_ITEM, ItemArgs(item_id=quote_id))
+
+    async def async_list_quotes_of_project(
+        self, project_id: int, query: Query | None = None
+    ) -> RentmanPage[Quote]:
+        """Fetch one page of quotes of one project."""
+        return await self._call(
+            QUOTES_OF_PROJECT,
+            ParentCollectionArgs(parent_id=project_id, query=query),
+        )
+
+    def async_iter_quotes_of_project(
+        self, project_id: int, query: Query | None = None
+    ) -> AsyncIterator[Quote]:
+        """Yield every quote of one project, following the cursor."""
+        return self._iter_collection(
+            QUOTES_OF_PROJECT,
+            ParentCollectionArgs(parent_id=project_id, query=query),
+        )
+
+    async def async_list_invoice_lines_of_quote(
+        self, quote_id: int, query: Query | None = None
+    ) -> RentmanPage[InvoiceLine]:
+        """Fetch one page of invoice lines of one quote."""
+        return await self._call(
+            INVOICE_LINES_OF_QUOTE,
+            ParentCollectionArgs(parent_id=quote_id, query=query),
+        )
+
+    def async_iter_invoice_lines_of_quote(
+        self, quote_id: int, query: Query | None = None
+    ) -> AsyncIterator[InvoiceLine]:
+        """Yield every invoice line of one quote, following the cursor."""
+        return self._iter_collection(
+            INVOICE_LINES_OF_QUOTE,
+            ParentCollectionArgs(parent_id=quote_id, query=query),
+        )
+
+    async def async_list_contracts(self, query: Query | None = None) -> RentmanPage[Contract]:
+        """Fetch one page of contracts."""
+        return await self._call(CONTRACTS, CollectionArgs(query=query))
+
+    def async_iter_contracts(self, query: Query | None = None) -> AsyncIterator[Contract]:
+        """Yield every contract, following the cursor across pages."""
+        return self._iter_collection(CONTRACTS, CollectionArgs(query=query))
+
+    async def async_get_contract(self, contract_id: int) -> Contract | None:
+        """Fetch one contract by its id."""
+        return await self._call(CONTRACTS_ITEM, ItemArgs(item_id=contract_id))
+
+    async def async_list_contracts_of_project(
+        self, project_id: int, query: Query | None = None
+    ) -> RentmanPage[Contract]:
+        """Fetch one page of contracts of one project."""
+        return await self._call(
+            CONTRACTS_OF_PROJECT,
+            ParentCollectionArgs(parent_id=project_id, query=query),
+        )
+
+    def async_iter_contracts_of_project(
+        self, project_id: int, query: Query | None = None
+    ) -> AsyncIterator[Contract]:
+        """Yield every contract of one project, following the cursor."""
+        return self._iter_collection(
+            CONTRACTS_OF_PROJECT,
+            ParentCollectionArgs(parent_id=project_id, query=query),
+        )
+
+    async def async_list_invoices(self, query: Query | None = None) -> RentmanPage[Invoice]:
+        """Fetch one page of invoices."""
+        return await self._call(INVOICES, CollectionArgs(query=query))
+
+    def async_iter_invoices(self, query: Query | None = None) -> AsyncIterator[Invoice]:
+        """Yield every invoice, following the cursor across pages."""
+        return self._iter_collection(INVOICES, CollectionArgs(query=query))
+
+    async def async_get_invoice(self, invoice_id: int) -> Invoice | None:
+        """Fetch one invoice by its id."""
+        return await self._call(INVOICES_ITEM, ItemArgs(item_id=invoice_id))
+
+    async def async_list_invoice_lines_of_invoice(
+        self, invoice_id: int, query: Query | None = None
+    ) -> RentmanPage[InvoiceLine]:
+        """Fetch one page of invoice lines of one invoice."""
+        return await self._call(
+            INVOICE_LINES_OF_INVOICE,
+            ParentCollectionArgs(parent_id=invoice_id, query=query),
+        )
+
+    def async_iter_invoice_lines_of_invoice(
+        self, invoice_id: int, query: Query | None = None
+    ) -> AsyncIterator[InvoiceLine]:
+        """Yield every invoice line of one invoice, following the cursor."""
+        return self._iter_collection(
+            INVOICE_LINES_OF_INVOICE,
+            ParentCollectionArgs(parent_id=invoice_id, query=query),
+        )
+
+    async def async_list_payments_of_invoice(
+        self, invoice_id: int, query: Query | None = None
+    ) -> RentmanPage[Payment]:
+        """Fetch one page of payments of one invoice."""
+        return await self._call(
+            PAYMENTS_OF_INVOICE,
+            ParentCollectionArgs(parent_id=invoice_id, query=query),
+        )
+
+    def async_iter_payments_of_invoice(
+        self, invoice_id: int, query: Query | None = None
+    ) -> AsyncIterator[Payment]:
+        """Yield every payment of one invoice, following the cursor."""
+        return self._iter_collection(
+            PAYMENTS_OF_INVOICE,
+            ParentCollectionArgs(parent_id=invoice_id, query=query),
+        )
+
+    async def async_list_invoice_lines(
+        self, query: Query | None = None
+    ) -> RentmanPage[InvoiceLine]:
+        """Fetch one page of invoice lines."""
+        return await self._call(INVOICE_LINES, CollectionArgs(query=query))
+
+    def async_iter_invoice_lines(self, query: Query | None = None) -> AsyncIterator[InvoiceLine]:
+        """Yield every invoice line, following the cursor across pages."""
+        return self._iter_collection(INVOICE_LINES, CollectionArgs(query=query))
+
+    async def async_get_invoice_line(self, invoice_line_id: int) -> InvoiceLine | None:
+        """Fetch one invoice line by its id."""
+        return await self._call(INVOICE_LINES_ITEM, ItemArgs(item_id=invoice_line_id))
+
+    async def async_list_payments(self, query: Query | None = None) -> RentmanPage[Payment]:
+        """Fetch one page of payments."""
+        return await self._call(PAYMENTS, CollectionArgs(query=query))
+
+    def async_iter_payments(self, query: Query | None = None) -> AsyncIterator[Payment]:
+        """Yield every payment, following the cursor across pages."""
+        return self._iter_collection(PAYMENTS, CollectionArgs(query=query))
+
+    async def async_get_payment(self, payment_id: int) -> Payment | None:
+        """Fetch one payment by its id."""
+        return await self._call(PAYMENTS_ITEM, ItemArgs(item_id=payment_id))
+
+    async def async_list_ledger_codes(self, query: Query | None = None) -> RentmanPage[LedgerCode]:
+        """Fetch one page of ledger codes."""
+        return await self._call(LEDGER_CODES, CollectionArgs(query=query))
+
+    def async_iter_ledger_codes(self, query: Query | None = None) -> AsyncIterator[LedgerCode]:
+        """Yield every ledger code, following the cursor across pages."""
+        return self._iter_collection(LEDGER_CODES, CollectionArgs(query=query))
+
+    async def async_get_ledger_code(self, ledger_code_id: int) -> LedgerCode | None:
+        """Fetch one ledger code by its id."""
+        return await self._call(LEDGER_CODES_ITEM, ItemArgs(item_id=ledger_code_id))
+
+    async def async_list_tax_classes(self, query: Query | None = None) -> RentmanPage[TaxClass]:
+        """Fetch one page of tax classes."""
+        return await self._call(TAX_CLASSES, CollectionArgs(query=query))
+
+    def async_iter_tax_classes(self, query: Query | None = None) -> AsyncIterator[TaxClass]:
+        """Yield every tax class, following the cursor across pages."""
+        return self._iter_collection(TAX_CLASSES, CollectionArgs(query=query))
+
+    async def async_get_tax_class(self, tax_class_id: int) -> TaxClass | None:
+        """Fetch one tax class by its id."""
+        return await self._call(TAX_CLASSES_ITEM, ItemArgs(item_id=tax_class_id))
 
     async def _call[ArgsT, ModelT](
         self,

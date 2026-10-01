@@ -890,3 +890,194 @@ class ProjectRequestEquipment:
     factor: str
     order: str
     raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class Quote:
+    """One quotation sent to a customer for a project."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    number: str
+    customer: RentmanLink | None
+    contact: RentmanLink | None
+    date: datetime | None
+    expiration_date: datetime | None
+    version: int | None
+    subject: str
+    show_tax: bool
+    project: RentmanLink | Project
+    filename: str
+    project_total_price: float | None
+    project_total_price_cancelled: float | None
+    project_rental_price: float | None
+    project_sale_price: float | None
+    project_crew_price: float | None
+    project_transport_price: float | None
+    project_other_price: float | None
+    project_insurance_price: float | None
+    project_services_price: float | None
+    price: float | None
+    price_invat: float | None
+    vat_amount: float | None
+    tags: tuple[str, ...]
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class Contract:
+    """One contract signed with a customer for a project."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    number: str
+    customer: RentmanLink | None
+    contact: RentmanLink | None
+    date: datetime | None
+    expiration_date: datetime | None
+    version: int | None
+    subject: str
+    show_tax: bool
+    project: RentmanLink | Project
+    filename: str
+    project_total_price: float | None
+    project_total_price_cancelled: float | None
+    project_rental_price: float | None
+    project_sale_price: float | None
+    project_crew_price: float | None
+    project_transport_price: float | None
+    project_other_price: float | None
+    project_insurance_price: float | None
+    project_services_price: float | None
+    price: float | None
+    price_invat: float | None
+    vat_amount: float | None
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class Invoice:
+    """One invoice issued for a project."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    customer: RentmanLink | None
+    account_manager: RentmanLink | None
+    contact: RentmanLink | None
+    expiration: datetime | None
+    date: datetime | None
+    number: str
+    procent: float | None
+    from_project: bool
+    subject: str
+    finalized: bool
+    integration_reference_id: str | None
+    project: RentmanLink | Project | None
+    filename: str
+    project_total_price: float | None
+    project_total_price_cancelled: float | None
+    project_rental_price: float | None
+    project_sale_price: float | None
+    project_crew_price: float | None
+    project_transport_price: float | None
+    project_other_price: float | None
+    project_insurance_price: float | None
+    project_services_price: float | None
+    sum_factuurregels: float | None
+    price: float | None
+    price_invat: float | None
+    vat_amount: float | None
+    invoicetype: str
+    outstanding_balance: float | None
+    total_paid: float | None
+    is_paid: bool
+    date_sent: datetime | None
+    payment_reminder_sent: int | None
+    final_payment_reminder_sent: datetime | None
+    payment_date: datetime | None
+    days_after_expiry: int | None
+    tags: tuple[str, ...]
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class LedgerCode:
+    """One ledger account that financial lines book to."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    code: str
+    is_credit: bool
+    is_debit: bool
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class TaxClass:
+    """One tax class applied to financial lines."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    name: str
+    code: str
+    type: str
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class InvoiceLine:
+    """One VAT line on a quote, contract, or invoice."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    item: int | None
+    base: float | None
+    ledger: RentmanLink | LedgerCode
+    vatrate: float | None
+    vatamount: float | None
+    priceincl: float | None
+    ledgercode: str
+    parent_api_path: str
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class Payment:
+    """One payment recorded against an invoice."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    invoice: RentmanLink | Invoice
+    moment: datetime | None
+    amount: float | None
+    description: str
+    payment_import_source: str
+    raw: dict[str, Any] | None = None

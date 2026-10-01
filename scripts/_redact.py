@@ -75,6 +75,9 @@ REDACTED_KEYS = {
     "remark_planner",
     "remark_client",
     "remark_crew",
+    "subject",
+    "filename",
+    "integration_reference_id",
 }
 
 
