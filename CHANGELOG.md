@@ -14,6 +14,7 @@ Before 1.0, breaking changes ship as minor bumps.
 - Add the equipment adjacent resources
 - Add the project planning resources
 - Add the financial resources
+- Add the subrental and purchase order resources
 
 ## [0.1.0] - 2026-10-01
 
