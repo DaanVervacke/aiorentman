@@ -92,6 +92,18 @@ Models
    :members:
 .. autoclass:: aiorentman.TaxClass
    :members:
+.. autoclass:: aiorentman.Subrental
+   :members:
+.. autoclass:: aiorentman.SubrentalEquipmentGroup
+   :members:
+.. autoclass:: aiorentman.SubrentalEquipment
+   :members:
+.. autoclass:: aiorentman.PurchaseOrder
+   :members:
+.. autoclass:: aiorentman.PurchaseOrderCost
+   :members:
+.. autoclass:: aiorentman.PurchaseOrderGlobalCost
+   :members:
 
 Exceptions
 ----------

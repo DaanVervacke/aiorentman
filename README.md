@@ -90,6 +90,18 @@ The library covers the resources an RFID and materials project needs, read only:
 | Payments | `async_list_payments` | `async_iter_payments` | `async_get_payment` |
 | Ledger codes | `async_list_ledger_codes` | `async_iter_ledger_codes` | `async_get_ledger_code` |
 | Tax classes | `async_list_tax_classes` | `async_iter_tax_classes` | `async_get_tax_class` |
+| Subrentals | `async_list_subrentals` | `async_iter_subrentals` | `async_get_subrental` |
+| Subrental equipment | `async_list_subrental_equipment` | `async_iter_subrental_equipment` | `async_get_subrental_equipment` |
+| Subrental equipment of a subrental | `async_list_subrental_equipment_of_subrental` | `async_iter_subrental_equipment_of_subrental` | |
+| Subrental equipment of a group | `async_list_subrental_equipment_of_subrental_equipment_group` | `async_iter_subrental_equipment_of_subrental_equipment_group` | |
+| Subrental equipment groups | `async_list_subrental_equipment_groups` | `async_iter_subrental_equipment_groups` | `async_get_subrental_equipment_group` |
+| Equipment groups of a subrental | `async_list_subrental_equipment_groups_of_subrental` | `async_iter_subrental_equipment_groups_of_subrental` | |
+| Purchase orders | `async_list_purchase_orders` | `async_iter_purchase_orders` | `async_get_purchase_order` |
+| Invoice lines of a purchase order | `async_list_invoice_lines_of_purchase_order` | `async_iter_invoice_lines_of_purchase_order` | |
+| Purchase order costs | `async_list_purchase_order_costs` | `async_iter_purchase_order_costs` | `async_get_purchase_order_cost` |
+| Costs of a purchase order | `async_list_purchase_order_costs_of_purchase_order` | `async_iter_purchase_order_costs_of_purchase_order` | |
+| Purchase order global costs | `async_list_purchase_order_global_costs` | `async_iter_purchase_order_global_costs` | `async_get_purchase_order_global_cost` |
+| Global costs of a purchase order | `async_list_purchase_order_global_costs_of_purchase_order` | `async_iter_purchase_order_global_costs_of_purchase_order` | |
 
 ## Token
 

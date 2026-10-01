@@ -24,12 +24,19 @@ from aiorentman.models import (
     ProjectRequestEquipment,
     ProjectStatus,
     ProjectVehicle,
+    PurchaseOrder,
+    PurchaseOrderCost,
+    PurchaseOrderGlobalCost,
     Quote,
     RentmanLink,
     RentmanPage,
     SerialNumber,
+    Status,
     StockLocation,
     Subproject,
+    Subrental,
+    SubrentalEquipment,
+    SubrentalEquipmentGroup,
     Supplier,
     TaxClass,
     Vehicle,
@@ -58,8 +65,14 @@ from aiorentman.parsers import (
     parse_project_status,
     parse_project_type,
     parse_project_vehicle,
+    parse_purchase_order,
+    parse_purchase_order_cost,
+    parse_purchase_order_global_cost,
     parse_quote,
     parse_serial_number,
+    parse_subrental,
+    parse_subrental_equipment,
+    parse_subrental_equipment_group,
     parse_supplier,
     parse_tax_class,
     parse_vehicle,
@@ -603,3 +616,137 @@ def test_parse_ledger_code_and_tax_class_keep_their_scalars() -> None:
     tax_class = parse_tax_class({"id": 2, "name": "Laag tarief", "type": "vat"})
     assert isinstance(tax_class, TaxClass)
     assert tax_class.type == "vat"
+
+
+def test_parse_subrental_coerces_number_and_resolves_links() -> None:
+    subrental = parse_subrental(
+        {
+            "number": 1,
+            "status": {"id": 3, "name": "Optie"},
+            "asset_location_to": {"id": 1, "name": "Main warehouse"},
+            "supplier_project": "/projects/130",
+            "tags": "trial",
+        }
+    )
+    assert isinstance(subrental, Subrental)
+    assert subrental.number == "1"
+    assert isinstance(subrental.status, Status)
+    assert subrental.status.id == 3
+    assert isinstance(subrental.asset_location_to, StockLocation)
+    assert subrental.asset_location_to.id == 1
+    assert subrental.supplier_project == RentmanLink("/projects/130")
+
+
+def test_parse_subrental_falls_back_to_empty_links() -> None:
+    subrental = parse_subrental({})
+    assert subrental.status == RentmanLink("")
+    assert subrental.number == ""
+    assert subrental.supplier_project is None
+    assert subrental.tags == ()
+
+
+def test_parse_subrental_group_and_equipment_keep_their_scalars() -> None:
+    group = parse_subrental_equipment_group({"subrental": "/subrentals/17", "order": 0})
+    assert isinstance(group, SubrentalEquipmentGroup)
+    assert group.subrental == RentmanLink("/subrentals/17")
+    assert group.order == "0"
+    line = parse_subrental_equipment(
+        {
+            "subrental_group": {"id": 2, "name": "Inhuur"},
+            "equipment": {"id": 358, "code": "AUD-001"},
+            "factor": 1,
+            "order": 0,
+        }
+    )
+    assert isinstance(line, SubrentalEquipment)
+    assert isinstance(line.subrental_group, SubrentalEquipmentGroup)
+    assert line.subrental_group.id == 2
+    assert isinstance(line.equipment, Equipment)
+    assert line.equipment.id == 358
+    assert line.factor == "1"
+    assert line.order == "0"
+
+
+def test_parse_subrental_equipment_resolves_self_reference() -> None:
+    line = parse_subrental_equipment({"parent": {"id": 3, "name": "Truck"}})
+    assert isinstance(line.parent, SubrentalEquipment)
+    assert line.parent.id == 3
+
+
+def test_parse_subrental_equipment_falls_back_to_an_empty_link() -> None:
+    line = parse_subrental_equipment({})
+    assert line.subrental_group == RentmanLink("")
+    assert line.parent is None
+    assert line.lineprice is None
+
+
+def test_parse_purchase_order_keeps_its_scalars() -> None:
+    order = parse_purchase_order(
+        {
+            "owner": "/crew/33",
+            "delivery_warehouse": {"id": 1, "name": "Main warehouse"},
+            "projects_json": '[{"id": 118}]',
+            "export_message": None,
+            "previous_status": "draft",
+        }
+    )
+    assert isinstance(order, PurchaseOrder)
+    assert order.owner == RentmanLink("/crew/33")
+    assert isinstance(order.delivery_warehouse, StockLocation)
+    assert order.delivery_warehouse.id == 1
+    assert order.projects_json == '[{"id": 118}]'
+    assert order.export_message is None
+    assert order.previous_status == "draft"
+
+
+def test_parse_purchase_order_degrades_on_sparse_payloads() -> None:
+    order = parse_purchase_order({})
+    assert order.owner == RentmanLink("")
+    assert order.previous_status == ""
+    assert order.delivery_warehouse is None
+    assert order.tags == ()
+
+
+def test_parse_purchase_order_cost_keeps_its_project_text() -> None:
+    cost = parse_purchase_order_cost(
+        {
+            "purchase_order": {"id": 1, "number": "01"},
+            "project": "116 Festival Demo Dance",
+            "costitem": 52,
+            "costitemtype": "Planningpersoneel",
+        }
+    )
+    assert isinstance(cost, PurchaseOrderCost)
+    assert isinstance(cost.purchase_order, PurchaseOrder)
+    assert cost.purchase_order.id == 1
+    assert cost.project == "116 Festival Demo Dance"
+    assert cost.costitem == 52
+
+
+def test_parse_purchase_order_cost_falls_back_to_an_empty_link() -> None:
+    cost = parse_purchase_order_cost({})
+    assert cost.purchase_order == RentmanLink("")
+    assert cost.project == ""
+    assert cost.quantity is None
+
+
+def test_parse_purchase_order_global_cost_resolves_expanded_links() -> None:
+    global_cost = parse_purchase_order_global_cost(
+        {
+            "purchase_order": {"id": 1, "number": "01"},
+            "taxclass": {"id": 3, "name": "Hoog tarief"},
+            "unit_purchase_cost": 10.5,
+        }
+    )
+    assert isinstance(global_cost, PurchaseOrderGlobalCost)
+    assert isinstance(global_cost.purchase_order, PurchaseOrder)
+    assert global_cost.purchase_order.id == 1
+    assert isinstance(global_cost.taxclass, TaxClass)
+    assert global_cost.taxclass.id == 3
+    assert global_cost.unit_purchase_cost == 10.5
+
+
+def test_parse_purchase_order_global_cost_falls_back_to_an_empty_link() -> None:
+    global_cost = parse_purchase_order_global_cost({})
+    assert global_cost.purchase_order == RentmanLink("")
+    assert global_cost.taxclass is None

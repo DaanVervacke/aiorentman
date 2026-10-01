@@ -31,6 +31,9 @@ from .models import (
     ProjectStatus,
     ProjectType,
     ProjectVehicle,
+    PurchaseOrder,
+    PurchaseOrderCost,
+    PurchaseOrderGlobalCost,
     Quote,
     RentmanLink,
     RentmanPage,
@@ -40,6 +43,9 @@ from .models import (
     StockLocation,
     StockMovement,
     Subproject,
+    Subrental,
+    SubrentalEquipment,
+    SubrentalEquipmentGroup,
     Supplier,
     TaxClass,
     Vehicle,
@@ -1244,5 +1250,179 @@ def parse_payment(data: Mapping[str, Any]) -> Payment:
         amount=_float_field(data, "amount"),
         description=_str_field(data, "description"),
         payment_import_source=_str_field(data, "payment_import_source"),
+        raw=dict(data),
+    )
+
+
+def parse_subrental(data: Mapping[str, Any]) -> Subrental:
+    """Build the subrental model from one subrental payload."""
+    return Subrental(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        name=_str_field(data, "name"),
+        accountmanager=_link_field(data, "accountmanager"),
+        reference=_str_field(data, "reference"),
+        supplier=_link_field(data, "supplier"),
+        number=_coerced_str_field(data, "number"),
+        contactperson=_link_field(data, "contactperson"),
+        location=_link_field(data, "location"),
+        location_contact=_link_field(data, "location_contact"),
+        usageperiod_start=_datetime_field(data, "usageperiod_start"),
+        usageperiod_end=_datetime_field(data, "usageperiod_end"),
+        planperiod_start=_datetime_field(data, "planperiod_start"),
+        planperiod_end=_datetime_field(data, "planperiod_end"),
+        delivery_in=_datetime_field(data, "delivery_in"),
+        delivery_out=_datetime_field(data, "delivery_out"),
+        equipment_cost=_float_field(data, "equipment_cost"),
+        price=_float_field(data, "price"),
+        extra_cost=_float_field(data, "extra_cost"),
+        auto_update_costs=_bool_field(data, "auto_update_costs"),
+        remark=_str_field(data, "remark"),
+        type=_str_field(data, "type"),
+        status=_link_or_model_field(data, "status", parse_status)
+        or RentmanLink(_str_field(data, "status")),
+        sent=_datetime_field(data, "sent"),
+        asset_location_to=_link_or_model_field(data, "asset_location_to", parse_stock_location),
+        asset_location_from=_link_or_model_field(data, "asset_location_from", parse_stock_location),
+        is_internal=_bool_field(data, "is_internal"),
+        supplier_project=_link_or_model_field(data, "supplier_project", parse_project),
+        tags=_codes_field(data, "tags"),
+        custom=_custom_field(data),
+        raw=dict(data),
+    )
+
+
+def parse_subrental_equipment_group(data: Mapping[str, Any]) -> SubrentalEquipmentGroup:
+    """Build the subrental group model from one group payload."""
+    return SubrentalEquipmentGroup(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        subrental=_link_or_model_field(data, "subrental", parse_subrental)
+        or RentmanLink(_str_field(data, "subrental")),
+        name=_str_field(data, "name"),
+        order=_coerced_str_field(data, "order"),
+        supplier_category=_link_field(data, "supplier_category"),
+        raw=dict(data),
+    )
+
+
+def parse_subrental_equipment(data: Mapping[str, Any]) -> SubrentalEquipment:
+    """Build the subrental equipment model from one subrental line payload."""
+    return SubrentalEquipment(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        subrental_group=_link_or_model_field(
+            data, "subrental_group", parse_subrental_equipment_group
+        )
+        or RentmanLink(_str_field(data, "subrental_group")),
+        equipment=_link_or_model_field(data, "equipment", parse_equipment),
+        parent=_link_or_model_field(data, "parent", parse_subrental_equipment),
+        planperiod_start=_datetime_field(data, "planperiod_start"),
+        planperiod_end=_datetime_field(data, "planperiod_end"),
+        name=_str_field(data, "name"),
+        quantity=_int_field(data, "quantity"),
+        quantity_total=_int_field(data, "quantity_total"),
+        unit_price=_float_field(data, "unit_price"),
+        discount=_float_field(data, "discount"),
+        factor=_coerced_str_field(data, "factor"),
+        order=_coerced_str_field(data, "order"),
+        remark=_str_field(data, "remark"),
+        lineprice=_float_field(data, "lineprice"),
+        supplier_planningmateriaal=_link_field(data, "supplier_planningmateriaal"),
+        raw=dict(data),
+    )
+
+
+def parse_purchase_order(data: Mapping[str, Any]) -> PurchaseOrder:
+    """Build the purchase order model from one purchase order payload."""
+    return PurchaseOrder(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        filename=_str_field(data, "filename"),
+        subject=_str_field(data, "subject"),
+        owner=_link_field(data, "owner") or RentmanLink(_str_field(data, "owner")),
+        date_of_issue=_datetime_field(data, "date_of_issue"),
+        delivery_date=_datetime_field(data, "delivery_date"),
+        description=_str_field(data, "description"),
+        number=_str_field(data, "number"),
+        approval_status=_str_field(data, "approval_status"),
+        previous_status=_str_field(data, "previous_status"),
+        approved_amount=_float_field(data, "approved_amount"),
+        supplier=_link_field(data, "supplier"),
+        contact_person=_link_field(data, "contact_person"),
+        delivery_type=_str_field(data, "delivery_type"),
+        delivery_location=_link_field(data, "delivery_location"),
+        delivery_location_person=_link_field(data, "delivery_location_person"),
+        delivery_warehouse=_link_or_model_field(data, "delivery_warehouse", parse_stock_location),
+        accounting_code=_str_field(data, "accounting_code"),
+        export_status=_str_field(data, "export_status"),
+        export_date=_datetime_field(data, "export_date"),
+        export_message=_str_or_none_field(data, "export_message"),
+        tags=_codes_field(data, "tags"),
+        underlying_cost_amount=_float_field(data, "underlying_cost_amount"),
+        underlying_cost_amount_tax=_float_field(data, "underlying_cost_amount_tax"),
+        underlying_cost_amount_with_tax=_float_field(data, "underlying_cost_amount_with_tax"),
+        approved_by=_link_field(data, "approved_by"),
+        approved_at=_datetime_field(data, "approved_at"),
+        projects_json=_str_or_none_field(data, "projects_json"),
+        custom=_custom_field(data),
+        raw=dict(data),
+    )
+
+
+def parse_purchase_order_cost(data: Mapping[str, Any]) -> PurchaseOrderCost:
+    """Build the purchase order cost model from one cost line payload."""
+    return PurchaseOrderCost(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        purchase_order=_link_or_model_field(data, "purchase_order", parse_purchase_order)
+        or RentmanLink(_str_field(data, "purchase_order")),
+        costitem=_int_field(data, "costitem"),
+        costitemtype=_str_field(data, "costitemtype"),
+        approved_amount=_float_field(data, "approved_amount"),
+        project=_str_field(data, "project"),
+        underlying_cost_amount=_float_field(data, "underlying_cost_amount"),
+        underlying_cost_amount_tax=_float_field(data, "underlying_cost_amount_tax"),
+        underlying_cost_amount_with_tax=_float_field(data, "underlying_cost_amount_with_tax"),
+        quantity=_int_field(data, "quantity"),
+        raw=dict(data),
+    )
+
+
+def parse_purchase_order_global_cost(data: Mapping[str, Any]) -> PurchaseOrderGlobalCost:
+    """Build the global cost model from one global cost line payload."""
+    return PurchaseOrderGlobalCost(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        purchase_order=_link_or_model_field(data, "purchase_order", parse_purchase_order)
+        or RentmanLink(_str_field(data, "purchase_order")),
+        name=_str_field(data, "name"),
+        unit_purchase_cost=_float_field(data, "unit_purchase_cost"),
+        quantity=_int_field(data, "quantity"),
+        taxclass=_link_or_model_field(data, "taxclass", parse_tax_class),
         raw=dict(data),
     )

@@ -1,0 +1,31 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:48+02:00",
+      "creator": null,
+      "displayname": "Synthetic 04b4076e714e",
+      "subrental_group": "/subrentalequipmentgroup/2",
+      "equipment": "/equipment/358",
+      "parent": null,
+      "planperiod_start": "2026-10-02T00:00:00+02:00",
+      "planperiod_end": "2026-10-10T00:00:00+02:00",
+      "name": "Synthetic ddc0dac8ba4f",
+      "quantity": 1,
+      "quantity_total": 1,
+      "unit_price": 250,
+      "discount": 0,
+      "factor": 1,
+      "order": 0,
+      "remark": "",
+      "lineprice": 250,
+      "supplier_planningmateriaal": null,
+      "updateHash": "17ffcf291d2f0df0aa526920ed277746"
+    }
+  ],
+  "itemCount": 1,
+  "limit": 50,
+  "offset": 0,
+  "next_page_url": null
+}

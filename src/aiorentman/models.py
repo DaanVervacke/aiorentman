@@ -1081,3 +1081,170 @@ class Payment:
     description: str
     payment_import_source: str
     raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class Subrental:
+    """One subrental order placed with an external supplier."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    name: str
+    accountmanager: RentmanLink | None
+    reference: str
+    supplier: RentmanLink | None
+    number: str
+    contactperson: RentmanLink | None
+    location: RentmanLink | None
+    location_contact: RentmanLink | None
+    usageperiod_start: datetime | None
+    usageperiod_end: datetime | None
+    planperiod_start: datetime | None
+    planperiod_end: datetime | None
+    delivery_in: datetime | None
+    delivery_out: datetime | None
+    equipment_cost: float | None
+    price: float | None
+    extra_cost: float | None
+    auto_update_costs: bool
+    remark: str
+    type: str
+    status: RentmanLink | Status
+    sent: datetime | None
+    asset_location_to: RentmanLink | StockLocation | None
+    asset_location_from: RentmanLink | StockLocation | None
+    is_internal: bool
+    supplier_project: RentmanLink | Project | None
+    tags: tuple[str, ...]
+    custom: dict[str, Any]
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class SubrentalEquipmentGroup:
+    """One equipment group inside a subrental."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    subrental: RentmanLink | Subrental
+    name: str
+    order: str
+    supplier_category: RentmanLink | None
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class SubrentalEquipment:
+    """One equipment line inside a subrental."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    subrental_group: RentmanLink | SubrentalEquipmentGroup
+    equipment: RentmanLink | Equipment | None
+    parent: RentmanLink | SubrentalEquipment | None
+    planperiod_start: datetime | None
+    planperiod_end: datetime | None
+    name: str
+    quantity: int | None
+    quantity_total: int | None
+    unit_price: float | None
+    discount: float | None
+    factor: str
+    order: str
+    remark: str
+    lineprice: float | None
+    supplier_planningmateriaal: RentmanLink | None
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class PurchaseOrder:
+    """One purchase order sent to a supplier."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    filename: str
+    subject: str
+    owner: RentmanLink
+    date_of_issue: datetime | None
+    delivery_date: datetime | None
+    description: str
+    number: str
+    approval_status: str
+    previous_status: str
+    approved_amount: float | None
+    supplier: RentmanLink | None
+    contact_person: RentmanLink | None
+    delivery_type: str
+    delivery_location: RentmanLink | None
+    delivery_location_person: RentmanLink | None
+    delivery_warehouse: RentmanLink | StockLocation | None
+    accounting_code: str
+    export_status: str
+    export_date: datetime | None
+    export_message: str | None
+    tags: tuple[str, ...]
+    underlying_cost_amount: float | None
+    underlying_cost_amount_tax: float | None
+    underlying_cost_amount_with_tax: float | None
+    approved_by: RentmanLink | None
+    approved_at: datetime | None
+    projects_json: str | None
+    custom: dict[str, Any]
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class PurchaseOrderCost:
+    """One underlying cost line of a purchase order."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    purchase_order: RentmanLink | PurchaseOrder
+    costitem: int | None
+    costitemtype: str
+    approved_amount: float | None
+    project: str
+    underlying_cost_amount: float | None
+    underlying_cost_amount_tax: float | None
+    underlying_cost_amount_with_tax: float | None
+    quantity: int | None
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class PurchaseOrderGlobalCost:
+    """One global cost line of a purchase order."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    purchase_order: RentmanLink | PurchaseOrder
+    name: str
+    unit_purchase_cost: float | None
+    quantity: int | None
+    taxclass: RentmanLink | TaxClass | None
+    raw: dict[str, Any] | None = None

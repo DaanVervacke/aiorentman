@@ -36,6 +36,7 @@ from ._endpoints import (
     INVOICE_LINES,
     INVOICE_LINES_ITEM,
     INVOICE_LINES_OF_INVOICE,
+    INVOICE_LINES_OF_PURCHASE_ORDER,
     INVOICE_LINES_OF_QUOTE,
     INVOICES,
     INVOICES_ITEM,
@@ -85,6 +86,14 @@ from ._endpoints import (
     PROJECT_VEHICLES_OF_SUBPROJECT,
     PROJECTS,
     PROJECTS_ITEM,
+    PURCHASE_ORDER_COSTS,
+    PURCHASE_ORDER_COSTS_ITEM,
+    PURCHASE_ORDER_COSTS_OF_PURCHASE_ORDER,
+    PURCHASE_ORDER_GLOBAL_COSTS,
+    PURCHASE_ORDER_GLOBAL_COSTS_ITEM,
+    PURCHASE_ORDER_GLOBAL_COSTS_OF_PURCHASE_ORDER,
+    PURCHASE_ORDERS,
+    PURCHASE_ORDERS_ITEM,
     QUOTES,
     QUOTES_ITEM,
     QUOTES_OF_PROJECT,
@@ -104,6 +113,15 @@ from ._endpoints import (
     SUBPROJECTS,
     SUBPROJECTS_ITEM,
     SUBPROJECTS_OF_PROJECT,
+    SUBRENTAL_EQUIPMENT,
+    SUBRENTAL_EQUIPMENT_GROUPS,
+    SUBRENTAL_EQUIPMENT_GROUPS_ITEM,
+    SUBRENTAL_EQUIPMENT_GROUPS_OF_SUBRENTAL,
+    SUBRENTAL_EQUIPMENT_ITEM,
+    SUBRENTAL_EQUIPMENT_OF_SUBRENTAL,
+    SUBRENTAL_EQUIPMENT_OF_SUBRENTAL_EQUIPMENT_GROUP,
+    SUBRENTALS,
+    SUBRENTALS_ITEM,
     SUPPLIERS,
     SUPPLIERS_ITEM,
     SUPPLIERS_OF_EQUIPMENT,
@@ -160,6 +178,9 @@ from .models import (
     ProjectStatus,
     ProjectType,
     ProjectVehicle,
+    PurchaseOrder,
+    PurchaseOrderCost,
+    PurchaseOrderGlobalCost,
     Quote,
     RentmanPage,
     Repair,
@@ -168,6 +189,9 @@ from .models import (
     StockLocation,
     StockMovement,
     Subproject,
+    Subrental,
+    SubrentalEquipment,
+    SubrentalEquipmentGroup,
     Supplier,
     TaxClass,
     Vehicle,
@@ -1330,6 +1354,223 @@ class RentmanClient:
     async def async_get_tax_class(self, tax_class_id: int) -> TaxClass | None:
         """Fetch one tax class by its id."""
         return await self._call(TAX_CLASSES_ITEM, ItemArgs(item_id=tax_class_id))
+
+    async def async_list_subrentals(self, query: Query | None = None) -> RentmanPage[Subrental]:
+        """Fetch one page of subrentals."""
+        return await self._call(SUBRENTALS, CollectionArgs(query=query))
+
+    def async_iter_subrentals(self, query: Query | None = None) -> AsyncIterator[Subrental]:
+        """Yield every subrental, following the cursor across pages."""
+        return self._iter_collection(SUBRENTALS, CollectionArgs(query=query))
+
+    async def async_get_subrental(self, subrental_id: int) -> Subrental | None:
+        """Fetch one subrental by its id."""
+        return await self._call(SUBRENTALS_ITEM, ItemArgs(item_id=subrental_id))
+
+    async def async_list_subrental_equipment_of_subrental(
+        self, subrental_id: int, query: Query | None = None
+    ) -> RentmanPage[SubrentalEquipment]:
+        """Fetch one page of equipment of one subrental."""
+        return await self._call(
+            SUBRENTAL_EQUIPMENT_OF_SUBRENTAL,
+            ParentCollectionArgs(parent_id=subrental_id, query=query),
+        )
+
+    def async_iter_subrental_equipment_of_subrental(
+        self, subrental_id: int, query: Query | None = None
+    ) -> AsyncIterator[SubrentalEquipment]:
+        """Yield every equipment line of one subrental, following the cursor."""
+        return self._iter_collection(
+            SUBRENTAL_EQUIPMENT_OF_SUBRENTAL,
+            ParentCollectionArgs(parent_id=subrental_id, query=query),
+        )
+
+    async def async_list_subrental_equipment_groups_of_subrental(
+        self, subrental_id: int, query: Query | None = None
+    ) -> RentmanPage[SubrentalEquipmentGroup]:
+        """Fetch one page of equipment groups of one subrental."""
+        return await self._call(
+            SUBRENTAL_EQUIPMENT_GROUPS_OF_SUBRENTAL,
+            ParentCollectionArgs(parent_id=subrental_id, query=query),
+        )
+
+    def async_iter_subrental_equipment_groups_of_subrental(
+        self, subrental_id: int, query: Query | None = None
+    ) -> AsyncIterator[SubrentalEquipmentGroup]:
+        """Yield every equipment group of one subrental, following the cursor."""
+        return self._iter_collection(
+            SUBRENTAL_EQUIPMENT_GROUPS_OF_SUBRENTAL,
+            ParentCollectionArgs(parent_id=subrental_id, query=query),
+        )
+
+    async def async_list_subrental_equipment(
+        self, query: Query | None = None
+    ) -> RentmanPage[SubrentalEquipment]:
+        """Fetch one page of subrental equipment lines."""
+        return await self._call(SUBRENTAL_EQUIPMENT, CollectionArgs(query=query))
+
+    def async_iter_subrental_equipment(
+        self, query: Query | None = None
+    ) -> AsyncIterator[SubrentalEquipment]:
+        """Yield every subrental equipment line, following the cursor across pages."""
+        return self._iter_collection(SUBRENTAL_EQUIPMENT, CollectionArgs(query=query))
+
+    async def async_get_subrental_equipment(
+        self, subrental_equipment_id: int
+    ) -> SubrentalEquipment | None:
+        """Fetch one subrental equipment line by its id."""
+        return await self._call(
+            SUBRENTAL_EQUIPMENT_ITEM,
+            ItemArgs(item_id=subrental_equipment_id),
+        )
+
+    async def async_list_subrental_equipment_of_subrental_equipment_group(
+        self, group_id: int, query: Query | None = None
+    ) -> RentmanPage[SubrentalEquipment]:
+        """Fetch one page of equipment of one subrental equipment group."""
+        return await self._call(
+            SUBRENTAL_EQUIPMENT_OF_SUBRENTAL_EQUIPMENT_GROUP,
+            ParentCollectionArgs(parent_id=group_id, query=query),
+        )
+
+    def async_iter_subrental_equipment_of_subrental_equipment_group(
+        self, group_id: int, query: Query | None = None
+    ) -> AsyncIterator[SubrentalEquipment]:
+        """Yield every equipment line of one subrental group, following the cursor."""
+        return self._iter_collection(
+            SUBRENTAL_EQUIPMENT_OF_SUBRENTAL_EQUIPMENT_GROUP,
+            ParentCollectionArgs(parent_id=group_id, query=query),
+        )
+
+    async def async_list_subrental_equipment_groups(
+        self, query: Query | None = None
+    ) -> RentmanPage[SubrentalEquipmentGroup]:
+        """Fetch one page of subrental equipment groups."""
+        return await self._call(SUBRENTAL_EQUIPMENT_GROUPS, CollectionArgs(query=query))
+
+    def async_iter_subrental_equipment_groups(
+        self, query: Query | None = None
+    ) -> AsyncIterator[SubrentalEquipmentGroup]:
+        """Yield every subrental equipment group, following the cursor across pages."""
+        return self._iter_collection(SUBRENTAL_EQUIPMENT_GROUPS, CollectionArgs(query=query))
+
+    async def async_get_subrental_equipment_group(
+        self, group_id: int
+    ) -> SubrentalEquipmentGroup | None:
+        """Fetch one subrental equipment group by its id."""
+        return await self._call(SUBRENTAL_EQUIPMENT_GROUPS_ITEM, ItemArgs(item_id=group_id))
+
+    async def async_list_purchase_orders(
+        self, query: Query | None = None
+    ) -> RentmanPage[PurchaseOrder]:
+        """Fetch one page of purchase orders."""
+        return await self._call(PURCHASE_ORDERS, CollectionArgs(query=query))
+
+    def async_iter_purchase_orders(
+        self, query: Query | None = None
+    ) -> AsyncIterator[PurchaseOrder]:
+        """Yield every purchase order, following the cursor across pages."""
+        return self._iter_collection(PURCHASE_ORDERS, CollectionArgs(query=query))
+
+    async def async_get_purchase_order(self, purchase_order_id: int) -> PurchaseOrder | None:
+        """Fetch one purchase order by its id."""
+        return await self._call(PURCHASE_ORDERS_ITEM, ItemArgs(item_id=purchase_order_id))
+
+    async def async_list_invoice_lines_of_purchase_order(
+        self, purchase_order_id: int, query: Query | None = None
+    ) -> RentmanPage[InvoiceLine]:
+        """Fetch one page of invoice lines of one purchase order."""
+        return await self._call(
+            INVOICE_LINES_OF_PURCHASE_ORDER,
+            ParentCollectionArgs(parent_id=purchase_order_id, query=query),
+        )
+
+    def async_iter_invoice_lines_of_purchase_order(
+        self, purchase_order_id: int, query: Query | None = None
+    ) -> AsyncIterator[InvoiceLine]:
+        """Yield every invoice line of one purchase order, following the cursor."""
+        return self._iter_collection(
+            INVOICE_LINES_OF_PURCHASE_ORDER,
+            ParentCollectionArgs(parent_id=purchase_order_id, query=query),
+        )
+
+    async def async_list_purchase_order_costs_of_purchase_order(
+        self, purchase_order_id: int, query: Query | None = None
+    ) -> RentmanPage[PurchaseOrderCost]:
+        """Fetch one page of cost lines of one purchase order."""
+        return await self._call(
+            PURCHASE_ORDER_COSTS_OF_PURCHASE_ORDER,
+            ParentCollectionArgs(parent_id=purchase_order_id, query=query),
+        )
+
+    def async_iter_purchase_order_costs_of_purchase_order(
+        self, purchase_order_id: int, query: Query | None = None
+    ) -> AsyncIterator[PurchaseOrderCost]:
+        """Yield every cost line of one purchase order, following the cursor."""
+        return self._iter_collection(
+            PURCHASE_ORDER_COSTS_OF_PURCHASE_ORDER,
+            ParentCollectionArgs(parent_id=purchase_order_id, query=query),
+        )
+
+    async def async_list_purchase_order_global_costs_of_purchase_order(
+        self, purchase_order_id: int, query: Query | None = None
+    ) -> RentmanPage[PurchaseOrderGlobalCost]:
+        """Fetch one page of global cost lines of one purchase order."""
+        return await self._call(
+            PURCHASE_ORDER_GLOBAL_COSTS_OF_PURCHASE_ORDER,
+            ParentCollectionArgs(parent_id=purchase_order_id, query=query),
+        )
+
+    def async_iter_purchase_order_global_costs_of_purchase_order(
+        self, purchase_order_id: int, query: Query | None = None
+    ) -> AsyncIterator[PurchaseOrderGlobalCost]:
+        """Yield every global cost line of one purchase order, following the cursor."""
+        return self._iter_collection(
+            PURCHASE_ORDER_GLOBAL_COSTS_OF_PURCHASE_ORDER,
+            ParentCollectionArgs(parent_id=purchase_order_id, query=query),
+        )
+
+    async def async_list_purchase_order_costs(
+        self, query: Query | None = None
+    ) -> RentmanPage[PurchaseOrderCost]:
+        """Fetch one page of purchase order cost lines."""
+        return await self._call(PURCHASE_ORDER_COSTS, CollectionArgs(query=query))
+
+    def async_iter_purchase_order_costs(
+        self, query: Query | None = None
+    ) -> AsyncIterator[PurchaseOrderCost]:
+        """Yield every purchase order cost line, following the cursor across pages."""
+        return self._iter_collection(PURCHASE_ORDER_COSTS, CollectionArgs(query=query))
+
+    async def async_get_purchase_order_cost(
+        self, purchase_order_cost_id: int
+    ) -> PurchaseOrderCost | None:
+        """Fetch one purchase order cost line by its id."""
+        return await self._call(
+            PURCHASE_ORDER_COSTS_ITEM,
+            ItemArgs(item_id=purchase_order_cost_id),
+        )
+
+    async def async_list_purchase_order_global_costs(
+        self, query: Query | None = None
+    ) -> RentmanPage[PurchaseOrderGlobalCost]:
+        """Fetch one page of purchase order global cost lines."""
+        return await self._call(PURCHASE_ORDER_GLOBAL_COSTS, CollectionArgs(query=query))
+
+    def async_iter_purchase_order_global_costs(
+        self, query: Query | None = None
+    ) -> AsyncIterator[PurchaseOrderGlobalCost]:
+        """Yield every purchase order global cost line, following the cursor across pages."""
+        return self._iter_collection(PURCHASE_ORDER_GLOBAL_COSTS, CollectionArgs(query=query))
+
+    async def async_get_purchase_order_global_cost(
+        self, purchase_order_global_cost_id: int
+    ) -> PurchaseOrderGlobalCost | None:
+        """Fetch one purchase order global cost line by its id."""
+        return await self._call(
+            PURCHASE_ORDER_GLOBAL_COSTS_ITEM,
+            ItemArgs(item_id=purchase_order_global_cost_id),
+        )
 
     async def _call[ArgsT, ModelT](
         self,

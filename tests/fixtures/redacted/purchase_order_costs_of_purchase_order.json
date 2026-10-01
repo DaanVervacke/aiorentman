@@ -1,0 +1,59 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 72bbae0d9070",
+      "purchase_order": "/purchaseorders/1",
+      "costitem": 52,
+      "costitemtype": "Planningpersoneel",
+      "approved_amount": 0,
+      "project": "116 Festival Demo Dance",
+      "underlying_cost_amount": 0,
+      "underlying_cost_amount_tax": 0,
+      "underlying_cost_amount_with_tax": 0,
+      "quantity": 1,
+      "updateHash": "6226e7a79a629fdd68aa9cb8d5478c36"
+    },
+    {
+      "id": 2,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 910c66ada158",
+      "purchase_order": "/purchaseorders/1",
+      "costitem": 53,
+      "costitemtype": "Planningpersoneel",
+      "approved_amount": 0,
+      "project": "116 Festival Demo Dance",
+      "underlying_cost_amount": 0,
+      "underlying_cost_amount_tax": 0,
+      "underlying_cost_amount_with_tax": 0,
+      "quantity": 1,
+      "updateHash": "abf79ee83f6c19960de3bb2855bd856f"
+    },
+    {
+      "id": 3,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 0567f4e333d2",
+      "purchase_order": "/purchaseorders/1",
+      "costitem": 54,
+      "costitemtype": "Planningpersoneel",
+      "approved_amount": 0,
+      "project": "116 Festival Demo Dance",
+      "underlying_cost_amount": 0,
+      "underlying_cost_amount_tax": 0,
+      "underlying_cost_amount_with_tax": 0,
+      "quantity": 1,
+      "updateHash": "a4998cae6053d85f8703c0634eb48b3c"
+    }
+  ],
+  "itemCount": 3,
+  "limit": 50,
+  "offset": 0,
+  "next_page_url": null
+}

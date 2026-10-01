@@ -30,6 +30,9 @@ from .models import (
     ProjectStatus,
     ProjectType,
     ProjectVehicle,
+    PurchaseOrder,
+    PurchaseOrderCost,
+    PurchaseOrderGlobalCost,
     Quote,
     RentmanPage,
     Repair,
@@ -38,6 +41,9 @@ from .models import (
     StockLocation,
     StockMovement,
     Subproject,
+    Subrental,
+    SubrentalEquipment,
+    SubrentalEquipmentGroup,
     Supplier,
     TaxClass,
     Vehicle,
@@ -71,6 +77,9 @@ from .parsers import (
     parse_project_status,
     parse_project_type,
     parse_project_vehicle,
+    parse_purchase_order,
+    parse_purchase_order_cost,
+    parse_purchase_order_global_cost,
     parse_quote,
     parse_repair,
     parse_serial_number,
@@ -78,6 +87,9 @@ from .parsers import (
     parse_stock_location,
     parse_stock_movement,
     parse_subproject,
+    parse_subrental,
+    parse_subrental_equipment,
+    parse_subrental_equipment_group,
     parse_supplier,
     parse_tax_class,
     parse_vehicle,
@@ -1119,6 +1131,184 @@ TAX_CLASSES_ITEM: Endpoint[ItemArgs, TaxClass | None] = Endpoint(
     response_schema="TaxClassResponse",
 )
 
+SUBRENTALS: Endpoint[CollectionArgs, RentmanPage[Subrental]] = Endpoint(
+    name="subrentals",
+    method="GET",
+    path=lambda _args: "/subrentals",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_subrental),
+    response_schema="SubrentalResponse",
+)
+
+SUBRENTALS_ITEM: Endpoint[ItemArgs, Subrental | None] = Endpoint(
+    name="subrentals_item",
+    method="GET",
+    path=lambda args: f"/subrentals/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_subrental),
+    response_schema="SubrentalResponse",
+)
+
+SUBRENTAL_EQUIPMENT_OF_SUBRENTAL: Endpoint[
+    ParentCollectionArgs, RentmanPage[SubrentalEquipment]
+] = Endpoint(
+    name="subrental_equipment_of_subrental",
+    method="GET",
+    path=lambda args: f"/subrentals/{args.parent_id}/subrentalequipment",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_subrental_equipment),
+    response_schema="SubrentalEquipmentResponse",
+)
+
+SUBRENTAL_EQUIPMENT_GROUPS_OF_SUBRENTAL: Endpoint[
+    ParentCollectionArgs, RentmanPage[SubrentalEquipmentGroup]
+] = Endpoint(
+    name="subrental_equipment_groups_of_subrental",
+    method="GET",
+    path=lambda args: f"/subrentals/{args.parent_id}/subrentalequipmentgroup",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_subrental_equipment_group),
+    response_schema="SubrentalEquipmentGroupResponse",
+)
+
+SUBRENTAL_EQUIPMENT: Endpoint[CollectionArgs, RentmanPage[SubrentalEquipment]] = Endpoint(
+    name="subrental_equipment",
+    method="GET",
+    path=lambda _args: "/subrentalequipment",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_subrental_equipment),
+    response_schema="SubrentalEquipmentResponse",
+)
+
+SUBRENTAL_EQUIPMENT_ITEM: Endpoint[ItemArgs, SubrentalEquipment | None] = Endpoint(
+    name="subrental_equipment_item",
+    method="GET",
+    path=lambda args: f"/subrentalequipment/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_subrental_equipment),
+    response_schema="SubrentalEquipmentResponse",
+)
+
+SUBRENTAL_EQUIPMENT_OF_SUBRENTAL_EQUIPMENT_GROUP: Endpoint[
+    ParentCollectionArgs, RentmanPage[SubrentalEquipment]
+] = Endpoint(
+    name="subrental_equipment_of_subrental_equipment_group",
+    method="GET",
+    path=lambda args: f"/subrentalequipmentgroup/{args.parent_id}/subrentalequipment",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_subrental_equipment),
+    response_schema="SubrentalEquipmentResponse",
+)
+
+SUBRENTAL_EQUIPMENT_GROUPS: Endpoint[CollectionArgs, RentmanPage[SubrentalEquipmentGroup]] = (
+    Endpoint(
+        name="subrental_equipment_groups",
+        method="GET",
+        path=lambda _args: "/subrentalequipmentgroup",
+        params=_collection_params,
+        parse=lambda payload, _args: parse_page(payload, parse_subrental_equipment_group),
+        response_schema="SubrentalEquipmentGroupResponse",
+    )
+)
+
+SUBRENTAL_EQUIPMENT_GROUPS_ITEM: Endpoint[ItemArgs, SubrentalEquipmentGroup | None] = Endpoint(
+    name="subrental_equipment_groups_item",
+    method="GET",
+    path=lambda args: f"/subrentalequipmentgroup/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_subrental_equipment_group),
+    response_schema="SubrentalEquipmentGroupResponse",
+)
+
+PURCHASE_ORDERS: Endpoint[CollectionArgs, RentmanPage[PurchaseOrder]] = Endpoint(
+    name="purchase_orders",
+    method="GET",
+    path=lambda _args: "/purchaseorders",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_purchase_order),
+    response_schema="PurchaseOrderResponse",
+)
+
+PURCHASE_ORDERS_ITEM: Endpoint[ItemArgs, PurchaseOrder | None] = Endpoint(
+    name="purchase_orders_item",
+    method="GET",
+    path=lambda args: f"/purchaseorders/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_purchase_order),
+    response_schema="PurchaseOrderResponse",
+)
+
+INVOICE_LINES_OF_PURCHASE_ORDER: Endpoint[ParentCollectionArgs, RentmanPage[InvoiceLine]] = (
+    Endpoint(
+        name="invoice_lines_of_purchase_order",
+        method="GET",
+        path=lambda args: f"/purchaseorders/{args.parent_id}/invoicelines",
+        params=_linked_collection_params,
+        parse=lambda payload, _args: parse_page(payload, parse_invoice_line),
+        response_schema="InvoiceLineResponse",
+    )
+)
+
+PURCHASE_ORDER_COSTS_OF_PURCHASE_ORDER: Endpoint[
+    ParentCollectionArgs, RentmanPage[PurchaseOrderCost]
+] = Endpoint(
+    name="purchase_order_costs_of_purchase_order",
+    method="GET",
+    path=lambda args: f"/purchaseorders/{args.parent_id}/purchaseordercosts",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_purchase_order_cost),
+    response_schema="PurchaseOrderCostResponse",
+)
+
+PURCHASE_ORDER_GLOBAL_COSTS_OF_PURCHASE_ORDER: Endpoint[
+    ParentCollectionArgs, RentmanPage[PurchaseOrderGlobalCost]
+] = Endpoint(
+    name="purchase_order_global_costs_of_purchase_order",
+    method="GET",
+    path=lambda args: f"/purchaseorders/{args.parent_id}/purchaseorderglobalcosts",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_purchase_order_global_cost),
+    response_schema="PurchaseOrderGlobalCostResponse",
+)
+
+PURCHASE_ORDER_COSTS: Endpoint[CollectionArgs, RentmanPage[PurchaseOrderCost]] = Endpoint(
+    name="purchase_order_costs",
+    method="GET",
+    path=lambda _args: "/purchaseordercosts",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_purchase_order_cost),
+    response_schema="PurchaseOrderCostResponse",
+)
+
+PURCHASE_ORDER_COSTS_ITEM: Endpoint[ItemArgs, PurchaseOrderCost | None] = Endpoint(
+    name="purchase_order_costs_item",
+    method="GET",
+    path=lambda args: f"/purchaseordercosts/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_purchase_order_cost),
+    response_schema="PurchaseOrderCostResponse",
+)
+
+PURCHASE_ORDER_GLOBAL_COSTS: Endpoint[CollectionArgs, RentmanPage[PurchaseOrderGlobalCost]] = (
+    Endpoint(
+        name="purchase_order_global_costs",
+        method="GET",
+        path=lambda _args: "/purchaseorderglobalcosts",
+        params=_collection_params,
+        parse=lambda payload, _args: parse_page(payload, parse_purchase_order_global_cost),
+        response_schema="PurchaseOrderGlobalCostResponse",
+    )
+)
+
+PURCHASE_ORDER_GLOBAL_COSTS_ITEM: Endpoint[ItemArgs, PurchaseOrderGlobalCost | None] = Endpoint(
+    name="purchase_order_global_costs_item",
+    method="GET",
+    path=lambda args: f"/purchaseorderglobalcosts/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_purchase_order_global_cost),
+    response_schema="PurchaseOrderGlobalCostResponse",
+)
+
 CATALOG: tuple[Endpoint[Any, Any], ...] = (
     ACTUAL_CONTENT,
     ACTUAL_CONTENT_ITEM,
@@ -1225,4 +1415,22 @@ CATALOG: tuple[Endpoint[Any, Any], ...] = (
     LEDGER_CODES_ITEM,
     TAX_CLASSES,
     TAX_CLASSES_ITEM,
+    SUBRENTALS,
+    SUBRENTALS_ITEM,
+    SUBRENTAL_EQUIPMENT_OF_SUBRENTAL,
+    SUBRENTAL_EQUIPMENT_GROUPS_OF_SUBRENTAL,
+    SUBRENTAL_EQUIPMENT,
+    SUBRENTAL_EQUIPMENT_ITEM,
+    SUBRENTAL_EQUIPMENT_OF_SUBRENTAL_EQUIPMENT_GROUP,
+    SUBRENTAL_EQUIPMENT_GROUPS,
+    SUBRENTAL_EQUIPMENT_GROUPS_ITEM,
+    PURCHASE_ORDERS,
+    PURCHASE_ORDERS_ITEM,
+    INVOICE_LINES_OF_PURCHASE_ORDER,
+    PURCHASE_ORDER_COSTS_OF_PURCHASE_ORDER,
+    PURCHASE_ORDER_GLOBAL_COSTS_OF_PURCHASE_ORDER,
+    PURCHASE_ORDER_COSTS,
+    PURCHASE_ORDER_COSTS_ITEM,
+    PURCHASE_ORDER_GLOBAL_COSTS,
+    PURCHASE_ORDER_GLOBAL_COSTS_ITEM,
 )

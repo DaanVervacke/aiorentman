@@ -60,6 +60,12 @@ COLLECTIONS: tuple[tuple[str, str], ...] = (
     ("payments", "/payments"),
     ("ledger_codes", "/ledgercodes"),
     ("tax_classes", "/taxclasses"),
+    ("subrentals", "/subrentals"),
+    ("subrental_equipment", "/subrentalequipment"),
+    ("subrental_equipment_groups", "/subrentalequipmentgroup"),
+    ("purchase_orders", "/purchaseorders"),
+    ("purchase_order_costs", "/purchaseordercosts"),
+    ("purchase_order_global_costs", "/purchaseorderglobalcosts"),
 )
 
 LINKED_COLLECTIONS: tuple[tuple[str, str, str, str], ...] = (
@@ -138,6 +144,42 @@ LINKED_COLLECTIONS: tuple[tuple[str, str, str, str], ...] = (
     ("payments_of_invoice", "/invoices/{}/payments", "invoices.json", "id"),
     ("quotes_of_project", "/projects/{}/quotes", "quotes.json", "project"),
     ("contracts_of_project", "/projects/{}/contracts", "projects.json", "id"),
+    (
+        "subrental_equipment_of_subrental",
+        "/subrentals/{}/subrentalequipment",
+        "subrentals.json",
+        "id",
+    ),
+    (
+        "subrental_equipment_groups_of_subrental",
+        "/subrentals/{}/subrentalequipmentgroup",
+        "subrental_equipment_groups.json",
+        "subrental",
+    ),
+    (
+        "subrental_equipment_of_subrental_equipment_group",
+        "/subrentalequipmentgroup/{}/subrentalequipment",
+        "subrental_equipment.json",
+        "subrental_group",
+    ),
+    (
+        "invoice_lines_of_purchase_order",
+        "/purchaseorders/{}/invoicelines",
+        "purchase_orders.json",
+        "id",
+    ),
+    (
+        "purchase_order_costs_of_purchase_order",
+        "/purchaseorders/{}/purchaseordercosts",
+        "purchase_order_costs.json",
+        "purchase_order",
+    ),
+    (
+        "purchase_order_global_costs_of_purchase_order",
+        "/purchaseorders/{}/purchaseorderglobalcosts",
+        "purchase_orders.json",
+        "id",
+    ),
 )
 
 

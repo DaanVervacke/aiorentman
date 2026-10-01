@@ -179,6 +179,36 @@ COLLECTIONS: tuple[tuple[Callable[[RentmanClient], Awaitable[RentmanPage[Any]]],
     (lambda client: client.async_list_payments(), "/payments"),
     (lambda client: client.async_list_ledger_codes(), "/ledgercodes"),
     (lambda client: client.async_list_tax_classes(), "/taxclasses"),
+    (lambda client: client.async_list_subrentals(), "/subrentals"),
+    (lambda client: client.async_list_subrental_equipment(), "/subrentalequipment"),
+    (lambda client: client.async_list_subrental_equipment_groups(), "/subrentalequipmentgroup"),
+    (
+        lambda client: client.async_list_subrental_equipment_of_subrental(17),
+        "/subrentals/17/subrentalequipment",
+    ),
+    (
+        lambda client: client.async_list_subrental_equipment_groups_of_subrental(17),
+        "/subrentals/17/subrentalequipmentgroup",
+    ),
+    (
+        lambda client: client.async_list_subrental_equipment_of_subrental_equipment_group(2),
+        "/subrentalequipmentgroup/2/subrentalequipment",
+    ),
+    (lambda client: client.async_list_purchase_orders(), "/purchaseorders"),
+    (
+        lambda client: client.async_list_invoice_lines_of_purchase_order(1),
+        "/purchaseorders/1/invoicelines",
+    ),
+    (
+        lambda client: client.async_list_purchase_order_costs_of_purchase_order(1),
+        "/purchaseorders/1/purchaseordercosts",
+    ),
+    (
+        lambda client: client.async_list_purchase_order_global_costs_of_purchase_order(1),
+        "/purchaseorders/1/purchaseorderglobalcosts",
+    ),
+    (lambda client: client.async_list_purchase_order_costs(), "/purchaseordercosts"),
+    (lambda client: client.async_list_purchase_order_global_costs(), "/purchaseorderglobalcosts"),
 )
 
 ITEMS: tuple[tuple[Callable[[RentmanClient], Awaitable[Any]], str], ...] = (
@@ -221,6 +251,12 @@ ITEMS: tuple[tuple[Callable[[RentmanClient], Awaitable[Any]], str], ...] = (
     (lambda client: client.async_get_payment(1), "/payments/1"),
     (lambda client: client.async_get_ledger_code(1), "/ledgercodes/1"),
     (lambda client: client.async_get_tax_class(2), "/taxclasses/2"),
+    (lambda client: client.async_get_subrental(17), "/subrentals/17"),
+    (lambda client: client.async_get_subrental_equipment(1), "/subrentalequipment/1"),
+    (lambda client: client.async_get_subrental_equipment_group(1), "/subrentalequipmentgroup/1"),
+    (lambda client: client.async_get_purchase_order(1), "/purchaseorders/1"),
+    (lambda client: client.async_get_purchase_order_cost(1), "/purchaseordercosts/1"),
+    (lambda client: client.async_get_purchase_order_global_cost(1), "/purchaseorderglobalcosts/1"),
 )
 
 ITERATORS: tuple[tuple[Callable[[RentmanClient, Query | None], Any], str], ...] = (
@@ -409,6 +445,46 @@ ITERATORS: tuple[tuple[Callable[[RentmanClient, Query | None], Any], str], ...] 
     (lambda client, query: client.async_iter_payments(query), "/payments"),
     (lambda client, query: client.async_iter_ledger_codes(query), "/ledgercodes"),
     (lambda client, query: client.async_iter_tax_classes(query), "/taxclasses"),
+    (lambda client, query: client.async_iter_subrentals(query), "/subrentals"),
+    (lambda client, query: client.async_iter_subrental_equipment(query), "/subrentalequipment"),
+    (
+        lambda client, query: client.async_iter_subrental_equipment_groups(query),
+        "/subrentalequipmentgroup",
+    ),
+    (
+        lambda client, query: client.async_iter_subrental_equipment_of_subrental(17, query),
+        "/subrentals/17/subrentalequipment",
+    ),
+    (
+        lambda client, query: client.async_iter_subrental_equipment_groups_of_subrental(17, query),
+        "/subrentals/17/subrentalequipmentgroup",
+    ),
+    (
+        lambda client, query: client.async_iter_subrental_equipment_of_subrental_equipment_group(
+            2, query
+        ),
+        "/subrentalequipmentgroup/2/subrentalequipment",
+    ),
+    (lambda client, query: client.async_iter_purchase_orders(query), "/purchaseorders"),
+    (
+        lambda client, query: client.async_iter_invoice_lines_of_purchase_order(1, query),
+        "/purchaseorders/1/invoicelines",
+    ),
+    (
+        lambda client, query: client.async_iter_purchase_order_costs_of_purchase_order(1, query),
+        "/purchaseorders/1/purchaseordercosts",
+    ),
+    (
+        lambda client, query: client.async_iter_purchase_order_global_costs_of_purchase_order(
+            1, query
+        ),
+        "/purchaseorders/1/purchaseorderglobalcosts",
+    ),
+    (lambda client, query: client.async_iter_purchase_order_costs(query), "/purchaseordercosts"),
+    (
+        lambda client, query: client.async_iter_purchase_order_global_costs(query),
+        "/purchaseorderglobalcosts",
+    ),
 )
 
 

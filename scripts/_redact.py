@@ -78,6 +78,9 @@ REDACTED_KEYS = {
     "subject",
     "filename",
     "integration_reference_id",
+    "export_message",
+    "projects_json",
+    "accounting_code",
 }
 
 

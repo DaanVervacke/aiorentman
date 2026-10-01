@@ -1,0 +1,68 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": null,
+      "displayname": "Synthetic 5eb4826569fe",
+      "subrental": "/subrentals/17",
+      "name": "Synthetic bd2178192585",
+      "order": 0,
+      "supplier_category": null,
+      "updateHash": "6226e7a79a629fdd68aa9cb8d5478c36"
+    },
+    {
+      "id": 2,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": null,
+      "displayname": "Synthetic 5eb4826569fe",
+      "subrental": "/subrentals/18",
+      "name": "Synthetic bd2178192585",
+      "order": 166,
+      "supplier_category": null,
+      "updateHash": "abf79ee83f6c19960de3bb2855bd856f"
+    },
+    {
+      "id": 3,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": null,
+      "displayname": "Synthetic 5eb4826569fe",
+      "subrental": "/subrentals/19",
+      "name": "Synthetic bd2178192585",
+      "order": 0,
+      "supplier_category": null,
+      "updateHash": "a4998cae6053d85f8703c0634eb48b3c"
+    },
+    {
+      "id": 6,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic d4791c131037",
+      "subrental": "/subrentals/22",
+      "name": "Synthetic 34bafa3a599a",
+      "order": 0,
+      "supplier_category": "/projectequipmentgroup/721",
+      "updateHash": "a8faf0388f1feefdd0ab053a974e7c51"
+    },
+    {
+      "id": 7,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic c7334a0df05d",
+      "subrental": "/subrentals/23",
+      "name": "Synthetic f4da826e19c1",
+      "order": 0,
+      "supplier_category": "/projectequipmentgroup/722",
+      "updateHash": "b53fb674dbcca47fad085295e9830776"
+    }
+  ],
+  "itemCount": 5,
+  "limit": 50,
+  "offset": 0,
+  "next_page_url": null
+}

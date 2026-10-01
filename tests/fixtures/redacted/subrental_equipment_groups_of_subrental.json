@@ -1,0 +1,20 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": null,
+      "displayname": "Synthetic 5eb4826569fe",
+      "subrental": "/subrentals/17",
+      "name": "Synthetic bd2178192585",
+      "order": 0,
+      "supplier_category": null,
+      "updateHash": "6226e7a79a629fdd68aa9cb8d5478c36"
+    }
+  ],
+  "itemCount": 1,
+  "limit": 50,
+  "offset": 0,
+  "next_page_url": null
+}

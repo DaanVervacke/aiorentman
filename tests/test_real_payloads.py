@@ -38,6 +38,9 @@ from aiorentman.parsers import (
     parse_project_status,
     parse_project_type,
     parse_project_vehicle,
+    parse_purchase_order,
+    parse_purchase_order_cost,
+    parse_purchase_order_global_cost,
     parse_quote,
     parse_repair,
     parse_serial_number,
@@ -45,6 +48,9 @@ from aiorentman.parsers import (
     parse_stock_location,
     parse_stock_movement,
     parse_subproject,
+    parse_subrental,
+    parse_subrental_equipment,
+    parse_subrental_equipment_group,
     parse_supplier,
     parse_tax_class,
     parse_vehicle,
@@ -114,6 +120,18 @@ PARSERS: dict[str, Callable[[Mapping[str, Any]], Any]] = {
     "payments.json": parse_payment,
     "ledger_codes.json": parse_ledger_code,
     "tax_classes.json": parse_tax_class,
+    "subrentals.json": parse_subrental,
+    "subrental_equipment.json": parse_subrental_equipment,
+    "subrental_equipment_groups.json": parse_subrental_equipment_group,
+    "subrental_equipment_of_subrental.json": parse_subrental_equipment,
+    "subrental_equipment_groups_of_subrental.json": parse_subrental_equipment_group,
+    "subrental_equipment_of_subrental_equipment_group.json": parse_subrental_equipment,
+    "purchase_orders.json": parse_purchase_order,
+    "invoice_lines_of_purchase_order.json": parse_invoice_line,
+    "purchase_order_costs.json": parse_purchase_order_cost,
+    "purchase_order_costs_of_purchase_order.json": parse_purchase_order_cost,
+    "purchase_order_global_costs.json": parse_purchase_order_global_cost,
+    "purchase_order_global_costs_of_purchase_order.json": parse_purchase_order_global_cost,
 }
 
 EMPTY_CAPTURES = {
@@ -123,6 +141,9 @@ EMPTY_CAPTURES = {
     "invoice_lines_of_quote.json",
     "payments_of_invoice.json",
     "contracts_of_project.json",
+    "invoice_lines_of_purchase_order.json",
+    "purchase_order_global_costs.json",
+    "purchase_order_global_costs_of_purchase_order.json",
 }
 
 
