@@ -44,7 +44,8 @@
       "equipment_period_to": "2026-02-16T23:00:00+00:00",
       "purchasecosts": 0.0,
       "volume": 85.0,
-      "custom": {}
+      "custom": {},
+      "updateHash": "c27f9fad0af8d76e"
     }
   ],
   "itemCount": 1,

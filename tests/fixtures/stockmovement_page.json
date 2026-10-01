@@ -14,7 +14,8 @@
       "date": "2026-02-12T07:45:00+00:00",
       "type": "0",
       "stock_location": "/stocklocations/2",
-      "api_client": "rfid-import"
+      "api_client": "rfid-import",
+      "updateHash": "5b39fc57439f6c2f"
     },
     {
       "id": 611,
@@ -30,7 +31,8 @@
       "date": "2026-02-15T16:20:00+00:00",
       "type": "1",
       "stock_location": "/stocklocations/2",
-      "api_client": "rfid-import"
+      "api_client": "rfid-import",
+      "updateHash": "d3bb0d089b2ca433"
     }
   ],
   "itemCount": 2,

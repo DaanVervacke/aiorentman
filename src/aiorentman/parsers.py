@@ -37,6 +37,16 @@ def _str_or_none_field(data: Mapping[str, Any], key: str) -> str | None:
     return value if isinstance(value, str) else None
 
 
+def _coerced_str_field(data: Mapping[str, Any], key: str) -> str:
+    """Accept text or a number where the API declares a string."""
+    value = data.get(key)
+    if isinstance(value, bool):
+        return ""
+    if isinstance(value, str | int | float):
+        return str(value)
+    return ""
+
+
 def _int_field(data: Mapping[str, Any], key: str) -> int | None:
     value = data.get(key)
     if isinstance(value, bool):
@@ -146,6 +156,7 @@ def parse_equipment(data: Mapping[str, Any]) -> Equipment:
         id=_int_field(data, "id") or 0,
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
         creator=_link_field(data, "creator"),
         displayname=_str_field(data, "displayname"),
         folder=_link_or_model_field(data, "folder", parse_folder),
@@ -210,6 +221,7 @@ def parse_serial_number(data: Mapping[str, Any]) -> SerialNumber:
         id=_int_field(data, "id") or 0,
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
         creator=_link_field(data, "creator"),
         displayname=_str_field(data, "displayname"),
         equipment=_link_or_model_field(data, "equipment", parse_equipment)
@@ -242,6 +254,7 @@ def parse_equipment_assigned_serial(data: Mapping[str, Any]) -> EquipmentAssigne
         id=_int_field(data, "id") or 0,
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
         creator=_link_field(data, "creator"),
         displayname=_str_field(data, "displayname"),
         combination=_link_or_model_field(data, "combination", parse_serial_number)
@@ -258,11 +271,12 @@ def parse_actual_content(data: Mapping[str, Any]) -> ActualContent:
         id=_int_field(data, "id") or 0,
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
         creator=_link_field(data, "creator"),
         displayname=_str_field(data, "displayname"),
         equipment=_link_or_model_field(data, "equipment", parse_equipment),
         serial=_link_or_model_field(data, "serial", parse_serial_number),
-        quantity=_str_field(data, "quantity"),
+        quantity=_coerced_str_field(data, "quantity"),
         combination_serial=_link_or_model_field(data, "combination_serial", parse_serial_number),
         raw=dict(data),
     )
@@ -274,12 +288,13 @@ def parse_equipment_set_content(data: Mapping[str, Any]) -> EquipmentSetContent:
         id=_int_field(data, "id") or 0,
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
         creator=_link_field(data, "creator"),
         displayname=_str_field(data, "displayname"),
-        quantity=_str_field(data, "quantity"),
+        quantity=_coerced_str_field(data, "quantity"),
         parent_equipment=_link_or_model_field(data, "parent_equipment", parse_equipment)
         or RentmanLink(_str_field(data, "parent_equipment")),
-        order=_str_field(data, "order"),
+        order=_coerced_str_field(data, "order"),
         equipment=_link_or_model_field(data, "equipment", parse_equipment)
         or RentmanLink(_str_field(data, "equipment")),
         is_fixed=_str_field(data, "is_fixed"),
@@ -294,11 +309,12 @@ def parse_folder(data: Mapping[str, Any]) -> Folder:
         id=_int_field(data, "id") or 0,
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
         creator=_link_field(data, "creator"),
         displayname=_str_field(data, "displayname"),
         parent=_link_or_model_field(data, "parent", parse_folder),
         name=_str_field(data, "name"),
-        order=_str_field(data, "order"),
+        order=_coerced_str_field(data, "order"),
         itemtype=_str_field(data, "itemtype"),
         path=_str_field(data, "path"),
         raw=dict(data),
@@ -311,6 +327,7 @@ def parse_stock_location(data: Mapping[str, Any]) -> StockLocation:
         id=_int_field(data, "id") or 0,
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
         creator=_link_field(data, "creator"),
         displayname=_str_field(data, "displayname"),
         name=_str_field(data, "name"),
@@ -334,6 +351,7 @@ def parse_warehouse_status(data: Mapping[str, Any]) -> WarehouseStatus:
         id=_int_field(data, "id") or 0,
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
         creator=_link_field(data, "creator"),
         displayname=_str_field(data, "displayname"),
         name=_str_field(data, "name"),
@@ -347,6 +365,7 @@ def parse_status(data: Mapping[str, Any]) -> Status:
         id=_int_field(data, "id") or 0,
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
         creator=_link_field(data, "creator"),
         displayname=_str_field(data, "displayname"),
         name=_str_field(data, "name"),
@@ -360,6 +379,7 @@ def parse_stock_movement(data: Mapping[str, Any]) -> StockMovement:
         id=_int_field(data, "id") or 0,
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
         creator=_link_field(data, "creator"),
         displayname=_str_field(data, "displayname"),
         amount=_int_field(data, "amount"),
@@ -383,6 +403,7 @@ def parse_repair(data: Mapping[str, Any]) -> Repair:
         id=_int_field(data, "id") or 0,
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
         creator=_link_field(data, "creator"),
         displayname=_str_field(data, "displayname"),
         internal_name=_str_field(data, "internal_name"),
@@ -416,6 +437,7 @@ def parse_project(data: Mapping[str, Any]) -> Project:
         id=_int_field(data, "id") or 0,
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
         creator=_link_field(data, "creator"),
         displayname=_str_field(data, "displayname"),
         location=_link_field(data, "location"),
@@ -467,11 +489,12 @@ def parse_subproject(data: Mapping[str, Any]) -> Subproject:
         id=_int_field(data, "id") or 0,
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
         creator=_link_field(data, "creator"),
         displayname=_str_field(data, "displayname"),
         project=_link_or_model_field(data, "project", parse_project)
         or RentmanLink(_str_field(data, "project")),
-        order=_str_field(data, "order"),
+        order=_coerced_str_field(data, "order"),
         name=_str_field(data, "name"),
         status=_link_or_model_field(data, "status", parse_status)
         or RentmanLink(_str_field(data, "status")),
@@ -527,19 +550,20 @@ def parse_project_equipment(data: Mapping[str, Any]) -> ProjectEquipment:
         id=_int_field(data, "id") or 0,
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
         creator=_link_field(data, "creator"),
         displayname=_str_field(data, "displayname"),
         equipment=_link_or_model_field(data, "equipment", parse_equipment),
         parent=_link_or_model_field(data, "parent", parse_project_equipment),
         ledger=_link_field(data, "ledger"),
         ledger_debit=_link_field(data, "ledger_debit"),
-        quantity=_str_field(data, "quantity"),
+        quantity=_coerced_str_field(data, "quantity"),
         quantity_total=_int_field(data, "quantity_total"),
         equipment_group=_link_field(data, "equipment_group"),
         discount=_float_field(data, "discount"),
         is_option=_bool_field(data, "is_option"),
-        factor=_str_field(data, "factor"),
-        order=_str_field(data, "order"),
+        factor=_coerced_str_field(data, "factor"),
+        order=_coerced_str_field(data, "order"),
         unit_price=_float_field(data, "unit_price"),
         name=_str_field(data, "name"),
         external_remark=_str_field(data, "external_remark"),

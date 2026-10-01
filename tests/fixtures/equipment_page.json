@@ -57,7 +57,10 @@
       "current_quantity": 2,
       "quantity_in_cases": 0,
       "location_in_warehouse": "Shelf A2",
-      "custom": {"custom_1": "insured"}
+      "custom": {
+        "custom_1": "insured"
+      },
+      "updateHash": "4e1cd015dd1bcd2a"
     },
     {
       "id": 34,
@@ -116,7 +119,8 @@
       "current_quantity": 1,
       "quantity_in_cases": 1,
       "location_in_warehouse": "Shelf B1",
-      "custom": {}
+      "custom": {},
+      "updateHash": "579df9def3a7f171"
     }
   ],
   "itemCount": 2,

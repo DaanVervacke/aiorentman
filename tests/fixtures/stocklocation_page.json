@@ -16,7 +16,8 @@
       "active": true,
       "type": "0",
       "color": "#7e57c2",
-      "in_archive": false
+      "in_archive": false,
+      "updateHash": "38ae0a4799685eef"
     },
     {
       "id": 6,
@@ -34,7 +35,8 @@
       "active": true,
       "type": "1",
       "color": "#42a5f5",
-      "in_archive": false
+      "in_archive": false,
+      "updateHash": "ba6c239568b6684f"
     }
   ],
   "itemCount": 2,

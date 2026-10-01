@@ -8,9 +8,10 @@
       "displayname": "Audio",
       "parent": null,
       "name": "Audio",
-      "order": "10",
+      "order": 10,
       "itemtype": "0",
-      "path": "Audio"
+      "path": "Audio",
+      "updateHash": "1badb2efb81c7c86"
     },
     {
       "id": 4,
@@ -20,9 +21,10 @@
       "displayname": "Audio / Amplifiers",
       "parent": "/folders/3",
       "name": "Amplifiers",
-      "order": "20",
+      "order": 20,
       "itemtype": "0",
-      "path": "Audio / Amplifiers"
+      "path": "Audio / Amplifiers",
+      "updateHash": "c5dd1b9b5f525b07"
     }
   ],
   "itemCount": 2,

@@ -6,7 +6,8 @@
       "modified": "2024-11-02T08:10:00+00:00",
       "creator": "/crew/237",
       "displayname": "In warehouse",
-      "name": "In warehouse"
+      "name": "In warehouse",
+      "updateHash": "935b3714257dd9b6"
     },
     {
       "id": 2,
@@ -14,7 +15,8 @@
       "modified": "2024-11-02T08:11:00+00:00",
       "creator": "/crew/237",
       "displayname": "On location",
-      "name": "On location"
+      "name": "On location",
+      "updateHash": "2d1581e513edf7cb"
     }
   ],
   "itemCount": 2,

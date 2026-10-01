@@ -1,0 +1,68 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic def4998b0569",
+      "combination": "/serialnumbers/36",
+      "serialnumber": "/serialnumbers/30",
+      "updateHash": "6226e7a79a629fdd68aa9cb8d5478c36"
+    },
+    {
+      "id": 2,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic c1efe8021452",
+      "combination": "/serialnumbers/36",
+      "serialnumber": "/serialnumbers/31",
+      "updateHash": "abf79ee83f6c19960de3bb2855bd856f"
+    },
+    {
+      "id": 3,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic dc1e5a6477a8",
+      "combination": "/serialnumbers/37",
+      "serialnumber": "/serialnumbers/32",
+      "updateHash": "a4998cae6053d85f8703c0634eb48b3c"
+    },
+    {
+      "id": 4,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic e90336558bb3",
+      "combination": "/serialnumbers/37",
+      "serialnumber": "/serialnumbers/33",
+      "updateHash": "9b6db6957a2a690bd193621d41f648cf"
+    },
+    {
+      "id": 5,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic e0f30b8dd5b0",
+      "combination": "/serialnumbers/38",
+      "serialnumber": "/serialnumbers/34",
+      "updateHash": "91d6dfc433f0a8a5e8a992a60b7970a0"
+    },
+    {
+      "id": 6,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 8bc3ceecbdfe",
+      "combination": "/serialnumbers/38",
+      "serialnumber": "/serialnumbers/35",
+      "updateHash": "a8faf0388f1feefdd0ab053a974e7c51"
+    }
+  ],
+  "itemCount": 6,
+  "limit": 50,
+  "offset": 0,
+  "next_page_url": null
+}

@@ -56,7 +56,10 @@
     "current_quantity": 2,
     "quantity_in_cases": 0,
     "location_in_warehouse": "Shelf A2",
-    "custom": {"custom_1": "insured"}
+    "custom": {
+      "custom_1": "insured"
+    },
+    "updateHash": "527f08fa9ab39927"
   },
   "itemCount": 1,
   "limit": 300,

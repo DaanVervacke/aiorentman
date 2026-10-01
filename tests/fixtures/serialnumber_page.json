@@ -24,7 +24,8 @@
       "tags": "",
       "last_subproject": "/subprojects/501",
       "sealed": false,
-      "custom": {}
+      "custom": {},
+      "updateHash": "f27f216116c88446"
     },
     {
       "id": 42,
@@ -50,7 +51,10 @@
       "tags": "audio",
       "last_subproject": null,
       "sealed": false,
-      "custom": {"custom_1": "insured"}
+      "custom": {
+        "custom_1": "insured"
+      },
+      "updateHash": "9da0ee2a8325e2b8"
     }
   ],
   "itemCount": 2,

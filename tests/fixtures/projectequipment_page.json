@@ -10,13 +10,13 @@
       "parent": null,
       "ledger": "/ledgercodes/7",
       "ledger_debit": "/ledgercodes/8",
-      "quantity": "2",
+      "quantity": 2,
       "quantity_total": 2,
       "equipment_group": "/projectequipmentgroup/9",
       "discount": 0.0,
       "is_option": false,
-      "factor": "1",
-      "order": "100",
+      "factor": 1,
+      "order": 100,
       "unit_price": 150.0,
       "name": "Yamaha QL5 Mixer",
       "external_remark": "",
@@ -32,7 +32,8 @@
       "warehouse_reservations": 2,
       "subrent_reservations": 0,
       "serial_number_ids": "41,42",
-      "custom": {}
+      "custom": {},
+      "updateHash": "79d1e2ad400b98a4"
     }
   ],
   "itemCount": 1,

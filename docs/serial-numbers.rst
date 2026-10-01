@@ -28,6 +28,12 @@ index needs and the sync stays cheap:
        for tag in serial.qrcodes:
            index[tag] = serial.id
 
+Every item carries an ``update_hash`` that Rentman computes from its id and
+modification time. The published OpenAPI schemas omit the field, but the
+live API returns it on every response. It changes whenever the item does,
+so an incremental index sync can skip items whose hash still matches the
+previous run.
+
 Expand the equipment link when the scan result needs the material as well:
 
 .. code-block:: python

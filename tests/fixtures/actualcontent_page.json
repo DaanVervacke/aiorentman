@@ -8,8 +8,9 @@
       "displayname": "Lab gruppen amplifier in rack 3",
       "equipment": "/equipment/35",
       "serial": "/serialnumbers/45",
-      "quantity": "1",
-      "combination_serial": "/serialnumbers/43"
+      "quantity": 1,
+      "combination_serial": "/serialnumbers/43",
+      "updateHash": "88b07fc648e95036"
     },
     {
       "id": 701,
@@ -19,8 +20,9 @@
       "displayname": "Power distributor in rack 3",
       "equipment": "/equipment/36",
       "serial": null,
-      "quantity": "1",
-      "combination_serial": "/serialnumbers/43"
+      "quantity": 1,
+      "combination_serial": "/serialnumbers/43",
+      "updateHash": "8e37be442f9e9793"
     }
   ],
   "itemCount": 2,

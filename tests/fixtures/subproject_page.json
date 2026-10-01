@@ -7,7 +7,7 @@
       "creator": "/crew/237",
       "displayname": "Spring Festival / Rental",
       "project": "/projects/480",
-      "order": "10",
+      "order": 10,
       "name": "Rental",
       "status": "/statuses/4",
       "is_template": false,
@@ -51,7 +51,8 @@
       "volume": 85.0,
       "equipment_period_from": "2026-02-11T09:00:00+00:00",
       "equipment_period_to": "2026-02-16T23:00:00+00:00",
-      "custom": {}
+      "custom": {},
+      "updateHash": "11f3483c9fd0e1cf"
     }
   ],
   "itemCount": 1,

@@ -6,7 +6,8 @@
       "modified": "2024-11-02T08:15:00+00:00",
       "creator": "/crew/237",
       "displayname": "Confirmed",
-      "name": "Confirmed"
+      "name": "Confirmed",
+      "updateHash": "a809a549727e241b"
     },
     {
       "id": 4,
@@ -14,7 +15,8 @@
       "modified": "2024-11-02T08:16:00+00:00",
       "creator": "/crew/237",
       "displayname": "Packed",
-      "name": "Packed"
+      "name": "Packed",
+      "updateHash": "c7baa3df5bb88b79"
     }
   ],
   "itemCount": 2,

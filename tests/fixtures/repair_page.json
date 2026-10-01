@@ -25,7 +25,8 @@
       "repair_status": "3",
       "unrepairable_of": null,
       "tags": "audio",
-      "custom": {}
+      "custom": {},
+      "updateHash": "0825ae9e59ea42b3"
     }
   ],
   "itemCount": 1,

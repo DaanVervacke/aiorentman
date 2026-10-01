@@ -11,9 +11,11 @@ from aiorentman.models import (
     StockLocation,
 )
 from aiorentman.parsers import (
+    parse_actual_content,
     parse_envelope_item,
     parse_equipment,
     parse_page,
+    parse_project_equipment,
     parse_serial_number,
 )
 
@@ -173,6 +175,14 @@ def test_parse_coerces_lenient_scalars() -> None:
     assert equipment.created is None
     assert equipment.name == ""
     assert equipment.is_physical == "1"
+    content = parse_actual_content({"quantity": True})
+    assert content.quantity == ""
+    line = parse_project_equipment({"quantity": 2, "order": 15, "factor": 1.5})
+    assert line.quantity == "2"
+    assert line.order == "15"
+    assert line.factor == "1.5"
+    serial = parse_serial_number({"updateHash": "d41d8cd98f00b204"})
+    assert serial.update_hash == "d41d8cd98f00b204"
 
 
 def test_parse_page_counts_items_when_item_count_is_missing() -> None:

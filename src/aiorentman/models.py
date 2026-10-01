@@ -44,6 +44,7 @@ class Equipment:
     id: int
     created: datetime | None
     modified: datetime | None
+    update_hash: str
     creator: RentmanLink | None
     displayname: str
     folder: RentmanLink | Folder | None
@@ -108,6 +109,7 @@ class SerialNumber:
     id: int
     created: datetime | None
     modified: datetime | None
+    update_hash: str
     creator: RentmanLink | None
     displayname: str
     equipment: RentmanLink | Equipment
@@ -139,6 +141,7 @@ class EquipmentAssignedSerial:
     id: int
     created: datetime | None
     modified: datetime | None
+    update_hash: str
     creator: RentmanLink | None
     displayname: str
     combination: RentmanLink | SerialNumber
@@ -153,6 +156,7 @@ class ActualContent:
     id: int
     created: datetime | None
     modified: datetime | None
+    update_hash: str
     creator: RentmanLink | None
     displayname: str
     equipment: RentmanLink | Equipment | None
@@ -169,6 +173,7 @@ class EquipmentSetContent:
     id: int
     created: datetime | None
     modified: datetime | None
+    update_hash: str
     creator: RentmanLink | None
     displayname: str
     quantity: str
@@ -187,6 +192,7 @@ class Folder:
     id: int
     created: datetime | None
     modified: datetime | None
+    update_hash: str
     creator: RentmanLink | None
     displayname: str
     parent: RentmanLink | Folder | None
@@ -204,6 +210,7 @@ class StockLocation:
     id: int
     created: datetime | None
     modified: datetime | None
+    update_hash: str
     creator: RentmanLink | None
     displayname: str
     name: str
@@ -227,6 +234,7 @@ class WarehouseStatus:
     id: int
     created: datetime | None
     modified: datetime | None
+    update_hash: str
     creator: RentmanLink | None
     displayname: str
     name: str
@@ -240,6 +248,7 @@ class Status:
     id: int
     created: datetime | None
     modified: datetime | None
+    update_hash: str
     creator: RentmanLink | None
     displayname: str
     name: str
@@ -253,6 +262,7 @@ class StockMovement:
     id: int
     created: datetime | None
     modified: datetime | None
+    update_hash: str
     creator: RentmanLink | None
     displayname: str
     amount: int | None
@@ -274,6 +284,7 @@ class Repair:
     id: int
     created: datetime | None
     modified: datetime | None
+    update_hash: str
     creator: RentmanLink | None
     displayname: str
     internal_name: str
@@ -306,6 +317,7 @@ class Project:
     id: int
     created: datetime | None
     modified: datetime | None
+    update_hash: str
     creator: RentmanLink | None
     displayname: str
     location: RentmanLink | None
@@ -357,6 +369,7 @@ class Subproject:
     id: int
     created: datetime | None
     modified: datetime | None
+    update_hash: str
     creator: RentmanLink | None
     displayname: str
     project: RentmanLink | Project
@@ -415,6 +428,7 @@ class ProjectEquipment:
     id: int
     created: datetime | None
     modified: datetime | None
+    update_hash: str
     creator: RentmanLink | None
     displayname: str
     equipment: RentmanLink | Equipment | None

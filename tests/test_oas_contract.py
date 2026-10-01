@@ -112,7 +112,9 @@ def test_model_fields_match_the_spec_properties(spec: dict[str, Any]) -> None:
     for model, schema_name in MODEL_SCHEMAS.items():
         properties = set(schemas[schema_name]["properties"])
         fields = {field.name for field in dataclasses.fields(model)}
-        assert fields - {"raw"} == properties, f"{model.__name__} disagrees with {schema_name}"
+        assert fields - {"raw", "update_hash"} == properties, (
+            f"{model.__name__} disagrees with {schema_name}"
+        )
 
 
 def test_spec_has_no_undocumented_in_scope_resources(spec: dict[str, Any]) -> None:

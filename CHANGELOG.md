@@ -8,6 +8,16 @@ Before 1.0, breaking changes ship as minor bumps.
 
 ## [Unreleased]
 
+### Added
+
+- An ``update_hash`` field on every model. The live API returns ``updateHash`` on every item even though the published OpenAPI schemas omit it, and it detects changed items during an incremental sync.
+- Redacted real captures under ``tests/fixtures/redacted/`` with a parser test that runs every one of them through its model, keeping the library honest against the live wire.
+
+### Changed
+
+- The ``quantity``, ``order``, and ``factor`` fields accept numbers on the wire where the published OpenAPI schemas declare strings. The live API sends integers and floats for these fields, and the parsers now coerce them to text instead of dropping them.
+- ``is_null`` takes its boolean as a keyword argument.
+
 ## [0.1.0] - 2026-10-01
 
 ### Added
