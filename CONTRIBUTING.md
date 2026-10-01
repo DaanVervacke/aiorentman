@@ -30,7 +30,11 @@ Add all of the following:
 - A typed `RentmanClient` method.
 - The contract test passing against the pinned OpenAPI document in `tests/fixtures/rentman_oas_1.16.0.json`, including the model field coverage for a new resource.
 - A fixture under `tests/fixtures/` with a real or redacted payload. Do not guess fixture shapes: capture one from the live API with `scripts/capture_data.py` and redact it with `scripts/_redact.py` before committing.
-- An entry under `[Unreleased]` in `CHANGELOG.md`.
+- A conventional commit, whose subject becomes the changelog entry.
+
+## Changelog
+
+`CHANGELOG.md` is generated with git-cliff from conventional commit subjects. Never edit it by hand. `feat:` and `fix:` subjects become the changelog entries and every other type is left out. Regenerate with `git-cliff --output CHANGELOG.md` after committing.
 
 ## Captures and confidential data
 
