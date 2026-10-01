@@ -44,6 +44,15 @@ The library covers the resources an RFID and materials project needs, read only:
 | Project equipment | `async_list_project_equipment` | `async_iter_project_equipment` | `async_get_project_equipment` |
 | Project equipment of a project | `async_list_project_equipment_of_project` | `async_iter_project_equipment_of_project` | |
 | Project equipment of a subproject | `async_list_project_equipment_of_subproject` | `async_iter_project_equipment_of_subproject` | |
+| Accessories | `async_list_accessories` | `async_iter_accessories` | `async_get_accessory` |
+| Accessories of a material | `async_list_accessories_of_equipment` | `async_iter_accessories_of_equipment` | |
+| Alternatives | `async_list_alternatives` | `async_iter_alternatives` | `async_get_alternative` |
+| Alternatives of a material | `async_list_alternatives_of_equipment` | `async_iter_alternatives_of_equipment` | |
+| Suppliers | `async_list_suppliers` | `async_iter_suppliers` | `async_get_supplier` |
+| Suppliers of a material | `async_list_suppliers_of_equipment` | `async_iter_suppliers_of_equipment` | |
+| Vehicles | `async_list_vehicles` | `async_iter_vehicles` | `async_get_vehicle` |
+| Vehicles of a stock location | `async_list_vehicles_of_stock_location` | `async_iter_vehicles_of_stock_location` | |
+| Extra input fields | `async_list_extra_input_fields` | `async_iter_extra_input_fields` | `async_get_extra_input_field` |
 
 ## Token
 

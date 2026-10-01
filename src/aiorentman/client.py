@@ -9,9 +9,15 @@ from urllib.parse import parse_qsl, urlsplit
 import aiohttp
 
 from ._endpoints import (
+    ACCESSORIES,
+    ACCESSORIES_ITEM,
+    ACCESSORIES_OF_EQUIPMENT,
     ACTUAL_CONTENT,
     ACTUAL_CONTENT_ITEM,
     ACTUAL_CONTENT_OF_SERIAL_NUMBER,
+    ALTERNATIVES,
+    ALTERNATIVES_ITEM,
+    ALTERNATIVES_OF_EQUIPMENT,
     EQUIPMENT,
     EQUIPMENT_ASSIGNED_SERIALS,
     EQUIPMENT_ASSIGNED_SERIALS_ITEM,
@@ -20,6 +26,8 @@ from ._endpoints import (
     EQUIPMENT_SET_CONTENT,
     EQUIPMENT_SET_CONTENT_ITEM,
     EQUIPMENT_SET_CONTENT_OF_EQUIPMENT,
+    EXTRA_INPUT_FIELDS,
+    EXTRA_INPUT_FIELDS_ITEM,
     FOLDERS,
     FOLDERS_ITEM,
     PROJECT_EQUIPMENT,
@@ -44,6 +52,12 @@ from ._endpoints import (
     SUBPROJECTS,
     SUBPROJECTS_ITEM,
     SUBPROJECTS_OF_PROJECT,
+    SUPPLIERS,
+    SUPPLIERS_ITEM,
+    SUPPLIERS_OF_EQUIPMENT,
+    VEHICLES,
+    VEHICLES_ITEM,
+    VEHICLES_OF_STOCK_LOCATION,
     WAREHOUSE_STATUSES,
     WAREHOUSE_STATUSES_ITEM,
     CollectionArgs,
@@ -67,10 +81,13 @@ from .exceptions import (
     RentmanInvalidResponseError,
 )
 from .models import (
+    Accessory,
     ActualContent,
+    Alternative,
     Equipment,
     EquipmentAssignedSerial,
     EquipmentSetContent,
+    ExtraInputField,
     Folder,
     Project,
     ProjectEquipment,
@@ -81,6 +98,8 @@ from .models import (
     StockLocation,
     StockMovement,
     Subproject,
+    Supplier,
+    Vehicle,
     WarehouseStatus,
 )
 from .query import Query
@@ -493,6 +512,147 @@ class RentmanClient:
         return self._iter_collection(
             PROJECT_EQUIPMENT_OF_SUBPROJECT,
             ParentCollectionArgs(parent_id=subproject_id, query=query),
+        )
+
+    async def async_list_accessories(self, query: Query | None = None) -> RentmanPage[Accessory]:
+        """Fetch one page of accessories."""
+        return await self._call(ACCESSORIES, CollectionArgs(query=query))
+
+    def async_iter_accessories(self, query: Query | None = None) -> AsyncIterator[Accessory]:
+        """Yield every accessory, following the cursor across pages."""
+        return self._iter_collection(ACCESSORIES, CollectionArgs(query=query))
+
+    async def async_get_accessory(self, accessory_id: int) -> Accessory | None:
+        """Fetch one accessory by its id."""
+        return await self._call(ACCESSORIES_ITEM, ItemArgs(item_id=accessory_id))
+
+    async def async_list_accessories_of_equipment(
+        self, equipment_id: int, query: Query | None = None
+    ) -> RentmanPage[Accessory]:
+        """Fetch one page of accessories of one material."""
+        return await self._call(
+            ACCESSORIES_OF_EQUIPMENT,
+            ParentCollectionArgs(parent_id=equipment_id, query=query),
+        )
+
+    def async_iter_accessories_of_equipment(
+        self, equipment_id: int, query: Query | None = None
+    ) -> AsyncIterator[Accessory]:
+        """Yield every accessory of one material, following the cursor."""
+        return self._iter_collection(
+            ACCESSORIES_OF_EQUIPMENT,
+            ParentCollectionArgs(parent_id=equipment_id, query=query),
+        )
+
+    async def async_list_alternatives(self, query: Query | None = None) -> RentmanPage[Alternative]:
+        """Fetch one page of alternatives."""
+        return await self._call(ALTERNATIVES, CollectionArgs(query=query))
+
+    def async_iter_alternatives(self, query: Query | None = None) -> AsyncIterator[Alternative]:
+        """Yield every alternative, following the cursor across pages."""
+        return self._iter_collection(ALTERNATIVES, CollectionArgs(query=query))
+
+    async def async_get_alternative(self, alternative_id: int) -> Alternative | None:
+        """Fetch one alternative by its id."""
+        return await self._call(ALTERNATIVES_ITEM, ItemArgs(item_id=alternative_id))
+
+    async def async_list_alternatives_of_equipment(
+        self, equipment_id: int, query: Query | None = None
+    ) -> RentmanPage[Alternative]:
+        """Fetch one page of alternatives of one material."""
+        return await self._call(
+            ALTERNATIVES_OF_EQUIPMENT,
+            ParentCollectionArgs(parent_id=equipment_id, query=query),
+        )
+
+    def async_iter_alternatives_of_equipment(
+        self, equipment_id: int, query: Query | None = None
+    ) -> AsyncIterator[Alternative]:
+        """Yield every alternative of one material, following the cursor."""
+        return self._iter_collection(
+            ALTERNATIVES_OF_EQUIPMENT,
+            ParentCollectionArgs(parent_id=equipment_id, query=query),
+        )
+
+    async def async_list_suppliers(self, query: Query | None = None) -> RentmanPage[Supplier]:
+        """Fetch one page of suppliers."""
+        return await self._call(SUPPLIERS, CollectionArgs(query=query))
+
+    def async_iter_suppliers(self, query: Query | None = None) -> AsyncIterator[Supplier]:
+        """Yield every supplier, following the cursor across pages."""
+        return self._iter_collection(SUPPLIERS, CollectionArgs(query=query))
+
+    async def async_get_supplier(self, supplier_id: int) -> Supplier | None:
+        """Fetch one supplier by its id."""
+        return await self._call(SUPPLIERS_ITEM, ItemArgs(item_id=supplier_id))
+
+    async def async_list_suppliers_of_equipment(
+        self, equipment_id: int, query: Query | None = None
+    ) -> RentmanPage[Supplier]:
+        """Fetch one page of suppliers of one material."""
+        return await self._call(
+            SUPPLIERS_OF_EQUIPMENT,
+            ParentCollectionArgs(parent_id=equipment_id, query=query),
+        )
+
+    def async_iter_suppliers_of_equipment(
+        self, equipment_id: int, query: Query | None = None
+    ) -> AsyncIterator[Supplier]:
+        """Yield every supplier of one material, following the cursor."""
+        return self._iter_collection(
+            SUPPLIERS_OF_EQUIPMENT,
+            ParentCollectionArgs(parent_id=equipment_id, query=query),
+        )
+
+    async def async_list_vehicles(self, query: Query | None = None) -> RentmanPage[Vehicle]:
+        """Fetch one page of vehicles."""
+        return await self._call(VEHICLES, CollectionArgs(query=query))
+
+    def async_iter_vehicles(self, query: Query | None = None) -> AsyncIterator[Vehicle]:
+        """Yield every vehicle, following the cursor across pages."""
+        return self._iter_collection(VEHICLES, CollectionArgs(query=query))
+
+    async def async_get_vehicle(self, vehicle_id: int) -> Vehicle | None:
+        """Fetch one vehicle by its id."""
+        return await self._call(VEHICLES_ITEM, ItemArgs(item_id=vehicle_id))
+
+    async def async_list_vehicles_of_stock_location(
+        self, stock_location_id: int, query: Query | None = None
+    ) -> RentmanPage[Vehicle]:
+        """Fetch one page of vehicles of one stock location."""
+        return await self._call(
+            VEHICLES_OF_STOCK_LOCATION,
+            ParentCollectionArgs(parent_id=stock_location_id, query=query),
+        )
+
+    def async_iter_vehicles_of_stock_location(
+        self, stock_location_id: int, query: Query | None = None
+    ) -> AsyncIterator[Vehicle]:
+        """Yield every vehicle of one stock location, following the cursor."""
+        return self._iter_collection(
+            VEHICLES_OF_STOCK_LOCATION,
+            ParentCollectionArgs(parent_id=stock_location_id, query=query),
+        )
+
+    async def async_list_extra_input_fields(
+        self, query: Query | None = None
+    ) -> RentmanPage[ExtraInputField]:
+        """Fetch one page of custom field definitions."""
+        return await self._call(EXTRA_INPUT_FIELDS, CollectionArgs(query=query))
+
+    def async_iter_extra_input_fields(
+        self, query: Query | None = None
+    ) -> AsyncIterator[ExtraInputField]:
+        """Yield every custom field definition, following the cursor across pages."""
+        return self._iter_collection(EXTRA_INPUT_FIELDS, CollectionArgs(query=query))
+
+    async def async_get_extra_input_field(
+        self, extra_input_field_id: int
+    ) -> ExtraInputField | None:
+        """Fetch one custom field definition by its id."""
+        return await self._call(
+            EXTRA_INPUT_FIELDS_ITEM,
+            ItemArgs(item_id=extra_input_field_id),
         )
 
     async def _call[ArgsT, ModelT](

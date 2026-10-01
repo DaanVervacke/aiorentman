@@ -51,6 +51,7 @@ REDACTED_KEYS = {
     "shop_seo_description",
     "color",
     "path",
+    "licenseplate",
 }
 
 

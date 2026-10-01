@@ -4,19 +4,30 @@ from datetime import UTC, datetime
 from typing import Any
 
 from aiorentman.models import (
+    Accessory,
+    Alternative,
     Equipment,
+    ExtraInputField,
+    Folder,
     RentmanLink,
     RentmanPage,
     SerialNumber,
     StockLocation,
+    Supplier,
+    Vehicle,
 )
 from aiorentman.parsers import (
+    parse_accessory,
     parse_actual_content,
+    parse_alternative,
     parse_envelope_item,
     parse_equipment,
+    parse_extra_input_field,
     parse_page,
     parse_project_equipment,
     parse_serial_number,
+    parse_supplier,
+    parse_vehicle,
 )
 
 from .conftest import cast_response
@@ -189,3 +200,104 @@ def test_parse_page_counts_items_when_item_count_is_missing() -> None:
     payload = cast_response({"data": [{"id": 1}]})
     page = parse_page(payload, parse_equipment)
     assert page.item_count == 1
+
+
+def test_parse_accessory_coerces_order_and_quantity() -> None:
+    accessory = parse_accessory({"id": 2, "order": 2, "quantity": "3", "add_as_new_line": True})
+    assert isinstance(accessory, Accessory)
+    assert accessory.order == "2"
+    assert accessory.quantity == 3
+    assert accessory.add_as_new_line is True
+
+
+def test_parse_accessory_resolves_expanded_links() -> None:
+    accessory = parse_accessory(
+        {
+            "parent_equipment": {"id": 338, "code": "AUD-001"},
+            "equipment": {"id": 340, "code": "CON-001"},
+        }
+    )
+    assert isinstance(accessory.parent_equipment, Equipment)
+    assert accessory.parent_equipment.code == "AUD-001"
+    assert isinstance(accessory.equipment, Equipment)
+    assert accessory.equipment.id == 340
+
+
+def test_parse_alternative_resolves_expanded_links() -> None:
+    alternative = parse_alternative(
+        {
+            "equipment": {"id": 346, "code": "AUD-002"},
+            "alternative": {"id": 428, "code": "AUD-003"},
+        }
+    )
+    assert isinstance(alternative, Alternative)
+    assert isinstance(alternative.equipment, Equipment)
+    assert alternative.equipment.code == "AUD-002"
+    assert isinstance(alternative.alternative, Equipment)
+    assert alternative.alternative.id == 428
+
+
+def test_parse_required_equipment_links_fall_back_to_empty_links() -> None:
+    accessory = parse_accessory({})
+    alternative = parse_alternative({})
+    supplier = parse_supplier({})
+    assert accessory.parent_equipment == RentmanLink("")
+    assert alternative.equipment == RentmanLink("")
+    assert alternative.alternative == RentmanLink("")
+    assert supplier.equipment == RentmanLink("")
+
+
+def test_parse_supplier_keeps_contact_links() -> None:
+    supplier = parse_supplier(
+        {"contact": "/contacts/3610", "contactperson": "/contactpersons/5", "price": 10}
+    )
+    assert isinstance(supplier, Supplier)
+    assert supplier.contact == RentmanLink("/contacts/3610")
+    assert supplier.contactperson == RentmanLink("/contactpersons/5")
+    assert supplier.price == 10.0
+
+
+def test_parse_vehicle_resolves_expanded_links_and_codes() -> None:
+    vehicle = parse_vehicle(
+        {
+            "id": 7,
+            "folder": {"id": 32, "name": "Transport"},
+            "cost_rate": "/rates/556",
+            "asset_location": {"id": 2, "name": "Main warehouse"},
+            "inspection_date": "2026-12-15T00:00:00+01:00",
+            "tags": "trial, nightly",
+        }
+    )
+    assert isinstance(vehicle, Vehicle)
+    assert isinstance(vehicle.folder, Folder)
+    assert vehicle.folder.name == "Transport"
+    assert vehicle.cost_rate == RentmanLink("/rates/556")
+    assert isinstance(vehicle.asset_location, StockLocation)
+    assert vehicle.asset_location.id == 2
+    assert vehicle.inspection_date is not None
+    assert vehicle.tags == ("trial", "nightly")
+
+
+def test_parse_vehicle_degrades_on_sparse_payloads() -> None:
+    vehicle = parse_vehicle({"id": 7})
+    assert vehicle.folder is None
+    assert vehicle.cost_rate is None
+    assert vehicle.asset_location is None
+    assert vehicle.seats is None
+    assert vehicle.licenseplate == ""
+    assert vehicle.custom == {}
+    assert vehicle.tags == ()
+
+
+def test_parse_extra_input_field_keeps_its_parent_link() -> None:
+    field = parse_extra_input_field({"id": 2, "parent": "/extrainputfields/1", "order": 3})
+    assert isinstance(field, ExtraInputField)
+    assert field.parent == RentmanLink("/extrainputfields/1")
+    assert field.order == "3"
+    assert field.linkedItemType == ""
+
+
+def test_parse_extra_input_field_resolves_an_expanded_parent() -> None:
+    field = parse_extra_input_field({"id": 2, "parent": {"id": 1, "type": "text"}})
+    assert isinstance(field.parent, ExtraInputField)
+    assert field.parent.id == 1

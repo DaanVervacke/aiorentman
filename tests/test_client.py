@@ -79,6 +79,27 @@ COLLECTIONS: tuple[tuple[Callable[[RentmanClient], Awaitable[RentmanPage[Any]]],
         lambda client: client.async_list_project_equipment_of_subproject(501),
         "/subprojects/501/projectequipment",
     ),
+    (lambda client: client.async_list_accessories(), "/accessories"),
+    (
+        lambda client: client.async_list_accessories_of_equipment(12),
+        "/equipment/12/accessories",
+    ),
+    (lambda client: client.async_list_alternatives(), "/alternatives"),
+    (
+        lambda client: client.async_list_alternatives_of_equipment(346),
+        "/equipment/346/alternatives",
+    ),
+    (lambda client: client.async_list_suppliers(), "/suppliers"),
+    (
+        lambda client: client.async_list_suppliers_of_equipment(354),
+        "/equipment/354/suppliers",
+    ),
+    (lambda client: client.async_list_vehicles(), "/vehicles"),
+    (
+        lambda client: client.async_list_vehicles_of_stock_location(2),
+        "/stocklocations/2/vehicles",
+    ),
+    (lambda client: client.async_list_extra_input_fields(), "/extrainputfields"),
 )
 
 ITEMS: tuple[tuple[Callable[[RentmanClient], Awaitable[Any]], str], ...] = (
@@ -99,6 +120,11 @@ ITEMS: tuple[tuple[Callable[[RentmanClient], Awaitable[Any]], str], ...] = (
     (lambda client: client.async_get_project(480), "/projects/480"),
     (lambda client: client.async_get_subproject(501), "/subprojects/501"),
     (lambda client: client.async_get_project_equipment(850), "/projectequipment/850"),
+    (lambda client: client.async_get_accessory(2), "/accessories/2"),
+    (lambda client: client.async_get_alternative(1), "/alternatives/1"),
+    (lambda client: client.async_get_supplier(1), "/suppliers/1"),
+    (lambda client: client.async_get_vehicle(7), "/vehicles/7"),
+    (lambda client: client.async_get_extra_input_field(1), "/extrainputfields/1"),
 )
 
 ITERATORS: tuple[tuple[Callable[[RentmanClient, Query | None], Any], str], ...] = (
@@ -157,6 +183,27 @@ ITERATORS: tuple[tuple[Callable[[RentmanClient, Query | None], Any], str], ...] 
         lambda client, query: client.async_iter_project_equipment_of_subproject(501, query),
         "/subprojects/501/projectequipment",
     ),
+    (lambda client, query: client.async_iter_accessories(query), "/accessories"),
+    (
+        lambda client, query: client.async_iter_accessories_of_equipment(12, query),
+        "/equipment/12/accessories",
+    ),
+    (lambda client, query: client.async_iter_alternatives(query), "/alternatives"),
+    (
+        lambda client, query: client.async_iter_alternatives_of_equipment(346, query),
+        "/equipment/346/alternatives",
+    ),
+    (lambda client, query: client.async_iter_suppliers(query), "/suppliers"),
+    (
+        lambda client, query: client.async_iter_suppliers_of_equipment(354, query),
+        "/equipment/354/suppliers",
+    ),
+    (lambda client, query: client.async_iter_vehicles(query), "/vehicles"),
+    (
+        lambda client, query: client.async_iter_vehicles_of_stock_location(2, query),
+        "/stocklocations/2/vehicles",
+    ),
+    (lambda client, query: client.async_iter_extra_input_fields(query), "/extrainputfields"),
 )
 
 

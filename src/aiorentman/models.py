@@ -459,3 +459,114 @@ class ProjectEquipment:
     serial_number_ids: str
     custom: dict[str, Any]
     raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class Accessory:
+    """One material that planning adds together with its parent material."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    parent_equipment: RentmanLink | Equipment
+    equipment: RentmanLink | Equipment | None
+    quantity: int | None
+    automatic: bool
+    skip: bool
+    is_free: bool
+    order: str
+    add_as_new_line: bool
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class Alternative:
+    """One material that can replace another material during planning."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    equipment: RentmanLink | Equipment
+    alternative: RentmanLink | Equipment
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class Supplier:
+    """One purchase source of a material, priced through its contact."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    equipment: RentmanLink | Equipment
+    contact: RentmanLink | None
+    contactperson: RentmanLink | None
+    price: float | None
+    details: str
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class Vehicle:
+    """One vehicle that planning books for transport."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    folder: RentmanLink | Folder | None
+    name: str
+    cost_rate: RentmanLink | None
+    in_planner: bool
+    height: float | None
+    length: float | None
+    width: float | None
+    seats: int | None
+    inspection_date: datetime | None
+    licenseplate: str
+    remark: str
+    payload_capacity: float | None
+    surface_area: str
+    multiple: str
+    image: RentmanLink | None
+    asset_location: RentmanLink | StockLocation | None
+    tags: tuple[str, ...]
+    distance_cost: float | None
+    fixed_cost: float | None
+    custom: dict[str, Any]
+    raw: dict[str, Any] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class ExtraInputField:
+    """One custom field definition attached to one item type."""
+
+    id: int
+    created: datetime | None
+    modified: datetime | None
+    update_hash: str
+    creator: RentmanLink | None
+    displayname: str
+    name: str
+    itemtype: str
+    linkedItemType: str  # noqa: N815
+    parent: RentmanLink | ExtraInputField | None
+    type: str
+    order: str
+    hidden: bool
+    classified: bool
+    search_include: bool
+    search_minlength: int | None
+    is_customfield_mandatory: bool
+    raw: dict[str, Any] | None = None

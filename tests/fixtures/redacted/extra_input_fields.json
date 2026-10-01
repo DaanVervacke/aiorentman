@@ -1,0 +1,44 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "created": "2026-10-01T19:32:43+02:00",
+      "modified": "2026-10-01T19:32:43+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic f8159983920f",
+      "name": "Synthetic bb716c5ee4b2",
+      "itemtype": "Materiaal",
+      "parent": null,
+      "type": "text",
+      "order": 2,
+      "hidden": false,
+      "classified": false,
+      "search_include": true,
+      "search_minlength": 5,
+      "is_customfield_mandatory": false,
+      "updateHash": "307824e45b8ce803e6af6461e9969a95"
+    },
+    {
+      "id": 2,
+      "created": "2026-10-01T19:32:43+02:00",
+      "modified": "2026-10-01T19:32:43+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic f8159983920f",
+      "name": "Synthetic bb716c5ee4b2",
+      "itemtype": "Planningmateriaal",
+      "parent": "/extrainputfields/1",
+      "type": "text",
+      "order": 3,
+      "hidden": false,
+      "classified": false,
+      "search_include": true,
+      "search_minlength": 5,
+      "is_customfield_mandatory": false,
+      "updateHash": "5d886b901768194d158689279554c7c6"
+    }
+  ],
+  "itemCount": 2,
+  "limit": 50,
+  "offset": 0,
+  "next_page_url": null
+}

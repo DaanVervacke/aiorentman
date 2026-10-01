@@ -1,0 +1,24 @@
+{
+  "data": [
+    {
+      "id": 2,
+      "created": "2026-10-01T19:32:43+02:00",
+      "modified": "2026-10-01T19:32:43+02:00",
+      "creator": null,
+      "displayname": "Synthetic 347e41716a6f",
+      "parent_equipment": "/equipment/338",
+      "equipment": "/equipment/340",
+      "quantity": 1,
+      "automatic": false,
+      "skip": false,
+      "is_free": false,
+      "order": 2,
+      "add_as_new_line": false,
+      "updateHash": "5d886b901768194d158689279554c7c6"
+    }
+  ],
+  "itemCount": 1,
+  "limit": 50,
+  "offset": 0,
+  "next_page_url": null
+}

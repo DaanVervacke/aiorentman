@@ -48,6 +48,16 @@ Models
    :members:
 .. autoclass:: aiorentman.ProjectEquipment
    :members:
+.. autoclass:: aiorentman.Accessory
+   :members:
+.. autoclass:: aiorentman.Alternative
+   :members:
+.. autoclass:: aiorentman.Supplier
+   :members:
+.. autoclass:: aiorentman.Vehicle
+   :members:
+.. autoclass:: aiorentman.ExtraInputField
+   :members:
 
 Exceptions
 ----------

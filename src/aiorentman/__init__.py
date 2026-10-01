@@ -15,10 +15,13 @@ from .exceptions import (
     RentmanTimeoutError,
 )
 from .models import (
+    Accessory,
     ActualContent,
+    Alternative,
     Equipment,
     EquipmentAssignedSerial,
     EquipmentSetContent,
+    ExtraInputField,
     Folder,
     Project,
     ProjectEquipment,
@@ -30,6 +33,8 @@ from .models import (
     StockLocation,
     StockMovement,
     Subproject,
+    Supplier,
+    Vehicle,
     WarehouseStatus,
 )
 from .query import (
@@ -50,10 +55,13 @@ except importlib.metadata.PackageNotFoundError:
     __version__ = "0.0.0"
 
 __all__ = [
+    "Accessory",
     "ActualContent",
+    "Alternative",
     "Equipment",
     "EquipmentAssignedSerial",
     "EquipmentSetContent",
+    "ExtraInputField",
     "Folder",
     "Project",
     "ProjectEquipment",
@@ -77,6 +85,8 @@ __all__ = [
     "StockLocation",
     "StockMovement",
     "Subproject",
+    "Supplier",
+    "Vehicle",
     "WarehouseStatus",
     "__version__",
     "eq",

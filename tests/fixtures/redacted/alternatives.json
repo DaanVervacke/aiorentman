@@ -1,0 +1,38 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "created": "2026-10-01T19:32:43+02:00",
+      "modified": "2026-10-01T19:32:43+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 159c7962b4a8",
+      "equipment": "/equipment/346",
+      "alternative": "/equipment/428",
+      "updateHash": "307824e45b8ce803e6af6461e9969a95"
+    },
+    {
+      "id": 2,
+      "created": "2026-10-01T19:32:43+02:00",
+      "modified": "2026-10-01T19:32:43+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 9b3b2f07bd3f",
+      "equipment": "/equipment/418",
+      "alternative": "/equipment/474",
+      "updateHash": "5d886b901768194d158689279554c7c6"
+    },
+    {
+      "id": 3,
+      "created": "2026-10-01T19:32:43+02:00",
+      "modified": "2026-10-01T19:32:43+02:00",
+      "creator": "/crew/33",
+      "displayname": "Synthetic 0f7795256a89",
+      "equipment": "/equipment/430",
+      "alternative": "/equipment/431",
+      "updateHash": "7f332fb17fecf46e77d9f84440b9104a"
+    }
+  ],
+  "itemCount": 3,
+  "limit": 50,
+  "offset": 0,
+  "next_page_url": null
+}

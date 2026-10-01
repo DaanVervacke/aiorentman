@@ -5,10 +5,13 @@ from dataclasses import dataclass
 from typing import Any
 
 from .models import (
+    Accessory,
     ActualContent,
+    Alternative,
     Equipment,
     EquipmentAssignedSerial,
     EquipmentSetContent,
+    ExtraInputField,
     Folder,
     Project,
     ProjectEquipment,
@@ -19,14 +22,19 @@ from .models import (
     StockLocation,
     StockMovement,
     Subproject,
+    Supplier,
+    Vehicle,
     WarehouseStatus,
 )
 from .parsers import (
+    parse_accessory,
     parse_actual_content,
+    parse_alternative,
     parse_envelope_item,
     parse_equipment,
     parse_equipment_assigned_serial,
     parse_equipment_set_content,
+    parse_extra_input_field,
     parse_folder,
     parse_page,
     parse_project,
@@ -37,6 +45,8 @@ from .parsers import (
     parse_stock_location,
     parse_stock_movement,
     parse_subproject,
+    parse_supplier,
+    parse_vehicle,
     parse_warehouse_status,
 )
 from .query import Query
@@ -439,6 +449,132 @@ PROJECT_EQUIPMENT_ITEM: Endpoint[ItemArgs, ProjectEquipment | None] = Endpoint(
     response_schema="ProjectEquipmentResponse",
 )
 
+ACCESSORIES: Endpoint[CollectionArgs, RentmanPage[Accessory]] = Endpoint(
+    name="accessories",
+    method="GET",
+    path=lambda _args: "/accessories",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_accessory),
+    response_schema="AccessoryResponse",
+)
+
+ACCESSORIES_ITEM: Endpoint[ItemArgs, Accessory | None] = Endpoint(
+    name="accessories_item",
+    method="GET",
+    path=lambda args: f"/accessories/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_accessory),
+    response_schema="AccessoryResponse",
+)
+
+ACCESSORIES_OF_EQUIPMENT: Endpoint[ParentCollectionArgs, RentmanPage[Accessory]] = Endpoint(
+    name="accessories_of_equipment",
+    method="GET",
+    path=lambda args: f"/equipment/{args.parent_id}/accessories",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_accessory),
+    response_schema="AccessoryResponse",
+)
+
+ALTERNATIVES: Endpoint[CollectionArgs, RentmanPage[Alternative]] = Endpoint(
+    name="alternatives",
+    method="GET",
+    path=lambda _args: "/alternatives",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_alternative),
+    response_schema="AlternativeResponse",
+)
+
+ALTERNATIVES_ITEM: Endpoint[ItemArgs, Alternative | None] = Endpoint(
+    name="alternatives_item",
+    method="GET",
+    path=lambda args: f"/alternatives/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_alternative),
+    response_schema="AlternativeResponse",
+)
+
+ALTERNATIVES_OF_EQUIPMENT: Endpoint[ParentCollectionArgs, RentmanPage[Alternative]] = Endpoint(
+    name="alternatives_of_equipment",
+    method="GET",
+    path=lambda args: f"/equipment/{args.parent_id}/alternatives",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_alternative),
+    response_schema="AlternativeResponse",
+)
+
+SUPPLIERS: Endpoint[CollectionArgs, RentmanPage[Supplier]] = Endpoint(
+    name="suppliers",
+    method="GET",
+    path=lambda _args: "/suppliers",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_supplier),
+    response_schema="SupplierResponse",
+)
+
+SUPPLIERS_ITEM: Endpoint[ItemArgs, Supplier | None] = Endpoint(
+    name="suppliers_item",
+    method="GET",
+    path=lambda args: f"/suppliers/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_supplier),
+    response_schema="SupplierResponse",
+)
+
+SUPPLIERS_OF_EQUIPMENT: Endpoint[ParentCollectionArgs, RentmanPage[Supplier]] = Endpoint(
+    name="suppliers_of_equipment",
+    method="GET",
+    path=lambda args: f"/equipment/{args.parent_id}/suppliers",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_supplier),
+    response_schema="SupplierResponse",
+)
+
+VEHICLES: Endpoint[CollectionArgs, RentmanPage[Vehicle]] = Endpoint(
+    name="vehicles",
+    method="GET",
+    path=lambda _args: "/vehicles",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_vehicle),
+    response_schema="VehicleResponse",
+)
+
+VEHICLES_ITEM: Endpoint[ItemArgs, Vehicle | None] = Endpoint(
+    name="vehicles_item",
+    method="GET",
+    path=lambda args: f"/vehicles/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_vehicle),
+    response_schema="VehicleResponse",
+)
+
+VEHICLES_OF_STOCK_LOCATION: Endpoint[ParentCollectionArgs, RentmanPage[Vehicle]] = Endpoint(
+    name="vehicles_of_stock_location",
+    method="GET",
+    path=lambda args: f"/stocklocations/{args.parent_id}/vehicles",
+    params=_linked_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_vehicle),
+    response_schema="VehicleResponse",
+)
+
+EXTRA_INPUT_FIELDS: Endpoint[CollectionArgs, RentmanPage[ExtraInputField]] = Endpoint(
+    name="extra_input_fields",
+    method="GET",
+    path=lambda _args: "/extrainputfields",
+    params=_collection_params,
+    parse=lambda payload, _args: parse_page(payload, parse_extra_input_field),
+    response_schema="ExtraInputFieldResponse",
+)
+
+EXTRA_INPUT_FIELDS_ITEM: Endpoint[ItemArgs, ExtraInputField | None] = Endpoint(
+    name="extra_input_fields_item",
+    method="GET",
+    path=lambda args: f"/extrainputfields/{args.item_id}",
+    params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_extra_input_field),
+    response_schema="ExtraInputFieldResponse",
+)
+
 CATALOG: tuple[Endpoint[Any, Any], ...] = (
     ACTUAL_CONTENT,
     ACTUAL_CONTENT_ITEM,
@@ -477,4 +613,18 @@ CATALOG: tuple[Endpoint[Any, Any], ...] = (
     PROJECT_EQUIPMENT_OF_SUBPROJECT,
     PROJECT_EQUIPMENT,
     PROJECT_EQUIPMENT_ITEM,
+    ACCESSORIES,
+    ACCESSORIES_ITEM,
+    ACCESSORIES_OF_EQUIPMENT,
+    ALTERNATIVES,
+    ALTERNATIVES_ITEM,
+    ALTERNATIVES_OF_EQUIPMENT,
+    SUPPLIERS,
+    SUPPLIERS_ITEM,
+    SUPPLIERS_OF_EQUIPMENT,
+    VEHICLES,
+    VEHICLES_ITEM,
+    VEHICLES_OF_STOCK_LOCATION,
+    EXTRA_INPUT_FIELDS,
+    EXTRA_INPUT_FIELDS_ITEM,
 )

@@ -6,10 +6,13 @@ from re import compile as _compile
 from typing import Any
 
 from .models import (
+    Accessory,
     ActualContent,
+    Alternative,
     Equipment,
     EquipmentAssignedSerial,
     EquipmentSetContent,
+    ExtraInputField,
     Folder,
     Project,
     ProjectEquipment,
@@ -21,6 +24,8 @@ from .models import (
     StockLocation,
     StockMovement,
     Subproject,
+    Supplier,
+    Vehicle,
     WarehouseStatus,
 )
 
@@ -580,5 +585,120 @@ def parse_project_equipment(data: Mapping[str, Any]) -> ProjectEquipment:
         subrent_reservations=_int_field(data, "subrent_reservations"),
         serial_number_ids=_str_field(data, "serial_number_ids"),
         custom=_custom_field(data),
+        raw=dict(data),
+    )
+
+
+def parse_accessory(data: Mapping[str, Any]) -> Accessory:
+    """Build the accessory model from one accessory payload."""
+    return Accessory(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        parent_equipment=_link_or_model_field(data, "parent_equipment", parse_equipment)
+        or RentmanLink(_str_field(data, "parent_equipment")),
+        equipment=_link_or_model_field(data, "equipment", parse_equipment),
+        quantity=_int_field(data, "quantity"),
+        automatic=_bool_field(data, "automatic"),
+        skip=_bool_field(data, "skip"),
+        is_free=_bool_field(data, "is_free"),
+        order=_coerced_str_field(data, "order"),
+        add_as_new_line=_bool_field(data, "add_as_new_line"),
+        raw=dict(data),
+    )
+
+
+def parse_alternative(data: Mapping[str, Any]) -> Alternative:
+    """Build the alternative model from one alternative payload."""
+    return Alternative(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        equipment=_link_or_model_field(data, "equipment", parse_equipment)
+        or RentmanLink(_str_field(data, "equipment")),
+        alternative=_link_or_model_field(data, "alternative", parse_equipment)
+        or RentmanLink(_str_field(data, "alternative")),
+        raw=dict(data),
+    )
+
+
+def parse_supplier(data: Mapping[str, Any]) -> Supplier:
+    """Build the supplier model from one supplier payload."""
+    return Supplier(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        equipment=_link_or_model_field(data, "equipment", parse_equipment)
+        or RentmanLink(_str_field(data, "equipment")),
+        contact=_link_field(data, "contact"),
+        contactperson=_link_field(data, "contactperson"),
+        price=_float_field(data, "price"),
+        details=_str_field(data, "details"),
+        raw=dict(data),
+    )
+
+
+def parse_vehicle(data: Mapping[str, Any]) -> Vehicle:
+    """Build the vehicle model from one vehicle payload."""
+    return Vehicle(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        folder=_link_or_model_field(data, "folder", parse_folder),
+        name=_str_field(data, "name"),
+        cost_rate=_link_field(data, "cost_rate"),
+        in_planner=_bool_field(data, "in_planner"),
+        height=_float_field(data, "height"),
+        length=_float_field(data, "length"),
+        width=_float_field(data, "width"),
+        seats=_int_field(data, "seats"),
+        inspection_date=_datetime_field(data, "inspection_date"),
+        licenseplate=_str_field(data, "licenseplate"),
+        remark=_str_field(data, "remark"),
+        payload_capacity=_float_field(data, "payload_capacity"),
+        surface_area=_str_field(data, "surface_area"),
+        multiple=_str_field(data, "multiple"),
+        image=_link_field(data, "image"),
+        asset_location=_link_or_model_field(data, "asset_location", parse_stock_location),
+        tags=_codes_field(data, "tags"),
+        distance_cost=_float_field(data, "distance_cost"),
+        fixed_cost=_float_field(data, "fixed_cost"),
+        custom=_custom_field(data),
+        raw=dict(data),
+    )
+
+
+def parse_extra_input_field(data: Mapping[str, Any]) -> ExtraInputField:
+    """Build the extra input field model from one field definition payload."""
+    return ExtraInputField(
+        id=_int_field(data, "id") or 0,
+        created=_datetime_field(data, "created"),
+        modified=_datetime_field(data, "modified"),
+        update_hash=_str_field(data, "updateHash"),
+        creator=_link_field(data, "creator"),
+        displayname=_str_field(data, "displayname"),
+        name=_str_field(data, "name"),
+        itemtype=_str_field(data, "itemtype"),
+        linkedItemType=_str_field(data, "linkedItemType"),
+        parent=_link_or_model_field(data, "parent", parse_extra_input_field),
+        type=_str_field(data, "type"),
+        order=_coerced_str_field(data, "order"),
+        hidden=_bool_field(data, "hidden"),
+        classified=_bool_field(data, "classified"),
+        search_include=_bool_field(data, "search_include"),
+        search_minlength=_int_field(data, "search_minlength"),
+        is_customfield_mandatory=_bool_field(data, "is_customfield_mandatory"),
         raw=dict(data),
     )

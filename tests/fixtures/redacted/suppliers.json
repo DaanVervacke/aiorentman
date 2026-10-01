@@ -1,0 +1,47 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": null,
+      "displayname": "Synthetic 3c19addaf20e",
+      "equipment": "/equipment/354",
+      "contact": "/contacts/3610",
+      "contactperson": null,
+      "price": 10,
+      "details": "Synthetic de3fbde0a189",
+      "updateHash": "6226e7a79a629fdd68aa9cb8d5478c36"
+    },
+    {
+      "id": 2,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": null,
+      "displayname": "Synthetic 3c19addaf20e",
+      "equipment": "/equipment/355",
+      "contact": "/contacts/3610",
+      "contactperson": null,
+      "price": 10,
+      "details": "Synthetic de3fbde0a189",
+      "updateHash": "abf79ee83f6c19960de3bb2855bd856f"
+    },
+    {
+      "id": 3,
+      "created": "2026-10-01T19:32:44+02:00",
+      "modified": "2026-10-01T19:32:44+02:00",
+      "creator": null,
+      "displayname": "Synthetic 3c19addaf20e",
+      "equipment": "/equipment/356",
+      "contact": "/contacts/3610",
+      "contactperson": null,
+      "price": 10,
+      "details": "Synthetic de3fbde0a189",
+      "updateHash": "a4998cae6053d85f8703c0634eb48b3c"
+    }
+  ],
+  "itemCount": 3,
+  "limit": 50,
+  "offset": 0,
+  "next_page_url": null
+}

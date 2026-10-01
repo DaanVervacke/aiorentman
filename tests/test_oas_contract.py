@@ -15,10 +15,13 @@ from aiorentman._endpoints import (
 )
 from aiorentman.const import OAS_VERSION
 from aiorentman.models import (
+    Accessory,
     ActualContent,
+    Alternative,
     Equipment,
     EquipmentAssignedSerial,
     EquipmentSetContent,
+    ExtraInputField,
     Folder,
     Project,
     ProjectEquipment,
@@ -28,16 +31,21 @@ from aiorentman.models import (
     StockLocation,
     StockMovement,
     Subproject,
+    Supplier,
+    Vehicle,
     WarehouseStatus,
 )
 
 FIXTURE = Path(__file__).parent / "fixtures" / "rentman_oas_1.16.0.json"
 
 MODEL_SCHEMAS: dict[type, str] = {
+    Accessory: "AccessoryResponse",
     ActualContent: "ActualContentResponse",
+    Alternative: "AlternativeResponse",
     Equipment: "EquipmentResponse",
     EquipmentAssignedSerial: "EquipmentAssignedSerialsResponse",
     EquipmentSetContent: "EquipmentSetContentResponse",
+    ExtraInputField: "ExtraInputFieldResponse",
     Folder: "FolderResponse",
     Project: "ProjectResponse",
     ProjectEquipment: "ProjectEquipmentResponse",
@@ -47,6 +55,8 @@ MODEL_SCHEMAS: dict[type, str] = {
     StockLocation: "StockLocationResponse",
     StockMovement: "StockMovementResponse",
     Subproject: "SubprojectResponse",
+    Supplier: "SupplierResponse",
+    Vehicle: "VehicleResponse",
     WarehouseStatus: "WarehouseStatusResponse",
 }
 
@@ -119,10 +129,13 @@ def test_model_fields_match_the_spec_properties(spec: dict[str, Any]) -> None:
 
 def test_spec_has_no_undocumented_in_scope_resources(spec: dict[str, Any]) -> None:
     in_scope = {
+        "/accessories",
         "/actualcontent",
+        "/alternatives",
         "/equipment",
         "/equipmentassignedserials",
         "/equipmentsetscontent",
+        "/extrainputfields",
         "/folders",
         "/projectequipment",
         "/projects",
@@ -132,6 +145,8 @@ def test_spec_has_no_undocumented_in_scope_resources(spec: dict[str, Any]) -> No
         "/stocklocations",
         "/stockmovements",
         "/subprojects",
+        "/suppliers",
+        "/vehicles",
         "/warehousestatuses",
     }
     for path in in_scope:
