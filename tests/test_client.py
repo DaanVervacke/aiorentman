@@ -1,6 +1,9 @@
 """Client tests: token resolution, wire pinning, cursors, and ownership."""
 
+import dataclasses
+import inspect
 from collections.abc import Awaitable, Callable
+from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Any
 
 import aiohttp
@@ -8,6 +11,7 @@ import pytest
 from aioresponses import aioresponses
 
 from aiorentman import Query, RentmanClient, RentmanPage, Sort, eq, is_null, lt
+from aiorentman._endpoints import CATALOG, CreateArgs, DeleteArgs, LinkedCreateArgs, UpdateArgs
 from aiorentman.const import BASE_URL, DEFAULT_REQUESTS_PER_SECOND
 from aiorentman.exceptions import (
     RentmanAuthenticationError,
@@ -15,8 +19,10 @@ from aiorentman.exceptions import (
     RentmanInvalidResponseError,
     RentmanNotFoundError,
     RentmanRateLimitError,
+    RentmanValidationError,
 )
-from aiorentman.models import ActualContent, Equipment, Repair, SerialNumber
+from aiorentman.models import ActualContent, Equipment, RentmanLink, Repair, SerialNumber
+from aiorentman.payloads import TaskPayload
 
 from .conftest import (
     EMPTY_ITEM,
@@ -1025,6 +1031,121 @@ async def test_iter_methods_consume_one_page() -> None:
             for call, path in ITERATORS:
                 consumed = [item async for item in call(client, None)]
                 assert consumed == [], path
+
+
+SAMPLE_MOMENT = datetime(2026, 10, 2, 12, 0, tzinfo=UTC)
+SAMPLE_LINK = RentmanLink(path="/crew/1")
+
+
+def minimal_payload(payload_cls: type) -> Any:
+    """Build one payload of one class with a sample value for every required field."""
+    samples: dict[Any, Any] = {
+        str: "sample",
+        int: 1,
+        float: 1.0,
+        bool: True,
+        datetime: SAMPLE_MOMENT,
+        RentmanLink: SAMPLE_LINK,
+    }
+    kwargs: dict[str, Any] = {}
+    for field in dataclasses.fields(payload_cls):
+        if field.default is not dataclasses.MISSING:
+            continue
+        base = field.type
+        if isinstance(base, str):
+            continue
+        for candidate in getattr(base, "__args__", ()):
+            if candidate is not type(None):
+                base = candidate
+        if isinstance(base, type):
+            kwargs[field.name] = samples[base]
+    return payload_cls(**kwargs)
+
+
+def write_case(endpoint: Any) -> tuple[str, tuple[Any, ...], str, str]:
+    """Derive one facade call, its arguments, its path, and its HTTP method."""
+    name = f"async_{endpoint.name}"
+    method = getattr(RentmanClient, name, None)
+    assert method is not None, f"the facade is missing {name}"
+    if endpoint.method == "DELETE":
+        return name, (1,), endpoint.path(DeleteArgs(item_id=1)), "DELETE"
+    if endpoint.method == "PUT":
+        payload_cls = inspect.signature(method).parameters["payload"].annotation
+        update = UpdateArgs(item_id=1, payload=None)
+        return name, (1, minimal_payload(payload_cls)), endpoint.path(update), "PUT"
+    payload_cls = inspect.signature(method).parameters["payload"].annotation
+    if "_of_" in endpoint.name:
+        linked = LinkedCreateArgs(parent_id=1, payload=None)
+        return name, (1, minimal_payload(payload_cls)), endpoint.path(linked), "POST"
+    return name, (minimal_payload(payload_cls),), endpoint.path(CreateArgs(payload=None)), "POST"
+
+
+WRITE_CASES: tuple[tuple[str, tuple[Any, ...], str, str], ...] = tuple(
+    write_case(endpoint) for endpoint in CATALOG if endpoint.method != "GET"
+)
+
+
+async def test_write_methods_hit_their_paths() -> None:
+    async with aiohttp.ClientSession() as session:
+        with aioresponses() as m:
+            for _, _, path, http_method in WRITE_CASES:
+                if http_method == "DELETE":
+                    m.delete(api_url(path))
+                elif http_method == "POST":
+                    m.post(api_url(path), payload=EMPTY_ITEM)
+                else:
+                    m.put(api_url(path), payload=EMPTY_ITEM)
+            client = make_client(session)
+            for method_name, args, path, http_method in WRITE_CASES:
+                result = await getattr(client, method_name)(*args)
+                if http_method == "DELETE":
+                    assert result is None, path
+                else:
+                    assert result is not None, path
+
+
+async def test_create_task_pins_the_wire_body() -> None:
+    async with aiohttp.ClientSession() as session:
+        with aioresponses() as m:
+            m.post(api_url("/tasks"), payload=EMPTY_ITEM)
+            client = make_client(session)
+            await client.async_create_task(
+                TaskPayload(
+                    color="#ffffff",
+                    name="sample",
+                    deadline=SAMPLE_MOMENT,
+                    status=RentmanLink(path="/taskstatuses/3"),
+                    custom={"custom_1": "value"},
+                )
+            )
+            call = recorded_call(m.requests, "POST", f"{BASE_URL}/tasks")
+    assert call.kwargs["json"] == {
+        "color": "#ffffff",
+        "name": "sample",
+        "deadline": "2026-10-02T12:00:00+00:00",
+        "status": "/taskstatuses/3",
+        "custom": {"custom_1": "value"},
+    }
+
+
+async def test_update_task_sends_only_set_fields() -> None:
+    async with aiohttp.ClientSession() as session:
+        with aioresponses() as m:
+            m.put(api_url("/tasks/1"), payload=EMPTY_ITEM)
+            client = make_client(session)
+            await client.async_update_task(1, TaskPayload(color="#ffffff", name="renamed"))
+            call = recorded_call(m.requests, "PUT", f"{BASE_URL}/tasks/1")
+    assert call.kwargs["json"] == {"color": "#ffffff", "name": "renamed"}
+
+
+async def test_create_maps_400_to_validation_error() -> None:
+    async with aiohttp.ClientSession() as session:
+        with aioresponses() as m:
+            m.post(api_url("/tasks"), status=400, body="color is required")
+            client = make_client(session)
+            with pytest.raises(RentmanValidationError, match="color is required") as info:
+                await client.async_create_task(TaskPayload(color="#ffffff"))
+    assert info.value.status == 400
 
 
 async def test_list_equipment_pins_the_wire_request() -> None:

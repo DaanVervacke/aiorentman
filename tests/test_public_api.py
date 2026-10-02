@@ -7,7 +7,7 @@ import inspect
 import pytest
 
 import aiorentman
-from aiorentman import __all__, client, exceptions, models, parsers, query
+from aiorentman import __all__, client, exceptions, models, parsers, payloads, query
 from aiorentman import _endpoints as endpoints
 
 
@@ -35,7 +35,7 @@ def test_reexports_are_identity_imports() -> None:
         if name == "__version__":
             continue
         symbol = getattr(aiorentman, name)
-        sources = (client, endpoints, exceptions, models, parsers, query)
+        sources = (client, endpoints, exceptions, models, parsers, payloads, query)
         defining = [module for module in sources if symbol is getattr(module, name, None)]
         assert defining, f"{name} is not an identity re-export of a submodule symbol"
 

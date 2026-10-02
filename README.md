@@ -17,7 +17,7 @@ pip install aiorentman
 
 ## Scope
 
-The library covers the resources an RFID and materials project needs, read only:
+The library covers the resources an RFID and materials project needs. Reads cover every documented GET path:
 
 | Resource | List | Iterate | Get |
 | --- | --- | --- | --- |
@@ -179,6 +179,40 @@ The library covers the resources an RFID and materials project needs, read only:
 | Factors of a factor group | `async_list_factors_of_factor_group` | `async_iter_factors_of_factor_group` |  |
 | Factor groups | `async_list_factor_groups` | `async_iter_factor_groups` | `async_get_factor_group` |
 
+Writes cover every documented POST, PUT, and DELETE path:
+
+| Resource | Create | Update | Delete |
+| --- | --- | --- | --- |
+| Accessories of a material | `async_create_accessory_of_equipment` | `async_update_accessory` | `async_delete_accessory` |
+| Alternatives of a material | `async_create_alternative_of_equipment` | `async_update_alternative` | `async_delete_alternative` |
+| Appointments | `async_create_appointment` | `async_update_appointment` | `async_delete_appointment` |
+| Availability of a crew member | `async_create_crew_availability_of_crew` | `async_update_crew_availability` | `async_delete_crew_availability` |
+| Contact persons of a contact | `async_create_contact_person_of_contact` | `async_update_contact_person` | `async_delete_contact_person` |
+| Contacts | `async_create_contact` | `async_update_contact` | `async_delete_contact` |
+| Crew on an appointment | `async_create_appointment_crew_of_appointment` | `async_update_appointment_crew` | `async_delete_appointment_crew` |
+| Equipment (materials) | `async_create_equipment` | `async_update_equipment` |  |
+| Folders | `async_create_folder` | `async_update_folder` |  |
+| Function groups of a project | `async_create_project_function_group_of_project` |  |  |
+| Leave mutations | `async_create_leave_mutation` |  |  |
+| Leave requests | `async_create_leave_request` | `async_update_leave_request` |  |
+| Payments of an invoice | `async_create_payment_of_invoice` | `async_update_payment` |  |
+| Project costs of a project | `async_create_project_cost_of_project` | `async_update_project_cost` | `async_delete_project_cost` |
+| Project functions of a project | `async_create_project_function_of_project` |  |  |
+| Project requests | `async_create_project_request` | `async_update_project_request` | `async_delete_project_request` |
+| Projects | `async_create_project` |  |  |
+| Request equipment of a project request | `async_create_project_request_equipment_of_project_request` | `async_update_project_request_equipment` | `async_delete_project_request_equipment` |
+| Serial numbers of a material | `async_create_serial_number_of_equipment` | `async_update_serial_number` | `async_delete_serial_number` |
+| Set contents of a material | `async_create_equipment_set_content_of_equipment` | `async_update_equipment_set_content` | `async_delete_equipment_set_content` |
+| Stock movements of a material | `async_create_stock_movement_of_equipment` | `async_update_stock_movement` | `async_delete_stock_movement` |
+| Subprojects of a project | `async_create_subproject_of_project` |  |  |
+| Subtasks of a task | `async_create_subtask_of_task` | `async_update_subtask` | `async_delete_subtask` |
+| Suppliers of a material | `async_create_supplier_of_equipment` | `async_update_supplier` | `async_delete_supplier` |
+| Task assignments of a task | `async_create_task_assignment_of_task` | `async_update_task_assignment` | `async_delete_task_assignment` |
+| Task statuses | `async_create_task_status` | `async_update_task_status` | `async_delete_task_status` |
+| Tasks | `async_create_task`, `async_create_task_of_contact`, `async_create_task_of_contact_person`, `async_create_task_of_contract`, `async_create_task_of_crew`, `async_create_task_of_equipment`, `async_create_task_of_invoice`, `async_create_task_of_project`, `async_create_task_of_purchase_order`, `async_create_task_of_quote`, `async_create_task_of_repair`, `async_create_task_of_serial_number`, `async_create_task_of_subrental`, `async_create_task_of_supplier`, `async_create_task_of_vehicle` | `async_update_task` | `async_delete_task` |
+| Time registrations | `async_create_time_registration`, `async_create_time_registration_of_leave_request` | `async_update_time_registration` | `async_delete_time_registration` |
+| Vehicles | `async_create_vehicle`, `async_create_vehicle_of_stock_location` | `async_update_vehicle` | `async_delete_vehicle` |
+
 ## Token
 
 Rentman issues one static token per user, generated in the application under Configuration, Integrations. Only the last generated token is valid. Pass it explicitly or set `RENTMAN_TOKEN`:
@@ -233,6 +267,30 @@ async for serial in client.async_iter_serial_numbers(query):
 
 The docs describe the full workflow, including expansion and availability checks: see `docs/serial-numbers.rst`.
 
+## Writing
+
+Create and update methods take one payload class per resource, named after the model plus `Payload`. Fields left unset are left out of the request body, so an update touches only what the caller set:
+
+```python
+from datetime import UTC, datetime
+
+from aiorentman import RentmanLink, TaskPayload
+
+task = await client.async_create_task(
+    TaskPayload(
+        color="#ff0000",
+        name="Patch the rig",
+        deadline=datetime(2026, 10, 6, 17, 0, tzinfo=UTC),
+        status=RentmanLink("/taskstatuses/2"),
+        custom={"custom_3": "truss"},
+    )
+)
+await client.async_update_task(task.id, TaskPayload(color="#ff0000", name="Patched"))
+await client.async_delete_task(task.id)
+```
+
+Datetime fields render as ISO 8601 and link fields take a `RentmanLink` holding the API path of the target. A create or update returns the parsed model of the saved object, or `None` when the response envelope degrades. A delete returns `None`. A 400 answer raises `RentmanValidationError` with the answer text in the message. Clearing a field to `null` is not supported, since fields left unset are not sent.
+
 ## Rate limits
 
 Rentman allows 10 requests per second, at most 20 concurrent requests, and 50.000 requests per day. The client enforces the first two by default. Pass `requests_per_second=None` to disable pacing, or lower it when several consumers share one account. Exceeding the server-side limits raises `RentmanRateLimitError`.
@@ -243,6 +301,7 @@ Rentman allows 10 requests per second, at most 20 concurrent requests, and 50.00
 | --- | --- |
 | `RentmanAuthenticationError` | The token is missing or was rejected |
 | `RentmanAuthorizationError` | The token does not grant access to a resource |
+| `RentmanValidationError` | The API rejected a request body or query as invalid |
 | `RentmanRateLimitError` | The request exceeded the rate limits |
 | `RentmanCommunicationError` | The API is unreachable or answered with a failure |
 | `RentmanTimeoutError` | A request exceeded the configured timeout |

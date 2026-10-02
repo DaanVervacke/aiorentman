@@ -29,6 +29,10 @@ class RentmanAuthenticationError(RentmanError):
     """The API token is missing or was rejected."""
 
 
+class RentmanValidationError(RentmanError):
+    """The Rentman API rejected a request body or query as invalid."""
+
+
 class RentmanAuthorizationError(RentmanError):
     """The token does not grant access to this resource."""
 

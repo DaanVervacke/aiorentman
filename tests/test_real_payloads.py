@@ -23,6 +23,7 @@ from aiorentman.parsers import (
     parse_crew,
     parse_crew_availability,
     parse_crew_rate,
+    parse_envelope_item,
     parse_equipment,
     parse_equipment_assigned_serial,
     parse_equipment_set_content,
@@ -284,6 +285,13 @@ EMPTY_CAPTURES = {
 }
 
 
+WRITE_PARSERS: dict[str, Callable[[Mapping[str, Any]], Any]] = {
+    "write_task_create.json": parse_task,
+    "write_task_update.json": parse_task,
+    "write_subtask_create.json": parse_subtask,
+}
+
+
 def test_every_redacted_capture_parses() -> None:
     for name, parse_item in PARSERS.items():
         payload = json.loads((REDACTED / name).read_text())
@@ -306,7 +314,7 @@ def test_empty_real_collection_parses_to_no_items() -> None:
 
 def test_redacted_covers_every_in_scope_collection() -> None:
     captured = {path.name for path in REDACTED.glob("*.json")}
-    assert captured == set(PARSERS)
+    assert captured == set(PARSERS) | set(WRITE_PARSERS)
 
 
 def test_real_wire_qrcodes_stay_comma_separated() -> None:
@@ -351,3 +359,21 @@ def test_real_wire_rate_links_parse_as_links() -> None:
     payload = json.loads((REDACTED / "project_crew.json").read_text())
     crew = parse_page(payload, parse_project_crew)
     assert all(isinstance(member.cost_rate, RentmanLink) for member in crew.items)
+
+
+def test_write_captures_parse_as_saved_models() -> None:
+    for name, parse_item in WRITE_PARSERS.items():
+        payload = json.loads((REDACTED / name).read_text())
+        model = parse_envelope_item(payload, parse_item)
+        assert model is not None, name
+        assert isinstance(model.id, int), name
+        assert isinstance(model.update_hash, str), name
+        assert model.update_hash, name
+
+
+def test_partial_update_capture_kept_the_unset_fields() -> None:
+    created = json.loads((REDACTED / "write_task_create.json").read_text())
+    updated = json.loads((REDACTED / "write_task_update.json").read_text())
+    assert updated["name"] == created["name"]
+    assert updated["details"] == created["details"]
+    assert updated["color"] != created["color"]

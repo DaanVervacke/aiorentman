@@ -5,7 +5,7 @@ import json
 import logging
 import socket
 import time
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Mapping
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from http import HTTPStatus
@@ -23,6 +23,7 @@ from .exceptions import (
     RentmanNotFoundError,
     RentmanRateLimitError,
     RentmanTimeoutError,
+    RentmanValidationError,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -49,18 +50,21 @@ async def request(
     url: str,
     headers: dict[str, str] | None = None,
     params: dict[str, str] | None = None,
+    body: Mapping[str, Any] | None = None,
     raise_on_error: bool = True,
     timeout: float = 30.0,  # noqa: ASYNC109
 ) -> AsyncIterator[aiohttp.ClientResponse]:
     """Perform one HTTP request and map failures to library exceptions."""
     try:
         started = time.monotonic()
+        kwargs: dict[str, Any] = {} if body is None else {"json": body}
         async with asyncio.timeout(timeout):
             async with session.request(
                 method=method,
                 url=url,
                 headers=headers,
                 params=params,
+                **kwargs,
             ) as response:
                 split = urlsplit(url)
                 _LOGGER.debug(
@@ -97,6 +101,12 @@ async def _raise_for_status(response: aiohttp.ClientResponse) -> None:
     if response.status == HTTPStatus.TOO_MANY_REQUESTS:
         msg = "The Rentman rate limit was exceeded (429)"
         raise RentmanRateLimitError(msg, status=429)
+    if response.status == HTTPStatus.BAD_REQUEST:
+        detail = await _error_detail(response)
+        msg = "The Rentman API rejected the request as invalid (400)"
+        if detail:
+            msg = f"{msg}: {detail}"
+        raise RentmanValidationError(msg, status=400)
     if response.status >= HTTPStatus.BAD_REQUEST:
         detail = await _error_detail(response)
         msg = f"Rentman API error {response.status}"
@@ -125,6 +135,7 @@ async def request_json(
     url: str,
     headers: dict[str, str] | None = None,
     params: dict[str, str] | None = None,
+    body: Mapping[str, Any] | None = None,
     timeout: float = 30.0,  # noqa: ASYNC109
 ) -> Any:
     """Make a request and return the parsed JSON body."""
@@ -134,6 +145,7 @@ async def request_json(
         url=url,
         headers=headers,
         params=params,
+        body=body,
         timeout=timeout,
     ) as response:
         return await json_payload(response)

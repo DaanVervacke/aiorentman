@@ -32,6 +32,51 @@ from ._endpoints import (
     CONTRACTS,
     CONTRACTS_ITEM,
     CONTRACTS_OF_PROJECT,
+    CREATE_ACCESSORY_OF_EQUIPMENT,
+    CREATE_ALTERNATIVE_OF_EQUIPMENT,
+    CREATE_APPOINTMENT,
+    CREATE_APPOINTMENT_CREW_OF_APPOINTMENT,
+    CREATE_CONTACT,
+    CREATE_CONTACT_PERSON_OF_CONTACT,
+    CREATE_CREW_AVAILABILITY_OF_CREW,
+    CREATE_EQUIPMENT,
+    CREATE_EQUIPMENT_SET_CONTENT_OF_EQUIPMENT,
+    CREATE_FOLDER,
+    CREATE_LEAVE_MUTATION,
+    CREATE_LEAVE_REQUEST,
+    CREATE_PAYMENT_OF_INVOICE,
+    CREATE_PROJECT,
+    CREATE_PROJECT_COST_OF_PROJECT,
+    CREATE_PROJECT_FUNCTION_GROUP_OF_PROJECT,
+    CREATE_PROJECT_FUNCTION_OF_PROJECT,
+    CREATE_PROJECT_REQUEST,
+    CREATE_PROJECT_REQUEST_EQUIPMENT_OF_PROJECT_REQUEST,
+    CREATE_SERIAL_NUMBER_OF_EQUIPMENT,
+    CREATE_STOCK_MOVEMENT_OF_EQUIPMENT,
+    CREATE_SUBPROJECT_OF_PROJECT,
+    CREATE_SUBTASK_OF_TASK,
+    CREATE_SUPPLIER_OF_EQUIPMENT,
+    CREATE_TASK,
+    CREATE_TASK_ASSIGNMENT_OF_TASK,
+    CREATE_TASK_OF_CONTACT,
+    CREATE_TASK_OF_CONTACT_PERSON,
+    CREATE_TASK_OF_CONTRACT,
+    CREATE_TASK_OF_CREW,
+    CREATE_TASK_OF_EQUIPMENT,
+    CREATE_TASK_OF_INVOICE,
+    CREATE_TASK_OF_PROJECT,
+    CREATE_TASK_OF_PURCHASE_ORDER,
+    CREATE_TASK_OF_QUOTE,
+    CREATE_TASK_OF_REPAIR,
+    CREATE_TASK_OF_SERIAL_NUMBER,
+    CREATE_TASK_OF_SUBRENTAL,
+    CREATE_TASK_OF_SUPPLIER,
+    CREATE_TASK_OF_VEHICLE,
+    CREATE_TASK_STATUS,
+    CREATE_TIME_REGISTRATION,
+    CREATE_TIME_REGISTRATION_OF_LEAVE_REQUEST,
+    CREATE_VEHICLE,
+    CREATE_VEHICLE_OF_STOCK_LOCATION,
     CREW,
     CREW_AVAILABILITY,
     CREW_AVAILABILITY_ITEM,
@@ -40,6 +85,26 @@ from ._endpoints import (
     CREW_RATES,
     CREW_RATES_ITEM,
     CREW_RATES_OF_CREW,
+    DELETE_ACCESSORY,
+    DELETE_ALTERNATIVE,
+    DELETE_APPOINTMENT,
+    DELETE_APPOINTMENT_CREW,
+    DELETE_CONTACT,
+    DELETE_CONTACT_PERSON,
+    DELETE_CREW_AVAILABILITY,
+    DELETE_EQUIPMENT_SET_CONTENT,
+    DELETE_PROJECT_COST,
+    DELETE_PROJECT_REQUEST,
+    DELETE_PROJECT_REQUEST_EQUIPMENT,
+    DELETE_SERIAL_NUMBER,
+    DELETE_STOCK_MOVEMENT,
+    DELETE_SUBTASK,
+    DELETE_SUPPLIER,
+    DELETE_TASK,
+    DELETE_TASK_ASSIGNMENT,
+    DELETE_TASK_STATUS,
+    DELETE_TIME_REGISTRATION,
+    DELETE_VEHICLE,
     EQUIPMENT,
     EQUIPMENT_ASSIGNED_SERIALS,
     EQUIPMENT_ASSIGNED_SERIALS_ITEM,
@@ -226,15 +291,43 @@ from ._endpoints import (
     TIME_REGISTRATIONS,
     TIME_REGISTRATIONS_ITEM,
     TIME_REGISTRATIONS_OF_LEAVE_REQUEST,
+    UPDATE_ACCESSORY,
+    UPDATE_ALTERNATIVE,
+    UPDATE_APPOINTMENT,
+    UPDATE_APPOINTMENT_CREW,
+    UPDATE_CONTACT,
+    UPDATE_CONTACT_PERSON,
+    UPDATE_CREW_AVAILABILITY,
+    UPDATE_EQUIPMENT,
+    UPDATE_EQUIPMENT_SET_CONTENT,
+    UPDATE_FOLDER,
+    UPDATE_LEAVE_REQUEST,
+    UPDATE_PAYMENT,
+    UPDATE_PROJECT_COST,
+    UPDATE_PROJECT_REQUEST,
+    UPDATE_PROJECT_REQUEST_EQUIPMENT,
+    UPDATE_SERIAL_NUMBER,
+    UPDATE_STOCK_MOVEMENT,
+    UPDATE_SUBTASK,
+    UPDATE_SUPPLIER,
+    UPDATE_TASK,
+    UPDATE_TASK_ASSIGNMENT,
+    UPDATE_TASK_STATUS,
+    UPDATE_TIME_REGISTRATION,
+    UPDATE_VEHICLE,
     VEHICLES,
     VEHICLES_ITEM,
     VEHICLES_OF_STOCK_LOCATION,
     WAREHOUSE_STATUSES,
     WAREHOUSE_STATUSES_ITEM,
     CollectionArgs,
+    CreateArgs,
+    DeleteArgs,
     Endpoint,
     ItemArgs,
+    LinkedCreateArgs,
     ParentCollectionArgs,
+    UpdateArgs,
 )
 from ._ratelimit import RequestPacer
 from ._transport import OwnedSession, request_json
@@ -319,17 +412,50 @@ from .models import (
     Vehicle,
     WarehouseStatus,
 )
+from .payloads import (
+    AccessoryPayload,
+    AlternativePayload,
+    AppointmentCrewPayload,
+    AppointmentPayload,
+    ContactPayload,
+    ContactPersonPayload,
+    CrewAvailabilityPayload,
+    EquipmentPayload,
+    EquipmentSetContentPayload,
+    FolderPayload,
+    LeaveMutationPayload,
+    LeaveRequestPayload,
+    PaymentPayload,
+    ProjectCostPayload,
+    ProjectFunctionGroupPayload,
+    ProjectFunctionPayload,
+    ProjectPayload,
+    ProjectRequestEquipmentPayload,
+    ProjectRequestPayload,
+    SerialNumberPayload,
+    StockMovementPayload,
+    SubprojectPayload,
+    SubtaskPayload,
+    SupplierPayload,
+    TaskAssignmentPayload,
+    TaskPayload,
+    TaskStatusPayload,
+    TimeRegistrationPayload,
+    VehiclePayload,
+)
 from .query import Query
 
 _LOGGER = logging.getLogger(__name__)
 
 
 class RentmanClient:
-    """Asynchronous read-only client for the Rentman API.
+    """Asynchronous client for the Rentman API.
 
     The client covers the inventory and planning resources an RFID and
-    materials project needs. Every request is paced against the documented
-    rate limits unless pacing is disabled with ``requests_per_second=None``.
+    materials project needs, with create, update, and delete methods for
+    every documented write path. Every request is paced against the
+    documented rate limits unless pacing is disabled with
+    ``requests_per_second=None``.
     """
 
     def __init__(
@@ -2960,6 +3086,581 @@ class RentmanClient:
         """Fetch one factor group by its id."""
         return await self._call(FACTOR_GROUPS_ITEM, ItemArgs(item_id=factor_group_id))
 
+    async def async_create_appointment(self, payload: AppointmentPayload) -> Appointment | None:
+        """Create one appointment."""
+        return await self._call(CREATE_APPOINTMENT, CreateArgs(payload))
+
+    async def async_create_contact(self, payload: ContactPayload) -> Contact | None:
+        """Create one contact."""
+        return await self._call(CREATE_CONTACT, CreateArgs(payload))
+
+    async def async_create_equipment(self, payload: EquipmentPayload) -> Equipment | None:
+        """Create one material."""
+        return await self._call(CREATE_EQUIPMENT, CreateArgs(payload))
+
+    async def async_create_folder(self, payload: FolderPayload) -> Folder | None:
+        """Create one folder."""
+        return await self._call(CREATE_FOLDER, CreateArgs(payload))
+
+    async def async_create_leave_request(self, payload: LeaveRequestPayload) -> LeaveRequest | None:
+        """Create one leave request."""
+        return await self._call(CREATE_LEAVE_REQUEST, CreateArgs(payload))
+
+    async def async_create_leave_mutation(
+        self, payload: LeaveMutationPayload
+    ) -> LeaveMutation | None:
+        """Create one leave mutation."""
+        return await self._call(CREATE_LEAVE_MUTATION, CreateArgs(payload))
+
+    async def async_create_project_request(
+        self, payload: ProjectRequestPayload
+    ) -> ProjectRequest | None:
+        """Create one project request."""
+        return await self._call(CREATE_PROJECT_REQUEST, CreateArgs(payload))
+
+    async def async_create_project(self, payload: ProjectPayload) -> Project | None:
+        """Create one project."""
+        return await self._call(CREATE_PROJECT, CreateArgs(payload))
+
+    async def async_create_task(self, payload: TaskPayload) -> Task | None:
+        """Create one task."""
+        return await self._call(CREATE_TASK, CreateArgs(payload))
+
+    async def async_create_task_status(self, payload: TaskStatusPayload) -> TaskStatus | None:
+        """Create one task status."""
+        return await self._call(CREATE_TASK_STATUS, CreateArgs(payload))
+
+    async def async_create_time_registration(
+        self, payload: TimeRegistrationPayload
+    ) -> TimeRegistration | None:
+        """Create one time registration."""
+        return await self._call(CREATE_TIME_REGISTRATION, CreateArgs(payload))
+
+    async def async_create_vehicle(self, payload: VehiclePayload) -> Vehicle | None:
+        """Create one vehicle."""
+        return await self._call(CREATE_VEHICLE, CreateArgs(payload))
+
+    async def async_create_appointment_crew_of_appointment(
+        self, appointment_id: int, payload: AppointmentCrewPayload
+    ) -> AppointmentCrew | None:
+        """Create one appointment crew on one appointment."""
+        return await self._call(
+            CREATE_APPOINTMENT_CREW_OF_APPOINTMENT,
+            LinkedCreateArgs(appointment_id, payload),
+        )
+
+    async def async_create_contact_person_of_contact(
+        self, contact_id: int, payload: ContactPersonPayload
+    ) -> ContactPerson | None:
+        """Create one contact person on one contact."""
+        return await self._call(
+            CREATE_CONTACT_PERSON_OF_CONTACT,
+            LinkedCreateArgs(contact_id, payload),
+        )
+
+    async def async_create_crew_availability_of_crew(
+        self, crew_id: int, payload: CrewAvailabilityPayload
+    ) -> CrewAvailability | None:
+        """Create one crew availability on one crew member."""
+        return await self._call(
+            CREATE_CREW_AVAILABILITY_OF_CREW,
+            LinkedCreateArgs(crew_id, payload),
+        )
+
+    async def async_create_accessory_of_equipment(
+        self, equipment_id: int, payload: AccessoryPayload
+    ) -> Accessory | None:
+        """Create one accessory on one material."""
+        return await self._call(
+            CREATE_ACCESSORY_OF_EQUIPMENT,
+            LinkedCreateArgs(equipment_id, payload),
+        )
+
+    async def async_create_alternative_of_equipment(
+        self, equipment_id: int, payload: AlternativePayload
+    ) -> Alternative | None:
+        """Create one alternative on one material."""
+        return await self._call(
+            CREATE_ALTERNATIVE_OF_EQUIPMENT,
+            LinkedCreateArgs(equipment_id, payload),
+        )
+
+    async def async_create_equipment_set_content_of_equipment(
+        self, equipment_id: int, payload: EquipmentSetContentPayload
+    ) -> EquipmentSetContent | None:
+        """Create one equipment set content on one material."""
+        return await self._call(
+            CREATE_EQUIPMENT_SET_CONTENT_OF_EQUIPMENT,
+            LinkedCreateArgs(equipment_id, payload),
+        )
+
+    async def async_create_serial_number_of_equipment(
+        self, equipment_id: int, payload: SerialNumberPayload
+    ) -> SerialNumber | None:
+        """Create one serial number on one material."""
+        return await self._call(
+            CREATE_SERIAL_NUMBER_OF_EQUIPMENT,
+            LinkedCreateArgs(equipment_id, payload),
+        )
+
+    async def async_create_stock_movement_of_equipment(
+        self, equipment_id: int, payload: StockMovementPayload
+    ) -> StockMovement | None:
+        """Create one stock movement on one material."""
+        return await self._call(
+            CREATE_STOCK_MOVEMENT_OF_EQUIPMENT,
+            LinkedCreateArgs(equipment_id, payload),
+        )
+
+    async def async_create_supplier_of_equipment(
+        self, equipment_id: int, payload: SupplierPayload
+    ) -> Supplier | None:
+        """Create one supplier on one material."""
+        return await self._call(
+            CREATE_SUPPLIER_OF_EQUIPMENT,
+            LinkedCreateArgs(equipment_id, payload),
+        )
+
+    async def async_create_payment_of_invoice(
+        self, invoice_id: int, payload: PaymentPayload
+    ) -> Payment | None:
+        """Create one payment on one invoice."""
+        return await self._call(
+            CREATE_PAYMENT_OF_INVOICE,
+            LinkedCreateArgs(invoice_id, payload),
+        )
+
+    async def async_create_time_registration_of_leave_request(
+        self, leave_request_id: int, payload: TimeRegistrationPayload
+    ) -> TimeRegistration | None:
+        """Create one time registration on one leave request."""
+        return await self._call(
+            CREATE_TIME_REGISTRATION_OF_LEAVE_REQUEST,
+            LinkedCreateArgs(leave_request_id, payload),
+        )
+
+    async def async_create_project_request_equipment_of_project_request(
+        self, project_request_id: int, payload: ProjectRequestEquipmentPayload
+    ) -> ProjectRequestEquipment | None:
+        """Create one project request equipment on one project request."""
+        return await self._call(
+            CREATE_PROJECT_REQUEST_EQUIPMENT_OF_PROJECT_REQUEST,
+            LinkedCreateArgs(project_request_id, payload),
+        )
+
+    async def async_create_project_cost_of_project(
+        self, project_id: int, payload: ProjectCostPayload
+    ) -> ProjectCost | None:
+        """Create one project cost on one project."""
+        return await self._call(
+            CREATE_PROJECT_COST_OF_PROJECT,
+            LinkedCreateArgs(project_id, payload),
+        )
+
+    async def async_create_project_function_group_of_project(
+        self, project_id: int, payload: ProjectFunctionGroupPayload
+    ) -> ProjectFunctionGroup | None:
+        """Create one project function group on one project."""
+        return await self._call(
+            CREATE_PROJECT_FUNCTION_GROUP_OF_PROJECT,
+            LinkedCreateArgs(project_id, payload),
+        )
+
+    async def async_create_project_function_of_project(
+        self, project_id: int, payload: ProjectFunctionPayload
+    ) -> ProjectFunction | None:
+        """Create one project function on one project."""
+        return await self._call(
+            CREATE_PROJECT_FUNCTION_OF_PROJECT,
+            LinkedCreateArgs(project_id, payload),
+        )
+
+    async def async_create_subproject_of_project(
+        self, project_id: int, payload: SubprojectPayload
+    ) -> Subproject | None:
+        """Create one subproject on one project."""
+        return await self._call(
+            CREATE_SUBPROJECT_OF_PROJECT,
+            LinkedCreateArgs(project_id, payload),
+        )
+
+    async def async_create_task_of_purchase_order(
+        self, purchase_order_id: int, payload: TaskPayload
+    ) -> Task | None:
+        """Create one task on one purchase order."""
+        return await self._call(
+            CREATE_TASK_OF_PURCHASE_ORDER,
+            LinkedCreateArgs(purchase_order_id, payload),
+        )
+
+    async def async_create_task_of_quote(self, quote_id: int, payload: TaskPayload) -> Task | None:
+        """Create one task on one quote."""
+        return await self._call(
+            CREATE_TASK_OF_QUOTE,
+            LinkedCreateArgs(quote_id, payload),
+        )
+
+    async def async_create_task_of_repair(
+        self, repair_id: int, payload: TaskPayload
+    ) -> Task | None:
+        """Create one task on one repair."""
+        return await self._call(
+            CREATE_TASK_OF_REPAIR,
+            LinkedCreateArgs(repair_id, payload),
+        )
+
+    async def async_create_task_of_serial_number(
+        self, serial_number_id: int, payload: TaskPayload
+    ) -> Task | None:
+        """Create one task on one serial number."""
+        return await self._call(
+            CREATE_TASK_OF_SERIAL_NUMBER,
+            LinkedCreateArgs(serial_number_id, payload),
+        )
+
+    async def async_create_vehicle_of_stock_location(
+        self, stock_location_id: int, payload: VehiclePayload
+    ) -> Vehicle | None:
+        """Create one vehicle on one stock location."""
+        return await self._call(
+            CREATE_VEHICLE_OF_STOCK_LOCATION,
+            LinkedCreateArgs(stock_location_id, payload),
+        )
+
+    async def async_create_task_of_subrental(
+        self, subrental_id: int, payload: TaskPayload
+    ) -> Task | None:
+        """Create one task on one subrental."""
+        return await self._call(
+            CREATE_TASK_OF_SUBRENTAL,
+            LinkedCreateArgs(subrental_id, payload),
+        )
+
+    async def async_create_subtask_of_task(
+        self, task_id: int, payload: SubtaskPayload
+    ) -> Subtask | None:
+        """Create one subtask on one task."""
+        return await self._call(
+            CREATE_SUBTASK_OF_TASK,
+            LinkedCreateArgs(task_id, payload),
+        )
+
+    async def async_create_task_assignment_of_task(
+        self, task_id: int, payload: TaskAssignmentPayload
+    ) -> TaskAssignment | None:
+        """Create one task assignment on one task."""
+        return await self._call(
+            CREATE_TASK_ASSIGNMENT_OF_TASK,
+            LinkedCreateArgs(task_id, payload),
+        )
+
+    async def async_create_task_of_contact_person(
+        self, contact_person_id: int, payload: TaskPayload
+    ) -> Task | None:
+        """Create one task on one contact person."""
+        return await self._call(
+            CREATE_TASK_OF_CONTACT_PERSON,
+            LinkedCreateArgs(contact_person_id, payload),
+        )
+
+    async def async_create_task_of_contact(
+        self, contact_id: int, payload: TaskPayload
+    ) -> Task | None:
+        """Create one task on one contact."""
+        return await self._call(
+            CREATE_TASK_OF_CONTACT,
+            LinkedCreateArgs(contact_id, payload),
+        )
+
+    async def async_create_task_of_contract(
+        self, contract_id: int, payload: TaskPayload
+    ) -> Task | None:
+        """Create one task on one contract."""
+        return await self._call(
+            CREATE_TASK_OF_CONTRACT,
+            LinkedCreateArgs(contract_id, payload),
+        )
+
+    async def async_create_task_of_crew(self, crew_id: int, payload: TaskPayload) -> Task | None:
+        """Create one task on one crew member."""
+        return await self._call(
+            CREATE_TASK_OF_CREW,
+            LinkedCreateArgs(crew_id, payload),
+        )
+
+    async def async_create_task_of_equipment(
+        self, equipment_id: int, payload: TaskPayload
+    ) -> Task | None:
+        """Create one task on one material."""
+        return await self._call(
+            CREATE_TASK_OF_EQUIPMENT,
+            LinkedCreateArgs(equipment_id, payload),
+        )
+
+    async def async_create_task_of_invoice(
+        self, invoice_id: int, payload: TaskPayload
+    ) -> Task | None:
+        """Create one task on one invoice."""
+        return await self._call(
+            CREATE_TASK_OF_INVOICE,
+            LinkedCreateArgs(invoice_id, payload),
+        )
+
+    async def async_create_task_of_project(
+        self, project_id: int, payload: TaskPayload
+    ) -> Task | None:
+        """Create one task on one project."""
+        return await self._call(
+            CREATE_TASK_OF_PROJECT,
+            LinkedCreateArgs(project_id, payload),
+        )
+
+    async def async_create_task_of_supplier(
+        self, supplier_id: int, payload: TaskPayload
+    ) -> Task | None:
+        """Create one task on one supplier."""
+        return await self._call(
+            CREATE_TASK_OF_SUPPLIER,
+            LinkedCreateArgs(supplier_id, payload),
+        )
+
+    async def async_create_task_of_vehicle(
+        self, vehicle_id: int, payload: TaskPayload
+    ) -> Task | None:
+        """Create one task on one vehicle."""
+        return await self._call(
+            CREATE_TASK_OF_VEHICLE,
+            LinkedCreateArgs(vehicle_id, payload),
+        )
+
+    async def async_update_accessory(
+        self, accessory_id: int, payload: AccessoryPayload
+    ) -> Accessory | None:
+        """Update one accessory by its id."""
+        return await self._call(UPDATE_ACCESSORY, UpdateArgs(accessory_id, payload))
+
+    async def async_update_alternative(
+        self, alternative_id: int, payload: AlternativePayload
+    ) -> Alternative | None:
+        """Update one alternative by its id."""
+        return await self._call(UPDATE_ALTERNATIVE, UpdateArgs(alternative_id, payload))
+
+    async def async_update_appointment_crew(
+        self, appointment_crew_id: int, payload: AppointmentCrewPayload
+    ) -> AppointmentCrew | None:
+        """Update one appointment crew by its id."""
+        return await self._call(UPDATE_APPOINTMENT_CREW, UpdateArgs(appointment_crew_id, payload))
+
+    async def async_update_appointment(
+        self, appointment_id: int, payload: AppointmentPayload
+    ) -> Appointment | None:
+        """Update one appointment by its id."""
+        return await self._call(UPDATE_APPOINTMENT, UpdateArgs(appointment_id, payload))
+
+    async def async_update_contact_person(
+        self, contact_person_id: int, payload: ContactPersonPayload
+    ) -> ContactPerson | None:
+        """Update one contact person by its id."""
+        return await self._call(UPDATE_CONTACT_PERSON, UpdateArgs(contact_person_id, payload))
+
+    async def async_update_contact(
+        self, contact_id: int, payload: ContactPayload
+    ) -> Contact | None:
+        """Update one contact by its id."""
+        return await self._call(UPDATE_CONTACT, UpdateArgs(contact_id, payload))
+
+    async def async_update_project_cost(
+        self, project_cost_id: int, payload: ProjectCostPayload
+    ) -> ProjectCost | None:
+        """Update one project cost by its id."""
+        return await self._call(UPDATE_PROJECT_COST, UpdateArgs(project_cost_id, payload))
+
+    async def async_update_crew_availability(
+        self, crew_availability_id: int, payload: CrewAvailabilityPayload
+    ) -> CrewAvailability | None:
+        """Update one crew availability by its id."""
+        return await self._call(UPDATE_CREW_AVAILABILITY, UpdateArgs(crew_availability_id, payload))
+
+    async def async_update_equipment(
+        self, equipment_id: int, payload: EquipmentPayload
+    ) -> Equipment | None:
+        """Update one equipment by its id."""
+        return await self._call(UPDATE_EQUIPMENT, UpdateArgs(equipment_id, payload))
+
+    async def async_update_equipment_set_content(
+        self, equipment_set_content_id: int, payload: EquipmentSetContentPayload
+    ) -> EquipmentSetContent | None:
+        """Update one equipment set content by its id."""
+        return await self._call(
+            UPDATE_EQUIPMENT_SET_CONTENT, UpdateArgs(equipment_set_content_id, payload)
+        )
+
+    async def async_update_folder(self, folder_id: int, payload: FolderPayload) -> Folder | None:
+        """Update one folder by its id."""
+        return await self._call(UPDATE_FOLDER, UpdateArgs(folder_id, payload))
+
+    async def async_update_leave_request(
+        self, leave_request_id: int, payload: LeaveRequestPayload
+    ) -> LeaveRequest | None:
+        """Update one leave request by its id."""
+        return await self._call(UPDATE_LEAVE_REQUEST, UpdateArgs(leave_request_id, payload))
+
+    async def async_update_payment(
+        self, payment_id: int, payload: PaymentPayload
+    ) -> Payment | None:
+        """Update one payment by its id."""
+        return await self._call(UPDATE_PAYMENT, UpdateArgs(payment_id, payload))
+
+    async def async_update_project_request_equipment(
+        self, project_request_equipment_id: int, payload: ProjectRequestEquipmentPayload
+    ) -> ProjectRequestEquipment | None:
+        """Update one project request equipment by its id."""
+        return await self._call(
+            UPDATE_PROJECT_REQUEST_EQUIPMENT, UpdateArgs(project_request_equipment_id, payload)
+        )
+
+    async def async_update_project_request(
+        self, project_request_id: int, payload: ProjectRequestPayload
+    ) -> ProjectRequest | None:
+        """Update one project request by its id."""
+        return await self._call(UPDATE_PROJECT_REQUEST, UpdateArgs(project_request_id, payload))
+
+    async def async_update_serial_number(
+        self, serial_number_id: int, payload: SerialNumberPayload
+    ) -> SerialNumber | None:
+        """Update one serial number by its id."""
+        return await self._call(UPDATE_SERIAL_NUMBER, UpdateArgs(serial_number_id, payload))
+
+    async def async_update_stock_movement(
+        self, stock_movement_id: int, payload: StockMovementPayload
+    ) -> StockMovement | None:
+        """Update one stock movement by its id."""
+        return await self._call(UPDATE_STOCK_MOVEMENT, UpdateArgs(stock_movement_id, payload))
+
+    async def async_update_subtask(
+        self, subtask_id: int, payload: SubtaskPayload
+    ) -> Subtask | None:
+        """Update one subtask by its id."""
+        return await self._call(UPDATE_SUBTASK, UpdateArgs(subtask_id, payload))
+
+    async def async_update_supplier(
+        self, supplier_id: int, payload: SupplierPayload
+    ) -> Supplier | None:
+        """Update one supplier by its id."""
+        return await self._call(UPDATE_SUPPLIER, UpdateArgs(supplier_id, payload))
+
+    async def async_update_task_assignment(
+        self, task_assignment_id: int, payload: TaskAssignmentPayload
+    ) -> TaskAssignment | None:
+        """Update one task assignment by its id."""
+        return await self._call(UPDATE_TASK_ASSIGNMENT, UpdateArgs(task_assignment_id, payload))
+
+    async def async_update_task(self, task_id: int, payload: TaskPayload) -> Task | None:
+        """Update one task by its id."""
+        return await self._call(UPDATE_TASK, UpdateArgs(task_id, payload))
+
+    async def async_update_task_status(
+        self, task_status_id: int, payload: TaskStatusPayload
+    ) -> TaskStatus | None:
+        """Update one task status by its id."""
+        return await self._call(UPDATE_TASK_STATUS, UpdateArgs(task_status_id, payload))
+
+    async def async_update_time_registration(
+        self, time_registration_id: int, payload: TimeRegistrationPayload
+    ) -> TimeRegistration | None:
+        """Update one time registration by its id."""
+        return await self._call(UPDATE_TIME_REGISTRATION, UpdateArgs(time_registration_id, payload))
+
+    async def async_update_vehicle(
+        self, vehicle_id: int, payload: VehiclePayload
+    ) -> Vehicle | None:
+        """Update one vehicle by its id."""
+        return await self._call(UPDATE_VEHICLE, UpdateArgs(vehicle_id, payload))
+
+    async def async_delete_accessory(self, accessory_id: int) -> None:
+        """Delete one accessory by its id."""
+        return await self._call(DELETE_ACCESSORY, DeleteArgs(accessory_id))
+
+    async def async_delete_alternative(self, alternative_id: int) -> None:
+        """Delete one alternative by its id."""
+        return await self._call(DELETE_ALTERNATIVE, DeleteArgs(alternative_id))
+
+    async def async_delete_appointment_crew(self, appointment_crew_id: int) -> None:
+        """Delete one appointment crew by its id."""
+        return await self._call(DELETE_APPOINTMENT_CREW, DeleteArgs(appointment_crew_id))
+
+    async def async_delete_appointment(self, appointment_id: int) -> None:
+        """Delete one appointment by its id."""
+        return await self._call(DELETE_APPOINTMENT, DeleteArgs(appointment_id))
+
+    async def async_delete_contact_person(self, contact_person_id: int) -> None:
+        """Delete one contact person by its id."""
+        return await self._call(DELETE_CONTACT_PERSON, DeleteArgs(contact_person_id))
+
+    async def async_delete_contact(self, contact_id: int) -> None:
+        """Delete one contact by its id."""
+        return await self._call(DELETE_CONTACT, DeleteArgs(contact_id))
+
+    async def async_delete_project_cost(self, project_cost_id: int) -> None:
+        """Delete one project cost by its id."""
+        return await self._call(DELETE_PROJECT_COST, DeleteArgs(project_cost_id))
+
+    async def async_delete_crew_availability(self, crew_availability_id: int) -> None:
+        """Delete one crew availability by its id."""
+        return await self._call(DELETE_CREW_AVAILABILITY, DeleteArgs(crew_availability_id))
+
+    async def async_delete_equipment_set_content(self, equipment_set_content_id: int) -> None:
+        """Delete one equipment set content by its id."""
+        return await self._call(DELETE_EQUIPMENT_SET_CONTENT, DeleteArgs(equipment_set_content_id))
+
+    async def async_delete_project_request_equipment(
+        self, project_request_equipment_id: int
+    ) -> None:
+        """Delete one project request equipment by its id."""
+        return await self._call(
+            DELETE_PROJECT_REQUEST_EQUIPMENT, DeleteArgs(project_request_equipment_id)
+        )
+
+    async def async_delete_project_request(self, project_request_id: int) -> None:
+        """Delete one project request by its id."""
+        return await self._call(DELETE_PROJECT_REQUEST, DeleteArgs(project_request_id))
+
+    async def async_delete_serial_number(self, serial_number_id: int) -> None:
+        """Delete one serial number by its id."""
+        return await self._call(DELETE_SERIAL_NUMBER, DeleteArgs(serial_number_id))
+
+    async def async_delete_stock_movement(self, stock_movement_id: int) -> None:
+        """Delete one stock movement by its id."""
+        return await self._call(DELETE_STOCK_MOVEMENT, DeleteArgs(stock_movement_id))
+
+    async def async_delete_subtask(self, subtask_id: int) -> None:
+        """Delete one subtask by its id."""
+        return await self._call(DELETE_SUBTASK, DeleteArgs(subtask_id))
+
+    async def async_delete_supplier(self, supplier_id: int) -> None:
+        """Delete one supplier by its id."""
+        return await self._call(DELETE_SUPPLIER, DeleteArgs(supplier_id))
+
+    async def async_delete_task_assignment(self, task_assignment_id: int) -> None:
+        """Delete one task assignment by its id."""
+        return await self._call(DELETE_TASK_ASSIGNMENT, DeleteArgs(task_assignment_id))
+
+    async def async_delete_task(self, task_id: int) -> None:
+        """Delete one task by its id."""
+        return await self._call(DELETE_TASK, DeleteArgs(task_id))
+
+    async def async_delete_task_status(self, task_status_id: int) -> None:
+        """Delete one task status by its id."""
+        return await self._call(DELETE_TASK_STATUS, DeleteArgs(task_status_id))
+
+    async def async_delete_time_registration(self, time_registration_id: int) -> None:
+        """Delete one time registration by its id."""
+        return await self._call(DELETE_TIME_REGISTRATION, DeleteArgs(time_registration_id))
+
+    async def async_delete_vehicle(self, vehicle_id: int) -> None:
+        """Delete one vehicle by its id."""
+        return await self._call(DELETE_VEHICLE, DeleteArgs(vehicle_id))
+
     async def _call[ArgsT, ModelT](
         self,
         endpoint: Endpoint[ArgsT, ModelT],
@@ -2990,6 +3691,7 @@ class RentmanClient:
                 url=url,
                 headers=headers,
                 params=params,
+                body=endpoint.body(args),
                 timeout=self._request_timeout,
             )
 

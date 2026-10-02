@@ -6,6 +6,7 @@ from unittest.mock import AsyncMock, Mock
 import aiohttp
 import pytest
 from aioresponses import aioresponses
+from yarl import URL
 
 from aiorentman._transport import (
     OwnedSession,
@@ -23,6 +24,7 @@ from aiorentman.exceptions import (
     RentmanNotFoundError,
     RentmanRateLimitError,
     RentmanTimeoutError,
+    RentmanValidationError,
 )
 
 from .conftest import api_url
@@ -70,6 +72,39 @@ async def test_status_429_maps_to_rate_limit_error() -> None:
             with pytest.raises(RentmanRateLimitError, match="rate limit") as info:
                 await request_json(session, method="GET", url=f"{BASE_URL}/equipment")
     assert info.value.status == 429
+
+
+async def test_status_400_maps_to_validation_error() -> None:
+    async with aiohttp.ClientSession() as session:
+        with aioresponses() as m:
+            m.get(api_url("/equipment"), status=400, body="color is required")
+            with pytest.raises(RentmanValidationError, match="rejected the request") as info:
+                await request_json(session, method="GET", url=f"{BASE_URL}/equipment")
+    assert info.value.status == 400
+    assert "color is required" in str(info.value)
+
+
+async def test_status_400_without_a_body_carries_no_detail() -> None:
+    async with aiohttp.ClientSession() as session:
+        with aioresponses() as m:
+            m.get(api_url("/equipment"), status=400, body="")
+            with pytest.raises(RentmanValidationError, match="rejected the request as invalid"):
+                await request_json(session, method="GET", url=f"{BASE_URL}/equipment")
+
+
+async def test_request_json_sends_the_body() -> None:
+    async with aiohttp.ClientSession() as session:
+        with aioresponses() as m:
+            m.post(api_url("/tasks"), payload={"data": {"id": 1}})
+            result = await request_json(
+                session,
+                method="POST",
+                url=f"{BASE_URL}/tasks",
+                body={"color": "#ffffff"},
+            )
+            call = m.requests[("POST", URL(f"{BASE_URL}/tasks"))][0]
+    assert result == {"data": {"id": 1}}
+    assert call.kwargs["json"] == {"color": "#ffffff"}
 
 
 async def test_status_500_maps_to_communication_error_with_detail() -> None:

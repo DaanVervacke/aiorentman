@@ -141,6 +141,7 @@ from .parsers import (
     parse_vehicle,
     parse_warehouse_status,
 )
+from .payloads import to_wire
 from .query import Query
 
 
@@ -177,15 +178,78 @@ class ParentCollectionArgs:
 
 
 @dataclass(frozen=True, slots=True)
+class CreateArgs:
+    """One create body for a standalone collection."""
+
+    payload: object
+
+
+@dataclass(frozen=True, slots=True)
+class LinkedCreateArgs:
+    """One create body attached to one parent id."""
+
+    parent_id: int
+    payload: object
+
+    def __post_init__(self) -> None:
+        if self.parent_id < 1:
+            msg = "parent_id must be a positive id"
+            raise ValueError(msg)
+
+
+@dataclass(frozen=True, slots=True)
+class UpdateArgs:
+    """One update body for one item id."""
+
+    item_id: int
+    payload: object
+
+    def __post_init__(self) -> None:
+        if self.item_id < 1:
+            msg = "item_id must be a positive id"
+            raise ValueError(msg)
+
+
+@dataclass(frozen=True, slots=True)
+class DeleteArgs:
+    """One item to delete, addressed by its numeric id."""
+
+    item_id: int
+
+    def __post_init__(self) -> None:
+        if self.item_id < 1:
+            msg = "item_id must be a positive id"
+            raise ValueError(msg)
+
+
+def _no_body(_args: Any) -> dict[str, Any] | None:
+    return None
+
+
+def _create_body(args: CreateArgs) -> dict[str, Any] | None:
+    return to_wire(args.payload)
+
+
+def _linked_create_body(args: LinkedCreateArgs) -> dict[str, Any] | None:
+    return to_wire(args.payload)
+
+
+def _update_body(args: UpdateArgs) -> dict[str, Any] | None:
+    return to_wire(args.payload)
+
+
+@dataclass(frozen=True, slots=True)
 class Endpoint[ArgsT, ModelT]:
-    """One wire contract: method, path, params, the parse step, and schema."""
+    """One wire contract: method, path, params, body, the parse step, and schemas."""
 
     name: str
     method: str
     path: Callable[[ArgsT], str]
     parse: Callable[[Any, ArgsT], ModelT]
     params: Callable[[ArgsT], dict[str, str]]
-    response_schema: str
+    response_schema: str | None
+    body: Callable[[ArgsT], dict[str, Any] | None] = _no_body
+    request_schema: str | None = None
 
 
 def _collection_params(args: CollectionArgs) -> dict[str, str]:
@@ -2255,6 +2319,1044 @@ FACTOR_GROUPS_ITEM: Endpoint[ItemArgs, FactorGroup | None] = Endpoint(
     response_schema="FactorGroupsResponse",
 )
 
+CREATE_APPOINTMENT: Endpoint[CreateArgs, Appointment | None] = Endpoint(
+    name="create_appointment",
+    method="POST",
+    path=lambda _args: "/appointments",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_appointment),
+    params=lambda _args: {},
+    response_schema="AppointmentResponse",
+    body=_create_body,
+    request_schema="AppointmentRequest",
+)
+
+
+CREATE_CONTACT: Endpoint[CreateArgs, Contact | None] = Endpoint(
+    name="create_contact",
+    method="POST",
+    path=lambda _args: "/contacts",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_contact),
+    params=lambda _args: {},
+    response_schema="ContactResponse",
+    body=_create_body,
+    request_schema="ContactRequest",
+)
+
+
+CREATE_EQUIPMENT: Endpoint[CreateArgs, Equipment | None] = Endpoint(
+    name="create_equipment",
+    method="POST",
+    path=lambda _args: "/equipment",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_equipment),
+    params=lambda _args: {},
+    response_schema="EquipmentResponse",
+    body=_create_body,
+    request_schema="EquipmentRequest",
+)
+
+
+CREATE_FOLDER: Endpoint[CreateArgs, Folder | None] = Endpoint(
+    name="create_folder",
+    method="POST",
+    path=lambda _args: "/folders",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_folder),
+    params=lambda _args: {},
+    response_schema="FolderResponse",
+    body=_create_body,
+    request_schema="FolderRequest",
+)
+
+
+CREATE_LEAVE_REQUEST: Endpoint[CreateArgs, LeaveRequest | None] = Endpoint(
+    name="create_leave_request",
+    method="POST",
+    path=lambda _args: "/leaverequest",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_leave_request),
+    params=lambda _args: {},
+    response_schema="LeaveRequestResponse",
+    body=_create_body,
+    request_schema="LeaveRequestRequest",
+)
+
+
+CREATE_LEAVE_MUTATION: Endpoint[CreateArgs, LeaveMutation | None] = Endpoint(
+    name="create_leave_mutation",
+    method="POST",
+    path=lambda _args: "/leavemutation",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_leave_mutation),
+    params=lambda _args: {},
+    response_schema="LeaveMutationsResponse",
+    body=_create_body,
+    request_schema="LeaveMutationsRequest",
+)
+
+
+CREATE_PROJECT_REQUEST: Endpoint[CreateArgs, ProjectRequest | None] = Endpoint(
+    name="create_project_request",
+    method="POST",
+    path=lambda _args: "/projectrequests",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_request),
+    params=lambda _args: {},
+    response_schema="ProjectRequestResponse",
+    body=_create_body,
+    request_schema="ProjectRequestRequest",
+)
+
+
+CREATE_PROJECT: Endpoint[CreateArgs, Project | None] = Endpoint(
+    name="create_project",
+    method="POST",
+    path=lambda _args: "/projects",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project),
+    params=lambda _args: {},
+    response_schema="ProjectResponse",
+    body=_create_body,
+    request_schema="ProjectRequest",
+)
+
+
+CREATE_TASK: Endpoint[CreateArgs, Task | None] = Endpoint(
+    name="create_task",
+    method="POST",
+    path=lambda _args: "/tasks",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
+    params=lambda _args: {},
+    response_schema="TaskResponse",
+    body=_create_body,
+    request_schema="TaskRequest",
+)
+
+
+CREATE_TASK_STATUS: Endpoint[CreateArgs, TaskStatus | None] = Endpoint(
+    name="create_task_status",
+    method="POST",
+    path=lambda _args: "/taskstatuses",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task_status),
+    params=lambda _args: {},
+    response_schema="TaskStatusResponse",
+    body=_create_body,
+    request_schema="TaskStatusRequest",
+)
+
+
+CREATE_TIME_REGISTRATION: Endpoint[CreateArgs, TimeRegistration | None] = Endpoint(
+    name="create_time_registration",
+    method="POST",
+    path=lambda _args: "/timeregistration",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_time_registration),
+    params=lambda _args: {},
+    response_schema="TimeRegistrationResponse",
+    body=_create_body,
+    request_schema="TimeRegistrationRequest",
+)
+
+
+CREATE_VEHICLE: Endpoint[CreateArgs, Vehicle | None] = Endpoint(
+    name="create_vehicle",
+    method="POST",
+    path=lambda _args: "/vehicles",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_vehicle),
+    params=lambda _args: {},
+    response_schema="VehicleResponse",
+    body=_create_body,
+    request_schema="VehicleRequest",
+)
+
+
+CREATE_APPOINTMENT_CREW_OF_APPOINTMENT: Endpoint[LinkedCreateArgs, AppointmentCrew | None] = (
+    Endpoint(
+        name="create_appointment_crew_of_appointment",
+        method="POST",
+        path=lambda args: f"/appointments/{args.parent_id}/appointmentcrew",
+        parse=lambda payload, _args: parse_envelope_item(payload, parse_appointment_crew),
+        params=lambda _args: {},
+        response_schema="AppointmentCrewResponse",
+        body=_linked_create_body,
+        request_schema="AppointmentCrewRequest",
+    )
+)
+
+
+CREATE_CONTACT_PERSON_OF_CONTACT: Endpoint[LinkedCreateArgs, ContactPerson | None] = Endpoint(
+    name="create_contact_person_of_contact",
+    method="POST",
+    path=lambda args: f"/contacts/{args.parent_id}/contactpersons",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_contact_person),
+    params=lambda _args: {},
+    response_schema="ContactPersonResponse",
+    body=_linked_create_body,
+    request_schema="ContactPersonRequest",
+)
+
+
+CREATE_CREW_AVAILABILITY_OF_CREW: Endpoint[LinkedCreateArgs, CrewAvailability | None] = Endpoint(
+    name="create_crew_availability_of_crew",
+    method="POST",
+    path=lambda args: f"/crew/{args.parent_id}/crewavailability",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_crew_availability),
+    params=lambda _args: {},
+    response_schema="CrewAvailabilityResponse",
+    body=_linked_create_body,
+    request_schema="CrewAvailabilityRequest",
+)
+
+
+CREATE_ACCESSORY_OF_EQUIPMENT: Endpoint[LinkedCreateArgs, Accessory | None] = Endpoint(
+    name="create_accessory_of_equipment",
+    method="POST",
+    path=lambda args: f"/equipment/{args.parent_id}/accessories",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_accessory),
+    params=lambda _args: {},
+    response_schema="AccessoryResponse",
+    body=_linked_create_body,
+    request_schema="AccessoryRequest",
+)
+
+
+CREATE_ALTERNATIVE_OF_EQUIPMENT: Endpoint[LinkedCreateArgs, Alternative | None] = Endpoint(
+    name="create_alternative_of_equipment",
+    method="POST",
+    path=lambda args: f"/equipment/{args.parent_id}/alternatives",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_alternative),
+    params=lambda _args: {},
+    response_schema="AlternativeResponse",
+    body=_linked_create_body,
+    request_schema="AlternativeRequest",
+)
+
+
+CREATE_EQUIPMENT_SET_CONTENT_OF_EQUIPMENT: Endpoint[
+    LinkedCreateArgs, EquipmentSetContent | None
+] = Endpoint(
+    name="create_equipment_set_content_of_equipment",
+    method="POST",
+    path=lambda args: f"/equipment/{args.parent_id}/equipmentsetscontent",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_equipment_set_content),
+    params=lambda _args: {},
+    response_schema="EquipmentSetContentResponse",
+    body=_linked_create_body,
+    request_schema="EquipmentSetContentRequest",
+)
+
+
+CREATE_SERIAL_NUMBER_OF_EQUIPMENT: Endpoint[LinkedCreateArgs, SerialNumber | None] = Endpoint(
+    name="create_serial_number_of_equipment",
+    method="POST",
+    path=lambda args: f"/equipment/{args.parent_id}/serialnumbers",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_serial_number),
+    params=lambda _args: {},
+    response_schema="SerialNumberResponse",
+    body=_linked_create_body,
+    request_schema="SerialNumberRequest",
+)
+
+
+CREATE_STOCK_MOVEMENT_OF_EQUIPMENT: Endpoint[LinkedCreateArgs, StockMovement | None] = Endpoint(
+    name="create_stock_movement_of_equipment",
+    method="POST",
+    path=lambda args: f"/equipment/{args.parent_id}/stockmovements",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_stock_movement),
+    params=lambda _args: {},
+    response_schema="StockMovementResponse",
+    body=_linked_create_body,
+    request_schema="StockMovementRequest",
+)
+
+
+CREATE_SUPPLIER_OF_EQUIPMENT: Endpoint[LinkedCreateArgs, Supplier | None] = Endpoint(
+    name="create_supplier_of_equipment",
+    method="POST",
+    path=lambda args: f"/equipment/{args.parent_id}/suppliers",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_supplier),
+    params=lambda _args: {},
+    response_schema="SupplierResponse",
+    body=_linked_create_body,
+    request_schema="SupplierRequest",
+)
+
+
+CREATE_PAYMENT_OF_INVOICE: Endpoint[LinkedCreateArgs, Payment | None] = Endpoint(
+    name="create_payment_of_invoice",
+    method="POST",
+    path=lambda args: f"/invoices/{args.parent_id}/payments",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_payment),
+    params=lambda _args: {},
+    response_schema="PaymentResponse",
+    body=_linked_create_body,
+    request_schema="PaymentRequest",
+)
+
+
+CREATE_TIME_REGISTRATION_OF_LEAVE_REQUEST: Endpoint[LinkedCreateArgs, TimeRegistration | None] = (
+    Endpoint(
+        name="create_time_registration_of_leave_request",
+        method="POST",
+        path=lambda args: f"/leaverequest/{args.parent_id}/timeregistration",
+        parse=lambda payload, _args: parse_envelope_item(payload, parse_time_registration),
+        params=lambda _args: {},
+        response_schema="TimeRegistrationResponse",
+        body=_linked_create_body,
+        request_schema="TimeRegistrationRequest",
+    )
+)
+
+
+CREATE_PROJECT_REQUEST_EQUIPMENT_OF_PROJECT_REQUEST: Endpoint[
+    LinkedCreateArgs, ProjectRequestEquipment | None
+] = Endpoint(
+    name="create_project_request_equipment_of_project_request",
+    method="POST",
+    path=lambda args: f"/projectrequests/{args.parent_id}/projectrequestequipment",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_request_equipment),
+    params=lambda _args: {},
+    response_schema="ProjectRequestEquipmentResponse",
+    body=_linked_create_body,
+    request_schema="ProjectRequestEquipmentRequest",
+)
+
+
+CREATE_PROJECT_COST_OF_PROJECT: Endpoint[LinkedCreateArgs, ProjectCost | None] = Endpoint(
+    name="create_project_cost_of_project",
+    method="POST",
+    path=lambda args: f"/projects/{args.parent_id}/costs",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_cost),
+    params=lambda _args: {},
+    response_schema="ProjectCostResponse",
+    body=_linked_create_body,
+    request_schema="ProjectCostRequest",
+)
+
+
+CREATE_PROJECT_FUNCTION_GROUP_OF_PROJECT: Endpoint[
+    LinkedCreateArgs, ProjectFunctionGroup | None
+] = Endpoint(
+    name="create_project_function_group_of_project",
+    method="POST",
+    path=lambda args: f"/projects/{args.parent_id}/projectfunctiongroups",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_function_group),
+    params=lambda _args: {},
+    response_schema="ProjectFunctionGroupResponse",
+    body=_linked_create_body,
+    request_schema="ProjectFunctionGroupRequest",
+)
+
+
+CREATE_PROJECT_FUNCTION_OF_PROJECT: Endpoint[LinkedCreateArgs, ProjectFunction | None] = Endpoint(
+    name="create_project_function_of_project",
+    method="POST",
+    path=lambda args: f"/projects/{args.parent_id}/projectfunctions",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_function),
+    params=lambda _args: {},
+    response_schema="ProjectFunctionResponse",
+    body=_linked_create_body,
+    request_schema="ProjectFunctionRequest",
+)
+
+
+CREATE_SUBPROJECT_OF_PROJECT: Endpoint[LinkedCreateArgs, Subproject | None] = Endpoint(
+    name="create_subproject_of_project",
+    method="POST",
+    path=lambda args: f"/projects/{args.parent_id}/subprojects",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_subproject),
+    params=lambda _args: {},
+    response_schema="SubprojectResponse",
+    body=_linked_create_body,
+    request_schema="SubprojectRequest",
+)
+
+
+CREATE_TASK_OF_PURCHASE_ORDER: Endpoint[LinkedCreateArgs, Task | None] = Endpoint(
+    name="create_task_of_purchase_order",
+    method="POST",
+    path=lambda args: f"/purchaseorders/{args.parent_id}/tasks",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
+    params=lambda _args: {},
+    response_schema="TaskResponse",
+    body=_linked_create_body,
+    request_schema="TaskRequest",
+)
+
+
+CREATE_TASK_OF_QUOTE: Endpoint[LinkedCreateArgs, Task | None] = Endpoint(
+    name="create_task_of_quote",
+    method="POST",
+    path=lambda args: f"/quotes/{args.parent_id}/tasks",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
+    params=lambda _args: {},
+    response_schema="TaskResponse",
+    body=_linked_create_body,
+    request_schema="TaskRequest",
+)
+
+
+CREATE_TASK_OF_REPAIR: Endpoint[LinkedCreateArgs, Task | None] = Endpoint(
+    name="create_task_of_repair",
+    method="POST",
+    path=lambda args: f"/repairs/{args.parent_id}/tasks",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
+    params=lambda _args: {},
+    response_schema="TaskResponse",
+    body=_linked_create_body,
+    request_schema="TaskRequest",
+)
+
+
+CREATE_TASK_OF_SERIAL_NUMBER: Endpoint[LinkedCreateArgs, Task | None] = Endpoint(
+    name="create_task_of_serial_number",
+    method="POST",
+    path=lambda args: f"/serialnumbers/{args.parent_id}/tasks",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
+    params=lambda _args: {},
+    response_schema="TaskResponse",
+    body=_linked_create_body,
+    request_schema="TaskRequest",
+)
+
+
+CREATE_VEHICLE_OF_STOCK_LOCATION: Endpoint[LinkedCreateArgs, Vehicle | None] = Endpoint(
+    name="create_vehicle_of_stock_location",
+    method="POST",
+    path=lambda args: f"/stocklocations/{args.parent_id}/vehicles",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_vehicle),
+    params=lambda _args: {},
+    response_schema="VehicleResponse",
+    body=_linked_create_body,
+    request_schema="VehicleRequest",
+)
+
+
+CREATE_TASK_OF_SUBRENTAL: Endpoint[LinkedCreateArgs, Task | None] = Endpoint(
+    name="create_task_of_subrental",
+    method="POST",
+    path=lambda args: f"/subrentals/{args.parent_id}/tasks",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
+    params=lambda _args: {},
+    response_schema="TaskResponse",
+    body=_linked_create_body,
+    request_schema="TaskRequest",
+)
+
+
+CREATE_SUBTASK_OF_TASK: Endpoint[LinkedCreateArgs, Subtask | None] = Endpoint(
+    name="create_subtask_of_task",
+    method="POST",
+    path=lambda args: f"/tasks/{args.parent_id}/subtasks",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_subtask),
+    params=lambda _args: {},
+    response_schema="SubtaskResponse",
+    body=_linked_create_body,
+    request_schema="SubtaskRequest",
+)
+
+
+CREATE_TASK_ASSIGNMENT_OF_TASK: Endpoint[LinkedCreateArgs, TaskAssignment | None] = Endpoint(
+    name="create_task_assignment_of_task",
+    method="POST",
+    path=lambda args: f"/tasks/{args.parent_id}/taskassignments",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task_assignment),
+    params=lambda _args: {},
+    response_schema="TaskAssignmentResponse",
+    body=_linked_create_body,
+    request_schema="TaskAssignmentRequest",
+)
+
+
+CREATE_TASK_OF_CONTACT_PERSON: Endpoint[LinkedCreateArgs, Task | None] = Endpoint(
+    name="create_task_of_contact_person",
+    method="POST",
+    path=lambda args: f"/contactpersons/{args.parent_id}/tasks",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
+    params=lambda _args: {},
+    response_schema="TaskResponse",
+    body=_linked_create_body,
+    request_schema="TaskRequest",
+)
+
+
+CREATE_TASK_OF_CONTACT: Endpoint[LinkedCreateArgs, Task | None] = Endpoint(
+    name="create_task_of_contact",
+    method="POST",
+    path=lambda args: f"/contacts/{args.parent_id}/tasks",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
+    params=lambda _args: {},
+    response_schema="TaskResponse",
+    body=_linked_create_body,
+    request_schema="TaskRequest",
+)
+
+
+CREATE_TASK_OF_CONTRACT: Endpoint[LinkedCreateArgs, Task | None] = Endpoint(
+    name="create_task_of_contract",
+    method="POST",
+    path=lambda args: f"/contracts/{args.parent_id}/tasks",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
+    params=lambda _args: {},
+    response_schema="TaskResponse",
+    body=_linked_create_body,
+    request_schema="TaskRequest",
+)
+
+
+CREATE_TASK_OF_CREW: Endpoint[LinkedCreateArgs, Task | None] = Endpoint(
+    name="create_task_of_crew",
+    method="POST",
+    path=lambda args: f"/crew/{args.parent_id}/tasks",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
+    params=lambda _args: {},
+    response_schema="TaskResponse",
+    body=_linked_create_body,
+    request_schema="TaskRequest",
+)
+
+
+CREATE_TASK_OF_EQUIPMENT: Endpoint[LinkedCreateArgs, Task | None] = Endpoint(
+    name="create_task_of_equipment",
+    method="POST",
+    path=lambda args: f"/equipment/{args.parent_id}/tasks",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
+    params=lambda _args: {},
+    response_schema="TaskResponse",
+    body=_linked_create_body,
+    request_schema="TaskRequest",
+)
+
+
+CREATE_TASK_OF_INVOICE: Endpoint[LinkedCreateArgs, Task | None] = Endpoint(
+    name="create_task_of_invoice",
+    method="POST",
+    path=lambda args: f"/invoices/{args.parent_id}/tasks",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
+    params=lambda _args: {},
+    response_schema="TaskResponse",
+    body=_linked_create_body,
+    request_schema="TaskRequest",
+)
+
+
+CREATE_TASK_OF_PROJECT: Endpoint[LinkedCreateArgs, Task | None] = Endpoint(
+    name="create_task_of_project",
+    method="POST",
+    path=lambda args: f"/projects/{args.parent_id}/tasks",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
+    params=lambda _args: {},
+    response_schema="TaskResponse",
+    body=_linked_create_body,
+    request_schema="TaskRequest",
+)
+
+
+CREATE_TASK_OF_SUPPLIER: Endpoint[LinkedCreateArgs, Task | None] = Endpoint(
+    name="create_task_of_supplier",
+    method="POST",
+    path=lambda args: f"/suppliers/{args.parent_id}/tasks",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
+    params=lambda _args: {},
+    response_schema="TaskResponse",
+    body=_linked_create_body,
+    request_schema="TaskRequest",
+)
+
+
+CREATE_TASK_OF_VEHICLE: Endpoint[LinkedCreateArgs, Task | None] = Endpoint(
+    name="create_task_of_vehicle",
+    method="POST",
+    path=lambda args: f"/vehicles/{args.parent_id}/tasks",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
+    params=lambda _args: {},
+    response_schema="TaskResponse",
+    body=_linked_create_body,
+    request_schema="TaskRequest",
+)
+
+
+UPDATE_ACCESSORY: Endpoint[UpdateArgs, Accessory | None] = Endpoint(
+    name="update_accessory",
+    method="PUT",
+    path=lambda args: f"/accessories/{args.item_id}",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_accessory),
+    params=lambda _args: {},
+    response_schema="AccessoryResponse",
+    body=_update_body,
+    request_schema="AccessoryRequest",
+)
+
+
+UPDATE_ALTERNATIVE: Endpoint[UpdateArgs, Alternative | None] = Endpoint(
+    name="update_alternative",
+    method="PUT",
+    path=lambda args: f"/alternatives/{args.item_id}",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_alternative),
+    params=lambda _args: {},
+    response_schema="AlternativeResponse",
+    body=_update_body,
+    request_schema="AlternativeRequest",
+)
+
+
+UPDATE_APPOINTMENT_CREW: Endpoint[UpdateArgs, AppointmentCrew | None] = Endpoint(
+    name="update_appointment_crew",
+    method="PUT",
+    path=lambda args: f"/appointmentcrew/{args.item_id}",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_appointment_crew),
+    params=lambda _args: {},
+    response_schema="AppointmentCrewResponse",
+    body=_update_body,
+    request_schema="AppointmentCrewRequest",
+)
+
+
+UPDATE_APPOINTMENT: Endpoint[UpdateArgs, Appointment | None] = Endpoint(
+    name="update_appointment",
+    method="PUT",
+    path=lambda args: f"/appointments/{args.item_id}",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_appointment),
+    params=lambda _args: {},
+    response_schema="AppointmentResponse",
+    body=_update_body,
+    request_schema="AppointmentRequest",
+)
+
+
+UPDATE_CONTACT_PERSON: Endpoint[UpdateArgs, ContactPerson | None] = Endpoint(
+    name="update_contact_person",
+    method="PUT",
+    path=lambda args: f"/contactpersons/{args.item_id}",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_contact_person),
+    params=lambda _args: {},
+    response_schema="ContactPersonResponse",
+    body=_update_body,
+    request_schema="ContactPersonRequest",
+)
+
+
+UPDATE_CONTACT: Endpoint[UpdateArgs, Contact | None] = Endpoint(
+    name="update_contact",
+    method="PUT",
+    path=lambda args: f"/contacts/{args.item_id}",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_contact),
+    params=lambda _args: {},
+    response_schema="ContactResponse",
+    body=_update_body,
+    request_schema="ContactRequest",
+)
+
+
+UPDATE_PROJECT_COST: Endpoint[UpdateArgs, ProjectCost | None] = Endpoint(
+    name="update_project_cost",
+    method="PUT",
+    path=lambda args: f"/costs/{args.item_id}",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_cost),
+    params=lambda _args: {},
+    response_schema="ProjectCostResponse",
+    body=_update_body,
+    request_schema="ProjectCostRequest",
+)
+
+
+UPDATE_CREW_AVAILABILITY: Endpoint[UpdateArgs, CrewAvailability | None] = Endpoint(
+    name="update_crew_availability",
+    method="PUT",
+    path=lambda args: f"/crewavailability/{args.item_id}",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_crew_availability),
+    params=lambda _args: {},
+    response_schema="CrewAvailabilityResponse",
+    body=_update_body,
+    request_schema="CrewAvailabilityRequest",
+)
+
+
+UPDATE_EQUIPMENT: Endpoint[UpdateArgs, Equipment | None] = Endpoint(
+    name="update_equipment",
+    method="PUT",
+    path=lambda args: f"/equipment/{args.item_id}",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_equipment),
+    params=lambda _args: {},
+    response_schema="EquipmentResponse",
+    body=_update_body,
+    request_schema="EquipmentRequest",
+)
+
+
+UPDATE_EQUIPMENT_SET_CONTENT: Endpoint[UpdateArgs, EquipmentSetContent | None] = Endpoint(
+    name="update_equipment_set_content",
+    method="PUT",
+    path=lambda args: f"/equipmentsetscontent/{args.item_id}",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_equipment_set_content),
+    params=lambda _args: {},
+    response_schema="EquipmentSetContentResponse",
+    body=_update_body,
+    request_schema="EquipmentSetContentRequest",
+)
+
+
+UPDATE_FOLDER: Endpoint[UpdateArgs, Folder | None] = Endpoint(
+    name="update_folder",
+    method="PUT",
+    path=lambda args: f"/folders/{args.item_id}",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_folder),
+    params=lambda _args: {},
+    response_schema="FolderResponse",
+    body=_update_body,
+    request_schema="FolderRequest",
+)
+
+
+UPDATE_LEAVE_REQUEST: Endpoint[UpdateArgs, LeaveRequest | None] = Endpoint(
+    name="update_leave_request",
+    method="PUT",
+    path=lambda args: f"/leaverequest/{args.item_id}",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_leave_request),
+    params=lambda _args: {},
+    response_schema="LeaveRequestResponse",
+    body=_update_body,
+    request_schema="LeaveRequestRequest",
+)
+
+
+UPDATE_PAYMENT: Endpoint[UpdateArgs, Payment | None] = Endpoint(
+    name="update_payment",
+    method="PUT",
+    path=lambda args: f"/payments/{args.item_id}",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_payment),
+    params=lambda _args: {},
+    response_schema="PaymentResponse",
+    body=_update_body,
+    request_schema="PaymentRequest",
+)
+
+
+UPDATE_PROJECT_REQUEST_EQUIPMENT: Endpoint[UpdateArgs, ProjectRequestEquipment | None] = Endpoint(
+    name="update_project_request_equipment",
+    method="PUT",
+    path=lambda args: f"/projectrequestequipment/{args.item_id}",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_request_equipment),
+    params=lambda _args: {},
+    response_schema="ProjectRequestEquipmentResponse",
+    body=_update_body,
+    request_schema="ProjectRequestEquipmentRequest",
+)
+
+
+UPDATE_PROJECT_REQUEST: Endpoint[UpdateArgs, ProjectRequest | None] = Endpoint(
+    name="update_project_request",
+    method="PUT",
+    path=lambda args: f"/projectrequests/{args.item_id}",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_request),
+    params=lambda _args: {},
+    response_schema="ProjectRequestResponse",
+    body=_update_body,
+    request_schema="ProjectRequestRequest",
+)
+
+
+UPDATE_SERIAL_NUMBER: Endpoint[UpdateArgs, SerialNumber | None] = Endpoint(
+    name="update_serial_number",
+    method="PUT",
+    path=lambda args: f"/serialnumbers/{args.item_id}",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_serial_number),
+    params=lambda _args: {},
+    response_schema="SerialNumberResponse",
+    body=_update_body,
+    request_schema="SerialNumberRequest",
+)
+
+
+UPDATE_STOCK_MOVEMENT: Endpoint[UpdateArgs, StockMovement | None] = Endpoint(
+    name="update_stock_movement",
+    method="PUT",
+    path=lambda args: f"/stockmovements/{args.item_id}",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_stock_movement),
+    params=lambda _args: {},
+    response_schema="StockMovementResponse",
+    body=_update_body,
+    request_schema="StockMovementRequest",
+)
+
+
+UPDATE_SUBTASK: Endpoint[UpdateArgs, Subtask | None] = Endpoint(
+    name="update_subtask",
+    method="PUT",
+    path=lambda args: f"/subtasks/{args.item_id}",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_subtask),
+    params=lambda _args: {},
+    response_schema="SubtaskResponse",
+    body=_update_body,
+    request_schema="SubtaskRequest",
+)
+
+
+UPDATE_SUPPLIER: Endpoint[UpdateArgs, Supplier | None] = Endpoint(
+    name="update_supplier",
+    method="PUT",
+    path=lambda args: f"/suppliers/{args.item_id}",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_supplier),
+    params=lambda _args: {},
+    response_schema="SupplierResponse",
+    body=_update_body,
+    request_schema="SupplierRequest",
+)
+
+
+UPDATE_TASK_ASSIGNMENT: Endpoint[UpdateArgs, TaskAssignment | None] = Endpoint(
+    name="update_task_assignment",
+    method="PUT",
+    path=lambda args: f"/taskassignments/{args.item_id}",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task_assignment),
+    params=lambda _args: {},
+    response_schema="TaskAssignmentResponse",
+    body=_update_body,
+    request_schema="TaskAssignmentRequest",
+)
+
+
+UPDATE_TASK: Endpoint[UpdateArgs, Task | None] = Endpoint(
+    name="update_task",
+    method="PUT",
+    path=lambda args: f"/tasks/{args.item_id}",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
+    params=lambda _args: {},
+    response_schema="TaskResponse",
+    body=_update_body,
+    request_schema="TaskRequest",
+)
+
+
+UPDATE_TASK_STATUS: Endpoint[UpdateArgs, TaskStatus | None] = Endpoint(
+    name="update_task_status",
+    method="PUT",
+    path=lambda args: f"/taskstatuses/{args.item_id}",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task_status),
+    params=lambda _args: {},
+    response_schema="TaskStatusResponse",
+    body=_update_body,
+    request_schema="TaskStatusRequest",
+)
+
+
+UPDATE_TIME_REGISTRATION: Endpoint[UpdateArgs, TimeRegistration | None] = Endpoint(
+    name="update_time_registration",
+    method="PUT",
+    path=lambda args: f"/timeregistration/{args.item_id}",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_time_registration),
+    params=lambda _args: {},
+    response_schema="TimeRegistrationResponse",
+    body=_update_body,
+    request_schema="TimeRegistrationRequest",
+)
+
+
+UPDATE_VEHICLE: Endpoint[UpdateArgs, Vehicle | None] = Endpoint(
+    name="update_vehicle",
+    method="PUT",
+    path=lambda args: f"/vehicles/{args.item_id}",
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_vehicle),
+    params=lambda _args: {},
+    response_schema="VehicleResponse",
+    body=_update_body,
+    request_schema="VehicleRequest",
+)
+
+
+DELETE_ACCESSORY: Endpoint[DeleteArgs, None] = Endpoint(
+    name="delete_accessory",
+    method="DELETE",
+    path=lambda args: f"/accessories/{args.item_id}",
+    parse=lambda _payload, _args: None,
+    params=lambda _args: {},
+    response_schema=None,
+)
+
+
+DELETE_ALTERNATIVE: Endpoint[DeleteArgs, None] = Endpoint(
+    name="delete_alternative",
+    method="DELETE",
+    path=lambda args: f"/alternatives/{args.item_id}",
+    parse=lambda _payload, _args: None,
+    params=lambda _args: {},
+    response_schema=None,
+)
+
+
+DELETE_APPOINTMENT_CREW: Endpoint[DeleteArgs, None] = Endpoint(
+    name="delete_appointment_crew",
+    method="DELETE",
+    path=lambda args: f"/appointmentcrew/{args.item_id}",
+    parse=lambda _payload, _args: None,
+    params=lambda _args: {},
+    response_schema=None,
+)
+
+
+DELETE_APPOINTMENT: Endpoint[DeleteArgs, None] = Endpoint(
+    name="delete_appointment",
+    method="DELETE",
+    path=lambda args: f"/appointments/{args.item_id}",
+    parse=lambda _payload, _args: None,
+    params=lambda _args: {},
+    response_schema=None,
+)
+
+
+DELETE_CONTACT_PERSON: Endpoint[DeleteArgs, None] = Endpoint(
+    name="delete_contact_person",
+    method="DELETE",
+    path=lambda args: f"/contactpersons/{args.item_id}",
+    parse=lambda _payload, _args: None,
+    params=lambda _args: {},
+    response_schema=None,
+)
+
+
+DELETE_CONTACT: Endpoint[DeleteArgs, None] = Endpoint(
+    name="delete_contact",
+    method="DELETE",
+    path=lambda args: f"/contacts/{args.item_id}",
+    parse=lambda _payload, _args: None,
+    params=lambda _args: {},
+    response_schema=None,
+)
+
+
+DELETE_PROJECT_COST: Endpoint[DeleteArgs, None] = Endpoint(
+    name="delete_project_cost",
+    method="DELETE",
+    path=lambda args: f"/costs/{args.item_id}",
+    parse=lambda _payload, _args: None,
+    params=lambda _args: {},
+    response_schema=None,
+)
+
+
+DELETE_CREW_AVAILABILITY: Endpoint[DeleteArgs, None] = Endpoint(
+    name="delete_crew_availability",
+    method="DELETE",
+    path=lambda args: f"/crewavailability/{args.item_id}",
+    parse=lambda _payload, _args: None,
+    params=lambda _args: {},
+    response_schema=None,
+)
+
+
+DELETE_EQUIPMENT_SET_CONTENT: Endpoint[DeleteArgs, None] = Endpoint(
+    name="delete_equipment_set_content",
+    method="DELETE",
+    path=lambda args: f"/equipmentsetscontent/{args.item_id}",
+    parse=lambda _payload, _args: None,
+    params=lambda _args: {},
+    response_schema=None,
+)
+
+
+DELETE_PROJECT_REQUEST_EQUIPMENT: Endpoint[DeleteArgs, None] = Endpoint(
+    name="delete_project_request_equipment",
+    method="DELETE",
+    path=lambda args: f"/projectrequestequipment/{args.item_id}",
+    parse=lambda _payload, _args: None,
+    params=lambda _args: {},
+    response_schema=None,
+)
+
+
+DELETE_PROJECT_REQUEST: Endpoint[DeleteArgs, None] = Endpoint(
+    name="delete_project_request",
+    method="DELETE",
+    path=lambda args: f"/projectrequests/{args.item_id}",
+    parse=lambda _payload, _args: None,
+    params=lambda _args: {},
+    response_schema=None,
+)
+
+
+DELETE_SERIAL_NUMBER: Endpoint[DeleteArgs, None] = Endpoint(
+    name="delete_serial_number",
+    method="DELETE",
+    path=lambda args: f"/serialnumbers/{args.item_id}",
+    parse=lambda _payload, _args: None,
+    params=lambda _args: {},
+    response_schema=None,
+)
+
+
+DELETE_STOCK_MOVEMENT: Endpoint[DeleteArgs, None] = Endpoint(
+    name="delete_stock_movement",
+    method="DELETE",
+    path=lambda args: f"/stockmovements/{args.item_id}",
+    parse=lambda _payload, _args: None,
+    params=lambda _args: {},
+    response_schema=None,
+)
+
+
+DELETE_SUBTASK: Endpoint[DeleteArgs, None] = Endpoint(
+    name="delete_subtask",
+    method="DELETE",
+    path=lambda args: f"/subtasks/{args.item_id}",
+    parse=lambda _payload, _args: None,
+    params=lambda _args: {},
+    response_schema=None,
+)
+
+
+DELETE_SUPPLIER: Endpoint[DeleteArgs, None] = Endpoint(
+    name="delete_supplier",
+    method="DELETE",
+    path=lambda args: f"/suppliers/{args.item_id}",
+    parse=lambda _payload, _args: None,
+    params=lambda _args: {},
+    response_schema=None,
+)
+
+
+DELETE_TASK_ASSIGNMENT: Endpoint[DeleteArgs, None] = Endpoint(
+    name="delete_task_assignment",
+    method="DELETE",
+    path=lambda args: f"/taskassignments/{args.item_id}",
+    parse=lambda _payload, _args: None,
+    params=lambda _args: {},
+    response_schema=None,
+)
+
+
+DELETE_TASK: Endpoint[DeleteArgs, None] = Endpoint(
+    name="delete_task",
+    method="DELETE",
+    path=lambda args: f"/tasks/{args.item_id}",
+    parse=lambda _payload, _args: None,
+    params=lambda _args: {},
+    response_schema=None,
+)
+
+
+DELETE_TASK_STATUS: Endpoint[DeleteArgs, None] = Endpoint(
+    name="delete_task_status",
+    method="DELETE",
+    path=lambda args: f"/taskstatuses/{args.item_id}",
+    parse=lambda _payload, _args: None,
+    params=lambda _args: {},
+    response_schema=None,
+)
+
+
+DELETE_TIME_REGISTRATION: Endpoint[DeleteArgs, None] = Endpoint(
+    name="delete_time_registration",
+    method="DELETE",
+    path=lambda args: f"/timeregistration/{args.item_id}",
+    parse=lambda _payload, _args: None,
+    params=lambda _args: {},
+    response_schema=None,
+)
+
+
+DELETE_VEHICLE: Endpoint[DeleteArgs, None] = Endpoint(
+    name="delete_vehicle",
+    method="DELETE",
+    path=lambda args: f"/vehicles/{args.item_id}",
+    parse=lambda _payload, _args: None,
+    params=lambda _args: {},
+    response_schema=None,
+)
+
+
 CATALOG: tuple[Endpoint[Any, Any], ...] = (
     ACTUAL_CONTENT,
     ACTUAL_CONTENT_ITEM,
@@ -2478,4 +3580,93 @@ CATALOG: tuple[Endpoint[Any, Any], ...] = (
     FILE_FOLDERS_OF_SUBRENTAL,
     FILE_FOLDERS_OF_SUPPLIER,
     FILE_FOLDERS_OF_VEHICLE,
+    CREATE_APPOINTMENT,
+    CREATE_CONTACT,
+    CREATE_EQUIPMENT,
+    CREATE_FOLDER,
+    CREATE_LEAVE_REQUEST,
+    CREATE_LEAVE_MUTATION,
+    CREATE_PROJECT_REQUEST,
+    CREATE_PROJECT,
+    CREATE_TASK,
+    CREATE_TASK_STATUS,
+    CREATE_TIME_REGISTRATION,
+    CREATE_VEHICLE,
+    CREATE_APPOINTMENT_CREW_OF_APPOINTMENT,
+    CREATE_CONTACT_PERSON_OF_CONTACT,
+    CREATE_CREW_AVAILABILITY_OF_CREW,
+    CREATE_ACCESSORY_OF_EQUIPMENT,
+    CREATE_ALTERNATIVE_OF_EQUIPMENT,
+    CREATE_EQUIPMENT_SET_CONTENT_OF_EQUIPMENT,
+    CREATE_SERIAL_NUMBER_OF_EQUIPMENT,
+    CREATE_STOCK_MOVEMENT_OF_EQUIPMENT,
+    CREATE_SUPPLIER_OF_EQUIPMENT,
+    CREATE_PAYMENT_OF_INVOICE,
+    CREATE_TIME_REGISTRATION_OF_LEAVE_REQUEST,
+    CREATE_PROJECT_REQUEST_EQUIPMENT_OF_PROJECT_REQUEST,
+    CREATE_PROJECT_COST_OF_PROJECT,
+    CREATE_PROJECT_FUNCTION_GROUP_OF_PROJECT,
+    CREATE_PROJECT_FUNCTION_OF_PROJECT,
+    CREATE_SUBPROJECT_OF_PROJECT,
+    CREATE_TASK_OF_PURCHASE_ORDER,
+    CREATE_TASK_OF_QUOTE,
+    CREATE_TASK_OF_REPAIR,
+    CREATE_TASK_OF_SERIAL_NUMBER,
+    CREATE_VEHICLE_OF_STOCK_LOCATION,
+    CREATE_TASK_OF_SUBRENTAL,
+    CREATE_SUBTASK_OF_TASK,
+    CREATE_TASK_ASSIGNMENT_OF_TASK,
+    CREATE_TASK_OF_CONTACT_PERSON,
+    CREATE_TASK_OF_CONTACT,
+    CREATE_TASK_OF_CONTRACT,
+    CREATE_TASK_OF_CREW,
+    CREATE_TASK_OF_EQUIPMENT,
+    CREATE_TASK_OF_INVOICE,
+    CREATE_TASK_OF_PROJECT,
+    CREATE_TASK_OF_SUPPLIER,
+    CREATE_TASK_OF_VEHICLE,
+    UPDATE_ACCESSORY,
+    UPDATE_ALTERNATIVE,
+    UPDATE_APPOINTMENT_CREW,
+    UPDATE_APPOINTMENT,
+    UPDATE_CONTACT_PERSON,
+    UPDATE_CONTACT,
+    UPDATE_PROJECT_COST,
+    UPDATE_CREW_AVAILABILITY,
+    UPDATE_EQUIPMENT,
+    UPDATE_EQUIPMENT_SET_CONTENT,
+    UPDATE_FOLDER,
+    UPDATE_LEAVE_REQUEST,
+    UPDATE_PAYMENT,
+    UPDATE_PROJECT_REQUEST_EQUIPMENT,
+    UPDATE_PROJECT_REQUEST,
+    UPDATE_SERIAL_NUMBER,
+    UPDATE_STOCK_MOVEMENT,
+    UPDATE_SUBTASK,
+    UPDATE_SUPPLIER,
+    UPDATE_TASK_ASSIGNMENT,
+    UPDATE_TASK,
+    UPDATE_TASK_STATUS,
+    UPDATE_TIME_REGISTRATION,
+    UPDATE_VEHICLE,
+    DELETE_ACCESSORY,
+    DELETE_ALTERNATIVE,
+    DELETE_APPOINTMENT_CREW,
+    DELETE_APPOINTMENT,
+    DELETE_CONTACT_PERSON,
+    DELETE_CONTACT,
+    DELETE_PROJECT_COST,
+    DELETE_CREW_AVAILABILITY,
+    DELETE_EQUIPMENT_SET_CONTENT,
+    DELETE_PROJECT_REQUEST_EQUIPMENT,
+    DELETE_PROJECT_REQUEST,
+    DELETE_SERIAL_NUMBER,
+    DELETE_STOCK_MOVEMENT,
+    DELETE_SUBTASK,
+    DELETE_SUPPLIER,
+    DELETE_TASK_ASSIGNMENT,
+    DELETE_TASK,
+    DELETE_TASK_STATUS,
+    DELETE_TIME_REGISTRATION,
+    DELETE_VEHICLE,
 )

@@ -151,6 +151,68 @@ Models
 .. autoclass:: aiorentman.FactorGroup
    :members:
 
+Payloads
+--------
+
+.. autoclass:: aiorentman.AccessoryPayload
+   :members:
+.. autoclass:: aiorentman.AlternativePayload
+   :members:
+.. autoclass:: aiorentman.AppointmentPayload
+   :members:
+.. autoclass:: aiorentman.AppointmentCrewPayload
+   :members:
+.. autoclass:: aiorentman.ContactPayload
+   :members:
+.. autoclass:: aiorentman.ContactPersonPayload
+   :members:
+.. autoclass:: aiorentman.CrewAvailabilityPayload
+   :members:
+.. autoclass:: aiorentman.EquipmentPayload
+   :members:
+.. autoclass:: aiorentman.EquipmentSetContentPayload
+   :members:
+.. autoclass:: aiorentman.FolderPayload
+   :members:
+.. autoclass:: aiorentman.LeaveMutationPayload
+   :members:
+.. autoclass:: aiorentman.LeaveRequestPayload
+   :members:
+.. autoclass:: aiorentman.PaymentPayload
+   :members:
+.. autoclass:: aiorentman.ProjectPayload
+   :members:
+.. autoclass:: aiorentman.ProjectCostPayload
+   :members:
+.. autoclass:: aiorentman.ProjectFunctionPayload
+   :members:
+.. autoclass:: aiorentman.ProjectFunctionGroupPayload
+   :members:
+.. autoclass:: aiorentman.ProjectRequestPayload
+   :members:
+.. autoclass:: aiorentman.ProjectRequestEquipmentPayload
+   :members:
+.. autoclass:: aiorentman.SerialNumberPayload
+   :members:
+.. autoclass:: aiorentman.StockMovementPayload
+   :members:
+.. autoclass:: aiorentman.SubprojectPayload
+   :members:
+.. autoclass:: aiorentman.SubtaskPayload
+   :members:
+.. autoclass:: aiorentman.SupplierPayload
+   :members:
+.. autoclass:: aiorentman.TaskPayload
+   :members:
+.. autoclass:: aiorentman.TaskAssignmentPayload
+   :members:
+.. autoclass:: aiorentman.TaskStatusPayload
+   :members:
+.. autoclass:: aiorentman.TimeRegistrationPayload
+   :members:
+.. autoclass:: aiorentman.VehiclePayload
+   :members:
+
 Exceptions
 ----------
 
@@ -161,5 +223,6 @@ Exceptions
 .. autoclass:: aiorentman.RentmanNotFoundError
 .. autoclass:: aiorentman.RentmanAuthenticationError
 .. autoclass:: aiorentman.RentmanAuthorizationError
+.. autoclass:: aiorentman.RentmanValidationError
 .. autoclass:: aiorentman.RentmanRateLimitError
 .. autoclass:: aiorentman.RentmanClientClosedError
