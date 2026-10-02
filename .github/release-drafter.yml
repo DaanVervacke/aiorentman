@@ -15,7 +15,6 @@ categories:
     labels: [documentation]
   - title: Dependency updates
     labels: [dependencies]
-  - collapse-after: 5
 version-resolver:
   minor:
     labels: [breaking-change, new-feature]
