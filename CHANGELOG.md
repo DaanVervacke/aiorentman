@@ -17,6 +17,7 @@ Before 1.0, breaking changes ship as minor bumps.
 - Add the subrental and purchase order resources
 - Add the crew, time, and contact resources
 - Add the task, file, and rate resources
+- Add the write surface
 
 ## [0.1.0] - 2026-10-01
 
