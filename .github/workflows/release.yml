@@ -56,11 +56,15 @@ jobs:
     permissions:
       id-token: write
     steps:
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7
+        with:
+          enable-cache: false
+
       - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: dist
           path: dist/
 
-      - uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33
-        with:
-          skip-existing: true
+      - uses: astral-sh/attest-action@f589a42a7efb6fe400b4f400de60b4bc90390027
+
+      - run: uv publish

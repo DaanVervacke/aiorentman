@@ -1,11 +1,11 @@
 Quickstart
 ==========
 
-Install with pip or uv:
+Install with uv:
 
 .. code-block:: bash
 
-   pip install aiorentman
+   uv add aiorentman
 
 List one page of materials, or walk every material with the cursor handled
 for you:

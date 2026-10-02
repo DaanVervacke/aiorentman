@@ -12,7 +12,7 @@ This is a client for a documented public API, but it is not affiliated with or e
 ## Install
 
 ```bash
-pip install aiorentman
+uv add aiorentman
 ```
 
 ## Scope

@@ -10,7 +10,8 @@ COMMANDS: tuple[tuple[str, ...], ...] = (
     ("uv", "run", "mypy", "src", "tests", "scripts"),
     ("uv", "run", "coverage", "run", "-m", "pytest"),
     ("uv", "run", "coverage", "report"),
-    ("uv", "run", "pip-audit"),
+    ("uv", "build"),
+    ("uv", "audit", "--locked", "--preview-features", "audit-command"),
 )
 
 
