@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Before 1.0, breaking changes ship as minor bumps.
 
+## [Unreleased]
+
+### Maintenance
+
+- Complete the uv toolchain migration
+- Let the label verifier read pull requests
+- Drop the malformed release drafter category
+- Sync repository labels and migrate the release drafter config
+- Render documentation and maintenance entries in the changelog
+
 ## [0.2.0] - 2026-10-02
 
 ### Features
