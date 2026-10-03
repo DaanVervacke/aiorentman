@@ -2,10 +2,10 @@ aiorentman
 ===========
 
 Unofficial asynchronous Python library to interact with the `Rentman API
-<https://api.rentman.net/>`_. It covers the inventory and planning resources
-that an RFID and materials project needs: equipment, serial numbers, stock
-locations, folders, repairs, stock movements, projects, subprojects, and
-planned equipment.
+<https://api.rentman.net/>`_. It covers the resources an RFID and materials
+project needs, from equipment, serial numbers, stock, and repairs to
+projects, crew, invoices, tasks, and files, with create, update, and delete
+methods for every documented write path.
 
 .. toctree::
    :maxdepth: 2

@@ -35,7 +35,7 @@ Add all of the following:
 
 ## Changelog
 
-`CHANGELOG.md` is generated with git-cliff from conventional commit subjects. Never edit it by hand. `feat:` and `fix:` subjects become the changelog entries and every other type is left out. Regenerate with `git-cliff --output CHANGELOG.md` after committing.
+`CHANGELOG.md` is generated with git-cliff from conventional commit subjects. Never edit it by hand. `feat:`, `fix:`, `docs:`, and `chore:` subjects become the changelog entries and every other type is left out. Regenerate with `git-cliff --output CHANGELOG.md` after committing.
 
 ## Captures and confidential data
 

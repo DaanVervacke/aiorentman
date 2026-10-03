@@ -49,9 +49,10 @@ The docs at `rentman.io/solutions/rfid
 <https://rentman.io/solutions/rfid>`_ describe the native flow: tags are
 attached to serialized items, linked through the Serial Numbers tab, and
 scanned with handheld readers while the Rentman app books equipment in and
-out. This library covers the reading side of that workflow. Booking scans
-back into Rentman needs the write endpoints, which are out of scope until
-the project calls for them.
+out. This library covers the reading side of that workflow, and the write
+surface can push changes back: ``async_update_serial_number`` updates a
+serial number and ``async_create_stock_movement_of_equipment`` books a
+stock movement. The API reference lists every write method.
 
 Availability of a scanned item follows from planning: project equipment
 lines carry their planning period, and serial numbers remember their last
