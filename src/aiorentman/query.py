@@ -7,6 +7,9 @@ from .const import MAX_PAGE_LIMIT
 
 type FilterValue = str | int | float | bool
 
+_RESERVED_PARAM_NAMES = frozenset({"fields", "sort", "expand", "limit", "offset"})
+_GENERATED_FIELDS = frozenset({"qrcodes", "tags", "qrcodes_of_serial_numbers"})
+
 
 class FilterOperator(StrEnum):
     """The relational operators the Rentman API accepts in filter keys."""
@@ -37,6 +40,12 @@ class Filter:
     def __post_init__(self) -> None:
         if not self.field:
             msg = "filter field must not be empty"
+            raise ValueError(msg)
+        if self.field in _RESERVED_PARAM_NAMES:
+            msg = f"filter field {self.field} collides with a reserved query parameter"
+            raise ValueError(msg)
+        if self.field in _GENERATED_FIELDS:
+            msg = f"filter field {self.field} is generated and cannot be filtered"
             raise ValueError(msg)
 
     def param(self) -> tuple[str, str]:
@@ -93,6 +102,9 @@ class Sort:
         if not self.field:
             msg = "sort field must not be empty"
             raise ValueError(msg)
+        if self.field in _GENERATED_FIELDS:
+            msg = f"sort field {self.field} is generated and cannot be sorted"
+            raise ValueError(msg)
 
     def param(self) -> str:
         """Render the sort field with its direction prefix."""
@@ -104,8 +116,9 @@ class Query:
     """Fields, sorting, filters, expansion, and paging for one collection request.
 
     Field, sort, and expand names are the schema property names of the
-    resource being requested, including ``custom_<number>`` names. The
-    contract test validates them against the pinned OpenAPI document.
+    resource being requested, including ``custom_<number>`` names. Filters
+    reject the reserved query parameter names, and filters and sorts reject
+    the generated fields, which the API can neither filter nor sort on.
     """
 
     fields: tuple[str, ...] = ()

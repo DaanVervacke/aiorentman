@@ -88,3 +88,20 @@ def test_operator_enum_values_match_the_api() -> None:
     assert FilterOperator.GREATER_THAN.value == "gt"
     assert FilterOperator.GREATER_THAN_OR_EQUALS.value == "gte"
     assert FilterOperator.IS_NULL.value == "isnull"
+
+
+def test_filters_reject_reserved_query_parameter_names() -> None:
+    for field in ("fields", "sort", "expand", "limit", "offset"):
+        with pytest.raises(ValueError, match="reserved query parameter"):
+            eq(field, "value")
+
+
+def test_filters_and_sorts_reject_generated_fields() -> None:
+    with pytest.raises(ValueError, match="generated"):
+        eq("qrcodes", "value")
+    with pytest.raises(ValueError, match="generated"):
+        eq("tags", "value")
+    with pytest.raises(ValueError, match="generated"):
+        eq("qrcodes_of_serial_numbers", "value")
+    with pytest.raises(ValueError, match="generated"):
+        Sort("tags")
