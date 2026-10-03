@@ -4,7 +4,7 @@ import logging
 import os
 from collections.abc import AsyncIterator
 from typing import Self
-from urllib.parse import parse_qsl, urlsplit
+from urllib.parse import urlsplit
 
 import aiohttp
 
@@ -3700,12 +3700,14 @@ class RentmanClient:
         endpoint: Endpoint[ArgsT, ModelT],
         args: ArgsT,
         cursor_url: str | None,
-    ) -> tuple[str, dict[str, str]]:
+    ) -> tuple[str, dict[str, str] | None]:
         if cursor_url is None:
             return f"{BASE_URL}{endpoint.path(args)}", endpoint.params(args)
-        url, params = _split_cursor_url(cursor_url)
+        url, query = _split_cursor_url(cursor_url)
         _LOGGER.debug("Following collection cursor to %s", url)
-        return url, params
+        if not query:
+            return url, None
+        return f"{url}?{query}", None
 
     async def _iter_collection[ArgsT, ModelT](
         self,
@@ -3714,12 +3716,17 @@ class RentmanClient:
     ) -> AsyncIterator[ModelT]:
         """Yield every item of one collection, following next_page_url."""
         cursor_url: str | None = None
+        seen_cursors: set[str] = set()
         while True:
             page = await self._call(endpoint, args, cursor_url)
             for item in page.items:
                 yield item
             if page.next_page_url is None:
                 return
+            if page.next_page_url in seen_cursors:
+                msg = "The next page URL repeats an earlier page"
+                raise RentmanInvalidResponseError(msg)
+            seen_cursors.add(page.next_page_url)
             cursor_url = page.next_page_url
 
     def _assert_open(self) -> None:
@@ -3739,11 +3746,15 @@ class RentmanClient:
         await self.async_close()
 
 
-def _split_cursor_url(url: str) -> tuple[str, dict[str, str]]:
-    """Validate one next_page_url and split it into its URL and parameters."""
-    split = urlsplit(url)
+def _split_cursor_url(url: str) -> tuple[str, str]:
+    """Validate one next_page_url and split it into its URL and query string."""
+    try:
+        split = urlsplit(url)
+    except ValueError as exc:
+        msg = "The next page URL is malformed"
+        raise RentmanInvalidResponseError(msg) from exc
     if f"{split.scheme}://{split.netloc}" != BASE_URL:
         msg = f"The next page URL leaves {BASE_URL}"
         raise RentmanInvalidResponseError(msg)
     base = f"{split.scheme}://{split.netloc}{split.path}"
-    return base, dict(parse_qsl(split.query, keep_blank_values=True))
+    return base, split.query

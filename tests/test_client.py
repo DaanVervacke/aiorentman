@@ -2,6 +2,7 @@
 
 import dataclasses
 import inspect
+import logging
 from collections.abc import Awaitable, Callable
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Any
@@ -12,7 +13,7 @@ from aioresponses import aioresponses
 
 from aiorentman import Query, RentmanClient, RentmanPage, Sort, eq, is_null, lt
 from aiorentman._endpoints import CATALOG, CreateArgs, DeleteArgs, LinkedCreateArgs, UpdateArgs
-from aiorentman.const import BASE_URL, DEFAULT_REQUESTS_PER_SECOND
+from aiorentman.const import BASE_URL, DEFAULT_MAX_CONCURRENT_REQUESTS, DEFAULT_REQUESTS_PER_SECOND
 from aiorentman.exceptions import (
     RentmanAuthenticationError,
     RentmanClientClosedError,
@@ -1316,6 +1317,7 @@ async def test_explicit_token_wins_over_the_environment(
 async def test_client_paces_by_default() -> None:
     client = RentmanClient(token=TOKEN)
     assert client._pacer._interval == 1 / DEFAULT_REQUESTS_PER_SECOND
+    assert client._pacer._max_concurrent == DEFAULT_MAX_CONCURRENT_REQUESTS
     await client.async_close()
 
 
@@ -1355,3 +1357,79 @@ async def test_pacing_still_serves_requests() -> None:
             client = RentmanClient(session, token=TOKEN, requests_per_second=100.0)
             page = await client.async_list_equipment()
     assert page.items == ()
+
+
+async def test_iter_rejects_malformed_cursor_urls() -> None:
+    hostile_page = {
+        "data": [],
+        "itemCount": 0,
+        "limit": 300,
+        "offset": 0,
+        "next_page_url": "https://[invalid",
+    }
+    async with aiohttp.ClientSession() as session:
+        with aioresponses() as m:
+            m.get(api_url("/serialnumbers"), payload=hostile_page)
+            client = make_client(session)
+            with pytest.raises(RentmanInvalidResponseError, match="malformed"):
+                async for _serial in client.async_iter_serial_numbers():
+                    pass
+
+
+def _page_with_next_url(next_url: str | None) -> dict[str, Any]:
+    return {
+        "data": [],
+        "itemCount": 0,
+        "limit": 300,
+        "offset": 0,
+        "next_page_url": next_url,
+    }
+
+
+async def test_iter_rejects_repeated_cursors() -> None:
+    cursor = f"{BASE_URL}/serialnumbers?cursor=abc"
+    async with aiohttp.ClientSession() as session:
+        with aioresponses() as m:
+            m.get(api_url("/serialnumbers"), payload=_page_with_next_url(cursor))
+            m.get(cursor_api_url("/serialnumbers"), payload=_page_with_next_url(cursor))
+            client = make_client(session)
+            with pytest.raises(RentmanInvalidResponseError, match="repeats"):
+                async for _serial in client.async_iter_serial_numbers():
+                    pass
+
+
+async def test_iter_follows_cursor_queries_verbatim() -> None:
+    cursor = f"{BASE_URL}/serialnumbers?cursor=abc&cursor=def"
+    async with aiohttp.ClientSession() as session:
+        with aioresponses() as m:
+            m.get(api_url("/serialnumbers"), payload=_page_with_next_url(cursor))
+            m.get(cursor, payload=_page_with_next_url(None))
+            client = make_client(session)
+            serials = [serial async for serial in client.async_iter_serial_numbers()]
+            calls = m.requests
+    assert serials == []
+    recorded_call(calls, "GET", cursor)
+
+
+async def test_iter_handles_cursor_urls_without_a_query() -> None:
+    cursor = f"{BASE_URL}/serialnumbers"
+    async with aiohttp.ClientSession() as session:
+        with aioresponses() as m:
+            m.get(api_url("/serialnumbers"), payload=_page_with_next_url(cursor))
+            m.get(api_url("/serialnumbers"), payload=_page_with_next_url(None))
+            client = make_client(session)
+            serials = [serial async for serial in client.async_iter_serial_numbers()]
+    assert serials == []
+
+
+async def test_debug_logs_never_contain_the_token(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    async with aiohttp.ClientSession() as session:
+        with aioresponses() as m:
+            m.get(api_url("/equipment"), payload=EMPTY_PAGE)
+            client = make_client(session)
+            with caplog.at_level(logging.DEBUG):
+                await client.async_list_equipment()
+    assert caplog.records
+    assert all(TOKEN not in record.getMessage() for record in caplog.records)

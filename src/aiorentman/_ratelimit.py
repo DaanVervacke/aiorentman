@@ -23,6 +23,7 @@ class RequestPacer:
         if max_concurrent < 1:
             msg = "max_concurrent must be at least 1"
             raise ValueError(msg)
+        self._max_concurrent = max_concurrent
         self._semaphore = asyncio.Semaphore(max_concurrent)
         self._interval = 0.0 if requests_per_second is None else 1.0 / requests_per_second
         self._lock = asyncio.Lock()
