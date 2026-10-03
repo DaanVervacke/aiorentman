@@ -50,12 +50,6 @@ Before 1.0, breaking changes ship as minor bumps.
 ### Maintenance
 
 - Generate the changelog with git-cliff
-- Update the changelog
-- Update the changelog
-- Update the changelog
-- Update the changelog
-- Update the changelog
-- Update the changelog
 
 ## [0.1.0] - 2026-10-01
 

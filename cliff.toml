@@ -31,6 +31,7 @@ filter_commits = true
 commit_parsers = [
     { message = "^chore: release", skip = true },
     { message = "^chore: regenerate the changelog", skip = true },
+    { message = "^chore: update the changelog", skip = true },
     { message = "^feat", group = "Features" },
     { message = "^fix", group = "Bug Fixes" },
     { message = "^docs", group = "Documentation" },
