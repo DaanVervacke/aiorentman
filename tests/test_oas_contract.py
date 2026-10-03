@@ -4,7 +4,8 @@ import dataclasses
 import json
 from datetime import datetime
 from pathlib import Path
-from typing import Any, get_args
+from types import UnionType
+from typing import Any, get_args, get_origin, get_type_hints
 
 import pytest
 
@@ -281,6 +282,63 @@ def test_model_fields_match_the_spec_properties(spec: dict[str, Any]) -> None:
         assert fields - {"raw", "update_hash"} == properties, (
             f"{model.__name__} disagrees with {schema_name}"
         )
+
+
+def test_envelope_keys_match_the_api_response_schema(spec: dict[str, Any]) -> None:
+    envelope = spec["components"]["schemas"]["ApiResponse"]["properties"]
+    assert set(envelope) == {"itemCount", "limit", "offset", "next_page_url"}
+
+
+def _annotation_members(annotation: Any) -> list[Any]:
+    origin = get_origin(annotation)
+    if origin is UnionType:
+        return [arg for arg in get_args(annotation) if arg is not type(None)]
+    return [annotation]
+
+
+def test_nullable_spec_fields_are_optional_on_models(spec: dict[str, Any]) -> None:
+    schemas = spec["components"]["schemas"]
+    for model, schema_name in MODEL_SCHEMAS.items():
+        properties = schemas[schema_name]["properties"]
+        hints = get_type_hints(model)
+        for field in dataclasses.fields(model):
+            if field.name in {"raw", "update_hash"}:
+                continue
+            prop = properties[WIRE_ALIASES.get(field.name, field.name)]
+            wire_type = prop.get("type")
+            nullable = isinstance(wire_type, list) and "null" in wire_type
+            annotation = hints[field.name]
+            assert not nullable or type(None) in get_args(annotation), (
+                f"{model.__name__}.{field.name} is nullable in {schema_name}"
+            )
+
+
+def test_model_field_types_match_the_spec_categories(spec: dict[str, Any]) -> None:
+    schemas = spec["components"]["schemas"]
+    for model, schema_name in MODEL_SCHEMAS.items():
+        properties = schemas[schema_name]["properties"]
+        hints = get_type_hints(model)
+        for field in dataclasses.fields(model):
+            if field.name in {"raw", "update_hash"}:
+                continue
+            prop = properties[WIRE_ALIASES.get(field.name, field.name)]
+            annotation = hints[field.name]
+            if get_origin(annotation) is tuple:
+                continue
+            members = _annotation_members(annotation)
+            wire_type = prop.get("type")
+            if isinstance(wire_type, list):
+                wire_type = next((part for part in wire_type if part != "null"), None)
+            if wire_type is None or wire_type == "array":
+                continue
+            spec_type = spec_base_type(prop)
+            if spec_type is RentmanLink and RentmanLink in members:
+                continue
+            if members == [datetime] and spec_type is str:
+                continue
+            assert members == [spec_type], (
+                f"{model.__name__}.{field.name} disagrees with {schema_name}"
+            )
 
 
 PAYLOAD_SCHEMAS: dict[type, str] = {
