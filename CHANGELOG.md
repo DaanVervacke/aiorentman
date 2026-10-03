@@ -23,6 +23,7 @@ Before 1.0, breaking changes ship as minor bumps.
 ### Maintenance
 
 - Prune dead fixtures and tighten tooling pins
+- Skip legacy changelog regen commits
 
 ## [0.2.1] - 2026-10-02
 
