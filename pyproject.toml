@@ -63,7 +63,6 @@ source-include = ["LICENSE"]
 target-version = "py314"
 line-length = 100
 src = ["src", "tests"]
-extend-exclude = [".claude", ".agents", ".codex", ".continue"]
 
 [tool.ruff.format]
 docstring-code-format = true
