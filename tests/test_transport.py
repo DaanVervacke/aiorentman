@@ -11,6 +11,8 @@ from yarl import URL
 from aiorentman._transport import (
     OwnedSession,
     _error_detail,
+    _raise_for_status,
+    _retry_after,
     json_payload,
     request,
     request_json,
@@ -72,6 +74,7 @@ async def test_status_429_maps_to_rate_limit_error() -> None:
             with pytest.raises(RentmanRateLimitError, match="rate limit") as info:
                 await request_json(session, method="GET", url=f"{BASE_URL}/equipment")
     assert info.value.status == 429
+    assert info.value.retry_after is None
 
 
 async def test_status_400_maps_to_validation_error() -> None:
@@ -114,6 +117,7 @@ async def test_status_500_maps_to_communication_error_with_detail() -> None:
             with pytest.raises(RentmanCommunicationError, match="upstream failure") as info:
                 await request_json(session, method="GET", url=f"{BASE_URL}/equipment")
     assert info.value.status == 500
+    assert "/equipment" in str(info.value)
 
 
 async def test_error_without_a_body_carries_no_detail() -> None:
@@ -200,3 +204,35 @@ async def test_owned_session_closes_only_what_it_created() -> None:
     foreign = OwnedSession(session=aiohttp.ClientSession(), owned=True)
     await foreign.close_if_owned()
     assert foreign.session.closed
+
+
+def test_retry_after_reads_numeric_headers() -> None:
+    response = Mock(spec=aiohttp.ClientResponse)
+    response.headers = {"Retry-After": "30"}
+    assert _retry_after(cast("aiohttp.ClientResponse", response)) == 30
+
+
+def test_retry_after_returns_none_without_the_header() -> None:
+    response = Mock(spec=aiohttp.ClientResponse)
+    response.headers = {}
+    assert _retry_after(cast("aiohttp.ClientResponse", response)) is None
+
+
+def test_retry_after_returns_none_for_non_numeric_headers() -> None:
+    response = Mock(spec=aiohttp.ClientResponse)
+    response.headers = {"Retry-After": "soon"}
+    assert _retry_after(cast("aiohttp.ClientResponse", response)) is None
+
+
+async def test_rate_limit_error_carries_retry_after() -> None:
+    response = Mock(spec=aiohttp.ClientResponse)
+    response.status = 429
+    response.headers = {"Retry-After": "30"}
+    with pytest.raises(RentmanRateLimitError) as info:
+        await _raise_for_status(
+            cast("aiohttp.ClientResponse", response),
+            method="GET",
+            path="/equipment",
+        )
+    assert info.value.retry_after == 30
+    assert info.value.status == 429

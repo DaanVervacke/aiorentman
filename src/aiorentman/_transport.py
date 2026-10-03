@@ -55,6 +55,7 @@ async def request(
     timeout: float = 30.0,  # noqa: ASYNC109
 ) -> AsyncIterator[aiohttp.ClientResponse]:
     """Perform one HTTP request and map failures to library exceptions."""
+    split = urlsplit(url)
     try:
         started = time.monotonic()
         kwargs: dict[str, Any] = {} if body is None else {"json": body}
@@ -66,7 +67,6 @@ async def request(
                 params=params,
                 **kwargs,
             ) as response:
-                split = urlsplit(url)
                 _LOGGER.debug(
                     "%s %s%s -> %s in %.3fs",
                     method,
@@ -76,40 +76,48 @@ async def request(
                     time.monotonic() - started,
                 )
                 if raise_on_error:
-                    await _raise_for_status(response)
+                    await _raise_for_status(response, method=method, path=split.path)
                 yield response
     except RentmanError:
         raise
     except TimeoutError as exc:
-        msg = f"Timeout communicating with the Rentman API ({exc.__class__.__name__})"
+        msg = f"Timeout communicating with the Rentman API during {method} {split.path}"
         raise RentmanTimeoutError(msg) from exc
     except (aiohttp.ClientError, socket.gaierror) as exc:
-        msg = f"Error communicating with the Rentman API ({exc.__class__.__name__})"
+        msg = (
+            f"Error communicating with the Rentman API during {method} {split.path}"
+            f" ({exc.__class__.__name__})"
+        )
         raise RentmanCommunicationError(msg) from exc
 
 
-async def _raise_for_status(response: aiohttp.ClientResponse) -> None:
+async def _raise_for_status(
+    response: aiohttp.ClientResponse,
+    *,
+    method: str,
+    path: str,
+) -> None:
     if response.status == HTTPStatus.UNAUTHORIZED:
-        msg = "The Rentman API rejected the token (401)"
+        msg = f"The Rentman API rejected the token (401) on {method} {path}"
         raise RentmanAuthenticationError(msg, status=401)
     if response.status == HTTPStatus.FORBIDDEN:
-        msg = "The token does not grant access to this resource (403)"
+        msg = f"The token does not grant access to this resource (403) on {method} {path}"
         raise RentmanAuthorizationError(msg, status=403)
     if response.status == HTTPStatus.NOT_FOUND:
-        msg = "The Rentman API has no such object (404)"
+        msg = f"The Rentman API has no such object (404) on {method} {path}"
         raise RentmanNotFoundError(msg, status=404)
     if response.status == HTTPStatus.TOO_MANY_REQUESTS:
         msg = "The Rentman rate limit was exceeded (429)"
-        raise RentmanRateLimitError(msg, status=429)
+        raise RentmanRateLimitError(msg, status=429, retry_after=_retry_after(response))
     if response.status == HTTPStatus.BAD_REQUEST:
         detail = await _error_detail(response)
-        msg = "The Rentman API rejected the request as invalid (400)"
+        msg = f"The Rentman API rejected the request as invalid (400) on {method} {path}"
         if detail:
             msg = f"{msg}: {detail}"
         raise RentmanValidationError(msg, status=400)
     if response.status >= HTTPStatus.BAD_REQUEST:
         detail = await _error_detail(response)
-        msg = f"Rentman API error {response.status}"
+        msg = f"Rentman API error {response.status} on {method} {path}"
         if detail:
             msg = f"{msg}: {detail}"
         raise RentmanCommunicationError(msg, status=response.status)
@@ -126,6 +134,17 @@ async def _error_detail(response: aiohttp.ClientResponse) -> str:
     if len(text) > _ERROR_DETAIL_LIMIT:
         return text[:_ERROR_DETAIL_LIMIT]
     return text.strip()
+
+
+def _retry_after(response: aiohttp.ClientResponse) -> int | None:
+    """Read the Retry-After header of one rate limited response."""
+    value = response.headers.get("Retry-After")
+    if value is None:
+        return None
+    try:
+        return int(value)
+    except ValueError:
+        return None
 
 
 async def request_json(

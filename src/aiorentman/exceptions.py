@@ -43,8 +43,18 @@ class RentmanRateLimitError(RentmanError):
     Rentman allows 10 requests per second, at most 20 concurrent requests,
     and 50.000 requests per day. The client paces its own requests, so this
     error usually means another consumer of the same account is spending the
-    shared budget.
+    shared budget. ``retry_after`` holds the Retry-After delay in seconds
+    when the response provides one.
     """
+
+    def __init__(
+        self,
+        message: str,
+        status: int | None = None,
+        retry_after: int | None = None,
+    ) -> None:
+        super().__init__(message, status)
+        self.retry_after = retry_after
 
 
 class RentmanClientClosedError(RentmanError):
