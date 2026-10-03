@@ -1611,7 +1611,7 @@ def parse_invitation(data: Mapping[str, Any]) -> Invitation:
         remark=_str_field(data, "remark"),
         emailstatus=_str_field(data, "emailstatus"),
         last_reminder=_datetime_field(data, "last_reminder"),
-        location_details=_str_field(data, "location_details"),
+        location_details=_str_or_none_field(data, "location_details"),
         auto_reminder_date=_datetime_field(data, "auto_reminder_date"),
         auto_reminder_sent=_int_field(data, "auto_reminder_sent"),
         raw=dict(data),

@@ -1403,7 +1403,7 @@ class Invitation:
     remark: str
     emailstatus: str
     last_reminder: datetime | None
-    location_details: str
+    location_details: str | None
     auto_reminder_date: datetime | None
     auto_reminder_sent: int | None
     raw: dict[str, Any] | None = None
