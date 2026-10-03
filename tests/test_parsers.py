@@ -336,6 +336,18 @@ def test_parse_coerces_lenient_scalars() -> None:
     assert serial.update_hash == "d41d8cd98f00b204"
 
 
+def test_parse_int_field_degrades_on_unconvertible_strings() -> None:
+    serial = parse_serial_number({"id": "²"})
+    assert serial.id == 0
+    serial = parse_serial_number({"id": "7" * 5000})
+    assert serial.id == 0
+
+
+def test_parse_int_field_converts_negative_strings() -> None:
+    equipment = parse_equipment({"id": "-5"})
+    assert equipment.id == -5
+
+
 def test_parse_page_counts_items_when_item_count_is_missing() -> None:
     payload = cast_response({"data": [{"id": 1}]})
     page = parse_page(payload, parse_equipment)
