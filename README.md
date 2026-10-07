@@ -7,7 +7,7 @@
 
 Unofficial asynchronous Python library to interact with the Rentman API. Requires Python >= 3.14.
 
-This is a client for a documented public API, but it is not affiliated with or endorsed by Rentman B.V. Rentman runs one rolling API version and migrates integrations automatically, so the library pins its contract to the OpenAPI document it ships with and validates every endpoint against it.
+This is a client for a documented public API, but it is not affiliated with or endorsed by Rentman B.V. Rentman runs one rolling API version and migrates integrations automatically, so the library pins its contract to OpenAPI 1.16.0 and its test suite checks every endpoint and model against that document.
 
 ## Install
 
@@ -17,7 +17,7 @@ uv add aiorentman
 
 ## Scope
 
-The library covers the resources an RFID and materials project needs. Reads cover every documented GET path:
+Reads cover every documented GET path:
 
 | Resource | List | Iterate | Get |
 | --- | --- | --- | --- |
@@ -129,54 +129,54 @@ The library covers the resources an RFID and materials project needs. Reads cove
 | Task statuses | `async_list_task_statuses` | `async_iter_task_statuses` | `async_get_task_status` |
 | Files | `async_list_files` | `async_iter_files` | `async_get_file` |
 | File folders | `async_list_file_folders` | `async_iter_file_folders` | `async_get_file_folder` |
-| Subtasks of a task | `async_list_subtasks_of_task` | `async_iter_subtasks_of_task` |  |
-| Task assignments of a task | `async_list_task_assignments_of_task` | `async_iter_task_assignments_of_task` |  |
-| Files of a task | `async_list_files_of_task` | `async_iter_files_of_task` |  |
-| File folders of a task | `async_list_file_folders_of_task` | `async_iter_file_folders_of_task` |  |
-| Tasks of a contact person | `async_list_tasks_of_contact_person` | `async_iter_tasks_of_contact_person` |  |
-| Tasks of a contact | `async_list_tasks_of_contact` | `async_iter_tasks_of_contact` |  |
-| Tasks of a crew member | `async_list_tasks_of_crew` | `async_iter_tasks_of_crew` |  |
-| Tasks of a material | `async_list_tasks_of_equipment` | `async_iter_tasks_of_equipment` |  |
-| Tasks of an invoice | `async_list_tasks_of_invoice` | `async_iter_tasks_of_invoice` |  |
-| Tasks of a project | `async_list_tasks_of_project` | `async_iter_tasks_of_project` |  |
-| Tasks of a purchase order | `async_list_tasks_of_purchase_order` | `async_iter_tasks_of_purchase_order` |  |
-| Tasks of a quote | `async_list_tasks_of_quote` | `async_iter_tasks_of_quote` |  |
-| Tasks of a repair | `async_list_tasks_of_repair` | `async_iter_tasks_of_repair` |  |
-| Tasks of a serial number | `async_list_tasks_of_serial_number` | `async_iter_tasks_of_serial_number` |  |
-| Tasks of a subrental | `async_list_tasks_of_subrental` | `async_iter_tasks_of_subrental` |  |
-| Tasks of a vehicle | `async_list_tasks_of_vehicle` | `async_iter_tasks_of_vehicle` |  |
-| Tasks of a supplier | `async_list_tasks_of_supplier` | `async_iter_tasks_of_supplier` |  |
-| Files of a contact person | `async_list_files_of_contact_person` | `async_iter_files_of_contact_person` |  |
-| Files of a contact | `async_list_files_of_contact` | `async_iter_files_of_contact` |  |
-| Files of a crew member | `async_list_files_of_crew` | `async_iter_files_of_crew` |  |
-| Files of a material | `async_list_files_of_equipment` | `async_iter_files_of_equipment` |  |
-| Files of an invoice | `async_list_files_of_invoice` | `async_iter_files_of_invoice` |  |
-| Files of a project | `async_list_files_of_project` | `async_iter_files_of_project` |  |
-| Files of a purchase order | `async_list_files_of_purchase_order` | `async_iter_files_of_purchase_order` |  |
-| Files of a quote | `async_list_files_of_quote` | `async_iter_files_of_quote` |  |
-| Files of a repair | `async_list_files_of_repair` | `async_iter_files_of_repair` |  |
-| Files of a serial number | `async_list_files_of_serial_number` | `async_iter_files_of_serial_number` |  |
-| Files of a subrental | `async_list_files_of_subrental` | `async_iter_files_of_subrental` |  |
-| Files of a time registration | `async_list_files_of_time_registration` | `async_iter_files_of_time_registration` |  |
-| Files of a vehicle | `async_list_files_of_vehicle` | `async_iter_files_of_vehicle` |  |
-| Files of a supplier | `async_list_files_of_supplier` | `async_iter_files_of_supplier` |  |
-| File folders of a contact person | `async_list_file_folders_of_contact_person` | `async_iter_file_folders_of_contact_person` |  |
-| File folders of a contact | `async_list_file_folders_of_contact` | `async_iter_file_folders_of_contact` |  |
-| File folders of a crew member | `async_list_file_folders_of_crew` | `async_iter_file_folders_of_crew` |  |
-| File folders of a material | `async_list_file_folders_of_equipment` | `async_iter_file_folders_of_equipment` |  |
-| File folders of a project | `async_list_file_folders_of_project` | `async_iter_file_folders_of_project` |  |
-| File folders of a purchase order | `async_list_file_folders_of_purchase_order` | `async_iter_file_folders_of_purchase_order` |  |
-| File folders of a repair | `async_list_file_folders_of_repair` | `async_iter_file_folders_of_repair` |  |
-| File folders of a serial number | `async_list_file_folders_of_serial_number` | `async_iter_file_folders_of_serial_number` |  |
-| File folders of a subproject | `async_list_file_folders_of_subproject` | `async_iter_file_folders_of_subproject` |  |
-| File folders of a subrental | `async_list_file_folders_of_subrental` | `async_iter_file_folders_of_subrental` |  |
-| File folders of a supplier | `async_list_file_folders_of_supplier` | `async_iter_file_folders_of_supplier` |  |
-| File folders of a vehicle | `async_list_file_folders_of_vehicle` | `async_iter_file_folders_of_vehicle` |  |
+| Subtasks of a task | `async_list_subtasks_of_task` | `async_iter_subtasks_of_task` | |
+| Task assignments of a task | `async_list_task_assignments_of_task` | `async_iter_task_assignments_of_task` | |
+| Files of a task | `async_list_files_of_task` | `async_iter_files_of_task` | |
+| File folders of a task | `async_list_file_folders_of_task` | `async_iter_file_folders_of_task` | |
+| Tasks of a contact person | `async_list_tasks_of_contact_person` | `async_iter_tasks_of_contact_person` | |
+| Tasks of a contact | `async_list_tasks_of_contact` | `async_iter_tasks_of_contact` | |
+| Tasks of a crew member | `async_list_tasks_of_crew` | `async_iter_tasks_of_crew` | |
+| Tasks of a material | `async_list_tasks_of_equipment` | `async_iter_tasks_of_equipment` | |
+| Tasks of an invoice | `async_list_tasks_of_invoice` | `async_iter_tasks_of_invoice` | |
+| Tasks of a project | `async_list_tasks_of_project` | `async_iter_tasks_of_project` | |
+| Tasks of a purchase order | `async_list_tasks_of_purchase_order` | `async_iter_tasks_of_purchase_order` | |
+| Tasks of a quote | `async_list_tasks_of_quote` | `async_iter_tasks_of_quote` | |
+| Tasks of a repair | `async_list_tasks_of_repair` | `async_iter_tasks_of_repair` | |
+| Tasks of a serial number | `async_list_tasks_of_serial_number` | `async_iter_tasks_of_serial_number` | |
+| Tasks of a subrental | `async_list_tasks_of_subrental` | `async_iter_tasks_of_subrental` | |
+| Tasks of a vehicle | `async_list_tasks_of_vehicle` | `async_iter_tasks_of_vehicle` | |
+| Tasks of a supplier | `async_list_tasks_of_supplier` | `async_iter_tasks_of_supplier` | |
+| Files of a contact person | `async_list_files_of_contact_person` | `async_iter_files_of_contact_person` | |
+| Files of a contact | `async_list_files_of_contact` | `async_iter_files_of_contact` | |
+| Files of a crew member | `async_list_files_of_crew` | `async_iter_files_of_crew` | |
+| Files of a material | `async_list_files_of_equipment` | `async_iter_files_of_equipment` | |
+| Files of an invoice | `async_list_files_of_invoice` | `async_iter_files_of_invoice` | |
+| Files of a project | `async_list_files_of_project` | `async_iter_files_of_project` | |
+| Files of a purchase order | `async_list_files_of_purchase_order` | `async_iter_files_of_purchase_order` | |
+| Files of a quote | `async_list_files_of_quote` | `async_iter_files_of_quote` | |
+| Files of a repair | `async_list_files_of_repair` | `async_iter_files_of_repair` | |
+| Files of a serial number | `async_list_files_of_serial_number` | `async_iter_files_of_serial_number` | |
+| Files of a subrental | `async_list_files_of_subrental` | `async_iter_files_of_subrental` | |
+| Files of a time registration | `async_list_files_of_time_registration` | `async_iter_files_of_time_registration` | |
+| Files of a vehicle | `async_list_files_of_vehicle` | `async_iter_files_of_vehicle` | |
+| Files of a supplier | `async_list_files_of_supplier` | `async_iter_files_of_supplier` | |
+| File folders of a contact person | `async_list_file_folders_of_contact_person` | `async_iter_file_folders_of_contact_person` | |
+| File folders of a contact | `async_list_file_folders_of_contact` | `async_iter_file_folders_of_contact` | |
+| File folders of a crew member | `async_list_file_folders_of_crew` | `async_iter_file_folders_of_crew` | |
+| File folders of a material | `async_list_file_folders_of_equipment` | `async_iter_file_folders_of_equipment` | |
+| File folders of a project | `async_list_file_folders_of_project` | `async_iter_file_folders_of_project` | |
+| File folders of a purchase order | `async_list_file_folders_of_purchase_order` | `async_iter_file_folders_of_purchase_order` | |
+| File folders of a repair | `async_list_file_folders_of_repair` | `async_iter_file_folders_of_repair` | |
+| File folders of a serial number | `async_list_file_folders_of_serial_number` | `async_iter_file_folders_of_serial_number` | |
+| File folders of a subproject | `async_list_file_folders_of_subproject` | `async_iter_file_folders_of_subproject` | |
+| File folders of a subrental | `async_list_file_folders_of_subrental` | `async_iter_file_folders_of_subrental` | |
+| File folders of a supplier | `async_list_file_folders_of_supplier` | `async_iter_file_folders_of_supplier` | |
+| File folders of a vehicle | `async_list_file_folders_of_vehicle` | `async_iter_file_folders_of_vehicle` | |
 | Rates | `async_list_rates` | `async_iter_rates` | `async_get_rate` |
 | Rate factors | `async_list_rate_factors` | `async_iter_rate_factors` | `async_get_rate_factor` |
-| Rate factors of a rate | `async_list_rate_factors_of_rate` | `async_iter_rate_factors_of_rate` |  |
+| Rate factors of a rate | `async_list_rate_factors_of_rate` | `async_iter_rate_factors_of_rate` | |
 | Factors | `async_list_factors` | `async_iter_factors` | `async_get_factor` |
-| Factors of a factor group | `async_list_factors_of_factor_group` | `async_iter_factors_of_factor_group` |  |
+| Factors of a factor group | `async_list_factors_of_factor_group` | `async_iter_factors_of_factor_group` | |
 | Factor groups | `async_list_factor_groups` | `async_iter_factor_groups` | `async_get_factor_group` |
 
 Writes cover every documented POST, PUT, and DELETE path:
@@ -190,21 +190,21 @@ Writes cover every documented POST, PUT, and DELETE path:
 | Contact persons of a contact | `async_create_contact_person_of_contact` | `async_update_contact_person` | `async_delete_contact_person` |
 | Contacts | `async_create_contact` | `async_update_contact` | `async_delete_contact` |
 | Crew on an appointment | `async_create_appointment_crew_of_appointment` | `async_update_appointment_crew` | `async_delete_appointment_crew` |
-| Equipment (materials) | `async_create_equipment` | `async_update_equipment` |  |
-| Folders | `async_create_folder` | `async_update_folder` |  |
-| Function groups of a project | `async_create_project_function_group_of_project` |  |  |
-| Leave mutations | `async_create_leave_mutation` |  |  |
-| Leave requests | `async_create_leave_request` | `async_update_leave_request` |  |
-| Payments of an invoice | `async_create_payment_of_invoice` | `async_update_payment` |  |
+| Equipment (materials) | `async_create_equipment` | `async_update_equipment` | |
+| Folders | `async_create_folder` | `async_update_folder` | |
+| Function groups of a project | `async_create_project_function_group_of_project` | | |
+| Leave mutations | `async_create_leave_mutation` | | |
+| Leave requests | `async_create_leave_request` | `async_update_leave_request` | |
+| Payments of an invoice | `async_create_payment_of_invoice` | `async_update_payment` | |
 | Project costs of a project | `async_create_project_cost_of_project` | `async_update_project_cost` | `async_delete_project_cost` |
-| Project functions of a project | `async_create_project_function_of_project` |  |  |
+| Project functions of a project | `async_create_project_function_of_project` | | |
 | Project requests | `async_create_project_request` | `async_update_project_request` | `async_delete_project_request` |
-| Projects | `async_create_project` |  |  |
+| Projects | `async_create_project` | | |
 | Request equipment of a project request | `async_create_project_request_equipment_of_project_request` | `async_update_project_request_equipment` | `async_delete_project_request_equipment` |
 | Serial numbers of a material | `async_create_serial_number_of_equipment` | `async_update_serial_number` | `async_delete_serial_number` |
 | Set contents of a material | `async_create_equipment_set_content_of_equipment` | `async_update_equipment_set_content` | `async_delete_equipment_set_content` |
 | Stock movements of a material | `async_create_stock_movement_of_equipment` | `async_update_stock_movement` | `async_delete_stock_movement` |
-| Subprojects of a project | `async_create_subproject_of_project` |  |  |
+| Subprojects of a project | `async_create_subproject_of_project` | | |
 | Subtasks of a task | `async_create_subtask_of_task` | `async_update_subtask` | `async_delete_subtask` |
 | Suppliers of a material | `async_create_supplier_of_equipment` | `async_update_supplier` | `async_delete_supplier` |
 | Task assignments of a task | `async_create_task_assignment_of_task` | `async_update_task_assignment` | `async_delete_task_assignment` |
@@ -231,6 +231,8 @@ async def main() -> None:
 
 asyncio.run(main())
 ```
+
+The client creates its own `aiohttp.ClientSession` unless you pass one as the first argument. It closes only a session it created, on exit from the `async with` block or on `await client.async_close()`. `request_timeout` sets the per-request timeout in seconds and defaults to 30.
 
 ## Querying
 
@@ -293,9 +295,11 @@ Datetime fields render as ISO 8601 and link fields take a `RentmanLink` holding 
 
 ## Rate limits
 
-Rentman allows 10 requests per second, at most 20 concurrent requests, and 50.000 requests per day. The client enforces the first two by default. Pass `requests_per_second=None` to disable pacing, or lower it when several consumers share one account. Exceeding the server-side limits raises `RentmanRateLimitError`.
+Rentman allows 10 requests per second, at most 20 concurrent requests, and 50.000 requests per day. The client enforces the first two by default through `requests_per_second` and `max_concurrent`. Pass `requests_per_second=None` to disable pacing, or lower it when several consumers share one account. Exceeding the server-side limits raises `RentmanRateLimitError`, with the Retry-After delay in seconds on `retry_after` when the response provides one.
 
 ## Errors
+
+Every exception derives from `RentmanError` and carries the HTTP status on `status` when there is one. `RentmanTimeoutError`, `RentmanInvalidResponseError`, and `RentmanNotFoundError` are subclasses of `RentmanCommunicationError`.
 
 | Exception | Meaning |
 | --- | --- |
