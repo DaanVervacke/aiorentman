@@ -33,5 +33,6 @@ items and the paging metadata. Every iter method is an async generator that
 follows ``next_page_url`` until it is exhausted.
 
 Requests are paced against the documented limits of 10 requests per second
-and 20 concurrent requests. Pass ``requests_per_second=None`` to disable
-pacing when another part of your application already throttles.
+and 20 concurrent requests, set through ``requests_per_second`` and
+``max_concurrent``. Pass ``requests_per_second=None`` to disable pacing when
+another part of your application already throttles.

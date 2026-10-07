@@ -27,8 +27,11 @@ object:
    page = await client.async_list_equipment(query)
 
 Field names are the schema property names of the resource, including
-``custom_<number>`` names for custom fields. The library validates them
-against the pinned OpenAPI document in its contract test, not at runtime.
+``custom_<number>`` names for custom fields. The library passes them through
+unchecked, except that filters reject the reserved parameter names
+``fields``, ``sort``, ``expand``, ``limit``, and ``offset``, and filters and
+sorts reject the generated fields ``qrcodes``, ``tags``, and
+``qrcodes_of_serial_numbers`` with a ``ValueError``.
 
 Linked fields such as ``folder`` hold a :class:`aiorentman.RentmanLink`
 with the API path of the linked resource. Pass the field to ``expand`` and

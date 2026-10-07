@@ -15,9 +15,10 @@ The client takes the token explicitly or falls back to the
 
    client = RentmanClient(token="your-api-token")
 
-There is no refresh flow. A rejected token surfaces as
+Constructing a client without either raises
+:class:`aiorentman.RentmanAuthenticationError`. There is no refresh flow. A rejected token surfaces as
 :class:`aiorentman.RentmanAuthenticationError` with status 401, and the only
 remedy is configuring a new token in Rentman and constructing a new client.
 
-Tokens grant full read access to your Rentman account. Treat them like
+A token can read and write everything its Rentman user can. Treat them like
 passwords and never commit them.

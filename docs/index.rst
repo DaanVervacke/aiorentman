@@ -2,10 +2,10 @@ aiorentman
 ===========
 
 Unofficial asynchronous Python library to interact with the `Rentman API
-<https://api.rentman.net/>`_. It covers the resources an RFID and materials
-project needs, from equipment, serial numbers, stock, and repairs to
-projects, crew, invoices, tasks, and files, with create, update, and delete
-methods for every documented write path.
+<https://api.rentman.net/>`_. It covers every documented read path, from
+equipment, serial numbers, stock, and repairs to projects, crew, invoices,
+tasks, and files, with create, update, and delete methods for every
+documented write path.
 
 .. toctree::
    :maxdepth: 2
@@ -18,8 +18,8 @@ methods for every documented write path.
    api
 
 Rentman runs one rolling API version and migrates integrations
-automatically. This library pins its contract to the OpenAPI document
-shipped with the repository and validates every endpoint against it.
+automatically. This library pins its contract to OpenAPI 1.16.0 and its
+test suite checks every endpoint and model against that document.
 
 Indices and tables
 ==================
