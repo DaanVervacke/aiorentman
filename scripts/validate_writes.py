@@ -63,7 +63,7 @@ async def main() -> None:
             await client.async_delete_subtask(subtask.id)
             await client.async_delete_task(task.id)
             try:
-                await client.async_get_tasks(task.id)
+                await client.async_get_task(task.id)
             except RentmanNotFoundError:
                 print("the deleted task is gone")
             else:

@@ -451,9 +451,8 @@ _LOGGER = logging.getLogger(__name__)
 class RentmanClient:
     """Asynchronous client for the Rentman API.
 
-    The client covers the inventory and planning resources an RFID and
-    materials project needs, with create, update, and delete methods for
-    every documented write path. Every request is paced against the
+    The client covers every documented read path, with create, update,
+    and delete methods for every documented write path. Every request is paced against the
     documented rate limits unless pacing is disabled with
     ``requests_per_second=None``.
     """
@@ -2158,7 +2157,7 @@ class RentmanClient:
         """Yield every task, following the cursor across pages."""
         return self._iter_collection(TASKS, CollectionArgs(query=query))
 
-    async def async_get_tasks(self, task_id: int) -> Task | None:
+    async def async_get_task(self, task_id: int) -> Task | None:
         """Fetch one task by its id."""
         return await self._call(TASKS_ITEM, ItemArgs(item_id=task_id))
 
@@ -2170,7 +2169,7 @@ class RentmanClient:
         """Yield every subtask, following the cursor across pages."""
         return self._iter_collection(SUBTASKS, CollectionArgs(query=query))
 
-    async def async_get_subtasks(self, subtask_id: int) -> Subtask | None:
+    async def async_get_subtask(self, subtask_id: int) -> Subtask | None:
         """Fetch one subtask by its id."""
         return await self._call(SUBTASKS_ITEM, ItemArgs(item_id=subtask_id))
 
@@ -2186,7 +2185,7 @@ class RentmanClient:
         """Yield every task_assignment, following the cursor across pages."""
         return self._iter_collection(TASK_ASSIGNMENTS, CollectionArgs(query=query))
 
-    async def async_get_task_assignments(self, task_assignment_id: int) -> TaskAssignment | None:
+    async def async_get_task_assignment(self, task_assignment_id: int) -> TaskAssignment | None:
         """Fetch one task assignment by its id."""
         return await self._call(TASK_ASSIGNMENTS_ITEM, ItemArgs(item_id=task_assignment_id))
 
@@ -2198,7 +2197,7 @@ class RentmanClient:
         """Yield every task_status, following the cursor across pages."""
         return self._iter_collection(TASK_STATUSES, CollectionArgs(query=query))
 
-    async def async_get_task_statuses(self, task_status_id: int) -> TaskStatus | None:
+    async def async_get_task_status(self, task_status_id: int) -> TaskStatus | None:
         """Fetch one task status by its id."""
         return await self._call(TASK_STATUSES_ITEM, ItemArgs(item_id=task_status_id))
 
@@ -2210,7 +2209,7 @@ class RentmanClient:
         """Yield every file, following the cursor across pages."""
         return self._iter_collection(FILES, CollectionArgs(query=query))
 
-    async def async_get_files(self, file_id: int) -> File | None:
+    async def async_get_file(self, file_id: int) -> File | None:
         """Fetch one file by its id."""
         return await self._call(FILES_ITEM, ItemArgs(item_id=file_id))
 
@@ -2222,7 +2221,7 @@ class RentmanClient:
         """Yield every file_folder, following the cursor across pages."""
         return self._iter_collection(FILE_FOLDERS, CollectionArgs(query=query))
 
-    async def async_get_file_folders(self, file_folder_id: int) -> FileFolder | None:
+    async def async_get_file_folder(self, file_folder_id: int) -> FileFolder | None:
         """Fetch one file folder by its id."""
         return await self._call(FILE_FOLDERS_ITEM, ItemArgs(item_id=file_folder_id))
 

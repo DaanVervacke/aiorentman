@@ -123,12 +123,12 @@ The library covers the resources an RFID and materials project needs. Reads cove
 | Contacts | `async_list_contacts` | `async_iter_contacts` | `async_get_contact` |
 | Contact persons | `async_list_contact_persons` | `async_iter_contact_persons` | `async_get_contact_person` |
 | Contact persons of a contact | `async_list_contact_persons_of_contact` | `async_iter_contact_persons_of_contact` | |
-| Tasks | `async_list_tasks` | `async_iter_tasks` | `async_get_tasks` |
-| Subtasks | `async_list_subtasks` | `async_iter_subtasks` | `async_get_subtasks` |
-| Task assignments | `async_list_task_assignments` | `async_iter_task_assignments` | `async_get_task_assignments` |
-| Task statuses | `async_list_task_statuses` | `async_iter_task_statuses` | `async_get_task_statuses` |
-| Files | `async_list_files` | `async_iter_files` | `async_get_files` |
-| File folders | `async_list_file_folders` | `async_iter_file_folders` | `async_get_file_folders` |
+| Tasks | `async_list_tasks` | `async_iter_tasks` | `async_get_task` |
+| Subtasks | `async_list_subtasks` | `async_iter_subtasks` | `async_get_subtask` |
+| Task assignments | `async_list_task_assignments` | `async_iter_task_assignments` | `async_get_task_assignment` |
+| Task statuses | `async_list_task_statuses` | `async_iter_task_statuses` | `async_get_task_status` |
+| Files | `async_list_files` | `async_iter_files` | `async_get_file` |
+| File folders | `async_list_file_folders` | `async_iter_file_folders` | `async_get_file_folder` |
 | Subtasks of a task | `async_list_subtasks_of_task` | `async_iter_subtasks_of_task` |  |
 | Task assignments of a task | `async_list_task_assignments_of_task` | `async_iter_task_assignments_of_task` |  |
 | Files of a task | `async_list_files_of_task` | `async_iter_files_of_task` |  |

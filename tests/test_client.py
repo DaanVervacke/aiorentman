@@ -510,12 +510,12 @@ ITEMS: tuple[tuple[Callable[[RentmanClient], Awaitable[Any]], str], ...] = (
     (lambda client: client.async_get_rate_factor(1), "/ratefactors/1"),
     (lambda client: client.async_get_factor(2), "/factors/2"),
     (lambda client: client.async_get_factor_group(1), "/factorgroups/1"),
-    (lambda client: client.async_get_tasks(95), "/tasks/95"),
-    (lambda client: client.async_get_subtasks(1), "/subtasks/1"),
-    (lambda client: client.async_get_task_assignments(1), "/taskassignments/1"),
-    (lambda client: client.async_get_task_statuses(1), "/taskstatuses/1"),
-    (lambda client: client.async_get_files(26), "/files/26"),
-    (lambda client: client.async_get_file_folders(1), "/file_folders/1"),
+    (lambda client: client.async_get_task(95), "/tasks/95"),
+    (lambda client: client.async_get_subtask(1), "/subtasks/1"),
+    (lambda client: client.async_get_task_assignment(1), "/taskassignments/1"),
+    (lambda client: client.async_get_task_status(1), "/taskstatuses/1"),
+    (lambda client: client.async_get_file(26), "/files/26"),
+    (lambda client: client.async_get_file_folder(1), "/file_folders/1"),
 )
 
 ITERATORS: tuple[tuple[Callable[[RentmanClient, Query | None], Any], str], ...] = (
