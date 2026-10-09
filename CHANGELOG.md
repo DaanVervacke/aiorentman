@@ -8,6 +8,10 @@ Before 1.0, breaking changes ship as minor bumps.
 
 ## [Unreleased]
 
+### Breaking Changes
+
+- Name single-item task and file getters in the singular
+
 ### Bug Fixes
 
 - Degrade on unconvertible id strings in the parser
@@ -19,11 +23,16 @@ Before 1.0, breaking changes ship as minor bumps.
 ### Documentation
 
 - Match the shipped write surface and changelog groups
+- Document client options, the error hierarchy, and retry_after
+- Correct the scope, validation, and token claims in the guides
+- Align the release procedure and token scope with the tooling
 
 ### Maintenance
 
 - Prune dead fixtures and tighten tooling pins
 - Skip legacy changelog regen commits
+- Align the changelog tooling with the library family
+- Group breaking changes in the changelog
 
 ## [0.2.1] - 2026-10-02
 
