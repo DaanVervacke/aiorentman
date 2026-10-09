@@ -6,6 +6,7 @@ Client
 
 .. autoclass:: aiorentman.client.RentmanClient
    :members:
+   :inherited-members:
 
 Query
 -----
