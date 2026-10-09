@@ -4,43 +4,77 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
 
+from ._base import RentmanLink, RentmanPage
 
-@dataclass(frozen=True, slots=True)
-class RentmanLink:
-    """A reference to another resource, given as its API path.
-
-    Linked fields hold a path string such as ``/equipment/12`` unless the
-    request expanded them, in which case the parser returns the full typed
-    model instead of this link. An expanded object without a usable id
-    parses to None.
-    """
-
-    path: str
-
-    @property
-    def id(self) -> int | None:
-        """The numeric id at the end of the path, or None when absent."""
-        tail = self.path.rsplit("/", 1)[-1]
-        try:
-            return int(tail)
-        except ValueError:
-            return None
-
-
-@dataclass(frozen=True, slots=True)
-class RentmanPage[ModelT]:
-    """One page of a collection: the parsed items and the paging metadata.
-
-    The parser drops items without a usable id, and logs each one at debug
-    level on the ``aiorentman.parsers`` logger. ``item_count`` is the count
-    the API reported, so it can be higher than ``len(items)``.
-    """
-
-    items: tuple[ModelT, ...]
-    item_count: int
-    limit: int
-    offset: int
-    next_page_url: str | None
+__all__ = [
+    "Accessory",
+    "ActualContent",
+    "Alternative",
+    "Appointment",
+    "AppointmentCrew",
+    "Contact",
+    "ContactPerson",
+    "Contract",
+    "Crew",
+    "CrewAvailability",
+    "CrewRate",
+    "Equipment",
+    "EquipmentAssignedSerial",
+    "EquipmentSetContent",
+    "ExtraInputField",
+    "Factor",
+    "FactorGroup",
+    "File",
+    "FileFolder",
+    "Folder",
+    "Invitation",
+    "Invoice",
+    "InvoiceLine",
+    "LeaveMutation",
+    "LeaveRequest",
+    "LeaveType",
+    "LedgerCode",
+    "Payment",
+    "Project",
+    "ProjectCost",
+    "ProjectCrew",
+    "ProjectEquipment",
+    "ProjectEquipmentGroup",
+    "ProjectFunction",
+    "ProjectFunctionGroup",
+    "ProjectRequest",
+    "ProjectRequestEquipment",
+    "ProjectStatus",
+    "ProjectType",
+    "ProjectVehicle",
+    "PurchaseOrder",
+    "PurchaseOrderCost",
+    "PurchaseOrderGlobalCost",
+    "Quote",
+    "Rate",
+    "RateFactor",
+    "RentmanLink",
+    "RentmanPage",
+    "Repair",
+    "SerialNumber",
+    "Status",
+    "StockLocation",
+    "StockMovement",
+    "Subproject",
+    "Subrental",
+    "SubrentalEquipment",
+    "SubrentalEquipmentGroup",
+    "Subtask",
+    "Supplier",
+    "Task",
+    "TaskAssignment",
+    "TaskStatus",
+    "TaxClass",
+    "TimeRegistration",
+    "TimeRegistrationActivity",
+    "Vehicle",
+    "WarehouseStatus",
+]
 
 
 @dataclass(frozen=True, slots=True)
