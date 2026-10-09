@@ -4,8 +4,8 @@
 
 For endpoint changes, all of the following are present:
 
-- [ ] A frozen `Endpoint` row in `src/aiorentman/_endpoints.py` with the complete wire contract and its response schema name.
-- [ ] A typed `RentmanClient` method.
+- [ ] An `EndpointSpec` row in `scripts/resources.py`, plus a `ModelSpec` row for a new resource and a `PAYLOADS` entry for a new request schema.
+- [ ] The modules regenerated with `uv run python -m scripts.generate`, with no hand edits to the generated files.
 - [ ] The contract test passes against the pinned OpenAPI document in `tests/fixtures/rentman_oas_1.16.0.json`.
 - [ ] A captured real payload under `tests/fixtures/`, redacted with `scripts/_redact.py`.
 - [ ] A conventional commit subject, which git-cliff renders into `CHANGELOG.md`.
