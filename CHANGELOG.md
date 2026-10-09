@@ -19,6 +19,10 @@ Before 1.0, breaking changes ship as minor bumps.
 - Fail closed on malformed and repeated collection cursors
 - Carry the request target and Retry-After in transport errors
 - Accept null location details on invitations
+- Make result models hashable
+- Create no session when the pacing arguments are invalid
+- Drop objects without a usable id instead of numbering them 0
+- Name partial parsers in the drop log
 
 ### Documentation
 
@@ -26,6 +30,7 @@ Before 1.0, breaking changes ship as minor bumps.
 - Document client options, the error hierarchy, and retry_after
 - Correct the scope, validation, and token claims in the guides
 - Align the release procedure and token scope with the tooling
+- Describe dropped objects, item_count, and pacing errors
 
 ### Maintenance
 
@@ -33,6 +38,7 @@ Before 1.0, breaking changes ship as minor bumps.
 - Skip legacy changelog regen commits
 - Align the changelog tooling with the library family
 - Group breaking changes in the changelog
+- Build the docs in the check gate
 
 ## [0.2.1] - 2026-10-02
 
