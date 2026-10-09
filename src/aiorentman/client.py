@@ -483,8 +483,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[SerialNumber]:
         """Fetch one page of serial numbers of one material."""
         return await self._call(
-            SERIAL_NUMBERS_OF_EQUIPMENT,
-            ParentCollectionArgs(parent_id=equipment_id, query=query),
+            SERIAL_NUMBERS_OF_EQUIPMENT, ParentCollectionArgs(parent_id=equipment_id, query=query)
         )
 
     def async_iter_serial_numbers_of_equipment(
@@ -492,8 +491,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[SerialNumber]:
         """Yield every serial number of one material, following the cursor."""
         return self._iter_collection(
-            SERIAL_NUMBERS_OF_EQUIPMENT,
-            ParentCollectionArgs(parent_id=equipment_id, query=query),
+            SERIAL_NUMBERS_OF_EQUIPMENT, ParentCollectionArgs(parent_id=equipment_id, query=query)
         )
 
     async def async_list_stock_movements_of_equipment(
@@ -501,8 +499,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[StockMovement]:
         """Fetch one page of stock movements of one material."""
         return await self._call(
-            STOCK_MOVEMENTS_OF_EQUIPMENT,
-            ParentCollectionArgs(parent_id=equipment_id, query=query),
+            STOCK_MOVEMENTS_OF_EQUIPMENT, ParentCollectionArgs(parent_id=equipment_id, query=query)
         )
 
     def async_iter_stock_movements_of_equipment(
@@ -510,8 +507,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[StockMovement]:
         """Yield every stock movement of one material, following the cursor."""
         return self._iter_collection(
-            STOCK_MOVEMENTS_OF_EQUIPMENT,
-            ParentCollectionArgs(parent_id=equipment_id, query=query),
+            STOCK_MOVEMENTS_OF_EQUIPMENT, ParentCollectionArgs(parent_id=equipment_id, query=query)
         )
 
     async def async_list_repairs_of_equipment(
@@ -519,8 +515,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[Repair]:
         """Fetch one page of repairs of one material."""
         return await self._call(
-            REPAIRS_OF_EQUIPMENT,
-            ParentCollectionArgs(parent_id=equipment_id, query=query),
+            REPAIRS_OF_EQUIPMENT, ParentCollectionArgs(parent_id=equipment_id, query=query)
         )
 
     def async_iter_repairs_of_equipment(
@@ -528,8 +523,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[Repair]:
         """Yield every repair of one material, following the cursor."""
         return self._iter_collection(
-            REPAIRS_OF_EQUIPMENT,
-            ParentCollectionArgs(parent_id=equipment_id, query=query),
+            REPAIRS_OF_EQUIPMENT, ParentCollectionArgs(parent_id=equipment_id, query=query)
         )
 
     async def async_list_equipment_set_content_of_equipment(
@@ -723,8 +717,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[Subproject]:
         """Fetch one page of subprojects of one project."""
         return await self._call(
-            SUBPROJECTS_OF_PROJECT,
-            ParentCollectionArgs(parent_id=project_id, query=query),
+            SUBPROJECTS_OF_PROJECT, ParentCollectionArgs(parent_id=project_id, query=query)
         )
 
     def async_iter_subprojects_of_project(
@@ -732,8 +725,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[Subproject]:
         """Yield every subproject of one project, following the cursor."""
         return self._iter_collection(
-            SUBPROJECTS_OF_PROJECT,
-            ParentCollectionArgs(parent_id=project_id, query=query),
+            SUBPROJECTS_OF_PROJECT, ParentCollectionArgs(parent_id=project_id, query=query)
         )
 
     async def async_list_subprojects(self, query: Query | None = None) -> RentmanPage[Subproject]:
@@ -771,8 +763,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[ProjectEquipment]:
         """Fetch one page of planned equipment lines of one project."""
         return await self._call(
-            PROJECT_EQUIPMENT_OF_PROJECT,
-            ParentCollectionArgs(parent_id=project_id, query=query),
+            PROJECT_EQUIPMENT_OF_PROJECT, ParentCollectionArgs(parent_id=project_id, query=query)
         )
 
     def async_iter_project_equipment_of_project(
@@ -780,8 +771,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[ProjectEquipment]:
         """Yield every planned equipment line of one project, following the cursor."""
         return self._iter_collection(
-            PROJECT_EQUIPMENT_OF_PROJECT,
-            ParentCollectionArgs(parent_id=project_id, query=query),
+            PROJECT_EQUIPMENT_OF_PROJECT, ParentCollectionArgs(parent_id=project_id, query=query)
         )
 
     async def async_list_project_equipment_of_subproject(
@@ -819,8 +809,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[Accessory]:
         """Fetch one page of accessories of one material."""
         return await self._call(
-            ACCESSORIES_OF_EQUIPMENT,
-            ParentCollectionArgs(parent_id=equipment_id, query=query),
+            ACCESSORIES_OF_EQUIPMENT, ParentCollectionArgs(parent_id=equipment_id, query=query)
         )
 
     def async_iter_accessories_of_equipment(
@@ -828,8 +817,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[Accessory]:
         """Yield every accessory of one material, following the cursor."""
         return self._iter_collection(
-            ACCESSORIES_OF_EQUIPMENT,
-            ParentCollectionArgs(parent_id=equipment_id, query=query),
+            ACCESSORIES_OF_EQUIPMENT, ParentCollectionArgs(parent_id=equipment_id, query=query)
         )
 
     async def async_list_alternatives(self, query: Query | None = None) -> RentmanPage[Alternative]:
@@ -849,8 +837,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[Alternative]:
         """Fetch one page of alternatives of one material."""
         return await self._call(
-            ALTERNATIVES_OF_EQUIPMENT,
-            ParentCollectionArgs(parent_id=equipment_id, query=query),
+            ALTERNATIVES_OF_EQUIPMENT, ParentCollectionArgs(parent_id=equipment_id, query=query)
         )
 
     def async_iter_alternatives_of_equipment(
@@ -858,8 +845,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[Alternative]:
         """Yield every alternative of one material, following the cursor."""
         return self._iter_collection(
-            ALTERNATIVES_OF_EQUIPMENT,
-            ParentCollectionArgs(parent_id=equipment_id, query=query),
+            ALTERNATIVES_OF_EQUIPMENT, ParentCollectionArgs(parent_id=equipment_id, query=query)
         )
 
     async def async_list_suppliers(self, query: Query | None = None) -> RentmanPage[Supplier]:
@@ -879,8 +865,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[Supplier]:
         """Fetch one page of suppliers of one material."""
         return await self._call(
-            SUPPLIERS_OF_EQUIPMENT,
-            ParentCollectionArgs(parent_id=equipment_id, query=query),
+            SUPPLIERS_OF_EQUIPMENT, ParentCollectionArgs(parent_id=equipment_id, query=query)
         )
 
     def async_iter_suppliers_of_equipment(
@@ -888,8 +873,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[Supplier]:
         """Yield every supplier of one material, following the cursor."""
         return self._iter_collection(
-            SUPPLIERS_OF_EQUIPMENT,
-            ParentCollectionArgs(parent_id=equipment_id, query=query),
+            SUPPLIERS_OF_EQUIPMENT, ParentCollectionArgs(parent_id=equipment_id, query=query)
         )
 
     async def async_list_vehicles(self, query: Query | None = None) -> RentmanPage[Vehicle]:
@@ -938,10 +922,7 @@ class RentmanClient(ClientCore):
         self, extra_input_field_id: int
     ) -> ExtraInputField | None:
         """Fetch one custom field definition by its id."""
-        return await self._call(
-            EXTRA_INPUT_FIELDS_ITEM,
-            ItemArgs(item_id=extra_input_field_id),
-        )
+        return await self._call(EXTRA_INPUT_FIELDS_ITEM, ItemArgs(item_id=extra_input_field_id))
 
     async def async_list_project_statuses(
         self, query: Query | None = None
@@ -1046,8 +1027,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[ProjectFunction]:
         """Fetch one page of functions of one project."""
         return await self._call(
-            PROJECT_FUNCTIONS_OF_PROJECT,
-            ParentCollectionArgs(parent_id=project_id, query=query),
+            PROJECT_FUNCTIONS_OF_PROJECT, ParentCollectionArgs(parent_id=project_id, query=query)
         )
 
     def async_iter_project_functions_of_project(
@@ -1055,8 +1035,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[ProjectFunction]:
         """Yield every function of one project, following the cursor."""
         return self._iter_collection(
-            PROJECT_FUNCTIONS_OF_PROJECT,
-            ParentCollectionArgs(parent_id=project_id, query=query),
+            PROJECT_FUNCTIONS_OF_PROJECT, ParentCollectionArgs(parent_id=project_id, query=query)
         )
 
     async def async_list_project_functions_of_project_function_group(
@@ -1094,8 +1073,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[ProjectCrew]:
         """Fetch one page of planned crew of one project."""
         return await self._call(
-            PROJECT_CREW_OF_PROJECT,
-            ParentCollectionArgs(parent_id=project_id, query=query),
+            PROJECT_CREW_OF_PROJECT, ParentCollectionArgs(parent_id=project_id, query=query)
         )
 
     def async_iter_project_crew_of_project(
@@ -1103,8 +1081,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[ProjectCrew]:
         """Yield every planned crew member of one project, following the cursor."""
         return self._iter_collection(
-            PROJECT_CREW_OF_PROJECT,
-            ParentCollectionArgs(parent_id=project_id, query=query),
+            PROJECT_CREW_OF_PROJECT, ParentCollectionArgs(parent_id=project_id, query=query)
         )
 
     async def async_list_project_crew_of_subproject(
@@ -1112,8 +1089,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[ProjectCrew]:
         """Fetch one page of planned crew of one subproject."""
         return await self._call(
-            PROJECT_CREW_OF_SUBPROJECT,
-            ParentCollectionArgs(parent_id=subproject_id, query=query),
+            PROJECT_CREW_OF_SUBPROJECT, ParentCollectionArgs(parent_id=subproject_id, query=query)
         )
 
     def async_iter_project_crew_of_subproject(
@@ -1121,8 +1097,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[ProjectCrew]:
         """Yield every planned crew member of one subproject, following the cursor."""
         return self._iter_collection(
-            PROJECT_CREW_OF_SUBPROJECT,
-            ParentCollectionArgs(parent_id=subproject_id, query=query),
+            PROJECT_CREW_OF_SUBPROJECT, ParentCollectionArgs(parent_id=subproject_id, query=query)
         )
 
     async def async_list_project_crew_of_project_function(
@@ -1164,8 +1139,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[ProjectVehicle]:
         """Fetch one page of planned vehicles of one project."""
         return await self._call(
-            PROJECT_VEHICLES_OF_PROJECT,
-            ParentCollectionArgs(parent_id=project_id, query=query),
+            PROJECT_VEHICLES_OF_PROJECT, ParentCollectionArgs(parent_id=project_id, query=query)
         )
 
     def async_iter_project_vehicles_of_project(
@@ -1173,8 +1147,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[ProjectVehicle]:
         """Yield every planned vehicle of one project, following the cursor."""
         return self._iter_collection(
-            PROJECT_VEHICLES_OF_PROJECT,
-            ParentCollectionArgs(parent_id=project_id, query=query),
+            PROJECT_VEHICLES_OF_PROJECT, ParentCollectionArgs(parent_id=project_id, query=query)
         )
 
     async def async_list_project_vehicles_of_subproject(
@@ -1304,8 +1277,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[ProjectCost]:
         """Fetch one page of cost lines of one project."""
         return await self._call(
-            PROJECT_COSTS_OF_PROJECT,
-            ParentCollectionArgs(parent_id=project_id, query=query),
+            PROJECT_COSTS_OF_PROJECT, ParentCollectionArgs(parent_id=project_id, query=query)
         )
 
     def async_iter_project_costs_of_project(
@@ -1313,8 +1285,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[ProjectCost]:
         """Yield every cost line of one project, following the cursor."""
         return self._iter_collection(
-            PROJECT_COSTS_OF_PROJECT,
-            ParentCollectionArgs(parent_id=project_id, query=query),
+            PROJECT_COSTS_OF_PROJECT, ParentCollectionArgs(parent_id=project_id, query=query)
         )
 
     async def async_list_project_requests(
@@ -1350,8 +1321,7 @@ class RentmanClient(ClientCore):
     ) -> ProjectRequestEquipment | None:
         """Fetch one requested equipment line by its id."""
         return await self._call(
-            PROJECT_REQUEST_EQUIPMENT_ITEM,
-            ItemArgs(item_id=project_request_equipment_id),
+            PROJECT_REQUEST_EQUIPMENT_ITEM, ItemArgs(item_id=project_request_equipment_id)
         )
 
     async def async_list_project_request_equipment_of_project_request(
@@ -1389,8 +1359,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[Quote]:
         """Fetch one page of quotes of one project."""
         return await self._call(
-            QUOTES_OF_PROJECT,
-            ParentCollectionArgs(parent_id=project_id, query=query),
+            QUOTES_OF_PROJECT, ParentCollectionArgs(parent_id=project_id, query=query)
         )
 
     def async_iter_quotes_of_project(
@@ -1398,8 +1367,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[Quote]:
         """Yield every quote of one project, following the cursor."""
         return self._iter_collection(
-            QUOTES_OF_PROJECT,
-            ParentCollectionArgs(parent_id=project_id, query=query),
+            QUOTES_OF_PROJECT, ParentCollectionArgs(parent_id=project_id, query=query)
         )
 
     async def async_list_invoice_lines_of_quote(
@@ -1407,8 +1375,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[InvoiceLine]:
         """Fetch one page of invoice lines of one quote."""
         return await self._call(
-            INVOICE_LINES_OF_QUOTE,
-            ParentCollectionArgs(parent_id=quote_id, query=query),
+            INVOICE_LINES_OF_QUOTE, ParentCollectionArgs(parent_id=quote_id, query=query)
         )
 
     def async_iter_invoice_lines_of_quote(
@@ -1416,8 +1383,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[InvoiceLine]:
         """Yield every invoice line of one quote, following the cursor."""
         return self._iter_collection(
-            INVOICE_LINES_OF_QUOTE,
-            ParentCollectionArgs(parent_id=quote_id, query=query),
+            INVOICE_LINES_OF_QUOTE, ParentCollectionArgs(parent_id=quote_id, query=query)
         )
 
     async def async_list_contracts(self, query: Query | None = None) -> RentmanPage[Contract]:
@@ -1437,8 +1403,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[Contract]:
         """Fetch one page of contracts of one project."""
         return await self._call(
-            CONTRACTS_OF_PROJECT,
-            ParentCollectionArgs(parent_id=project_id, query=query),
+            CONTRACTS_OF_PROJECT, ParentCollectionArgs(parent_id=project_id, query=query)
         )
 
     def async_iter_contracts_of_project(
@@ -1446,8 +1411,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[Contract]:
         """Yield every contract of one project, following the cursor."""
         return self._iter_collection(
-            CONTRACTS_OF_PROJECT,
-            ParentCollectionArgs(parent_id=project_id, query=query),
+            CONTRACTS_OF_PROJECT, ParentCollectionArgs(parent_id=project_id, query=query)
         )
 
     async def async_list_invoices(self, query: Query | None = None) -> RentmanPage[Invoice]:
@@ -1467,8 +1431,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[InvoiceLine]:
         """Fetch one page of invoice lines of one invoice."""
         return await self._call(
-            INVOICE_LINES_OF_INVOICE,
-            ParentCollectionArgs(parent_id=invoice_id, query=query),
+            INVOICE_LINES_OF_INVOICE, ParentCollectionArgs(parent_id=invoice_id, query=query)
         )
 
     def async_iter_invoice_lines_of_invoice(
@@ -1476,8 +1439,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[InvoiceLine]:
         """Yield every invoice line of one invoice, following the cursor."""
         return self._iter_collection(
-            INVOICE_LINES_OF_INVOICE,
-            ParentCollectionArgs(parent_id=invoice_id, query=query),
+            INVOICE_LINES_OF_INVOICE, ParentCollectionArgs(parent_id=invoice_id, query=query)
         )
 
     async def async_list_payments_of_invoice(
@@ -1485,8 +1447,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[Payment]:
         """Fetch one page of payments of one invoice."""
         return await self._call(
-            PAYMENTS_OF_INVOICE,
-            ParentCollectionArgs(parent_id=invoice_id, query=query),
+            PAYMENTS_OF_INVOICE, ParentCollectionArgs(parent_id=invoice_id, query=query)
         )
 
     def async_iter_payments_of_invoice(
@@ -1494,8 +1455,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[Payment]:
         """Yield every payment of one invoice, following the cursor."""
         return self._iter_collection(
-            PAYMENTS_OF_INVOICE,
-            ParentCollectionArgs(parent_id=invoice_id, query=query),
+            PAYMENTS_OF_INVOICE, ParentCollectionArgs(parent_id=invoice_id, query=query)
         )
 
     async def async_list_invoice_lines(
@@ -1612,10 +1572,7 @@ class RentmanClient(ClientCore):
         self, subrental_equipment_id: int
     ) -> SubrentalEquipment | None:
         """Fetch one subrental equipment line by its id."""
-        return await self._call(
-            SUBRENTAL_EQUIPMENT_ITEM,
-            ItemArgs(item_id=subrental_equipment_id),
-        )
+        return await self._call(SUBRENTAL_EQUIPMENT_ITEM, ItemArgs(item_id=subrental_equipment_id))
 
     async def async_list_subrental_equipment_of_subrental_equipment_group(
         self, group_id: int, query: Query | None = None
@@ -1739,10 +1696,7 @@ class RentmanClient(ClientCore):
         self, purchase_order_cost_id: int
     ) -> PurchaseOrderCost | None:
         """Fetch one purchase order cost line by its id."""
-        return await self._call(
-            PURCHASE_ORDER_COSTS_ITEM,
-            ItemArgs(item_id=purchase_order_cost_id),
-        )
+        return await self._call(PURCHASE_ORDER_COSTS_ITEM, ItemArgs(item_id=purchase_order_cost_id))
 
     async def async_list_purchase_order_global_costs(
         self, query: Query | None = None
@@ -1761,8 +1715,7 @@ class RentmanClient(ClientCore):
     ) -> PurchaseOrderGlobalCost | None:
         """Fetch one purchase order global cost line by its id."""
         return await self._call(
-            PURCHASE_ORDER_GLOBAL_COSTS_ITEM,
-            ItemArgs(item_id=purchase_order_global_cost_id),
+            PURCHASE_ORDER_GLOBAL_COSTS_ITEM, ItemArgs(item_id=purchase_order_global_cost_id)
         )
 
     async def async_list_crew(self, query: Query | None = None) -> RentmanPage[Crew]:
@@ -1782,8 +1735,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[Appointment]:
         """Fetch one page of appointments of one crew member."""
         return await self._call(
-            APPOINTMENTS_OF_CREW,
-            ParentCollectionArgs(parent_id=crew_id, query=query),
+            APPOINTMENTS_OF_CREW, ParentCollectionArgs(parent_id=crew_id, query=query)
         )
 
     def async_iter_appointments_of_crew(
@@ -1791,8 +1743,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[Appointment]:
         """Yield every appointment of one crew member, following the cursor."""
         return self._iter_collection(
-            APPOINTMENTS_OF_CREW,
-            ParentCollectionArgs(parent_id=crew_id, query=query),
+            APPOINTMENTS_OF_CREW, ParentCollectionArgs(parent_id=crew_id, query=query)
         )
 
     async def async_list_crew_availability_of_crew(
@@ -1800,8 +1751,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[CrewAvailability]:
         """Fetch one page of availability windows of one crew member."""
         return await self._call(
-            CREW_AVAILABILITY_OF_CREW,
-            ParentCollectionArgs(parent_id=crew_id, query=query),
+            CREW_AVAILABILITY_OF_CREW, ParentCollectionArgs(parent_id=crew_id, query=query)
         )
 
     def async_iter_crew_availability_of_crew(
@@ -1809,8 +1759,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[CrewAvailability]:
         """Yield every availability window of one crew member, following the cursor."""
         return self._iter_collection(
-            CREW_AVAILABILITY_OF_CREW,
-            ParentCollectionArgs(parent_id=crew_id, query=query),
+            CREW_AVAILABILITY_OF_CREW, ParentCollectionArgs(parent_id=crew_id, query=query)
         )
 
     async def async_list_crew_rates_of_crew(
@@ -1818,8 +1767,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[CrewRate]:
         """Fetch one page of rates of one crew member."""
         return await self._call(
-            CREW_RATES_OF_CREW,
-            ParentCollectionArgs(parent_id=crew_id, query=query),
+            CREW_RATES_OF_CREW, ParentCollectionArgs(parent_id=crew_id, query=query)
         )
 
     def async_iter_crew_rates_of_crew(
@@ -1827,8 +1775,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[CrewRate]:
         """Yield every rate of one crew member, following the cursor."""
         return self._iter_collection(
-            CREW_RATES_OF_CREW,
-            ParentCollectionArgs(parent_id=crew_id, query=query),
+            CREW_RATES_OF_CREW, ParentCollectionArgs(parent_id=crew_id, query=query)
         )
 
     async def async_list_invitations_of_crew(
@@ -1836,8 +1783,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[Invitation]:
         """Fetch one page of invitations of one crew member."""
         return await self._call(
-            INVITATIONS_OF_CREW,
-            ParentCollectionArgs(parent_id=crew_id, query=query),
+            INVITATIONS_OF_CREW, ParentCollectionArgs(parent_id=crew_id, query=query)
         )
 
     def async_iter_invitations_of_crew(
@@ -1845,8 +1791,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[Invitation]:
         """Yield every invitation of one crew member, following the cursor."""
         return self._iter_collection(
-            INVITATIONS_OF_CREW,
-            ParentCollectionArgs(parent_id=crew_id, query=query),
+            INVITATIONS_OF_CREW, ParentCollectionArgs(parent_id=crew_id, query=query)
         )
 
     async def async_list_crew_availability(
@@ -2066,8 +2011,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[ContactPerson]:
         """Fetch one page of contact persons of one contact."""
         return await self._call(
-            CONTACT_PERSONS_OF_CONTACT,
-            ParentCollectionArgs(parent_id=contact_id, query=query),
+            CONTACT_PERSONS_OF_CONTACT, ParentCollectionArgs(parent_id=contact_id, query=query)
         )
 
     def async_iter_contact_persons_of_contact(
@@ -2075,8 +2019,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[ContactPerson]:
         """Yield every contact person of one contact, following the cursor."""
         return self._iter_collection(
-            CONTACT_PERSONS_OF_CONTACT,
-            ParentCollectionArgs(parent_id=contact_id, query=query),
+            CONTACT_PERSONS_OF_CONTACT, ParentCollectionArgs(parent_id=contact_id, query=query)
         )
 
     async def async_list_contact_persons(
@@ -2176,8 +2119,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[Subtask]:
         """Fetch one page of subtasks of one task."""
         return await self._call(
-            SUBTASKS_OF_TASK,
-            ParentCollectionArgs(parent_id=task_id, query=query),
+            SUBTASKS_OF_TASK, ParentCollectionArgs(parent_id=task_id, query=query)
         )
 
     def async_iter_subtasks_of_task(
@@ -2185,8 +2127,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[Subtask]:
         """Yield every subtask of one task, following the cursor."""
         return self._iter_collection(
-            SUBTASKS_OF_TASK,
-            ParentCollectionArgs(parent_id=task_id, query=query),
+            SUBTASKS_OF_TASK, ParentCollectionArgs(parent_id=task_id, query=query)
         )
 
     async def async_list_task_assignments_of_task(
@@ -2194,8 +2135,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[TaskAssignment]:
         """Fetch one page of task assignments of one task."""
         return await self._call(
-            TASK_ASSIGNMENTS_OF_TASK,
-            ParentCollectionArgs(parent_id=task_id, query=query),
+            TASK_ASSIGNMENTS_OF_TASK, ParentCollectionArgs(parent_id=task_id, query=query)
         )
 
     def async_iter_task_assignments_of_task(
@@ -2203,26 +2143,21 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[TaskAssignment]:
         """Yield every task assignment of one task, following the cursor."""
         return self._iter_collection(
-            TASK_ASSIGNMENTS_OF_TASK,
-            ParentCollectionArgs(parent_id=task_id, query=query),
+            TASK_ASSIGNMENTS_OF_TASK, ParentCollectionArgs(parent_id=task_id, query=query)
         )
 
     async def async_list_files_of_task(
         self, task_id: int, query: Query | None = None
     ) -> RentmanPage[File]:
         """Fetch one page of files of one task."""
-        return await self._call(
-            FILES_OF_TASK,
-            ParentCollectionArgs(parent_id=task_id, query=query),
-        )
+        return await self._call(FILES_OF_TASK, ParentCollectionArgs(parent_id=task_id, query=query))
 
     def async_iter_files_of_task(
         self, task_id: int, query: Query | None = None
     ) -> AsyncIterator[File]:
         """Yield every file of one task, following the cursor."""
         return self._iter_collection(
-            FILES_OF_TASK,
-            ParentCollectionArgs(parent_id=task_id, query=query),
+            FILES_OF_TASK, ParentCollectionArgs(parent_id=task_id, query=query)
         )
 
     async def async_list_file_folders_of_task(
@@ -2230,8 +2165,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[FileFolder]:
         """Fetch one page of file folders of one task."""
         return await self._call(
-            FILE_FOLDERS_OF_TASK,
-            ParentCollectionArgs(parent_id=task_id, query=query),
+            FILE_FOLDERS_OF_TASK, ParentCollectionArgs(parent_id=task_id, query=query)
         )
 
     def async_iter_file_folders_of_task(
@@ -2239,8 +2173,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[FileFolder]:
         """Yield every file folder of one task, following the cursor."""
         return self._iter_collection(
-            FILE_FOLDERS_OF_TASK,
-            ParentCollectionArgs(parent_id=task_id, query=query),
+            FILE_FOLDERS_OF_TASK, ParentCollectionArgs(parent_id=task_id, query=query)
         )
 
     async def async_list_tasks_of_contact_person(
@@ -2248,8 +2181,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[Task]:
         """Fetch one page of tasks of one contact person."""
         return await self._call(
-            TASKS_OF_CONTACT_PERSON,
-            ParentCollectionArgs(parent_id=contact_person_id, query=query),
+            TASKS_OF_CONTACT_PERSON, ParentCollectionArgs(parent_id=contact_person_id, query=query)
         )
 
     def async_iter_tasks_of_contact_person(
@@ -2257,8 +2189,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[Task]:
         """Yield every task of one contact person, following the cursor."""
         return self._iter_collection(
-            TASKS_OF_CONTACT_PERSON,
-            ParentCollectionArgs(parent_id=contact_person_id, query=query),
+            TASKS_OF_CONTACT_PERSON, ParentCollectionArgs(parent_id=contact_person_id, query=query)
         )
 
     async def async_list_tasks_of_contact(
@@ -2266,8 +2197,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[Task]:
         """Fetch one page of tasks of one contact."""
         return await self._call(
-            TASKS_OF_CONTACT,
-            ParentCollectionArgs(parent_id=contact_id, query=query),
+            TASKS_OF_CONTACT, ParentCollectionArgs(parent_id=contact_id, query=query)
         )
 
     def async_iter_tasks_of_contact(
@@ -2275,26 +2205,21 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[Task]:
         """Yield every task of one contact, following the cursor."""
         return self._iter_collection(
-            TASKS_OF_CONTACT,
-            ParentCollectionArgs(parent_id=contact_id, query=query),
+            TASKS_OF_CONTACT, ParentCollectionArgs(parent_id=contact_id, query=query)
         )
 
     async def async_list_tasks_of_crew(
         self, crew_id: int, query: Query | None = None
     ) -> RentmanPage[Task]:
         """Fetch one page of tasks of one crew member."""
-        return await self._call(
-            TASKS_OF_CREW,
-            ParentCollectionArgs(parent_id=crew_id, query=query),
-        )
+        return await self._call(TASKS_OF_CREW, ParentCollectionArgs(parent_id=crew_id, query=query))
 
     def async_iter_tasks_of_crew(
         self, crew_id: int, query: Query | None = None
     ) -> AsyncIterator[Task]:
         """Yield every task of one crew member, following the cursor."""
         return self._iter_collection(
-            TASKS_OF_CREW,
-            ParentCollectionArgs(parent_id=crew_id, query=query),
+            TASKS_OF_CREW, ParentCollectionArgs(parent_id=crew_id, query=query)
         )
 
     async def async_list_tasks_of_equipment(
@@ -2302,8 +2227,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[Task]:
         """Fetch one page of tasks of one material."""
         return await self._call(
-            TASKS_OF_EQUIPMENT,
-            ParentCollectionArgs(parent_id=equipment_id, query=query),
+            TASKS_OF_EQUIPMENT, ParentCollectionArgs(parent_id=equipment_id, query=query)
         )
 
     def async_iter_tasks_of_equipment(
@@ -2311,8 +2235,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[Task]:
         """Yield every task of one material, following the cursor."""
         return self._iter_collection(
-            TASKS_OF_EQUIPMENT,
-            ParentCollectionArgs(parent_id=equipment_id, query=query),
+            TASKS_OF_EQUIPMENT, ParentCollectionArgs(parent_id=equipment_id, query=query)
         )
 
     async def async_list_tasks_of_invoice(
@@ -2320,8 +2243,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[Task]:
         """Fetch one page of tasks of one invoice."""
         return await self._call(
-            TASKS_OF_INVOICE,
-            ParentCollectionArgs(parent_id=invoice_id, query=query),
+            TASKS_OF_INVOICE, ParentCollectionArgs(parent_id=invoice_id, query=query)
         )
 
     def async_iter_tasks_of_invoice(
@@ -2329,8 +2251,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[Task]:
         """Yield every task of one invoice, following the cursor."""
         return self._iter_collection(
-            TASKS_OF_INVOICE,
-            ParentCollectionArgs(parent_id=invoice_id, query=query),
+            TASKS_OF_INVOICE, ParentCollectionArgs(parent_id=invoice_id, query=query)
         )
 
     async def async_list_tasks_of_project(
@@ -2338,8 +2259,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[Task]:
         """Fetch one page of tasks of one project."""
         return await self._call(
-            TASKS_OF_PROJECT,
-            ParentCollectionArgs(parent_id=project_id, query=query),
+            TASKS_OF_PROJECT, ParentCollectionArgs(parent_id=project_id, query=query)
         )
 
     def async_iter_tasks_of_project(
@@ -2347,8 +2267,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[Task]:
         """Yield every task of one project, following the cursor."""
         return self._iter_collection(
-            TASKS_OF_PROJECT,
-            ParentCollectionArgs(parent_id=project_id, query=query),
+            TASKS_OF_PROJECT, ParentCollectionArgs(parent_id=project_id, query=query)
         )
 
     async def async_list_tasks_of_purchase_order(
@@ -2356,8 +2275,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[Task]:
         """Fetch one page of tasks of one purchase order."""
         return await self._call(
-            TASKS_OF_PURCHASE_ORDER,
-            ParentCollectionArgs(parent_id=purchase_order_id, query=query),
+            TASKS_OF_PURCHASE_ORDER, ParentCollectionArgs(parent_id=purchase_order_id, query=query)
         )
 
     def async_iter_tasks_of_purchase_order(
@@ -2365,8 +2283,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[Task]:
         """Yield every task of one purchase order, following the cursor."""
         return self._iter_collection(
-            TASKS_OF_PURCHASE_ORDER,
-            ParentCollectionArgs(parent_id=purchase_order_id, query=query),
+            TASKS_OF_PURCHASE_ORDER, ParentCollectionArgs(parent_id=purchase_order_id, query=query)
         )
 
     async def async_list_tasks_of_quote(
@@ -2374,8 +2291,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[Task]:
         """Fetch one page of tasks of one quote."""
         return await self._call(
-            TASKS_OF_QUOTE,
-            ParentCollectionArgs(parent_id=quote_id, query=query),
+            TASKS_OF_QUOTE, ParentCollectionArgs(parent_id=quote_id, query=query)
         )
 
     def async_iter_tasks_of_quote(
@@ -2383,8 +2299,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[Task]:
         """Yield every task of one quote, following the cursor."""
         return self._iter_collection(
-            TASKS_OF_QUOTE,
-            ParentCollectionArgs(parent_id=quote_id, query=query),
+            TASKS_OF_QUOTE, ParentCollectionArgs(parent_id=quote_id, query=query)
         )
 
     async def async_list_tasks_of_repair(
@@ -2392,8 +2307,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[Task]:
         """Fetch one page of tasks of one repair."""
         return await self._call(
-            TASKS_OF_REPAIR,
-            ParentCollectionArgs(parent_id=repair_id, query=query),
+            TASKS_OF_REPAIR, ParentCollectionArgs(parent_id=repair_id, query=query)
         )
 
     def async_iter_tasks_of_repair(
@@ -2401,8 +2315,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[Task]:
         """Yield every task of one repair, following the cursor."""
         return self._iter_collection(
-            TASKS_OF_REPAIR,
-            ParentCollectionArgs(parent_id=repair_id, query=query),
+            TASKS_OF_REPAIR, ParentCollectionArgs(parent_id=repair_id, query=query)
         )
 
     async def async_list_tasks_of_serial_number(
@@ -2410,8 +2323,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[Task]:
         """Fetch one page of tasks of one serial number."""
         return await self._call(
-            TASKS_OF_SERIAL_NUMBER,
-            ParentCollectionArgs(parent_id=serial_number_id, query=query),
+            TASKS_OF_SERIAL_NUMBER, ParentCollectionArgs(parent_id=serial_number_id, query=query)
         )
 
     def async_iter_tasks_of_serial_number(
@@ -2419,8 +2331,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[Task]:
         """Yield every task of one serial number, following the cursor."""
         return self._iter_collection(
-            TASKS_OF_SERIAL_NUMBER,
-            ParentCollectionArgs(parent_id=serial_number_id, query=query),
+            TASKS_OF_SERIAL_NUMBER, ParentCollectionArgs(parent_id=serial_number_id, query=query)
         )
 
     async def async_list_tasks_of_subrental(
@@ -2428,8 +2339,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[Task]:
         """Fetch one page of tasks of one subrental."""
         return await self._call(
-            TASKS_OF_SUBRENTAL,
-            ParentCollectionArgs(parent_id=subrental_id, query=query),
+            TASKS_OF_SUBRENTAL, ParentCollectionArgs(parent_id=subrental_id, query=query)
         )
 
     def async_iter_tasks_of_subrental(
@@ -2437,8 +2347,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[Task]:
         """Yield every task of one subrental, following the cursor."""
         return self._iter_collection(
-            TASKS_OF_SUBRENTAL,
-            ParentCollectionArgs(parent_id=subrental_id, query=query),
+            TASKS_OF_SUBRENTAL, ParentCollectionArgs(parent_id=subrental_id, query=query)
         )
 
     async def async_list_tasks_of_vehicle(
@@ -2446,8 +2355,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[Task]:
         """Fetch one page of tasks of one vehicle."""
         return await self._call(
-            TASKS_OF_VEHICLE,
-            ParentCollectionArgs(parent_id=vehicle_id, query=query),
+            TASKS_OF_VEHICLE, ParentCollectionArgs(parent_id=vehicle_id, query=query)
         )
 
     def async_iter_tasks_of_vehicle(
@@ -2455,8 +2363,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[Task]:
         """Yield every task of one vehicle, following the cursor."""
         return self._iter_collection(
-            TASKS_OF_VEHICLE,
-            ParentCollectionArgs(parent_id=vehicle_id, query=query),
+            TASKS_OF_VEHICLE, ParentCollectionArgs(parent_id=vehicle_id, query=query)
         )
 
     async def async_list_tasks_of_supplier(
@@ -2464,8 +2371,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[Task]:
         """Fetch one page of tasks of one supplier."""
         return await self._call(
-            TASKS_OF_SUPPLIER,
-            ParentCollectionArgs(parent_id=supplier_id, query=query),
+            TASKS_OF_SUPPLIER, ParentCollectionArgs(parent_id=supplier_id, query=query)
         )
 
     def async_iter_tasks_of_supplier(
@@ -2473,8 +2379,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[Task]:
         """Yield every task of one supplier, following the cursor."""
         return self._iter_collection(
-            TASKS_OF_SUPPLIER,
-            ParentCollectionArgs(parent_id=supplier_id, query=query),
+            TASKS_OF_SUPPLIER, ParentCollectionArgs(parent_id=supplier_id, query=query)
         )
 
     async def async_list_files_of_contact_person(
@@ -2482,8 +2387,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[File]:
         """Fetch one page of files of one contact person."""
         return await self._call(
-            FILES_OF_CONTACT_PERSON,
-            ParentCollectionArgs(parent_id=contact_person_id, query=query),
+            FILES_OF_CONTACT_PERSON, ParentCollectionArgs(parent_id=contact_person_id, query=query)
         )
 
     def async_iter_files_of_contact_person(
@@ -2491,8 +2395,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[File]:
         """Yield every file of one contact person, following the cursor."""
         return self._iter_collection(
-            FILES_OF_CONTACT_PERSON,
-            ParentCollectionArgs(parent_id=contact_person_id, query=query),
+            FILES_OF_CONTACT_PERSON, ParentCollectionArgs(parent_id=contact_person_id, query=query)
         )
 
     async def async_list_files_of_contact(
@@ -2500,8 +2403,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[File]:
         """Fetch one page of files of one contact."""
         return await self._call(
-            FILES_OF_CONTACT,
-            ParentCollectionArgs(parent_id=contact_id, query=query),
+            FILES_OF_CONTACT, ParentCollectionArgs(parent_id=contact_id, query=query)
         )
 
     def async_iter_files_of_contact(
@@ -2509,26 +2411,21 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[File]:
         """Yield every file of one contact, following the cursor."""
         return self._iter_collection(
-            FILES_OF_CONTACT,
-            ParentCollectionArgs(parent_id=contact_id, query=query),
+            FILES_OF_CONTACT, ParentCollectionArgs(parent_id=contact_id, query=query)
         )
 
     async def async_list_files_of_crew(
         self, crew_id: int, query: Query | None = None
     ) -> RentmanPage[File]:
         """Fetch one page of files of one crew member."""
-        return await self._call(
-            FILES_OF_CREW,
-            ParentCollectionArgs(parent_id=crew_id, query=query),
-        )
+        return await self._call(FILES_OF_CREW, ParentCollectionArgs(parent_id=crew_id, query=query))
 
     def async_iter_files_of_crew(
         self, crew_id: int, query: Query | None = None
     ) -> AsyncIterator[File]:
         """Yield every file of one crew member, following the cursor."""
         return self._iter_collection(
-            FILES_OF_CREW,
-            ParentCollectionArgs(parent_id=crew_id, query=query),
+            FILES_OF_CREW, ParentCollectionArgs(parent_id=crew_id, query=query)
         )
 
     async def async_list_files_of_equipment(
@@ -2536,8 +2433,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[File]:
         """Fetch one page of files of one material."""
         return await self._call(
-            FILES_OF_EQUIPMENT,
-            ParentCollectionArgs(parent_id=equipment_id, query=query),
+            FILES_OF_EQUIPMENT, ParentCollectionArgs(parent_id=equipment_id, query=query)
         )
 
     def async_iter_files_of_equipment(
@@ -2545,8 +2441,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[File]:
         """Yield every file of one material, following the cursor."""
         return self._iter_collection(
-            FILES_OF_EQUIPMENT,
-            ParentCollectionArgs(parent_id=equipment_id, query=query),
+            FILES_OF_EQUIPMENT, ParentCollectionArgs(parent_id=equipment_id, query=query)
         )
 
     async def async_list_files_of_invoice(
@@ -2554,8 +2449,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[File]:
         """Fetch one page of files of one invoice."""
         return await self._call(
-            FILES_OF_INVOICE,
-            ParentCollectionArgs(parent_id=invoice_id, query=query),
+            FILES_OF_INVOICE, ParentCollectionArgs(parent_id=invoice_id, query=query)
         )
 
     def async_iter_files_of_invoice(
@@ -2563,8 +2457,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[File]:
         """Yield every file of one invoice, following the cursor."""
         return self._iter_collection(
-            FILES_OF_INVOICE,
-            ParentCollectionArgs(parent_id=invoice_id, query=query),
+            FILES_OF_INVOICE, ParentCollectionArgs(parent_id=invoice_id, query=query)
         )
 
     async def async_list_files_of_project(
@@ -2572,8 +2465,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[File]:
         """Fetch one page of files of one project."""
         return await self._call(
-            FILES_OF_PROJECT,
-            ParentCollectionArgs(parent_id=project_id, query=query),
+            FILES_OF_PROJECT, ParentCollectionArgs(parent_id=project_id, query=query)
         )
 
     def async_iter_files_of_project(
@@ -2581,8 +2473,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[File]:
         """Yield every file of one project, following the cursor."""
         return self._iter_collection(
-            FILES_OF_PROJECT,
-            ParentCollectionArgs(parent_id=project_id, query=query),
+            FILES_OF_PROJECT, ParentCollectionArgs(parent_id=project_id, query=query)
         )
 
     async def async_list_files_of_purchase_order(
@@ -2590,8 +2481,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[File]:
         """Fetch one page of files of one purchase order."""
         return await self._call(
-            FILES_OF_PURCHASE_ORDER,
-            ParentCollectionArgs(parent_id=purchase_order_id, query=query),
+            FILES_OF_PURCHASE_ORDER, ParentCollectionArgs(parent_id=purchase_order_id, query=query)
         )
 
     def async_iter_files_of_purchase_order(
@@ -2599,8 +2489,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[File]:
         """Yield every file of one purchase order, following the cursor."""
         return self._iter_collection(
-            FILES_OF_PURCHASE_ORDER,
-            ParentCollectionArgs(parent_id=purchase_order_id, query=query),
+            FILES_OF_PURCHASE_ORDER, ParentCollectionArgs(parent_id=purchase_order_id, query=query)
         )
 
     async def async_list_files_of_quote(
@@ -2608,8 +2497,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[File]:
         """Fetch one page of files of one quote."""
         return await self._call(
-            FILES_OF_QUOTE,
-            ParentCollectionArgs(parent_id=quote_id, query=query),
+            FILES_OF_QUOTE, ParentCollectionArgs(parent_id=quote_id, query=query)
         )
 
     def async_iter_files_of_quote(
@@ -2617,8 +2505,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[File]:
         """Yield every file of one quote, following the cursor."""
         return self._iter_collection(
-            FILES_OF_QUOTE,
-            ParentCollectionArgs(parent_id=quote_id, query=query),
+            FILES_OF_QUOTE, ParentCollectionArgs(parent_id=quote_id, query=query)
         )
 
     async def async_list_files_of_repair(
@@ -2626,8 +2513,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[File]:
         """Fetch one page of files of one repair."""
         return await self._call(
-            FILES_OF_REPAIR,
-            ParentCollectionArgs(parent_id=repair_id, query=query),
+            FILES_OF_REPAIR, ParentCollectionArgs(parent_id=repair_id, query=query)
         )
 
     def async_iter_files_of_repair(
@@ -2635,8 +2521,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[File]:
         """Yield every file of one repair, following the cursor."""
         return self._iter_collection(
-            FILES_OF_REPAIR,
-            ParentCollectionArgs(parent_id=repair_id, query=query),
+            FILES_OF_REPAIR, ParentCollectionArgs(parent_id=repair_id, query=query)
         )
 
     async def async_list_files_of_serial_number(
@@ -2644,8 +2529,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[File]:
         """Fetch one page of files of one serial number."""
         return await self._call(
-            FILES_OF_SERIAL_NUMBER,
-            ParentCollectionArgs(parent_id=serial_number_id, query=query),
+            FILES_OF_SERIAL_NUMBER, ParentCollectionArgs(parent_id=serial_number_id, query=query)
         )
 
     def async_iter_files_of_serial_number(
@@ -2653,8 +2537,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[File]:
         """Yield every file of one serial number, following the cursor."""
         return self._iter_collection(
-            FILES_OF_SERIAL_NUMBER,
-            ParentCollectionArgs(parent_id=serial_number_id, query=query),
+            FILES_OF_SERIAL_NUMBER, ParentCollectionArgs(parent_id=serial_number_id, query=query)
         )
 
     async def async_list_files_of_subrental(
@@ -2662,8 +2545,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[File]:
         """Fetch one page of files of one subrental."""
         return await self._call(
-            FILES_OF_SUBRENTAL,
-            ParentCollectionArgs(parent_id=subrental_id, query=query),
+            FILES_OF_SUBRENTAL, ParentCollectionArgs(parent_id=subrental_id, query=query)
         )
 
     def async_iter_files_of_subrental(
@@ -2671,8 +2553,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[File]:
         """Yield every file of one subrental, following the cursor."""
         return self._iter_collection(
-            FILES_OF_SUBRENTAL,
-            ParentCollectionArgs(parent_id=subrental_id, query=query),
+            FILES_OF_SUBRENTAL, ParentCollectionArgs(parent_id=subrental_id, query=query)
         )
 
     async def async_list_files_of_time_registration(
@@ -2698,8 +2579,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[File]:
         """Fetch one page of files of one vehicle."""
         return await self._call(
-            FILES_OF_VEHICLE,
-            ParentCollectionArgs(parent_id=vehicle_id, query=query),
+            FILES_OF_VEHICLE, ParentCollectionArgs(parent_id=vehicle_id, query=query)
         )
 
     def async_iter_files_of_vehicle(
@@ -2707,8 +2587,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[File]:
         """Yield every file of one vehicle, following the cursor."""
         return self._iter_collection(
-            FILES_OF_VEHICLE,
-            ParentCollectionArgs(parent_id=vehicle_id, query=query),
+            FILES_OF_VEHICLE, ParentCollectionArgs(parent_id=vehicle_id, query=query)
         )
 
     async def async_list_files_of_supplier(
@@ -2716,8 +2595,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[File]:
         """Fetch one page of files of one supplier."""
         return await self._call(
-            FILES_OF_SUPPLIER,
-            ParentCollectionArgs(parent_id=supplier_id, query=query),
+            FILES_OF_SUPPLIER, ParentCollectionArgs(parent_id=supplier_id, query=query)
         )
 
     def async_iter_files_of_supplier(
@@ -2725,8 +2603,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[File]:
         """Yield every file of one supplier, following the cursor."""
         return self._iter_collection(
-            FILES_OF_SUPPLIER,
-            ParentCollectionArgs(parent_id=supplier_id, query=query),
+            FILES_OF_SUPPLIER, ParentCollectionArgs(parent_id=supplier_id, query=query)
         )
 
     async def async_list_file_folders_of_contact_person(
@@ -2752,8 +2629,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[FileFolder]:
         """Fetch one page of file folders of one contact."""
         return await self._call(
-            FILE_FOLDERS_OF_CONTACT,
-            ParentCollectionArgs(parent_id=contact_id, query=query),
+            FILE_FOLDERS_OF_CONTACT, ParentCollectionArgs(parent_id=contact_id, query=query)
         )
 
     def async_iter_file_folders_of_contact(
@@ -2761,8 +2637,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[FileFolder]:
         """Yield every file folder of one contact, following the cursor."""
         return self._iter_collection(
-            FILE_FOLDERS_OF_CONTACT,
-            ParentCollectionArgs(parent_id=contact_id, query=query),
+            FILE_FOLDERS_OF_CONTACT, ParentCollectionArgs(parent_id=contact_id, query=query)
         )
 
     async def async_list_file_folders_of_crew(
@@ -2770,8 +2645,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[FileFolder]:
         """Fetch one page of file folders of one crew member."""
         return await self._call(
-            FILE_FOLDERS_OF_CREW,
-            ParentCollectionArgs(parent_id=crew_id, query=query),
+            FILE_FOLDERS_OF_CREW, ParentCollectionArgs(parent_id=crew_id, query=query)
         )
 
     def async_iter_file_folders_of_crew(
@@ -2779,8 +2653,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[FileFolder]:
         """Yield every file folder of one crew member, following the cursor."""
         return self._iter_collection(
-            FILE_FOLDERS_OF_CREW,
-            ParentCollectionArgs(parent_id=crew_id, query=query),
+            FILE_FOLDERS_OF_CREW, ParentCollectionArgs(parent_id=crew_id, query=query)
         )
 
     async def async_list_file_folders_of_equipment(
@@ -2788,8 +2661,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[FileFolder]:
         """Fetch one page of file folders of one material."""
         return await self._call(
-            FILE_FOLDERS_OF_EQUIPMENT,
-            ParentCollectionArgs(parent_id=equipment_id, query=query),
+            FILE_FOLDERS_OF_EQUIPMENT, ParentCollectionArgs(parent_id=equipment_id, query=query)
         )
 
     def async_iter_file_folders_of_equipment(
@@ -2797,8 +2669,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[FileFolder]:
         """Yield every file folder of one material, following the cursor."""
         return self._iter_collection(
-            FILE_FOLDERS_OF_EQUIPMENT,
-            ParentCollectionArgs(parent_id=equipment_id, query=query),
+            FILE_FOLDERS_OF_EQUIPMENT, ParentCollectionArgs(parent_id=equipment_id, query=query)
         )
 
     async def async_list_file_folders_of_project(
@@ -2806,8 +2677,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[FileFolder]:
         """Fetch one page of file folders of one project."""
         return await self._call(
-            FILE_FOLDERS_OF_PROJECT,
-            ParentCollectionArgs(parent_id=project_id, query=query),
+            FILE_FOLDERS_OF_PROJECT, ParentCollectionArgs(parent_id=project_id, query=query)
         )
 
     def async_iter_file_folders_of_project(
@@ -2815,8 +2685,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[FileFolder]:
         """Yield every file folder of one project, following the cursor."""
         return self._iter_collection(
-            FILE_FOLDERS_OF_PROJECT,
-            ParentCollectionArgs(parent_id=project_id, query=query),
+            FILE_FOLDERS_OF_PROJECT, ParentCollectionArgs(parent_id=project_id, query=query)
         )
 
     async def async_list_file_folders_of_purchase_order(
@@ -2842,8 +2711,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[FileFolder]:
         """Fetch one page of file folders of one repair."""
         return await self._call(
-            FILE_FOLDERS_OF_REPAIR,
-            ParentCollectionArgs(parent_id=repair_id, query=query),
+            FILE_FOLDERS_OF_REPAIR, ParentCollectionArgs(parent_id=repair_id, query=query)
         )
 
     def async_iter_file_folders_of_repair(
@@ -2851,8 +2719,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[FileFolder]:
         """Yield every file folder of one repair, following the cursor."""
         return self._iter_collection(
-            FILE_FOLDERS_OF_REPAIR,
-            ParentCollectionArgs(parent_id=repair_id, query=query),
+            FILE_FOLDERS_OF_REPAIR, ParentCollectionArgs(parent_id=repair_id, query=query)
         )
 
     async def async_list_file_folders_of_serial_number(
@@ -2878,8 +2745,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[FileFolder]:
         """Fetch one page of file folders of one subproject."""
         return await self._call(
-            FILE_FOLDERS_OF_SUBPROJECT,
-            ParentCollectionArgs(parent_id=subproject_id, query=query),
+            FILE_FOLDERS_OF_SUBPROJECT, ParentCollectionArgs(parent_id=subproject_id, query=query)
         )
 
     def async_iter_file_folders_of_subproject(
@@ -2887,8 +2753,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[FileFolder]:
         """Yield every file folder of one subproject, following the cursor."""
         return self._iter_collection(
-            FILE_FOLDERS_OF_SUBPROJECT,
-            ParentCollectionArgs(parent_id=subproject_id, query=query),
+            FILE_FOLDERS_OF_SUBPROJECT, ParentCollectionArgs(parent_id=subproject_id, query=query)
         )
 
     async def async_list_file_folders_of_subrental(
@@ -2896,8 +2761,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[FileFolder]:
         """Fetch one page of file folders of one subrental."""
         return await self._call(
-            FILE_FOLDERS_OF_SUBRENTAL,
-            ParentCollectionArgs(parent_id=subrental_id, query=query),
+            FILE_FOLDERS_OF_SUBRENTAL, ParentCollectionArgs(parent_id=subrental_id, query=query)
         )
 
     def async_iter_file_folders_of_subrental(
@@ -2905,8 +2769,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[FileFolder]:
         """Yield every file folder of one subrental, following the cursor."""
         return self._iter_collection(
-            FILE_FOLDERS_OF_SUBRENTAL,
-            ParentCollectionArgs(parent_id=subrental_id, query=query),
+            FILE_FOLDERS_OF_SUBRENTAL, ParentCollectionArgs(parent_id=subrental_id, query=query)
         )
 
     async def async_list_file_folders_of_supplier(
@@ -2914,8 +2777,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[FileFolder]:
         """Fetch one page of file folders of one supplier."""
         return await self._call(
-            FILE_FOLDERS_OF_SUPPLIER,
-            ParentCollectionArgs(parent_id=supplier_id, query=query),
+            FILE_FOLDERS_OF_SUPPLIER, ParentCollectionArgs(parent_id=supplier_id, query=query)
         )
 
     def async_iter_file_folders_of_supplier(
@@ -2923,8 +2785,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[FileFolder]:
         """Yield every file folder of one supplier, following the cursor."""
         return self._iter_collection(
-            FILE_FOLDERS_OF_SUPPLIER,
-            ParentCollectionArgs(parent_id=supplier_id, query=query),
+            FILE_FOLDERS_OF_SUPPLIER, ParentCollectionArgs(parent_id=supplier_id, query=query)
         )
 
     async def async_list_file_folders_of_vehicle(
@@ -2932,8 +2793,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[FileFolder]:
         """Fetch one page of file folders of one vehicle."""
         return await self._call(
-            FILE_FOLDERS_OF_VEHICLE,
-            ParentCollectionArgs(parent_id=vehicle_id, query=query),
+            FILE_FOLDERS_OF_VEHICLE, ParentCollectionArgs(parent_id=vehicle_id, query=query)
         )
 
     def async_iter_file_folders_of_vehicle(
@@ -2941,8 +2801,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[FileFolder]:
         """Yield every file folder of one vehicle, following the cursor."""
         return self._iter_collection(
-            FILE_FOLDERS_OF_VEHICLE,
-            ParentCollectionArgs(parent_id=vehicle_id, query=query),
+            FILE_FOLDERS_OF_VEHICLE, ParentCollectionArgs(parent_id=vehicle_id, query=query)
         )
 
     async def async_list_rates(self, query: Query | None = None) -> RentmanPage[Rate]:
@@ -2974,8 +2833,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[RateFactor]:
         """Fetch one page of rate factors of one rate."""
         return await self._call(
-            RATE_FACTORS_OF_RATE,
-            ParentCollectionArgs(parent_id=rate_id, query=query),
+            RATE_FACTORS_OF_RATE, ParentCollectionArgs(parent_id=rate_id, query=query)
         )
 
     def async_iter_rate_factors_of_rate(
@@ -2983,8 +2841,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[RateFactor]:
         """Yield every rate factor of one rate, following the cursor."""
         return self._iter_collection(
-            RATE_FACTORS_OF_RATE,
-            ParentCollectionArgs(parent_id=rate_id, query=query),
+            RATE_FACTORS_OF_RATE, ParentCollectionArgs(parent_id=rate_id, query=query)
         )
 
     async def async_list_factors(self, query: Query | None = None) -> RentmanPage[Factor]:
@@ -3004,8 +2861,7 @@ class RentmanClient(ClientCore):
     ) -> RentmanPage[Factor]:
         """Fetch one page of factors of one factor group."""
         return await self._call(
-            FACTORS_OF_FACTOR_GROUP,
-            ParentCollectionArgs(parent_id=factor_group_id, query=query),
+            FACTORS_OF_FACTOR_GROUP, ParentCollectionArgs(parent_id=factor_group_id, query=query)
         )
 
     def async_iter_factors_of_factor_group(
@@ -3013,8 +2869,7 @@ class RentmanClient(ClientCore):
     ) -> AsyncIterator[Factor]:
         """Yield every factor of one factor group, following the cursor."""
         return self._iter_collection(
-            FACTORS_OF_FACTOR_GROUP,
-            ParentCollectionArgs(parent_id=factor_group_id, query=query),
+            FACTORS_OF_FACTOR_GROUP, ParentCollectionArgs(parent_id=factor_group_id, query=query)
         )
 
     async def async_list_factor_groups(
@@ -3090,8 +2945,7 @@ class RentmanClient(ClientCore):
     ) -> AppointmentCrew | None:
         """Create one appointment crew on one appointment."""
         return await self._call(
-            CREATE_APPOINTMENT_CREW_OF_APPOINTMENT,
-            LinkedCreateArgs(appointment_id, payload),
+            CREATE_APPOINTMENT_CREW_OF_APPOINTMENT, LinkedCreateArgs(appointment_id, payload)
         )
 
     async def async_create_contact_person_of_contact(
@@ -3099,8 +2953,7 @@ class RentmanClient(ClientCore):
     ) -> ContactPerson | None:
         """Create one contact person on one contact."""
         return await self._call(
-            CREATE_CONTACT_PERSON_OF_CONTACT,
-            LinkedCreateArgs(contact_id, payload),
+            CREATE_CONTACT_PERSON_OF_CONTACT, LinkedCreateArgs(contact_id, payload)
         )
 
     async def async_create_crew_availability_of_crew(
@@ -3108,8 +2961,7 @@ class RentmanClient(ClientCore):
     ) -> CrewAvailability | None:
         """Create one crew availability on one crew member."""
         return await self._call(
-            CREATE_CREW_AVAILABILITY_OF_CREW,
-            LinkedCreateArgs(crew_id, payload),
+            CREATE_CREW_AVAILABILITY_OF_CREW, LinkedCreateArgs(crew_id, payload)
         )
 
     async def async_create_accessory_of_equipment(
@@ -3117,8 +2969,7 @@ class RentmanClient(ClientCore):
     ) -> Accessory | None:
         """Create one accessory on one material."""
         return await self._call(
-            CREATE_ACCESSORY_OF_EQUIPMENT,
-            LinkedCreateArgs(equipment_id, payload),
+            CREATE_ACCESSORY_OF_EQUIPMENT, LinkedCreateArgs(equipment_id, payload)
         )
 
     async def async_create_alternative_of_equipment(
@@ -3126,8 +2977,7 @@ class RentmanClient(ClientCore):
     ) -> Alternative | None:
         """Create one alternative on one material."""
         return await self._call(
-            CREATE_ALTERNATIVE_OF_EQUIPMENT,
-            LinkedCreateArgs(equipment_id, payload),
+            CREATE_ALTERNATIVE_OF_EQUIPMENT, LinkedCreateArgs(equipment_id, payload)
         )
 
     async def async_create_equipment_set_content_of_equipment(
@@ -3135,8 +2985,7 @@ class RentmanClient(ClientCore):
     ) -> EquipmentSetContent | None:
         """Create one equipment set content on one material."""
         return await self._call(
-            CREATE_EQUIPMENT_SET_CONTENT_OF_EQUIPMENT,
-            LinkedCreateArgs(equipment_id, payload),
+            CREATE_EQUIPMENT_SET_CONTENT_OF_EQUIPMENT, LinkedCreateArgs(equipment_id, payload)
         )
 
     async def async_create_serial_number_of_equipment(
@@ -3144,8 +2993,7 @@ class RentmanClient(ClientCore):
     ) -> SerialNumber | None:
         """Create one serial number on one material."""
         return await self._call(
-            CREATE_SERIAL_NUMBER_OF_EQUIPMENT,
-            LinkedCreateArgs(equipment_id, payload),
+            CREATE_SERIAL_NUMBER_OF_EQUIPMENT, LinkedCreateArgs(equipment_id, payload)
         )
 
     async def async_create_stock_movement_of_equipment(
@@ -3153,8 +3001,7 @@ class RentmanClient(ClientCore):
     ) -> StockMovement | None:
         """Create one stock movement on one material."""
         return await self._call(
-            CREATE_STOCK_MOVEMENT_OF_EQUIPMENT,
-            LinkedCreateArgs(equipment_id, payload),
+            CREATE_STOCK_MOVEMENT_OF_EQUIPMENT, LinkedCreateArgs(equipment_id, payload)
         )
 
     async def async_create_supplier_of_equipment(
@@ -3162,26 +3009,21 @@ class RentmanClient(ClientCore):
     ) -> Supplier | None:
         """Create one supplier on one material."""
         return await self._call(
-            CREATE_SUPPLIER_OF_EQUIPMENT,
-            LinkedCreateArgs(equipment_id, payload),
+            CREATE_SUPPLIER_OF_EQUIPMENT, LinkedCreateArgs(equipment_id, payload)
         )
 
     async def async_create_payment_of_invoice(
         self, invoice_id: int, payload: PaymentPayload
     ) -> Payment | None:
         """Create one payment on one invoice."""
-        return await self._call(
-            CREATE_PAYMENT_OF_INVOICE,
-            LinkedCreateArgs(invoice_id, payload),
-        )
+        return await self._call(CREATE_PAYMENT_OF_INVOICE, LinkedCreateArgs(invoice_id, payload))
 
     async def async_create_time_registration_of_leave_request(
         self, leave_request_id: int, payload: TimeRegistrationPayload
     ) -> TimeRegistration | None:
         """Create one time registration on one leave request."""
         return await self._call(
-            CREATE_TIME_REGISTRATION_OF_LEAVE_REQUEST,
-            LinkedCreateArgs(leave_request_id, payload),
+            CREATE_TIME_REGISTRATION_OF_LEAVE_REQUEST, LinkedCreateArgs(leave_request_id, payload)
         )
 
     async def async_create_project_request_equipment_of_project_request(
@@ -3198,8 +3040,7 @@ class RentmanClient(ClientCore):
     ) -> ProjectCost | None:
         """Create one project cost on one project."""
         return await self._call(
-            CREATE_PROJECT_COST_OF_PROJECT,
-            LinkedCreateArgs(project_id, payload),
+            CREATE_PROJECT_COST_OF_PROJECT, LinkedCreateArgs(project_id, payload)
         )
 
     async def async_create_project_function_group_of_project(
@@ -3207,8 +3048,7 @@ class RentmanClient(ClientCore):
     ) -> ProjectFunctionGroup | None:
         """Create one project function group on one project."""
         return await self._call(
-            CREATE_PROJECT_FUNCTION_GROUP_OF_PROJECT,
-            LinkedCreateArgs(project_id, payload),
+            CREATE_PROJECT_FUNCTION_GROUP_OF_PROJECT, LinkedCreateArgs(project_id, payload)
         )
 
     async def async_create_project_function_of_project(
@@ -3216,51 +3056,39 @@ class RentmanClient(ClientCore):
     ) -> ProjectFunction | None:
         """Create one project function on one project."""
         return await self._call(
-            CREATE_PROJECT_FUNCTION_OF_PROJECT,
-            LinkedCreateArgs(project_id, payload),
+            CREATE_PROJECT_FUNCTION_OF_PROJECT, LinkedCreateArgs(project_id, payload)
         )
 
     async def async_create_subproject_of_project(
         self, project_id: int, payload: SubprojectPayload
     ) -> Subproject | None:
         """Create one subproject on one project."""
-        return await self._call(
-            CREATE_SUBPROJECT_OF_PROJECT,
-            LinkedCreateArgs(project_id, payload),
-        )
+        return await self._call(CREATE_SUBPROJECT_OF_PROJECT, LinkedCreateArgs(project_id, payload))
 
     async def async_create_task_of_purchase_order(
         self, purchase_order_id: int, payload: TaskPayload
     ) -> Task | None:
         """Create one task on one purchase order."""
         return await self._call(
-            CREATE_TASK_OF_PURCHASE_ORDER,
-            LinkedCreateArgs(purchase_order_id, payload),
+            CREATE_TASK_OF_PURCHASE_ORDER, LinkedCreateArgs(purchase_order_id, payload)
         )
 
     async def async_create_task_of_quote(self, quote_id: int, payload: TaskPayload) -> Task | None:
         """Create one task on one quote."""
-        return await self._call(
-            CREATE_TASK_OF_QUOTE,
-            LinkedCreateArgs(quote_id, payload),
-        )
+        return await self._call(CREATE_TASK_OF_QUOTE, LinkedCreateArgs(quote_id, payload))
 
     async def async_create_task_of_repair(
         self, repair_id: int, payload: TaskPayload
     ) -> Task | None:
         """Create one task on one repair."""
-        return await self._call(
-            CREATE_TASK_OF_REPAIR,
-            LinkedCreateArgs(repair_id, payload),
-        )
+        return await self._call(CREATE_TASK_OF_REPAIR, LinkedCreateArgs(repair_id, payload))
 
     async def async_create_task_of_serial_number(
         self, serial_number_id: int, payload: TaskPayload
     ) -> Task | None:
         """Create one task on one serial number."""
         return await self._call(
-            CREATE_TASK_OF_SERIAL_NUMBER,
-            LinkedCreateArgs(serial_number_id, payload),
+            CREATE_TASK_OF_SERIAL_NUMBER, LinkedCreateArgs(serial_number_id, payload)
         )
 
     async def async_create_vehicle_of_stock_location(
@@ -3268,115 +3096,80 @@ class RentmanClient(ClientCore):
     ) -> Vehicle | None:
         """Create one vehicle on one stock location."""
         return await self._call(
-            CREATE_VEHICLE_OF_STOCK_LOCATION,
-            LinkedCreateArgs(stock_location_id, payload),
+            CREATE_VEHICLE_OF_STOCK_LOCATION, LinkedCreateArgs(stock_location_id, payload)
         )
 
     async def async_create_task_of_subrental(
         self, subrental_id: int, payload: TaskPayload
     ) -> Task | None:
         """Create one task on one subrental."""
-        return await self._call(
-            CREATE_TASK_OF_SUBRENTAL,
-            LinkedCreateArgs(subrental_id, payload),
-        )
+        return await self._call(CREATE_TASK_OF_SUBRENTAL, LinkedCreateArgs(subrental_id, payload))
 
     async def async_create_subtask_of_task(
         self, task_id: int, payload: SubtaskPayload
     ) -> Subtask | None:
         """Create one subtask on one task."""
-        return await self._call(
-            CREATE_SUBTASK_OF_TASK,
-            LinkedCreateArgs(task_id, payload),
-        )
+        return await self._call(CREATE_SUBTASK_OF_TASK, LinkedCreateArgs(task_id, payload))
 
     async def async_create_task_assignment_of_task(
         self, task_id: int, payload: TaskAssignmentPayload
     ) -> TaskAssignment | None:
         """Create one task assignment on one task."""
-        return await self._call(
-            CREATE_TASK_ASSIGNMENT_OF_TASK,
-            LinkedCreateArgs(task_id, payload),
-        )
+        return await self._call(CREATE_TASK_ASSIGNMENT_OF_TASK, LinkedCreateArgs(task_id, payload))
 
     async def async_create_task_of_contact_person(
         self, contact_person_id: int, payload: TaskPayload
     ) -> Task | None:
         """Create one task on one contact person."""
         return await self._call(
-            CREATE_TASK_OF_CONTACT_PERSON,
-            LinkedCreateArgs(contact_person_id, payload),
+            CREATE_TASK_OF_CONTACT_PERSON, LinkedCreateArgs(contact_person_id, payload)
         )
 
     async def async_create_task_of_contact(
         self, contact_id: int, payload: TaskPayload
     ) -> Task | None:
         """Create one task on one contact."""
-        return await self._call(
-            CREATE_TASK_OF_CONTACT,
-            LinkedCreateArgs(contact_id, payload),
-        )
+        return await self._call(CREATE_TASK_OF_CONTACT, LinkedCreateArgs(contact_id, payload))
 
     async def async_create_task_of_contract(
         self, contract_id: int, payload: TaskPayload
     ) -> Task | None:
         """Create one task on one contract."""
-        return await self._call(
-            CREATE_TASK_OF_CONTRACT,
-            LinkedCreateArgs(contract_id, payload),
-        )
+        return await self._call(CREATE_TASK_OF_CONTRACT, LinkedCreateArgs(contract_id, payload))
 
     async def async_create_task_of_crew(self, crew_id: int, payload: TaskPayload) -> Task | None:
         """Create one task on one crew member."""
-        return await self._call(
-            CREATE_TASK_OF_CREW,
-            LinkedCreateArgs(crew_id, payload),
-        )
+        return await self._call(CREATE_TASK_OF_CREW, LinkedCreateArgs(crew_id, payload))
 
     async def async_create_task_of_equipment(
         self, equipment_id: int, payload: TaskPayload
     ) -> Task | None:
         """Create one task on one material."""
-        return await self._call(
-            CREATE_TASK_OF_EQUIPMENT,
-            LinkedCreateArgs(equipment_id, payload),
-        )
+        return await self._call(CREATE_TASK_OF_EQUIPMENT, LinkedCreateArgs(equipment_id, payload))
 
     async def async_create_task_of_invoice(
         self, invoice_id: int, payload: TaskPayload
     ) -> Task | None:
         """Create one task on one invoice."""
-        return await self._call(
-            CREATE_TASK_OF_INVOICE,
-            LinkedCreateArgs(invoice_id, payload),
-        )
+        return await self._call(CREATE_TASK_OF_INVOICE, LinkedCreateArgs(invoice_id, payload))
 
     async def async_create_task_of_project(
         self, project_id: int, payload: TaskPayload
     ) -> Task | None:
         """Create one task on one project."""
-        return await self._call(
-            CREATE_TASK_OF_PROJECT,
-            LinkedCreateArgs(project_id, payload),
-        )
+        return await self._call(CREATE_TASK_OF_PROJECT, LinkedCreateArgs(project_id, payload))
 
     async def async_create_task_of_supplier(
         self, supplier_id: int, payload: TaskPayload
     ) -> Task | None:
         """Create one task on one supplier."""
-        return await self._call(
-            CREATE_TASK_OF_SUPPLIER,
-            LinkedCreateArgs(supplier_id, payload),
-        )
+        return await self._call(CREATE_TASK_OF_SUPPLIER, LinkedCreateArgs(supplier_id, payload))
 
     async def async_create_task_of_vehicle(
         self, vehicle_id: int, payload: TaskPayload
     ) -> Task | None:
         """Create one task on one vehicle."""
-        return await self._call(
-            CREATE_TASK_OF_VEHICLE,
-            LinkedCreateArgs(vehicle_id, payload),
-        )
+        return await self._call(CREATE_TASK_OF_VEHICLE, LinkedCreateArgs(vehicle_id, payload))
 
     async def async_update_accessory(
         self, accessory_id: int, payload: AccessoryPayload

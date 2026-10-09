@@ -1,4 +1,4 @@
-"""Generate the model and parser modules from the pinned schema and the resource table.
+"""Generate the models, parsers, endpoint catalog, and client from the resource table.
 
 Run ``uv run python -m scripts.generate`` to rewrite the generated modules, or
 add ``--check`` to fail when a committed module differs from the generator
@@ -14,18 +14,17 @@ from pathlib import Path
 from typing import Any
 
 from aiorentman.payloads import WIRE_ALIASES
-from scripts.resources import MODELS, ModelSpec
+from scripts.resources import ENDPOINTS, MODELS, PAYLOADS, EndpointSpec, ModelSpec
 
 REPO = Path(__file__).resolve().parent.parent
 SPEC = REPO / "tests" / "fixtures" / "rentman_oas_1.16.0.json"
 PACKAGE = REPO / "src" / "aiorentman"
 
 
-def load_schemas() -> Mapping[str, Any]:
-    """Read the component schemas of the pinned OpenAPI document."""
+def load_spec() -> Mapping[str, Any]:
+    """Read the pinned OpenAPI document."""
     spec: dict[str, Any] = json.loads(SPEC.read_text())
-    schemas: Mapping[str, Any] = spec["components"]["schemas"]
-    return schemas
+    return spec
 
 
 def snake(name: str) -> str:
@@ -196,10 +195,266 @@ def render_parsers(schemas: Mapping[str, Any]) -> str:
     return head + "".join(functions)
 
 
+ARGS = {
+    "collection": "CollectionArgs",
+    "item": "ItemArgs",
+    "linked": "ParentCollectionArgs",
+    "create": "CreateArgs",
+    "linked_create": "LinkedCreateArgs",
+    "update": "UpdateArgs",
+    "delete": "DeleteArgs",
+}
+HTTP_METHODS = {
+    "collection": "GET",
+    "item": "GET",
+    "linked": "GET",
+    "create": "POST",
+    "linked_create": "POST",
+    "update": "PUT",
+    "delete": "DELETE",
+}
+BODIES = {
+    "create": "create_body",
+    "linked_create": "linked_create_body",
+    "update": "update_body",
+}
+ID_ATTRIBUTES = {
+    "item": "item_id",
+    "update": "item_id",
+    "delete": "item_id",
+    "linked": "parent_id",
+    "linked_create": "parent_id",
+}
+
+
+def _operation(spec: Mapping[str, Any], endpoint: EndpointSpec) -> Mapping[str, Any]:
+    operation: Mapping[str, Any] = spec["paths"][endpoint.path][HTTP_METHODS[endpoint.kind].lower()]
+    return operation
+
+
+def _schema_name(reference: str) -> str:
+    return reference.rsplit("/", 1)[-1]
+
+
+def response_schema(spec: Mapping[str, Any], endpoint: EndpointSpec) -> str | None:
+    """Name the response schema of one endpoint, or None for a delete."""
+    if endpoint.kind == "delete":
+        return None
+    content = _operation(spec, endpoint)["responses"]["200"]["content"]
+    data = content["application/json"]["schema"]["allOf"][0]["properties"]["data"]
+    return _schema_name(data["$ref"] if "$ref" in data else data["items"]["$ref"])
+
+
+def request_schema(spec: Mapping[str, Any], endpoint: EndpointSpec) -> str | None:
+    """Name the request body schema of one endpoint, or None when it sends no body."""
+    if endpoint.kind not in BODIES:
+        return None
+    body = _operation(spec, endpoint)["requestBody"]["content"]["application/json"]["schema"]
+    return _schema_name(body["$ref"])
+
+
+def endpoint_model(spec: Mapping[str, Any], endpoint: EndpointSpec) -> str | None:
+    """Name the result model of one endpoint, or None for a delete."""
+    schema = response_schema(spec, endpoint)
+    if schema is None:
+        return None
+    return next(model.name for model in MODELS if model.schema == schema)
+
+
+def endpoint_result(spec: Mapping[str, Any], endpoint: EndpointSpec) -> str:
+    """Render the parsed result type of one endpoint."""
+    model = endpoint_model(spec, endpoint)
+    if model is None:
+        return "None"
+    if endpoint.kind in {"collection", "linked"}:
+        return f"RentmanPage[{model}]"
+    return f"{model} | None"
+
+
+def _path_lambda(endpoint: EndpointSpec) -> str:
+    if "{id}" not in endpoint.path:
+        return f'lambda _args: "{endpoint.path}"'
+    rendered = endpoint.path.replace("{id}", "{args." + ID_ATTRIBUTES[endpoint.kind] + "}")
+    return f'lambda args: f"{rendered}"'
+
+
+def _endpoint_row(spec: Mapping[str, Any], endpoint: EndpointSpec) -> str:
+    model = endpoint_model(spec, endpoint)
+    if model is None:
+        parse = "lambda _payload, _args: None"
+    elif endpoint.kind in {"collection", "linked"}:
+        parse = f"lambda payload, _args: parse_page(payload, parse_{snake(model)})"
+    else:
+        parse = f"lambda payload, _args: parse_envelope_item(payload, parse_{snake(model)})"
+    params = {
+        "collection": "collection_params",
+        "linked": "linked_collection_params",
+    }.get(endpoint.kind, "lambda _args: {}")
+    schema = response_schema(spec, endpoint)
+    lines = [
+        f'    name="{endpoint.const.lower()}",\n',
+        f'    method="{HTTP_METHODS[endpoint.kind]}",\n',
+        f"    path={_path_lambda(endpoint)},\n",
+    ]
+    if endpoint.kind in {*BODIES, "delete"}:
+        lines += [f"    parse={parse},\n", f"    params={params},\n"]
+    else:
+        lines += [f"    params={params},\n", f"    parse={parse},\n"]
+    lines.append(f'    response_schema="{schema}",\n' if schema else "    response_schema=None,\n")
+    if endpoint.kind in BODIES:
+        lines += [
+            f"    body={BODIES[endpoint.kind]},\n",
+            f'    request_schema="{request_schema(spec, endpoint)}",\n',
+        ]
+    annotation = f"Endpoint[{ARGS[endpoint.kind]}, {endpoint_result(spec, endpoint)}]"
+    return f"{endpoint.const}: {annotation} = Endpoint(\n" + "".join(lines) + ")\n"
+
+
+def render_endpoints(spec: Mapping[str, Any]) -> str:
+    """Render the source of _endpoints.py."""
+    models = {"RentmanPage"}
+    parsers = set()
+    for endpoint in ENDPOINTS:
+        model = endpoint_model(spec, endpoint)
+        if model is None:
+            continue
+        models.add(model)
+        parsers.add(f"parse_{snake(model)}")
+        parsers.add(
+            "parse_page" if endpoint.kind in {"collection", "linked"} else "parse_envelope_item"
+        )
+    helpers = sorted(
+        {
+            *ARGS.values(),
+            "Endpoint",
+            "collection_params",
+            "linked_collection_params",
+            *BODIES.values(),
+        }
+    )
+    constants = [endpoint.const for endpoint in ENDPOINTS]
+    head = (
+        '"""The frozen endpoint catalog: one row per wire contract."""\n\n'
+        "from typing import Any\n\n"
+        + _import_block("._endpoint_types", helpers)
+        + _import_block(".models", sorted(models))
+        + _import_block(".parsers", sorted(parsers))
+        + "\n"
+        + _all_block([*constants, "CATALOG", *ARGS.values(), "Endpoint"])
+        + "\n\n"
+    )
+    rows = "\n".join(_endpoint_row(spec, endpoint) for endpoint in ENDPOINTS)
+    catalog = (
+        "\nCATALOG: tuple[Endpoint[Any, Any], ...] = (\n"
+        + "".join(f"    {const},\n" for const in constants)
+        + ")\n"
+    )
+    return head + rows + catalog
+
+
+def _import_block(module: str, names: Sequence[str]) -> str:
+    return f"from {module} import (\n" + "".join(f"    {name},\n" for name in names) + ")\n"
+
+
+def _client_arguments(endpoint: EndpointSpec) -> str:
+    param = endpoint.param
+    return {
+        "collection": "CollectionArgs(query=query)",
+        "linked": f"ParentCollectionArgs(parent_id={param}, query=query)",
+        "item": f"ItemArgs(item_id={param})",
+        "create": "CreateArgs(payload)",
+        "linked_create": f"LinkedCreateArgs({param}, payload)",
+        "update": f"UpdateArgs({param}, payload)",
+        "delete": f"DeleteArgs({param})",
+    }[endpoint.kind]
+
+
+def _method(definition: str, doc: str, returned: str) -> str:
+    return f'    {definition}:\n        """{doc}"""\n        return {returned}\n'
+
+
+def _client_methods(spec: Mapping[str, Any], endpoint: EndpointSpec) -> list[str]:
+    model = endpoint_model(spec, endpoint)
+    result = endpoint_result(spec, endpoint)
+    arguments = _client_arguments(endpoint)
+    payload = PAYLOADS.get(request_schema(spec, endpoint) or "")
+    parameters = ["self"]
+    if endpoint.param is not None:
+        parameters.append(f"{endpoint.param}: int")
+    if payload is not None:
+        parameters.append(f"payload: {payload}")
+    if endpoint.kind in {"collection", "linked"}:
+        parameters.append("query: Query | None = None")
+        signature = ", ".join(parameters)
+        list_doc, iter_doc = endpoint.docs
+        return [
+            _method(
+                f"async def async_list_{endpoint.method}({signature}) -> {result}",
+                list_doc,
+                f"await self._call({endpoint.const}, {arguments})",
+            ),
+            _method(
+                f"def async_iter_{endpoint.method}({signature}) -> AsyncIterator[{model}]",
+                iter_doc,
+                f"self._iter_collection({endpoint.const}, {arguments})",
+            ),
+        ]
+    verb = {
+        "item": "get",
+        "create": "create",
+        "linked_create": "create",
+        "update": "update",
+        "delete": "delete",
+    }[endpoint.kind]
+    (doc,) = endpoint.docs
+    return [
+        _method(
+            f"async def async_{verb}_{endpoint.method}({', '.join(parameters)}) -> {result}",
+            doc,
+            f"await self._call({endpoint.const}, {arguments})",
+        )
+    ]
+
+
+def render_client(spec: Mapping[str, Any]) -> str:
+    """Render the source of client.py."""
+    models = {"RentmanPage"}
+    payloads = set()
+    for endpoint in ENDPOINTS:
+        model = endpoint_model(spec, endpoint)
+        if model is not None:
+            models.add(model)
+        payload = PAYLOADS.get(request_schema(spec, endpoint) or "")
+        if payload is not None:
+            payloads.add(payload)
+    endpoint_names = sorted(
+        {endpoint.const for endpoint in ENDPOINTS} | {ARGS[endpoint.kind] for endpoint in ENDPOINTS}
+    )
+    head = (
+        '"""The RentmanClient facade: one typed method per endpoint."""\n\n'
+        "from collections.abc import AsyncIterator\n\n"
+        "from ._core import ClientCore\n"
+        + _import_block("._endpoints", endpoint_names)
+        + _import_block(".models", sorted(models))
+        + _import_block(".payloads", sorted(payloads))
+        + "from .query import Query\n\n\n"
+        "class RentmanClient(ClientCore):\n"
+        '    """Asynchronous client for the Rentman API.\n\n'
+        "    The client covers every documented read path, with create, update,\n"
+        "    and delete methods for every documented write path. Every request is paced"
+        " against the\n"
+        "    documented rate limits unless pacing is disabled with\n"
+        "    ``requests_per_second=None``.\n"
+        '    """\n'
+    )
+    methods = [method for endpoint in ENDPOINTS for method in _client_methods(spec, endpoint)]
+    return head + "\n" + "\n".join(methods)
+
+
 def format_source(source: str, path: Path) -> str:
     """Sort the imports and apply ruff format, as the check gate expects."""
     for command in (
-        ("check", "--select", "I", "--fix-only", "--quiet"),
+        ("check", "--select", "I,RUF022", "--fix-only", "--quiet"),
         ("format", "--quiet"),
     ):
         completed = subprocess.run(
@@ -215,17 +470,17 @@ def format_source(source: str, path: Path) -> str:
 
 
 TARGETS: tuple[tuple[str, Callable[[Mapping[str, Any]], str]], ...] = (
-    ("models.py", render_models),
-    ("parsers.py", render_parsers),
+    ("models.py", lambda spec: render_models(spec["components"]["schemas"])),
+    ("parsers.py", lambda spec: render_parsers(spec["components"]["schemas"])),
+    ("_endpoints.py", render_endpoints),
+    ("client.py", render_client),
 )
 
 
 def generate() -> dict[Path, str]:
     """Render every generated module, keyed by its path."""
-    schemas = load_schemas()
-    return {
-        PACKAGE / name: format_source(render(schemas), PACKAGE / name) for name, render in TARGETS
-    }
+    spec = load_spec()
+    return {PACKAGE / name: format_source(render(spec), PACKAGE / name) for name, render in TARGETS}
 
 
 def main(argv: Sequence[str]) -> int:
