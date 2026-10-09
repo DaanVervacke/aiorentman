@@ -17,6 +17,7 @@ ruff check .
 mypy src tests scripts
 coverage run -m pytest
 coverage report
+sphinx-build -W -q docs docs/_build/html
 uv build
 uv audit --locked --preview-features audit-command
 ```
