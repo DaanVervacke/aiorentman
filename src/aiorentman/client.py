@@ -470,7 +470,8 @@ class RentmanClient:
 
         The token comes from the argument or from the RENTMAN_TOKEN
         environment variable. Regenerating the token in Rentman invalidates
-        the previous one.
+        the previous one. A requests_per_second that is not positive or a
+        max_concurrent below 1 raises ValueError.
         """
         resolved = token or os.environ.get(TOKEN_ENV_VAR)
         if not resolved:

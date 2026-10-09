@@ -20,7 +20,7 @@ for you:
    async def main() -> None:
        async with RentmanClient(token="your-api-token") as client:
            page = await client.async_list_equipment()
-           print(page.item_count, "materials on this page")
+           print(len(page.items), "materials on this page")
 
            async for equipment in client.async_iter_equipment():
                print(equipment.code, equipment.name)

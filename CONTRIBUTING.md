@@ -22,7 +22,7 @@ uv build
 uv audit --locked --preview-features audit-command
 ```
 
-Coverage measures branches in `src/` and requires `fail_under = 98`. `uv audit` needs network access.
+Coverage measures branches in `src/` and requires `fail_under = 98`. `sphinx-build` runs with the `docs` dependency group through `uv run --group docs`. `uv audit` and the docs build need network access.
 
 ## Adding an endpoint
 

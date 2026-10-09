@@ -226,7 +226,7 @@ from aiorentman import RentmanClient
 async def main() -> None:
     async with RentmanClient(token="your-api-token") as client:
         page = await client.async_list_equipment()
-        print(page.item_count, "materials on this page")
+        print(len(page.items), "materials on this page")
 
 
 asyncio.run(main())
@@ -253,7 +253,7 @@ page = await client.async_list_equipment(query)
 
 Filters support the relational operators the API documents: `eq`, `neq`, `lt`, `lte`, `gt`, `gte`, and `is_null`. Field names come straight from the API schema, including `custom_<number>` custom fields.
 
-Linked fields such as `equipment.folder` hold a `RentmanLink` with the API path of the linked resource. Expand a field and the parser returns the full typed model instead.
+Linked fields such as `equipment.folder` hold a `RentmanLink` with the API path of the linked resource. Expand a field and the parser returns the full typed model instead, or `None` when the expanded object has no usable id.
 
 ## RFID and materials
 
@@ -291,7 +291,7 @@ await client.async_update_task(task.id, TaskPayload(color="#ff0000", name="Patch
 await client.async_delete_task(task.id)
 ```
 
-Datetime fields render as ISO 8601 and link fields take a `RentmanLink` holding the API path of the target. A create or update returns the parsed model of the saved object, or `None` when the response envelope degrades. A delete returns `None`. A 400 answer raises `RentmanValidationError` with the answer text in the message. Clearing a field to `null` is not supported, since fields left unset are not sent.
+Datetime fields render as ISO 8601 and link fields take a `RentmanLink` holding the API path of the target. A create or update returns the parsed model of the saved object, or `None` when the response envelope degrades or the saved object has no usable id. A delete returns `None`. A 400 answer raises `RentmanValidationError` with the answer text in the message. Clearing a field to `null` is not supported, since fields left unset are not sent.
 
 ## Rate limits
 
