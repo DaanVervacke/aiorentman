@@ -1139,6 +1139,14 @@ async def test_update_task_sends_only_set_fields() -> None:
     assert call.kwargs["json"] == {"color": "#ffffff", "name": "renamed"}
 
 
+async def test_create_returns_none_when_the_saved_object_has_no_id() -> None:
+    async with aiohttp.ClientSession() as session:
+        with aioresponses() as m:
+            m.post(api_url("/tasks"), payload={"data": {"name": "sample"}})
+            client = make_client(session)
+            assert await client.async_create_task(TaskPayload(color="#ffffff")) is None
+
+
 async def test_create_maps_400_to_validation_error() -> None:
     async with aiohttp.ClientSession() as session:
         with aioresponses() as m:

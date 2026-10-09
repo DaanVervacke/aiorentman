@@ -1,5 +1,6 @@
 """Parser tests run against the committed fixtures."""
 
+import functools
 import logging
 from datetime import UTC, datetime
 from typing import Any
@@ -144,7 +145,13 @@ def test_parse_rate_and_factor_keep_their_scalars() -> None:
 
 def test_parse_rate_factor_resolves_expanded_rate() -> None:
     rate_factor = parse_rate_factor(
-        {"id": 1, "rate_id": {"id": 1, "name": "15 per hour"}, "from": 0, "to": 100, "variable": 15}
+        {
+            "id": 900,
+            "rate_id": {"id": 1, "name": "15 per hour"},
+            "from": 0,
+            "to": 100,
+            "variable": 15,
+        }
     )
     assert isinstance(rate_factor, RateFactor)
     assert isinstance(rate_factor.rate_id, Rate)
@@ -156,11 +163,7 @@ def test_parse_rate_factor_resolves_expanded_rate() -> None:
 
 
 def test_parse_rate_factor_falls_back_to_an_empty_link() -> None:
-    rate_factor = parse_rate_factor(
-        {
-            "id": 1,
-        }
-    )
+    rate_factor = parse_rate_factor({"id": 1})
     assert rate_factor.rate_id == RentmanLink("")
     assert rate_factor.from_ is None
 
@@ -168,7 +171,7 @@ def test_parse_rate_factor_falls_back_to_an_empty_link() -> None:
 def test_parse_factor_resolves_expanded_group() -> None:
     factor = parse_factor(
         {
-            "id": 1,
+            "id": 900,
             "factor": 1,
             "factor_group": {"id": 1, "name": "Days"},
             "from_days": 1,
@@ -183,11 +186,7 @@ def test_parse_factor_resolves_expanded_group() -> None:
 
 
 def test_parse_factor_falls_back_to_an_empty_link() -> None:
-    factor = parse_factor(
-        {
-            "id": 1,
-        }
-    )
+    factor = parse_factor({"id": 1})
     assert factor.factor_group == RentmanLink("")
     assert factor.factor == ""
 
@@ -311,11 +310,7 @@ def test_parse_crew_link_stays_a_link_after_expansion_attempts() -> None:
 
 
 def test_parse_required_link_falls_back_to_an_empty_link() -> None:
-    serial = parse_serial_number(
-        {
-            "id": 1,
-        }
-    )
+    serial = parse_serial_number({"id": 1})
     assert serial.equipment == RentmanLink("")
     assert serial.equipment.id is None
 
@@ -392,6 +387,19 @@ def test_parse_expanded_link_without_an_id_is_none() -> None:
     assert vehicle.folder is None
 
 
+def test_parse_required_link_without_an_expanded_id_is_an_empty_link() -> None:
+    serial = parse_serial_number({"id": 1, "equipment": {"name": "Mixer"}})
+    assert serial.equipment == RentmanLink("")
+
+
+def test_parse_page_names_callables_without_a_name(caplog: pytest.LogCaptureFixture) -> None:
+    parse_item = functools.partial(parse_equipment)
+    with caplog.at_level(logging.DEBUG, logger="aiorentman.parsers"):
+        page = parse_page({"data": [{}]}, parse_item)
+    assert page.items == ()
+    assert caplog.messages == [f"Dropped one {parse_item!r} payload without a usable id"]
+
+
 def test_parse_int_field_converts_negative_strings() -> None:
     equipment = parse_equipment({"id": "-5"})
     assert equipment.id == -5
@@ -441,21 +449,9 @@ def test_parse_alternative_resolves_expanded_links() -> None:
 
 
 def test_parse_required_equipment_links_fall_back_to_empty_links() -> None:
-    accessory = parse_accessory(
-        {
-            "id": 1,
-        }
-    )
-    alternative = parse_alternative(
-        {
-            "id": 1,
-        }
-    )
-    supplier = parse_supplier(
-        {
-            "id": 1,
-        }
-    )
+    accessory = parse_accessory({"id": 1})
+    alternative = parse_alternative({"id": 1})
+    supplier = parse_supplier({"id": 1})
     assert accessory.parent_equipment == RentmanLink("")
     assert alternative.equipment == RentmanLink("")
     assert alternative.alternative == RentmanLink("")
@@ -545,11 +541,7 @@ def test_parse_project_function_resolves_expanded_links() -> None:
 
 
 def test_parse_project_function_group_falls_back_to_empty_links() -> None:
-    group = parse_project_function_group(
-        {
-            "id": 1,
-        }
-    )
+    group = parse_project_function_group({"id": 1})
     assert group.project == RentmanLink("")
     assert group.subproject == RentmanLink("")
     assert group.remark == ""
@@ -575,11 +567,7 @@ def test_parse_project_crew_resolves_expanded_links() -> None:
 
 
 def test_parse_project_crew_falls_back_to_empty_links() -> None:
-    member = parse_project_crew(
-        {
-            "id": 1,
-        }
-    )
+    member = parse_project_crew({"id": 1})
     assert member.function == RentmanLink("")
     assert member.crewmember == RentmanLink("")
     assert member.hours_planned is None
@@ -601,22 +589,14 @@ def test_parse_project_vehicle_resolves_expanded_links() -> None:
 
 
 def test_parse_project_vehicle_falls_back_to_empty_links() -> None:
-    planned = parse_project_vehicle(
-        {
-            "id": 1,
-        }
-    )
+    planned = parse_project_vehicle({"id": 1})
     assert planned.function == RentmanLink("")
     assert planned.vehicle == RentmanLink("")
     assert planned.costs is None
 
 
 def test_parse_project_equipment_group_falls_back_to_empty_links() -> None:
-    group = parse_project_equipment_group(
-        {
-            "id": 1,
-        }
-    )
+    group = parse_project_equipment_group({"id": 1})
     assert isinstance(group, ProjectEquipmentGroup)
     assert group.project == RentmanLink("")
     assert group.subproject == RentmanLink("")
@@ -625,11 +605,7 @@ def test_parse_project_equipment_group_falls_back_to_empty_links() -> None:
 
 
 def test_parse_project_cost_falls_back_to_empty_links() -> None:
-    cost = parse_project_cost(
-        {
-            "id": 1,
-        }
-    )
+    cost = parse_project_cost({"id": 1})
     assert isinstance(cost, ProjectCost)
     assert cost.project == RentmanLink("")
     assert cost.subproject == RentmanLink("")
@@ -654,11 +630,7 @@ def test_parse_project_request_keeps_keyword_checkins() -> None:
 
 
 def test_parse_project_request_degrades_on_sparse_payloads() -> None:
-    request = parse_project_request(
-        {
-            "id": 1,
-        }
-    )
+    request = parse_project_request({"id": 1})
     assert request.in_ is None
     assert request.out_ is None
     assert request.linked_project is None
@@ -687,11 +659,7 @@ def test_parse_project_request_equipment_resolves_links() -> None:
 
 
 def test_parse_project_request_equipment_falls_back_to_an_empty_link() -> None:
-    line = parse_project_request_equipment(
-        {
-            "id": 1,
-        }
-    )
+    line = parse_project_request_equipment({"id": 1})
     assert line.project_request == RentmanLink("")
     assert line.parent is None
 
@@ -724,16 +692,8 @@ def test_parse_quote_resolves_expanded_links() -> None:
 
 
 def test_parse_quote_and_contract_fall_back_to_empty_links() -> None:
-    quote = parse_quote(
-        {
-            "id": 1,
-        }
-    )
-    contract = parse_contract(
-        {
-            "id": 1,
-        }
-    )
+    quote = parse_quote({"id": 1})
+    contract = parse_contract({"id": 1})
     assert isinstance(contract, Contract)
     assert quote.project == RentmanLink("")
     assert contract.project == RentmanLink("")
@@ -761,11 +721,7 @@ def test_parse_invoice_resolves_expanded_links() -> None:
 
 
 def test_parse_invoice_degrades_on_sparse_payloads() -> None:
-    invoice = parse_invoice(
-        {
-            "id": 1,
-        }
-    )
+    invoice = parse_invoice({"id": 1})
     assert invoice.project is None
     assert invoice.integration_reference_id is None
     assert invoice.days_after_expiry is None
@@ -775,7 +731,7 @@ def test_parse_invoice_degrades_on_sparse_payloads() -> None:
 def test_parse_invoice_line_resolves_expanded_ledger() -> None:
     line = parse_invoice_line(
         {
-            "id": 1,
+            "id": 900,
             "item": 1,
             "base": 1350,
             "ledger": {"id": 1, "code": "Rental"},
@@ -792,11 +748,7 @@ def test_parse_invoice_line_resolves_expanded_ledger() -> None:
 
 
 def test_parse_invoice_line_falls_back_to_an_empty_link() -> None:
-    line = parse_invoice_line(
-        {
-            "id": 1,
-        }
-    )
+    line = parse_invoice_line({"id": 1})
     assert line.ledger == RentmanLink("")
     assert line.item is None
     assert line.priceincl is None
@@ -821,11 +773,7 @@ def test_parse_payment_resolves_expanded_invoice() -> None:
 
 
 def test_parse_payment_falls_back_to_an_empty_link() -> None:
-    payment = parse_payment(
-        {
-            "id": 1,
-        }
-    )
+    payment = parse_payment({"id": 1})
     assert payment.invoice == RentmanLink("")
     assert payment.moment is None
     assert payment.description == ""
@@ -845,7 +793,7 @@ def test_parse_ledger_code_and_tax_class_keep_their_scalars() -> None:
 def test_parse_subrental_coerces_number_and_resolves_links() -> None:
     subrental = parse_subrental(
         {
-            "id": 1,
+            "id": 900,
             "number": 1,
             "status": {"id": 3, "name": "Optie"},
             "asset_location_to": {"id": 1, "name": "Main warehouse"},
@@ -863,11 +811,7 @@ def test_parse_subrental_coerces_number_and_resolves_links() -> None:
 
 
 def test_parse_subrental_falls_back_to_empty_links() -> None:
-    subrental = parse_subrental(
-        {
-            "id": 1,
-        }
-    )
+    subrental = parse_subrental({"id": 1})
     assert subrental.status == RentmanLink("")
     assert subrental.number == ""
     assert subrental.supplier_project is None
@@ -904,11 +848,7 @@ def test_parse_subrental_equipment_resolves_self_reference() -> None:
 
 
 def test_parse_subrental_equipment_falls_back_to_an_empty_link() -> None:
-    line = parse_subrental_equipment(
-        {
-            "id": 1,
-        }
-    )
+    line = parse_subrental_equipment({"id": 1})
     assert line.subrental_group == RentmanLink("")
     assert line.parent is None
     assert line.lineprice is None
@@ -917,7 +857,7 @@ def test_parse_subrental_equipment_falls_back_to_an_empty_link() -> None:
 def test_parse_purchase_order_keeps_its_scalars() -> None:
     order = parse_purchase_order(
         {
-            "id": 1,
+            "id": 900,
             "owner": "/crew/33",
             "delivery_warehouse": {"id": 1, "name": "Main warehouse"},
             "projects_json": '[{"id": 118}]',
@@ -935,11 +875,7 @@ def test_parse_purchase_order_keeps_its_scalars() -> None:
 
 
 def test_parse_purchase_order_degrades_on_sparse_payloads() -> None:
-    order = parse_purchase_order(
-        {
-            "id": 1,
-        }
-    )
+    order = parse_purchase_order({"id": 1})
     assert order.owner == RentmanLink("")
     assert order.previous_status == ""
     assert order.delivery_warehouse is None
@@ -949,7 +885,7 @@ def test_parse_purchase_order_degrades_on_sparse_payloads() -> None:
 def test_parse_purchase_order_cost_keeps_its_project_text() -> None:
     cost = parse_purchase_order_cost(
         {
-            "id": 1,
+            "id": 900,
             "purchase_order": {"id": 1, "number": "01"},
             "project": "116 Festival Demo Dance",
             "costitem": 52,
@@ -964,11 +900,7 @@ def test_parse_purchase_order_cost_keeps_its_project_text() -> None:
 
 
 def test_parse_purchase_order_cost_falls_back_to_an_empty_link() -> None:
-    cost = parse_purchase_order_cost(
-        {
-            "id": 1,
-        }
-    )
+    cost = parse_purchase_order_cost({"id": 1})
     assert cost.purchase_order == RentmanLink("")
     assert cost.project == ""
     assert cost.quantity is None
@@ -977,7 +909,7 @@ def test_parse_purchase_order_cost_falls_back_to_an_empty_link() -> None:
 def test_parse_purchase_order_global_cost_resolves_expanded_links() -> None:
     global_cost = parse_purchase_order_global_cost(
         {
-            "id": 1,
+            "id": 900,
             "purchase_order": {"id": 1, "number": "01"},
             "taxclass": {"id": 3, "name": "Hoog tarief"},
             "unit_purchase_cost": 10.5,
@@ -992,11 +924,7 @@ def test_parse_purchase_order_global_cost_resolves_expanded_links() -> None:
 
 
 def test_parse_purchase_order_global_cost_falls_back_to_an_empty_link() -> None:
-    global_cost = parse_purchase_order_global_cost(
-        {
-            "id": 1,
-        }
-    )
+    global_cost = parse_purchase_order_global_cost({"id": 1})
     assert global_cost.purchase_order == RentmanLink("")
     assert global_cost.taxclass is None
 
@@ -1004,7 +932,7 @@ def test_parse_purchase_order_global_cost_falls_back_to_an_empty_link() -> None:
 def test_parse_crew_coerces_contract_and_resolves_links() -> None:
     member = parse_crew(
         {
-            "id": 1,
+            "id": 900,
             "contract": 40,
             "folder": {"id": 40, "name": "Crew"},
             "default_warehouse": {"id": 1, "name": "Main warehouse"},
@@ -1036,21 +964,9 @@ def test_parse_crew_models_keep_required_crew_links() -> None:
 
 
 def test_parse_crew_models_fall_back_to_empty_links() -> None:
-    availability = parse_crew_availability(
-        {
-            "id": 1,
-        }
-    )
-    rate = parse_crew_rate(
-        {
-            "id": 1,
-        }
-    )
-    invitation = parse_invitation(
-        {
-            "id": 1,
-        }
-    )
+    availability = parse_crew_availability({"id": 1})
+    rate = parse_crew_rate({"id": 1})
+    invitation = parse_invitation({"id": 1})
     assert availability.crewmember == RentmanLink("")
     assert rate.medewerker == RentmanLink("")
     assert invitation.crewmember == RentmanLink("")
@@ -1074,11 +990,7 @@ def test_parse_appointment_and_crew_resolves_expanded_links() -> None:
 
 
 def test_parse_appointment_and_crew_fall_back_to_empty_links() -> None:
-    attachment = parse_appointment_crew(
-        {
-            "id": 1,
-        }
-    )
+    attachment = parse_appointment_crew({"id": 1})
     assert attachment.appointment == RentmanLink("")
     assert attachment.crew == RentmanLink("")
     appointment = parse_appointment({"id": 1, "start": "2026-10-05T10:00:00+02:00"})
@@ -1105,16 +1017,8 @@ def test_parse_leave_models_keep_their_links() -> None:
 
 
 def test_parse_leave_models_fall_back_to_empty_links() -> None:
-    request = parse_leave_request(
-        {
-            "id": 1,
-        }
-    )
-    mutation = parse_leave_mutation(
-        {
-            "id": 1,
-        }
-    )
+    request = parse_leave_request({"id": 1})
+    mutation = parse_leave_mutation({"id": 1})
     assert request.requested_for == RentmanLink("")
     assert mutation.leavetype == RentmanLink("")
     assert mutation.crewmember == RentmanLink("")
@@ -1127,7 +1031,7 @@ def test_parse_leave_models_fall_back_to_empty_links() -> None:
 def test_parse_time_registration_resolves_expanded_links() -> None:
     registration = parse_time_registration(
         {
-            "id": 1,
+            "id": 900,
             "crewmember": {"id": 226, "firstname": "Stage"},
             "leavetype": {"id": 1, "name": "Gewerkt"},
             "leaverequest": "/leaverequest/1",
@@ -1161,11 +1065,7 @@ def test_parse_time_registration_activity_keeps_keyword_times() -> None:
 
 
 def test_parse_time_registration_activity_falls_back_to_an_empty_link() -> None:
-    activity = parse_time_registration_activity(
-        {
-            "id": 1,
-        }
-    )
+    activity = parse_time_registration_activity({"id": 1})
     assert activity.time_registration == RentmanLink("")
     assert activity.from_ is None
     assert activity.subproject_function is None
@@ -1201,16 +1101,8 @@ def test_parse_contact_person_resolves_expanded_contact() -> None:
 
 
 def test_parse_contact_models_fall_back_to_empty_links() -> None:
-    contact = parse_contact(
-        {
-            "id": 1,
-        }
-    )
-    person = parse_contact_person(
-        {
-            "id": 1,
-        }
-    )
+    contact = parse_contact({"id": 1})
+    person = parse_contact_person({"id": 1})
     assert contact.default_person is None
     assert contact.VAT_code == ""
     assert person.contact == RentmanLink("")
@@ -1220,7 +1112,7 @@ def test_parse_contact_models_fall_back_to_empty_links() -> None:
 def test_parse_task_coerces_scalars_and_resolves_links() -> None:
     task = parse_task(
         {
-            "id": 1,
+            "id": 900,
             "status": {"id": 1, "name": "To do"},
             "order": 576,
             "public": 1,
@@ -1240,11 +1132,7 @@ def test_parse_task_coerces_scalars_and_resolves_links() -> None:
 
 
 def test_parse_task_falls_back_to_an_empty_link() -> None:
-    task = parse_task(
-        {
-            "id": 1,
-        }
-    )
+    task = parse_task({"id": 1})
     assert task.status == RentmanLink("")
     assert task.recurhoe == ""
     assert task.recurperiode is None
@@ -1268,16 +1156,8 @@ def test_parse_subtask_and_assignment_resolve_expanded_links() -> None:
 
 
 def test_parse_subtask_and_assignment_fall_back_to_empty_links() -> None:
-    subtask = parse_subtask(
-        {
-            "id": 1,
-        }
-    )
-    assignment = parse_task_assignment(
-        {
-            "id": 1,
-        }
-    )
+    subtask = parse_subtask({"id": 1})
+    assignment = parse_task_assignment({"id": 1})
     assert subtask.task == RentmanLink("")
     assert assignment.task == RentmanLink("")
     assert assignment.crew == RentmanLink("")
@@ -1296,7 +1176,7 @@ def test_parse_task_status_keeps_its_scalars() -> None:
 def test_parse_file_resolves_expanded_folder() -> None:
     file = parse_file(
         {
-            "id": 1,
+            "id": 900,
             "readable_name": "Quotation 10.pdf",
             "size": 23455,
             "folder": {"id": 1, "name": "Quotations"},
@@ -1314,11 +1194,7 @@ def test_parse_file_resolves_expanded_folder() -> None:
 
 
 def test_parse_file_degrades_on_sparse_payloads() -> None:
-    file = parse_file(
-        {
-            "id": 1,
-        }
-    )
+    file = parse_file({"id": 1})
     assert file.folder is None
     assert file.preview_of is None
     assert file.url == ""
@@ -1334,11 +1210,7 @@ def test_parse_file_folder_resolves_self_reference() -> None:
 
 
 def test_parse_file_folder_degrades_on_sparse_payloads() -> None:
-    folder = parse_file_folder(
-        {
-            "id": 1,
-        }
-    )
+    folder = parse_file_folder({"id": 1})
     assert folder.parent is None
     assert folder.name == ""
     assert folder.parent_api_path == ""
