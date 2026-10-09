@@ -1,4 +1,8 @@
-"""Convert raw Rentman payloads into result models."""
+"""Convert raw Rentman payloads into result models.
+
+A model parser raises ValueError for an object without a usable id.
+parse_page, parse_envelope_item, and expanded links drop such objects.
+"""
 
 import logging
 from collections.abc import Callable, Mapping
@@ -136,7 +140,10 @@ def _parse_with_id[ModelT](
     try:
         return parse_item(data)
     except _MissingIdError:
-        _LOGGER.debug("Dropped one %s payload without a usable id", parse_item.__name__)
+        _LOGGER.debug(
+            "Dropped one %s payload without a usable id",
+            getattr(parse_item, "__name__", repr(parse_item)),
+        )
         return None
 
 
