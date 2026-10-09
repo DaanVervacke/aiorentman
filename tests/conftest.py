@@ -28,7 +28,7 @@ EMPTY_PAGE: dict[str, Any] = {
     "next_page_url": None,
 }
 
-EMPTY_ITEM: dict[str, Any] = {"data": {}}
+MINIMAL_ITEM: dict[str, Any] = {"data": {"id": 1}}
 
 
 @pytest.fixture

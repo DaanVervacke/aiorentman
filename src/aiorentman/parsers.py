@@ -1,5 +1,6 @@
 """Convert raw Rentman payloads into result models."""
 
+import logging
 from collections.abc import Callable, Mapping
 from datetime import datetime
 from re import compile as _compile
@@ -77,6 +78,12 @@ from .models import (
 
 _CODE_SEPARATOR = _compile(r"[,\n]+")
 
+_LOGGER = logging.getLogger(__name__)
+
+
+class _MissingIdError(ValueError):
+    """An object payload carries no usable integer id."""
+
 
 def _str_field(data: Mapping[str, Any], key: str, default: str = "") -> str:
     value = data.get(key)
@@ -110,6 +117,27 @@ def _int_field(data: Mapping[str, Any], key: str) -> int | None:
         except ValueError:
             return None
     return None
+
+
+def _required_id(data: Mapping[str, Any]) -> int:
+    """Read the id every documented object carries, or reject the object."""
+    value = _int_field(data, "id")
+    if value is None:
+        msg = "The payload carries no usable id"
+        raise _MissingIdError(msg)
+    return value
+
+
+def _parse_with_id[ModelT](
+    data: Mapping[str, Any],
+    parse_item: Callable[[Mapping[str, Any]], ModelT],
+) -> ModelT | None:
+    """Parse one object, dropping it when it carries no usable id."""
+    try:
+        return parse_item(data)
+    except _MissingIdError:
+        _LOGGER.debug("Dropped one %s payload without a usable id", parse_item.__name__)
+        return None
 
 
 def _float_field(data: Mapping[str, Any], key: str) -> float | None:
@@ -168,7 +196,7 @@ def _link_or_model_field[ModelT](
     if isinstance(value, str):
         return RentmanLink(value)
     if isinstance(value, Mapping):
-        return parse_model(value)
+        return _parse_with_id(value, parse_model)
     return None
 
 
@@ -181,7 +209,10 @@ def parse_page[ModelT](
     raw_items = envelope.get("data")
     items: tuple[ModelT, ...] = ()
     if isinstance(raw_items, list):
-        items = tuple(parse_item(item) for item in raw_items if isinstance(item, Mapping))
+        parsed = (
+            _parse_with_id(item, parse_item) for item in raw_items if isinstance(item, Mapping)
+        )
+        items = tuple(item for item in parsed if item is not None)
     return RentmanPage(
         items=items,
         item_count=_int_field(envelope, "itemCount") or len(items),
@@ -200,14 +231,14 @@ def parse_envelope_item[ModelT](
         return None
     payload = data.get("data", data)
     if isinstance(payload, Mapping):
-        return parse_item(payload)
+        return _parse_with_id(payload, parse_item)
     return None
 
 
 def parse_equipment(data: Mapping[str, Any]) -> Equipment:
     """Build the equipment model from one equipment payload."""
     return Equipment(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -272,7 +303,7 @@ def parse_equipment(data: Mapping[str, Any]) -> Equipment:
 def parse_serial_number(data: Mapping[str, Any]) -> SerialNumber:
     """Build the serial number model from one serial number payload."""
     return SerialNumber(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -305,7 +336,7 @@ def parse_serial_number(data: Mapping[str, Any]) -> SerialNumber:
 def parse_equipment_assigned_serial(data: Mapping[str, Any]) -> EquipmentAssignedSerial:
     """Build the assigned serial model from one assignment payload."""
     return EquipmentAssignedSerial(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -322,7 +353,7 @@ def parse_equipment_assigned_serial(data: Mapping[str, Any]) -> EquipmentAssigne
 def parse_actual_content(data: Mapping[str, Any]) -> ActualContent:
     """Build the actual content model from one content payload."""
     return ActualContent(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -339,7 +370,7 @@ def parse_actual_content(data: Mapping[str, Any]) -> ActualContent:
 def parse_equipment_set_content(data: Mapping[str, Any]) -> EquipmentSetContent:
     """Build the set content model from one set content payload."""
     return EquipmentSetContent(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -360,7 +391,7 @@ def parse_equipment_set_content(data: Mapping[str, Any]) -> EquipmentSetContent:
 def parse_folder(data: Mapping[str, Any]) -> Folder:
     """Build the folder model from one folder payload."""
     return Folder(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -378,7 +409,7 @@ def parse_folder(data: Mapping[str, Any]) -> Folder:
 def parse_stock_location(data: Mapping[str, Any]) -> StockLocation:
     """Build the stock location model from one stock location payload."""
     return StockLocation(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -402,7 +433,7 @@ def parse_stock_location(data: Mapping[str, Any]) -> StockLocation:
 def parse_warehouse_status(data: Mapping[str, Any]) -> WarehouseStatus:
     """Build the warehouse status model from one warehouse status payload."""
     return WarehouseStatus(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -416,7 +447,7 @@ def parse_warehouse_status(data: Mapping[str, Any]) -> WarehouseStatus:
 def parse_status(data: Mapping[str, Any]) -> Status:
     """Build the status model from one status payload."""
     return Status(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -430,7 +461,7 @@ def parse_status(data: Mapping[str, Any]) -> Status:
 def parse_stock_movement(data: Mapping[str, Any]) -> StockMovement:
     """Build the stock movement model from one stock movement payload."""
     return StockMovement(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -454,7 +485,7 @@ def parse_stock_movement(data: Mapping[str, Any]) -> StockMovement:
 def parse_repair(data: Mapping[str, Any]) -> Repair:
     """Build the repair model from one repair payload."""
     return Repair(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -488,7 +519,7 @@ def parse_repair(data: Mapping[str, Any]) -> Repair:
 def parse_project(data: Mapping[str, Any]) -> Project:
     """Build the project model from one project payload."""
     return Project(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -540,7 +571,7 @@ def parse_project(data: Mapping[str, Any]) -> Project:
 def parse_subproject(data: Mapping[str, Any]) -> Subproject:
     """Build the subproject model from one subproject payload."""
     return Subproject(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -601,7 +632,7 @@ def parse_subproject(data: Mapping[str, Any]) -> Subproject:
 def parse_project_equipment(data: Mapping[str, Any]) -> ProjectEquipment:
     """Build the project equipment model from one planned equipment payload."""
     return ProjectEquipment(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -641,7 +672,7 @@ def parse_project_equipment(data: Mapping[str, Any]) -> ProjectEquipment:
 def parse_accessory(data: Mapping[str, Any]) -> Accessory:
     """Build the accessory model from one accessory payload."""
     return Accessory(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -663,7 +694,7 @@ def parse_accessory(data: Mapping[str, Any]) -> Accessory:
 def parse_alternative(data: Mapping[str, Any]) -> Alternative:
     """Build the alternative model from one alternative payload."""
     return Alternative(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -680,7 +711,7 @@ def parse_alternative(data: Mapping[str, Any]) -> Alternative:
 def parse_supplier(data: Mapping[str, Any]) -> Supplier:
     """Build the supplier model from one supplier payload."""
     return Supplier(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -699,7 +730,7 @@ def parse_supplier(data: Mapping[str, Any]) -> Supplier:
 def parse_vehicle(data: Mapping[str, Any]) -> Vehicle:
     """Build the vehicle model from one vehicle payload."""
     return Vehicle(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -732,7 +763,7 @@ def parse_vehicle(data: Mapping[str, Any]) -> Vehicle:
 def parse_extra_input_field(data: Mapping[str, Any]) -> ExtraInputField:
     """Build the extra input field model from one field definition payload."""
     return ExtraInputField(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -756,7 +787,7 @@ def parse_extra_input_field(data: Mapping[str, Any]) -> ExtraInputField:
 def parse_project_status(data: Mapping[str, Any]) -> ProjectStatus:
     """Build the project status model from one status payload."""
     return ProjectStatus(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -770,7 +801,7 @@ def parse_project_status(data: Mapping[str, Any]) -> ProjectStatus:
 def parse_project_type(data: Mapping[str, Any]) -> ProjectType:
     """Build the project type model from one type payload."""
     return ProjectType(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -786,7 +817,7 @@ def parse_project_type(data: Mapping[str, Any]) -> ProjectType:
 def parse_project_function_group(data: Mapping[str, Any]) -> ProjectFunctionGroup:
     """Build the function group model from one group payload."""
     return ProjectFunctionGroup(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -814,7 +845,7 @@ def parse_project_function_group(data: Mapping[str, Any]) -> ProjectFunctionGrou
 def parse_project_function(data: Mapping[str, Any]) -> ProjectFunction:
     """Build the function model from one planned function payload."""
     return ProjectFunction(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -886,7 +917,7 @@ def parse_project_function(data: Mapping[str, Any]) -> ProjectFunction:
 def parse_project_crew(data: Mapping[str, Any]) -> ProjectCrew:
     """Build the project crew model from one crew planning payload."""
     return ProjectCrew(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -925,7 +956,7 @@ def parse_project_crew(data: Mapping[str, Any]) -> ProjectCrew:
 def parse_project_vehicle(data: Mapping[str, Any]) -> ProjectVehicle:
     """Build the project vehicle model from one transport planning payload."""
     return ProjectVehicle(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -950,7 +981,7 @@ def parse_project_vehicle(data: Mapping[str, Any]) -> ProjectVehicle:
 def parse_project_equipment_group(data: Mapping[str, Any]) -> ProjectEquipmentGroup:
     """Build the equipment group model from one group payload."""
     return ProjectEquipmentGroup(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -983,7 +1014,7 @@ def parse_project_equipment_group(data: Mapping[str, Any]) -> ProjectEquipmentGr
 def parse_project_cost(data: Mapping[str, Any]) -> ProjectCost:
     """Build the project cost model from one cost line payload."""
     return ProjectCost(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1012,7 +1043,7 @@ def parse_project_cost(data: Mapping[str, Any]) -> ProjectCost:
 def parse_project_request(data: Mapping[str, Any]) -> ProjectRequest:
     """Build the project request model from one request payload."""
     return ProjectRequest(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1061,7 +1092,7 @@ def parse_project_request(data: Mapping[str, Any]) -> ProjectRequest:
 def parse_project_request_equipment(data: Mapping[str, Any]) -> ProjectRequestEquipment:
     """Build the request equipment model from one requested line payload."""
     return ProjectRequestEquipment(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1088,7 +1119,7 @@ def parse_project_request_equipment(data: Mapping[str, Any]) -> ProjectRequestEq
 def parse_quote(data: Mapping[str, Any]) -> Quote:
     """Build the quote model from one quotation payload."""
     return Quote(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1125,7 +1156,7 @@ def parse_quote(data: Mapping[str, Any]) -> Quote:
 def parse_contract(data: Mapping[str, Any]) -> Contract:
     """Build the contract model from one contract payload."""
     return Contract(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1161,7 +1192,7 @@ def parse_contract(data: Mapping[str, Any]) -> Contract:
 def parse_invoice(data: Mapping[str, Any]) -> Invoice:
     """Build the invoice model from one invoice payload."""
     return Invoice(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1210,7 +1241,7 @@ def parse_invoice(data: Mapping[str, Any]) -> Invoice:
 def parse_ledger_code(data: Mapping[str, Any]) -> LedgerCode:
     """Build the ledger code model from one ledger account payload."""
     return LedgerCode(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1226,7 +1257,7 @@ def parse_ledger_code(data: Mapping[str, Any]) -> LedgerCode:
 def parse_tax_class(data: Mapping[str, Any]) -> TaxClass:
     """Build the tax class model from one tax class payload."""
     return TaxClass(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1242,7 +1273,7 @@ def parse_tax_class(data: Mapping[str, Any]) -> TaxClass:
 def parse_invoice_line(data: Mapping[str, Any]) -> InvoiceLine:
     """Build the invoice line model from one VAT line payload."""
     return InvoiceLine(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1264,7 +1295,7 @@ def parse_invoice_line(data: Mapping[str, Any]) -> InvoiceLine:
 def parse_payment(data: Mapping[str, Any]) -> Payment:
     """Build the payment model from one payment payload."""
     return Payment(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1283,7 +1314,7 @@ def parse_payment(data: Mapping[str, Any]) -> Payment:
 def parse_subrental(data: Mapping[str, Any]) -> Subrental:
     """Build the subrental model from one subrental payload."""
     return Subrental(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1325,7 +1356,7 @@ def parse_subrental(data: Mapping[str, Any]) -> Subrental:
 def parse_subrental_equipment_group(data: Mapping[str, Any]) -> SubrentalEquipmentGroup:
     """Build the subrental group model from one group payload."""
     return SubrentalEquipmentGroup(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1343,7 +1374,7 @@ def parse_subrental_equipment_group(data: Mapping[str, Any]) -> SubrentalEquipme
 def parse_subrental_equipment(data: Mapping[str, Any]) -> SubrentalEquipment:
     """Build the subrental equipment model from one subrental line payload."""
     return SubrentalEquipment(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1374,7 +1405,7 @@ def parse_subrental_equipment(data: Mapping[str, Any]) -> SubrentalEquipment:
 def parse_purchase_order(data: Mapping[str, Any]) -> PurchaseOrder:
     """Build the purchase order model from one purchase order payload."""
     return PurchaseOrder(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1415,7 +1446,7 @@ def parse_purchase_order(data: Mapping[str, Any]) -> PurchaseOrder:
 def parse_purchase_order_cost(data: Mapping[str, Any]) -> PurchaseOrderCost:
     """Build the purchase order cost model from one cost line payload."""
     return PurchaseOrderCost(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1438,7 +1469,7 @@ def parse_purchase_order_cost(data: Mapping[str, Any]) -> PurchaseOrderCost:
 def parse_purchase_order_global_cost(data: Mapping[str, Any]) -> PurchaseOrderGlobalCost:
     """Build the global cost model from one global cost line payload."""
     return PurchaseOrderGlobalCost(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1457,7 +1488,7 @@ def parse_purchase_order_global_cost(data: Mapping[str, Any]) -> PurchaseOrderGl
 def parse_crew(data: Mapping[str, Any]) -> Crew:
     """Build the crew model from one crew member payload."""
     return Crew(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1504,7 +1535,7 @@ def parse_crew(data: Mapping[str, Any]) -> Crew:
 def parse_crew_availability(data: Mapping[str, Any]) -> CrewAvailability:
     """Build the availability model from one availability window payload."""
     return CrewAvailability(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1530,7 +1561,7 @@ def parse_crew_availability(data: Mapping[str, Any]) -> CrewAvailability:
 def parse_crew_rate(data: Mapping[str, Any]) -> CrewRate:
     """Build the crew rate model from one crew rate payload."""
     return CrewRate(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1547,7 +1578,7 @@ def parse_crew_rate(data: Mapping[str, Any]) -> CrewRate:
 def parse_appointment(data: Mapping[str, Any]) -> Appointment:
     """Build the appointment model from one appointment payload."""
     return Appointment(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1575,7 +1606,7 @@ def parse_appointment(data: Mapping[str, Any]) -> Appointment:
 def parse_appointment_crew(data: Mapping[str, Any]) -> AppointmentCrew:
     """Build the appointment crew model from one attachment payload."""
     return AppointmentCrew(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1592,7 +1623,7 @@ def parse_appointment_crew(data: Mapping[str, Any]) -> AppointmentCrew:
 def parse_invitation(data: Mapping[str, Any]) -> Invitation:
     """Build the invitation model from one planning invitation payload."""
     return Invitation(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1621,7 +1652,7 @@ def parse_invitation(data: Mapping[str, Any]) -> Invitation:
 def parse_leave_type(data: Mapping[str, Any]) -> LeaveType:
     """Build the leave type model from one leave type payload."""
     return LeaveType(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1646,7 +1677,7 @@ def parse_leave_type(data: Mapping[str, Any]) -> LeaveType:
 def parse_leave_request(data: Mapping[str, Any]) -> LeaveRequest:
     """Build the leave request model from one leave request payload."""
     return LeaveRequest(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1665,7 +1696,7 @@ def parse_leave_request(data: Mapping[str, Any]) -> LeaveRequest:
 def parse_leave_mutation(data: Mapping[str, Any]) -> LeaveMutation:
     """Build the leave mutation model from one balance mutation payload."""
     return LeaveMutation(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1685,7 +1716,7 @@ def parse_leave_mutation(data: Mapping[str, Any]) -> LeaveMutation:
 def parse_time_registration(data: Mapping[str, Any]) -> TimeRegistration:
     """Build the time registration model from one registration payload."""
     return TimeRegistration(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1713,7 +1744,7 @@ def parse_time_registration(data: Mapping[str, Any]) -> TimeRegistration:
 def parse_time_registration_activity(data: Mapping[str, Any]) -> TimeRegistrationActivity:
     """Build the activity model from one activity line payload."""
     return TimeRegistrationActivity(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1737,7 +1768,7 @@ def parse_time_registration_activity(data: Mapping[str, Any]) -> TimeRegistratio
 def parse_contact(data: Mapping[str, Any]) -> Contact:
     """Build the contact model from one contact payload."""
     return Contact(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1817,7 +1848,7 @@ def parse_contact(data: Mapping[str, Any]) -> Contact:
 def parse_contact_person(data: Mapping[str, Any]) -> ContactPerson:
     """Build the contact person model from one contact person payload."""
     return ContactPerson(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1847,7 +1878,7 @@ def parse_contact_person(data: Mapping[str, Any]) -> ContactPerson:
 def parse_task_status(data: Mapping[str, Any]) -> TaskStatus:
     """Build the task status model from one status payload."""
     return TaskStatus(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1864,7 +1895,7 @@ def parse_task_status(data: Mapping[str, Any]) -> TaskStatus:
 def parse_task(data: Mapping[str, Any]) -> Task:
     """Build the task model from one task payload."""
     return Task(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1907,7 +1938,7 @@ def parse_task(data: Mapping[str, Any]) -> Task:
 def parse_subtask(data: Mapping[str, Any]) -> Subtask:
     """Build the subtask model from one checklist line payload."""
     return Subtask(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1924,7 +1955,7 @@ def parse_subtask(data: Mapping[str, Any]) -> Subtask:
 def parse_task_assignment(data: Mapping[str, Any]) -> TaskAssignment:
     """Build the task assignment model from one assignment payload."""
     return TaskAssignment(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1941,7 +1972,7 @@ def parse_task_assignment(data: Mapping[str, Any]) -> TaskAssignment:
 def parse_file_folder(data: Mapping[str, Any]) -> FileFolder:
     """Build the file folder model from one folder payload."""
     return FileFolder(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -1961,7 +1992,7 @@ def parse_file_folder(data: Mapping[str, Any]) -> FileFolder:
 def parse_file(data: Mapping[str, Any]) -> File:
     """Build the file model from one stored file payload."""
     return File(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -2000,7 +2031,7 @@ def parse_file(data: Mapping[str, Any]) -> File:
 def parse_rate(data: Mapping[str, Any]) -> Rate:
     """Build the rate model from one rate definition payload."""
     return Rate(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -2017,7 +2048,7 @@ def parse_rate(data: Mapping[str, Any]) -> Rate:
 def parse_rate_factor(data: Mapping[str, Any]) -> RateFactor:
     """Build the rate factor model from one rate bracket payload."""
     return RateFactor(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -2036,7 +2067,7 @@ def parse_rate_factor(data: Mapping[str, Any]) -> RateFactor:
 def parse_factor_group(data: Mapping[str, Any]) -> FactorGroup:
     """Build the factor group model from one group payload."""
     return FactorGroup(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),
@@ -2050,7 +2081,7 @@ def parse_factor_group(data: Mapping[str, Any]) -> FactorGroup:
 def parse_factor(data: Mapping[str, Any]) -> Factor:
     """Build the factor model from one day bracket payload."""
     return Factor(
-        id=_int_field(data, "id") or 0,
+        id=_required_id(data),
         created=_datetime_field(data, "created"),
         modified=_datetime_field(data, "modified"),
         update_hash=_str_field(data, "updateHash"),

@@ -26,8 +26,8 @@ from aiorentman.models import ActualContent, Equipment, RentmanLink, Repair, Ser
 from aiorentman.payloads import TaskPayload
 
 from .conftest import (
-    EMPTY_ITEM,
     EMPTY_PAGE,
+    MINIMAL_ITEM,
     TOKEN,
     api_url,
     cursor_api_url,
@@ -1017,7 +1017,7 @@ async def test_item_methods_hit_their_paths() -> None:
     async with aiohttp.ClientSession() as session:
         with aioresponses() as m:
             for _, path in ITEMS:
-                m.get(api_url(path), payload=EMPTY_ITEM)
+                m.get(api_url(path), payload=MINIMAL_ITEM)
             client = make_client(session)
             for call, path in ITEMS:
                 assert await call(client) is not None, path
@@ -1093,9 +1093,9 @@ async def test_write_methods_hit_their_paths() -> None:
                 if http_method == "DELETE":
                     m.delete(api_url(path))
                 elif http_method == "POST":
-                    m.post(api_url(path), payload=EMPTY_ITEM)
+                    m.post(api_url(path), payload=MINIMAL_ITEM)
                 else:
-                    m.put(api_url(path), payload=EMPTY_ITEM)
+                    m.put(api_url(path), payload=MINIMAL_ITEM)
             client = make_client(session)
             for method_name, args, path, http_method in WRITE_CASES:
                 result = await getattr(client, method_name)(*args)
@@ -1108,7 +1108,7 @@ async def test_write_methods_hit_their_paths() -> None:
 async def test_create_task_pins_the_wire_body() -> None:
     async with aiohttp.ClientSession() as session:
         with aioresponses() as m:
-            m.post(api_url("/tasks"), payload=EMPTY_ITEM)
+            m.post(api_url("/tasks"), payload=MINIMAL_ITEM)
             client = make_client(session)
             await client.async_create_task(
                 TaskPayload(
@@ -1132,7 +1132,7 @@ async def test_create_task_pins_the_wire_body() -> None:
 async def test_update_task_sends_only_set_fields() -> None:
     async with aiohttp.ClientSession() as session:
         with aioresponses() as m:
-            m.put(api_url("/tasks/1"), payload=EMPTY_ITEM)
+            m.put(api_url("/tasks/1"), payload=MINIMAL_ITEM)
             client = make_client(session)
             await client.async_update_task(1, TaskPayload(color="#ffffff", name="renamed"))
             call = recorded_call(m.requests, "PUT", f"{BASE_URL}/tasks/1")
@@ -1187,7 +1187,7 @@ async def test_list_equipment_pins_the_wire_request() -> None:
 async def test_item_requests_carry_the_token() -> None:
     async with aiohttp.ClientSession() as session:
         with aioresponses() as m:
-            m.get(api_url("/equipment/12"), payload=EMPTY_ITEM)
+            m.get(api_url("/equipment/12"), payload=MINIMAL_ITEM)
             client = make_client(session)
             equipment = await client.async_get_equipment(12)
             call = recorded_call(m.requests, "GET", f"{BASE_URL}/equipment/12")
