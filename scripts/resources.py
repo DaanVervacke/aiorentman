@@ -596,6 +596,13 @@ class EndpointSpec:
     param: str | None = None
 
 
+CLIENT_DOC = """Asynchronous client for the Rentman API.
+
+    The client covers the read and write paths of the pinned document.
+    Collections get a list method for one page and an iter method that
+    follows the cursor. Every request is paced against the documented rate
+    limits unless pacing is disabled with ``requests_per_second=None``."""
+
 PAYLOADS: Mapping[str, str] = {
     "AccessoryRequest": "AccessoryPayload",
     "AlternativeRequest": "AlternativePayload",

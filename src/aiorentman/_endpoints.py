@@ -14,11 +14,8 @@ from ._endpoint_types import (
     LinkedCreateArgs,
     ParentCollectionArgs,
     UpdateArgs,
-    collection_params,
-    create_body,
-    linked_collection_params,
-    linked_create_body,
-    update_body,
+    payload_body,
+    query_params,
 )
 from .models import (
     Accessory,
@@ -486,7 +483,7 @@ ACTUAL_CONTENT: Endpoint[CollectionArgs, RentmanPage[ActualContent]] = Endpoint(
     name="actual_content",
     method="GET",
     path=lambda _args: "/actualcontent",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_actual_content),
     response_schema="ActualContentResponse",
 )
@@ -505,7 +502,7 @@ ACTUAL_CONTENT_OF_SERIAL_NUMBER: Endpoint[ParentCollectionArgs, RentmanPage[Actu
         name="actual_content_of_serial_number",
         method="GET",
         path=lambda args: f"/serialnumbers/{args.parent_id}/actualcontent",
-        params=linked_collection_params,
+        params=query_params,
         parse=lambda payload, _args: parse_page(payload, parse_actual_content),
         response_schema="ActualContentResponse",
     )
@@ -515,7 +512,7 @@ EQUIPMENT: Endpoint[CollectionArgs, RentmanPage[Equipment]] = Endpoint(
     name="equipment",
     method="GET",
     path=lambda _args: "/equipment",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_equipment),
     response_schema="EquipmentResponse",
 )
@@ -533,7 +530,7 @@ SERIAL_NUMBERS_OF_EQUIPMENT: Endpoint[ParentCollectionArgs, RentmanPage[SerialNu
     name="serial_numbers_of_equipment",
     method="GET",
     path=lambda args: f"/equipment/{args.parent_id}/serialnumbers",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_serial_number),
     response_schema="SerialNumberResponse",
 )
@@ -542,7 +539,7 @@ STOCK_MOVEMENTS_OF_EQUIPMENT: Endpoint[ParentCollectionArgs, RentmanPage[StockMo
     name="stock_movements_of_equipment",
     method="GET",
     path=lambda args: f"/equipment/{args.parent_id}/stockmovements",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_stock_movement),
     response_schema="StockMovementResponse",
 )
@@ -551,7 +548,7 @@ REPAIRS_OF_EQUIPMENT: Endpoint[ParentCollectionArgs, RentmanPage[Repair]] = Endp
     name="repairs_of_equipment",
     method="GET",
     path=lambda args: f"/equipment/{args.parent_id}/repairs",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_repair),
     response_schema="RepairResponse",
 )
@@ -562,7 +559,7 @@ EQUIPMENT_SET_CONTENT_OF_EQUIPMENT: Endpoint[
     name="equipment_set_content_of_equipment",
     method="GET",
     path=lambda args: f"/equipment/{args.parent_id}/equipmentsetscontent",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_equipment_set_content),
     response_schema="EquipmentSetContentResponse",
 )
@@ -571,7 +568,7 @@ SERIAL_NUMBERS: Endpoint[CollectionArgs, RentmanPage[SerialNumber]] = Endpoint(
     name="serial_numbers",
     method="GET",
     path=lambda _args: "/serialnumbers",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_serial_number),
     response_schema="SerialNumberResponse",
 )
@@ -590,7 +587,7 @@ EQUIPMENT_ASSIGNED_SERIALS: Endpoint[CollectionArgs, RentmanPage[EquipmentAssign
         name="equipment_assigned_serials",
         method="GET",
         path=lambda _args: "/equipmentassignedserials",
-        params=collection_params,
+        params=query_params,
         parse=lambda payload, _args: parse_page(payload, parse_equipment_assigned_serial),
         response_schema="EquipmentAssignedSerialsResponse",
     )
@@ -611,7 +608,7 @@ EQUIPMENT_ASSIGNED_SERIALS_OF_SERIAL_NUMBER: Endpoint[
     name="equipment_assigned_serials_of_serial_number",
     method="GET",
     path=lambda args: f"/serialnumbers/{args.parent_id}/equipmentassignedserials",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_equipment_assigned_serial),
     response_schema="EquipmentAssignedSerialsResponse",
 )
@@ -620,7 +617,7 @@ EQUIPMENT_SET_CONTENT: Endpoint[CollectionArgs, RentmanPage[EquipmentSetContent]
     name="equipment_set_content",
     method="GET",
     path=lambda _args: "/equipmentsetscontent",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_equipment_set_content),
     response_schema="EquipmentSetContentResponse",
 )
@@ -638,7 +635,7 @@ FOLDERS: Endpoint[CollectionArgs, RentmanPage[Folder]] = Endpoint(
     name="folders",
     method="GET",
     path=lambda _args: "/folders",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_folder),
     response_schema="FolderResponse",
 )
@@ -656,7 +653,7 @@ STOCK_LOCATIONS: Endpoint[CollectionArgs, RentmanPage[StockLocation]] = Endpoint
     name="stock_locations",
     method="GET",
     path=lambda _args: "/stocklocations",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_stock_location),
     response_schema="StockLocationResponse",
 )
@@ -674,7 +671,7 @@ WAREHOUSE_STATUSES: Endpoint[CollectionArgs, RentmanPage[WarehouseStatus]] = End
     name="warehouse_statuses",
     method="GET",
     path=lambda _args: "/warehousestatuses",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_warehouse_status),
     response_schema="WarehouseStatusResponse",
 )
@@ -692,7 +689,7 @@ STATUSES: Endpoint[CollectionArgs, RentmanPage[Status]] = Endpoint(
     name="statuses",
     method="GET",
     path=lambda _args: "/statuses",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_status),
     response_schema="StatusResponse",
 )
@@ -710,7 +707,7 @@ STOCK_MOVEMENTS: Endpoint[CollectionArgs, RentmanPage[StockMovement]] = Endpoint
     name="stock_movements",
     method="GET",
     path=lambda _args: "/stockmovements",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_stock_movement),
     response_schema="StockMovementResponse",
 )
@@ -728,7 +725,7 @@ REPAIRS: Endpoint[CollectionArgs, RentmanPage[Repair]] = Endpoint(
     name="repairs",
     method="GET",
     path=lambda _args: "/repairs",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_repair),
     response_schema="RepairResponse",
 )
@@ -746,7 +743,7 @@ PROJECTS: Endpoint[CollectionArgs, RentmanPage[Project]] = Endpoint(
     name="projects",
     method="GET",
     path=lambda _args: "/projects",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_project),
     response_schema="ProjectResponse",
 )
@@ -764,7 +761,7 @@ SUBPROJECTS_OF_PROJECT: Endpoint[ParentCollectionArgs, RentmanPage[Subproject]] 
     name="subprojects_of_project",
     method="GET",
     path=lambda args: f"/projects/{args.parent_id}/subprojects",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_subproject),
     response_schema="SubprojectResponse",
 )
@@ -773,7 +770,7 @@ SUBPROJECTS: Endpoint[CollectionArgs, RentmanPage[Subproject]] = Endpoint(
     name="subprojects",
     method="GET",
     path=lambda _args: "/subprojects",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_subproject),
     response_schema="SubprojectResponse",
 )
@@ -791,7 +788,7 @@ PROJECT_EQUIPMENT: Endpoint[CollectionArgs, RentmanPage[ProjectEquipment]] = End
     name="project_equipment",
     method="GET",
     path=lambda _args: "/projectequipment",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_project_equipment),
     response_schema="ProjectEquipmentResponse",
 )
@@ -810,7 +807,7 @@ PROJECT_EQUIPMENT_OF_PROJECT: Endpoint[ParentCollectionArgs, RentmanPage[Project
         name="project_equipment_of_project",
         method="GET",
         path=lambda args: f"/projects/{args.parent_id}/projectequipment",
-        params=linked_collection_params,
+        params=query_params,
         parse=lambda payload, _args: parse_page(payload, parse_project_equipment),
         response_schema="ProjectEquipmentResponse",
     )
@@ -821,7 +818,7 @@ PROJECT_EQUIPMENT_OF_SUBPROJECT: Endpoint[ParentCollectionArgs, RentmanPage[Proj
         name="project_equipment_of_subproject",
         method="GET",
         path=lambda args: f"/subprojects/{args.parent_id}/projectequipment",
-        params=linked_collection_params,
+        params=query_params,
         parse=lambda payload, _args: parse_page(payload, parse_project_equipment),
         response_schema="ProjectEquipmentResponse",
     )
@@ -831,7 +828,7 @@ ACCESSORIES: Endpoint[CollectionArgs, RentmanPage[Accessory]] = Endpoint(
     name="accessories",
     method="GET",
     path=lambda _args: "/accessories",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_accessory),
     response_schema="AccessoryResponse",
 )
@@ -849,7 +846,7 @@ ACCESSORIES_OF_EQUIPMENT: Endpoint[ParentCollectionArgs, RentmanPage[Accessory]]
     name="accessories_of_equipment",
     method="GET",
     path=lambda args: f"/equipment/{args.parent_id}/accessories",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_accessory),
     response_schema="AccessoryResponse",
 )
@@ -858,7 +855,7 @@ ALTERNATIVES: Endpoint[CollectionArgs, RentmanPage[Alternative]] = Endpoint(
     name="alternatives",
     method="GET",
     path=lambda _args: "/alternatives",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_alternative),
     response_schema="AlternativeResponse",
 )
@@ -876,7 +873,7 @@ ALTERNATIVES_OF_EQUIPMENT: Endpoint[ParentCollectionArgs, RentmanPage[Alternativ
     name="alternatives_of_equipment",
     method="GET",
     path=lambda args: f"/equipment/{args.parent_id}/alternatives",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_alternative),
     response_schema="AlternativeResponse",
 )
@@ -885,7 +882,7 @@ SUPPLIERS: Endpoint[CollectionArgs, RentmanPage[Supplier]] = Endpoint(
     name="suppliers",
     method="GET",
     path=lambda _args: "/suppliers",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_supplier),
     response_schema="SupplierResponse",
 )
@@ -903,7 +900,7 @@ SUPPLIERS_OF_EQUIPMENT: Endpoint[ParentCollectionArgs, RentmanPage[Supplier]] = 
     name="suppliers_of_equipment",
     method="GET",
     path=lambda args: f"/equipment/{args.parent_id}/suppliers",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_supplier),
     response_schema="SupplierResponse",
 )
@@ -912,7 +909,7 @@ VEHICLES: Endpoint[CollectionArgs, RentmanPage[Vehicle]] = Endpoint(
     name="vehicles",
     method="GET",
     path=lambda _args: "/vehicles",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_vehicle),
     response_schema="VehicleResponse",
 )
@@ -930,7 +927,7 @@ VEHICLES_OF_STOCK_LOCATION: Endpoint[ParentCollectionArgs, RentmanPage[Vehicle]]
     name="vehicles_of_stock_location",
     method="GET",
     path=lambda args: f"/stocklocations/{args.parent_id}/vehicles",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_vehicle),
     response_schema="VehicleResponse",
 )
@@ -939,7 +936,7 @@ EXTRA_INPUT_FIELDS: Endpoint[CollectionArgs, RentmanPage[ExtraInputField]] = End
     name="extra_input_fields",
     method="GET",
     path=lambda _args: "/extrainputfields",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_extra_input_field),
     response_schema="ExtraInputFieldResponse",
 )
@@ -957,7 +954,7 @@ PROJECT_STATUSES: Endpoint[CollectionArgs, RentmanPage[ProjectStatus]] = Endpoin
     name="project_statuses",
     method="GET",
     path=lambda _args: "/projectstatuses",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_project_status),
     response_schema="ProjectStatusResponse",
 )
@@ -975,7 +972,7 @@ PROJECT_TYPES: Endpoint[CollectionArgs, RentmanPage[ProjectType]] = Endpoint(
     name="project_types",
     method="GET",
     path=lambda _args: "/projecttypes",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_project_type),
     response_schema="ProjectTypeResponse",
 )
@@ -993,7 +990,7 @@ PROJECT_FUNCTION_GROUPS: Endpoint[CollectionArgs, RentmanPage[ProjectFunctionGro
     name="project_function_groups",
     method="GET",
     path=lambda _args: "/projectfunctiongroups",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_project_function_group),
     response_schema="ProjectFunctionGroupResponse",
 )
@@ -1013,7 +1010,7 @@ PROJECT_FUNCTION_GROUPS_OF_PROJECT: Endpoint[
     name="project_function_groups_of_project",
     method="GET",
     path=lambda args: f"/projects/{args.parent_id}/projectfunctiongroups",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_project_function_group),
     response_schema="ProjectFunctionGroupResponse",
 )
@@ -1024,7 +1021,7 @@ PROJECT_FUNCTION_GROUPS_OF_SUBPROJECT: Endpoint[
     name="project_function_groups_of_subproject",
     method="GET",
     path=lambda args: f"/subprojects/{args.parent_id}/projectfunctiongroups",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_project_function_group),
     response_schema="ProjectFunctionGroupResponse",
 )
@@ -1033,7 +1030,7 @@ PROJECT_FUNCTIONS: Endpoint[CollectionArgs, RentmanPage[ProjectFunction]] = Endp
     name="project_functions",
     method="GET",
     path=lambda _args: "/projectfunctions",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_project_function),
     response_schema="ProjectFunctionResponse",
 )
@@ -1052,7 +1049,7 @@ PROJECT_FUNCTIONS_OF_PROJECT: Endpoint[ParentCollectionArgs, RentmanPage[Project
         name="project_functions_of_project",
         method="GET",
         path=lambda args: f"/projects/{args.parent_id}/projectfunctions",
-        params=linked_collection_params,
+        params=query_params,
         parse=lambda payload, _args: parse_page(payload, parse_project_function),
         response_schema="ProjectFunctionResponse",
     )
@@ -1064,7 +1061,7 @@ PROJECT_FUNCTIONS_OF_PROJECT_FUNCTION_GROUP: Endpoint[
     name="project_functions_of_project_function_group",
     method="GET",
     path=lambda args: f"/projectfunctiongroups/{args.parent_id}/projectfunctions",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_project_function),
     response_schema="ProjectFunctionResponse",
 )
@@ -1073,7 +1070,7 @@ PROJECT_CREW: Endpoint[CollectionArgs, RentmanPage[ProjectCrew]] = Endpoint(
     name="project_crew",
     method="GET",
     path=lambda _args: "/projectcrew",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_project_crew),
     response_schema="ProjectCrewResponse",
 )
@@ -1091,7 +1088,7 @@ PROJECT_CREW_OF_PROJECT: Endpoint[ParentCollectionArgs, RentmanPage[ProjectCrew]
     name="project_crew_of_project",
     method="GET",
     path=lambda args: f"/projects/{args.parent_id}/projectcrew",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_project_crew),
     response_schema="ProjectCrewResponse",
 )
@@ -1100,7 +1097,7 @@ PROJECT_CREW_OF_SUBPROJECT: Endpoint[ParentCollectionArgs, RentmanPage[ProjectCr
     name="project_crew_of_subproject",
     method="GET",
     path=lambda args: f"/subprojects/{args.parent_id}/projectcrew",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_project_crew),
     response_schema="ProjectCrewResponse",
 )
@@ -1110,7 +1107,7 @@ PROJECT_CREW_OF_PROJECT_FUNCTION: Endpoint[ParentCollectionArgs, RentmanPage[Pro
         name="project_crew_of_project_function",
         method="GET",
         path=lambda args: f"/projectfunctions/{args.parent_id}/projectcrew",
-        params=linked_collection_params,
+        params=query_params,
         parse=lambda payload, _args: parse_page(payload, parse_project_crew),
         response_schema="ProjectCrewResponse",
     )
@@ -1120,7 +1117,7 @@ PROJECT_VEHICLES: Endpoint[CollectionArgs, RentmanPage[ProjectVehicle]] = Endpoi
     name="project_vehicles",
     method="GET",
     path=lambda _args: "/projectvehicles",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_project_vehicle),
     response_schema="ProjectVehicleResponse",
 )
@@ -1138,7 +1135,7 @@ PROJECT_VEHICLES_OF_PROJECT: Endpoint[ParentCollectionArgs, RentmanPage[ProjectV
     name="project_vehicles_of_project",
     method="GET",
     path=lambda args: f"/projects/{args.parent_id}/projectvehicles",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_project_vehicle),
     response_schema="ProjectVehicleResponse",
 )
@@ -1148,7 +1145,7 @@ PROJECT_VEHICLES_OF_SUBPROJECT: Endpoint[ParentCollectionArgs, RentmanPage[Proje
         name="project_vehicles_of_subproject",
         method="GET",
         path=lambda args: f"/subprojects/{args.parent_id}/projectvehicles",
-        params=linked_collection_params,
+        params=query_params,
         parse=lambda payload, _args: parse_page(payload, parse_project_vehicle),
         response_schema="ProjectVehicleResponse",
     )
@@ -1160,7 +1157,7 @@ PROJECT_VEHICLES_OF_PROJECT_FUNCTION: Endpoint[
     name="project_vehicles_of_project_function",
     method="GET",
     path=lambda args: f"/projectfunctions/{args.parent_id}/projectvehicles",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_project_vehicle),
     response_schema="ProjectVehicleResponse",
 )
@@ -1169,7 +1166,7 @@ PROJECT_EQUIPMENT_GROUPS: Endpoint[CollectionArgs, RentmanPage[ProjectEquipmentG
     name="project_equipment_groups",
     method="GET",
     path=lambda _args: "/projectequipmentgroup",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_project_equipment_group),
     response_schema="ProjectEquipmentGroupResponse",
 )
@@ -1189,7 +1186,7 @@ PROJECT_EQUIPMENT_GROUPS_OF_PROJECT: Endpoint[
     name="project_equipment_groups_of_project",
     method="GET",
     path=lambda args: f"/projects/{args.parent_id}/projectequipmentgroup",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_project_equipment_group),
     response_schema="ProjectEquipmentGroupResponse",
 )
@@ -1200,7 +1197,7 @@ PROJECT_EQUIPMENT_GROUPS_OF_SUBPROJECT: Endpoint[
     name="project_equipment_groups_of_subproject",
     method="GET",
     path=lambda args: f"/subprojects/{args.parent_id}/projectequipmentgroup",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_project_equipment_group),
     response_schema="ProjectEquipmentGroupResponse",
 )
@@ -1211,7 +1208,7 @@ PROJECT_EQUIPMENT_OF_PROJECT_EQUIPMENT_GROUP: Endpoint[
     name="project_equipment_of_project_equipment_group",
     method="GET",
     path=lambda args: f"/projectequipmentgroup/{args.parent_id}/projectequipment",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_project_equipment),
     response_schema="ProjectEquipmentResponse",
 )
@@ -1220,7 +1217,7 @@ PROJECT_COSTS: Endpoint[CollectionArgs, RentmanPage[ProjectCost]] = Endpoint(
     name="project_costs",
     method="GET",
     path=lambda _args: "/costs",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_project_cost),
     response_schema="ProjectCostResponse",
 )
@@ -1238,7 +1235,7 @@ PROJECT_COSTS_OF_PROJECT: Endpoint[ParentCollectionArgs, RentmanPage[ProjectCost
     name="project_costs_of_project",
     method="GET",
     path=lambda args: f"/projects/{args.parent_id}/costs",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_project_cost),
     response_schema="ProjectCostResponse",
 )
@@ -1247,7 +1244,7 @@ PROJECT_REQUESTS: Endpoint[CollectionArgs, RentmanPage[ProjectRequest]] = Endpoi
     name="project_requests",
     method="GET",
     path=lambda _args: "/projectrequests",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_project_request),
     response_schema="ProjectRequestResponse",
 )
@@ -1266,7 +1263,7 @@ PROJECT_REQUEST_EQUIPMENT: Endpoint[CollectionArgs, RentmanPage[ProjectRequestEq
         name="project_request_equipment",
         method="GET",
         path=lambda _args: "/projectrequestequipment",
-        params=collection_params,
+        params=query_params,
         parse=lambda payload, _args: parse_page(payload, parse_project_request_equipment),
         response_schema="ProjectRequestEquipmentResponse",
     )
@@ -1287,7 +1284,7 @@ PROJECT_REQUEST_EQUIPMENT_OF_PROJECT_REQUEST: Endpoint[
     name="project_request_equipment_of_project_request",
     method="GET",
     path=lambda args: f"/projectrequests/{args.parent_id}/projectrequestequipment",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_project_request_equipment),
     response_schema="ProjectRequestEquipmentResponse",
 )
@@ -1296,7 +1293,7 @@ QUOTES: Endpoint[CollectionArgs, RentmanPage[Quote]] = Endpoint(
     name="quotes",
     method="GET",
     path=lambda _args: "/quotes",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_quote),
     response_schema="QuotationResponse",
 )
@@ -1314,7 +1311,7 @@ QUOTES_OF_PROJECT: Endpoint[ParentCollectionArgs, RentmanPage[Quote]] = Endpoint
     name="quotes_of_project",
     method="GET",
     path=lambda args: f"/projects/{args.parent_id}/quotes",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_quote),
     response_schema="QuotationResponse",
 )
@@ -1323,7 +1320,7 @@ INVOICE_LINES_OF_QUOTE: Endpoint[ParentCollectionArgs, RentmanPage[InvoiceLine]]
     name="invoice_lines_of_quote",
     method="GET",
     path=lambda args: f"/quotes/{args.parent_id}/invoicelines",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_invoice_line),
     response_schema="InvoiceLineResponse",
 )
@@ -1332,7 +1329,7 @@ CONTRACTS: Endpoint[CollectionArgs, RentmanPage[Contract]] = Endpoint(
     name="contracts",
     method="GET",
     path=lambda _args: "/contracts",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_contract),
     response_schema="ContractResponse",
 )
@@ -1350,7 +1347,7 @@ CONTRACTS_OF_PROJECT: Endpoint[ParentCollectionArgs, RentmanPage[Contract]] = En
     name="contracts_of_project",
     method="GET",
     path=lambda args: f"/projects/{args.parent_id}/contracts",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_contract),
     response_schema="ContractResponse",
 )
@@ -1359,7 +1356,7 @@ INVOICES: Endpoint[CollectionArgs, RentmanPage[Invoice]] = Endpoint(
     name="invoices",
     method="GET",
     path=lambda _args: "/invoices",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_invoice),
     response_schema="FactuurResponse",
 )
@@ -1377,7 +1374,7 @@ INVOICE_LINES_OF_INVOICE: Endpoint[ParentCollectionArgs, RentmanPage[InvoiceLine
     name="invoice_lines_of_invoice",
     method="GET",
     path=lambda args: f"/invoices/{args.parent_id}/invoicelines",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_invoice_line),
     response_schema="InvoiceLineResponse",
 )
@@ -1386,7 +1383,7 @@ PAYMENTS_OF_INVOICE: Endpoint[ParentCollectionArgs, RentmanPage[Payment]] = Endp
     name="payments_of_invoice",
     method="GET",
     path=lambda args: f"/invoices/{args.parent_id}/payments",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_payment),
     response_schema="PaymentResponse",
 )
@@ -1395,7 +1392,7 @@ INVOICE_LINES: Endpoint[CollectionArgs, RentmanPage[InvoiceLine]] = Endpoint(
     name="invoice_lines",
     method="GET",
     path=lambda _args: "/invoicelines",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_invoice_line),
     response_schema="InvoiceLineResponse",
 )
@@ -1413,7 +1410,7 @@ PAYMENTS: Endpoint[CollectionArgs, RentmanPage[Payment]] = Endpoint(
     name="payments",
     method="GET",
     path=lambda _args: "/payments",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_payment),
     response_schema="PaymentResponse",
 )
@@ -1431,7 +1428,7 @@ LEDGER_CODES: Endpoint[CollectionArgs, RentmanPage[LedgerCode]] = Endpoint(
     name="ledger_codes",
     method="GET",
     path=lambda _args: "/ledgercodes",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_ledger_code),
     response_schema="LedgerResponse",
 )
@@ -1449,7 +1446,7 @@ TAX_CLASSES: Endpoint[CollectionArgs, RentmanPage[TaxClass]] = Endpoint(
     name="tax_classes",
     method="GET",
     path=lambda _args: "/taxclasses",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_tax_class),
     response_schema="TaxClassResponse",
 )
@@ -1467,7 +1464,7 @@ SUBRENTALS: Endpoint[CollectionArgs, RentmanPage[Subrental]] = Endpoint(
     name="subrentals",
     method="GET",
     path=lambda _args: "/subrentals",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_subrental),
     response_schema="SubrentalResponse",
 )
@@ -1487,7 +1484,7 @@ SUBRENTAL_EQUIPMENT_OF_SUBRENTAL: Endpoint[
     name="subrental_equipment_of_subrental",
     method="GET",
     path=lambda args: f"/subrentals/{args.parent_id}/subrentalequipment",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_subrental_equipment),
     response_schema="SubrentalEquipmentResponse",
 )
@@ -1498,7 +1495,7 @@ SUBRENTAL_EQUIPMENT_GROUPS_OF_SUBRENTAL: Endpoint[
     name="subrental_equipment_groups_of_subrental",
     method="GET",
     path=lambda args: f"/subrentals/{args.parent_id}/subrentalequipmentgroup",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_subrental_equipment_group),
     response_schema="SubrentalEquipmentGroupResponse",
 )
@@ -1507,7 +1504,7 @@ SUBRENTAL_EQUIPMENT: Endpoint[CollectionArgs, RentmanPage[SubrentalEquipment]] =
     name="subrental_equipment",
     method="GET",
     path=lambda _args: "/subrentalequipment",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_subrental_equipment),
     response_schema="SubrentalEquipmentResponse",
 )
@@ -1527,7 +1524,7 @@ SUBRENTAL_EQUIPMENT_OF_SUBRENTAL_EQUIPMENT_GROUP: Endpoint[
     name="subrental_equipment_of_subrental_equipment_group",
     method="GET",
     path=lambda args: f"/subrentalequipmentgroup/{args.parent_id}/subrentalequipment",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_subrental_equipment),
     response_schema="SubrentalEquipmentResponse",
 )
@@ -1537,7 +1534,7 @@ SUBRENTAL_EQUIPMENT_GROUPS: Endpoint[CollectionArgs, RentmanPage[SubrentalEquipm
         name="subrental_equipment_groups",
         method="GET",
         path=lambda _args: "/subrentalequipmentgroup",
-        params=collection_params,
+        params=query_params,
         parse=lambda payload, _args: parse_page(payload, parse_subrental_equipment_group),
         response_schema="SubrentalEquipmentGroupResponse",
     )
@@ -1556,7 +1553,7 @@ PURCHASE_ORDERS: Endpoint[CollectionArgs, RentmanPage[PurchaseOrder]] = Endpoint
     name="purchase_orders",
     method="GET",
     path=lambda _args: "/purchaseorders",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_purchase_order),
     response_schema="PurchaseOrderResponse",
 )
@@ -1575,7 +1572,7 @@ INVOICE_LINES_OF_PURCHASE_ORDER: Endpoint[ParentCollectionArgs, RentmanPage[Invo
         name="invoice_lines_of_purchase_order",
         method="GET",
         path=lambda args: f"/purchaseorders/{args.parent_id}/invoicelines",
-        params=linked_collection_params,
+        params=query_params,
         parse=lambda payload, _args: parse_page(payload, parse_invoice_line),
         response_schema="InvoiceLineResponse",
     )
@@ -1587,7 +1584,7 @@ PURCHASE_ORDER_COSTS_OF_PURCHASE_ORDER: Endpoint[
     name="purchase_order_costs_of_purchase_order",
     method="GET",
     path=lambda args: f"/purchaseorders/{args.parent_id}/purchaseordercosts",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_purchase_order_cost),
     response_schema="PurchaseOrderCostResponse",
 )
@@ -1598,7 +1595,7 @@ PURCHASE_ORDER_GLOBAL_COSTS_OF_PURCHASE_ORDER: Endpoint[
     name="purchase_order_global_costs_of_purchase_order",
     method="GET",
     path=lambda args: f"/purchaseorders/{args.parent_id}/purchaseorderglobalcosts",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_purchase_order_global_cost),
     response_schema="PurchaseOrderGlobalCostResponse",
 )
@@ -1607,7 +1604,7 @@ PURCHASE_ORDER_COSTS: Endpoint[CollectionArgs, RentmanPage[PurchaseOrderCost]] =
     name="purchase_order_costs",
     method="GET",
     path=lambda _args: "/purchaseordercosts",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_purchase_order_cost),
     response_schema="PurchaseOrderCostResponse",
 )
@@ -1626,7 +1623,7 @@ PURCHASE_ORDER_GLOBAL_COSTS: Endpoint[CollectionArgs, RentmanPage[PurchaseOrderG
         name="purchase_order_global_costs",
         method="GET",
         path=lambda _args: "/purchaseorderglobalcosts",
-        params=collection_params,
+        params=query_params,
         parse=lambda payload, _args: parse_page(payload, parse_purchase_order_global_cost),
         response_schema="PurchaseOrderGlobalCostResponse",
     )
@@ -1645,7 +1642,7 @@ CREW: Endpoint[CollectionArgs, RentmanPage[Crew]] = Endpoint(
     name="crew",
     method="GET",
     path=lambda _args: "/crew",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_crew),
     response_schema="CrewResponse",
 )
@@ -1663,7 +1660,7 @@ APPOINTMENTS_OF_CREW: Endpoint[ParentCollectionArgs, RentmanPage[Appointment]] =
     name="appointments_of_crew",
     method="GET",
     path=lambda args: f"/crew/{args.parent_id}/appointments",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_appointment),
     response_schema="AppointmentResponse",
 )
@@ -1672,7 +1669,7 @@ CREW_AVAILABILITY_OF_CREW: Endpoint[ParentCollectionArgs, RentmanPage[CrewAvaila
     name="crew_availability_of_crew",
     method="GET",
     path=lambda args: f"/crew/{args.parent_id}/crewavailability",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_crew_availability),
     response_schema="CrewAvailabilityResponse",
 )
@@ -1681,7 +1678,7 @@ CREW_RATES_OF_CREW: Endpoint[ParentCollectionArgs, RentmanPage[CrewRate]] = Endp
     name="crew_rates_of_crew",
     method="GET",
     path=lambda args: f"/crew/{args.parent_id}/crewrates",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_crew_rate),
     response_schema="CrewRatesResponse",
 )
@@ -1690,7 +1687,7 @@ INVITATIONS_OF_CREW: Endpoint[ParentCollectionArgs, RentmanPage[Invitation]] = E
     name="invitations_of_crew",
     method="GET",
     path=lambda args: f"/crew/{args.parent_id}/invitations",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_invitation),
     response_schema="InvitationsResponse",
 )
@@ -1699,7 +1696,7 @@ CREW_AVAILABILITY: Endpoint[CollectionArgs, RentmanPage[CrewAvailability]] = End
     name="crew_availability",
     method="GET",
     path=lambda _args: "/crewavailability",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_crew_availability),
     response_schema="CrewAvailabilityResponse",
 )
@@ -1717,7 +1714,7 @@ CREW_RATES: Endpoint[CollectionArgs, RentmanPage[CrewRate]] = Endpoint(
     name="crew_rates",
     method="GET",
     path=lambda _args: "/crewrates",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_crew_rate),
     response_schema="CrewRatesResponse",
 )
@@ -1735,7 +1732,7 @@ INVITATIONS: Endpoint[CollectionArgs, RentmanPage[Invitation]] = Endpoint(
     name="invitations",
     method="GET",
     path=lambda _args: "/invitations",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_invitation),
     response_schema="InvitationsResponse",
 )
@@ -1753,7 +1750,7 @@ APPOINTMENTS: Endpoint[CollectionArgs, RentmanPage[Appointment]] = Endpoint(
     name="appointments",
     method="GET",
     path=lambda _args: "/appointments",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_appointment),
     response_schema="AppointmentResponse",
 )
@@ -1772,7 +1769,7 @@ APPOINTMENT_CREW_OF_APPOINTMENT: Endpoint[ParentCollectionArgs, RentmanPage[Appo
         name="appointment_crew_of_appointment",
         method="GET",
         path=lambda args: f"/appointments/{args.parent_id}/appointmentcrew",
-        params=linked_collection_params,
+        params=query_params,
         parse=lambda payload, _args: parse_page(payload, parse_appointment_crew),
         response_schema="AppointmentCrewResponse",
     )
@@ -1782,7 +1779,7 @@ APPOINTMENT_CREW: Endpoint[CollectionArgs, RentmanPage[AppointmentCrew]] = Endpo
     name="appointment_crew",
     method="GET",
     path=lambda _args: "/appointmentcrew",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_appointment_crew),
     response_schema="AppointmentCrewResponse",
 )
@@ -1800,7 +1797,7 @@ TIME_REGISTRATIONS: Endpoint[CollectionArgs, RentmanPage[TimeRegistration]] = En
     name="time_registrations",
     method="GET",
     path=lambda _args: "/timeregistration",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_time_registration),
     response_schema="TimeRegistrationResponse",
 )
@@ -1820,7 +1817,7 @@ TIME_REGISTRATION_ACTIVITIES_OF_TIME_REGISTRATION: Endpoint[
     name="time_registration_activities_of_time_registration",
     method="GET",
     path=lambda args: f"/timeregistration/{args.parent_id}/timeregistrationactivities",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_time_registration_activity),
     response_schema="TimeRegistrationActivityResponse",
 )
@@ -1830,7 +1827,7 @@ TIME_REGISTRATION_ACTIVITIES: Endpoint[CollectionArgs, RentmanPage[TimeRegistrat
         name="time_registration_activities",
         method="GET",
         path=lambda _args: "/timeregistrationactivities",
-        params=collection_params,
+        params=query_params,
         parse=lambda payload, _args: parse_page(payload, parse_time_registration_activity),
         response_schema="TimeRegistrationActivityResponse",
     )
@@ -1849,7 +1846,7 @@ LEAVE_REQUESTS: Endpoint[CollectionArgs, RentmanPage[LeaveRequest]] = Endpoint(
     name="leave_requests",
     method="GET",
     path=lambda _args: "/leaverequest",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_leave_request),
     response_schema="LeaveRequestResponse",
 )
@@ -1869,7 +1866,7 @@ TIME_REGISTRATIONS_OF_LEAVE_REQUEST: Endpoint[
     name="time_registrations_of_leave_request",
     method="GET",
     path=lambda args: f"/leaverequest/{args.parent_id}/timeregistration",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_time_registration),
     response_schema="TimeRegistrationResponse",
 )
@@ -1878,7 +1875,7 @@ LEAVE_MUTATIONS: Endpoint[CollectionArgs, RentmanPage[LeaveMutation]] = Endpoint
     name="leave_mutations",
     method="GET",
     path=lambda _args: "/leavemutation",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_leave_mutation),
     response_schema="LeaveMutationsResponse",
 )
@@ -1896,7 +1893,7 @@ LEAVE_TYPES: Endpoint[CollectionArgs, RentmanPage[LeaveType]] = Endpoint(
     name="leave_types",
     method="GET",
     path=lambda _args: "/leavetypes",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_leave_type),
     response_schema="LeaveTypesResponse",
 )
@@ -1914,7 +1911,7 @@ CONTACTS: Endpoint[CollectionArgs, RentmanPage[Contact]] = Endpoint(
     name="contacts",
     method="GET",
     path=lambda _args: "/contacts",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_contact),
     response_schema="ContactResponse",
 )
@@ -1932,7 +1929,7 @@ CONTACT_PERSONS_OF_CONTACT: Endpoint[ParentCollectionArgs, RentmanPage[ContactPe
     name="contact_persons_of_contact",
     method="GET",
     path=lambda args: f"/contacts/{args.parent_id}/contactpersons",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_contact_person),
     response_schema="ContactPersonResponse",
 )
@@ -1941,7 +1938,7 @@ CONTACT_PERSONS: Endpoint[CollectionArgs, RentmanPage[ContactPerson]] = Endpoint
     name="contact_persons",
     method="GET",
     path=lambda _args: "/contactpersons",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_contact_person),
     response_schema="ContactPersonResponse",
 )
@@ -1959,7 +1956,7 @@ TASKS: Endpoint[CollectionArgs, RentmanPage[Task]] = Endpoint(
     name="tasks",
     method="GET",
     path=lambda _args: "/tasks",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_task),
     response_schema="TaskResponse",
 )
@@ -1977,7 +1974,7 @@ SUBTASKS: Endpoint[CollectionArgs, RentmanPage[Subtask]] = Endpoint(
     name="subtasks",
     method="GET",
     path=lambda _args: "/subtasks",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_subtask),
     response_schema="SubtaskResponse",
 )
@@ -1995,7 +1992,7 @@ TASK_ASSIGNMENTS: Endpoint[CollectionArgs, RentmanPage[TaskAssignment]] = Endpoi
     name="task_assignments",
     method="GET",
     path=lambda _args: "/taskassignments",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_task_assignment),
     response_schema="TaskAssignmentResponse",
 )
@@ -2013,7 +2010,7 @@ TASK_STATUSES: Endpoint[CollectionArgs, RentmanPage[TaskStatus]] = Endpoint(
     name="task_statuses",
     method="GET",
     path=lambda _args: "/taskstatuses",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_task_status),
     response_schema="TaskStatusResponse",
 )
@@ -2031,7 +2028,7 @@ FILES: Endpoint[CollectionArgs, RentmanPage[File]] = Endpoint(
     name="files",
     method="GET",
     path=lambda _args: "/files",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file),
     response_schema="FileResponse",
 )
@@ -2049,7 +2046,7 @@ FILE_FOLDERS: Endpoint[CollectionArgs, RentmanPage[FileFolder]] = Endpoint(
     name="file_folders",
     method="GET",
     path=lambda _args: "/file_folders",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file_folder),
     response_schema="FileFolderResponse",
 )
@@ -2067,7 +2064,7 @@ SUBTASKS_OF_TASK: Endpoint[ParentCollectionArgs, RentmanPage[Subtask]] = Endpoin
     name="subtasks_of_task",
     method="GET",
     path=lambda args: f"/tasks/{args.parent_id}/subtasks",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_subtask),
     response_schema="SubtaskResponse",
 )
@@ -2076,7 +2073,7 @@ TASK_ASSIGNMENTS_OF_TASK: Endpoint[ParentCollectionArgs, RentmanPage[TaskAssignm
     name="task_assignments_of_task",
     method="GET",
     path=lambda args: f"/tasks/{args.parent_id}/taskassignments",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_task_assignment),
     response_schema="TaskAssignmentResponse",
 )
@@ -2085,7 +2082,7 @@ FILES_OF_TASK: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint(
     name="files_of_task",
     method="GET",
     path=lambda args: f"/tasks/{args.parent_id}/files",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file),
     response_schema="FileResponse",
 )
@@ -2094,7 +2091,7 @@ FILE_FOLDERS_OF_TASK: Endpoint[ParentCollectionArgs, RentmanPage[FileFolder]] = 
     name="file_folders_of_task",
     method="GET",
     path=lambda args: f"/tasks/{args.parent_id}/file_folders",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file_folder),
     response_schema="FileFolderResponse",
 )
@@ -2103,7 +2100,7 @@ TASKS_OF_CONTACT_PERSON: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = End
     name="tasks_of_contact_person",
     method="GET",
     path=lambda args: f"/contactpersons/{args.parent_id}/tasks",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_task),
     response_schema="TaskResponse",
 )
@@ -2112,7 +2109,7 @@ TASKS_OF_CONTACT: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = Endpoint(
     name="tasks_of_contact",
     method="GET",
     path=lambda args: f"/contacts/{args.parent_id}/tasks",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_task),
     response_schema="TaskResponse",
 )
@@ -2121,7 +2118,7 @@ TASKS_OF_CREW: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = Endpoint(
     name="tasks_of_crew",
     method="GET",
     path=lambda args: f"/crew/{args.parent_id}/tasks",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_task),
     response_schema="TaskResponse",
 )
@@ -2130,7 +2127,7 @@ TASKS_OF_EQUIPMENT: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = Endpoint
     name="tasks_of_equipment",
     method="GET",
     path=lambda args: f"/equipment/{args.parent_id}/tasks",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_task),
     response_schema="TaskResponse",
 )
@@ -2139,7 +2136,7 @@ TASKS_OF_INVOICE: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = Endpoint(
     name="tasks_of_invoice",
     method="GET",
     path=lambda args: f"/invoices/{args.parent_id}/tasks",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_task),
     response_schema="TaskResponse",
 )
@@ -2148,7 +2145,7 @@ TASKS_OF_PROJECT: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = Endpoint(
     name="tasks_of_project",
     method="GET",
     path=lambda args: f"/projects/{args.parent_id}/tasks",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_task),
     response_schema="TaskResponse",
 )
@@ -2157,7 +2154,7 @@ TASKS_OF_PURCHASE_ORDER: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = End
     name="tasks_of_purchase_order",
     method="GET",
     path=lambda args: f"/purchaseorders/{args.parent_id}/tasks",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_task),
     response_schema="TaskResponse",
 )
@@ -2166,7 +2163,7 @@ TASKS_OF_QUOTE: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = Endpoint(
     name="tasks_of_quote",
     method="GET",
     path=lambda args: f"/quotes/{args.parent_id}/tasks",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_task),
     response_schema="TaskResponse",
 )
@@ -2175,7 +2172,7 @@ TASKS_OF_REPAIR: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = Endpoint(
     name="tasks_of_repair",
     method="GET",
     path=lambda args: f"/repairs/{args.parent_id}/tasks",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_task),
     response_schema="TaskResponse",
 )
@@ -2184,7 +2181,7 @@ TASKS_OF_SERIAL_NUMBER: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = Endp
     name="tasks_of_serial_number",
     method="GET",
     path=lambda args: f"/serialnumbers/{args.parent_id}/tasks",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_task),
     response_schema="TaskResponse",
 )
@@ -2193,7 +2190,7 @@ TASKS_OF_SUBRENTAL: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = Endpoint
     name="tasks_of_subrental",
     method="GET",
     path=lambda args: f"/subrentals/{args.parent_id}/tasks",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_task),
     response_schema="TaskResponse",
 )
@@ -2202,7 +2199,7 @@ TASKS_OF_VEHICLE: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = Endpoint(
     name="tasks_of_vehicle",
     method="GET",
     path=lambda args: f"/vehicles/{args.parent_id}/tasks",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_task),
     response_schema="TaskResponse",
 )
@@ -2211,7 +2208,7 @@ TASKS_OF_SUPPLIER: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = Endpoint(
     name="tasks_of_supplier",
     method="GET",
     path=lambda args: f"/suppliers/{args.parent_id}/tasks",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_task),
     response_schema="TaskResponse",
 )
@@ -2220,7 +2217,7 @@ FILES_OF_CONTACT_PERSON: Endpoint[ParentCollectionArgs, RentmanPage[File]] = End
     name="files_of_contact_person",
     method="GET",
     path=lambda args: f"/contactpersons/{args.parent_id}/files",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file),
     response_schema="FileResponse",
 )
@@ -2229,7 +2226,7 @@ FILES_OF_CONTACT: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint(
     name="files_of_contact",
     method="GET",
     path=lambda args: f"/contacts/{args.parent_id}/files",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file),
     response_schema="FileResponse",
 )
@@ -2238,7 +2235,7 @@ FILES_OF_CREW: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint(
     name="files_of_crew",
     method="GET",
     path=lambda args: f"/crew/{args.parent_id}/files",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file),
     response_schema="FileResponse",
 )
@@ -2247,7 +2244,7 @@ FILES_OF_EQUIPMENT: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint
     name="files_of_equipment",
     method="GET",
     path=lambda args: f"/equipment/{args.parent_id}/files",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file),
     response_schema="FileResponse",
 )
@@ -2256,7 +2253,7 @@ FILES_OF_INVOICE: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint(
     name="files_of_invoice",
     method="GET",
     path=lambda args: f"/invoices/{args.parent_id}/files",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file),
     response_schema="FileResponse",
 )
@@ -2265,7 +2262,7 @@ FILES_OF_PROJECT: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint(
     name="files_of_project",
     method="GET",
     path=lambda args: f"/projects/{args.parent_id}/files",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file),
     response_schema="FileResponse",
 )
@@ -2274,7 +2271,7 @@ FILES_OF_PURCHASE_ORDER: Endpoint[ParentCollectionArgs, RentmanPage[File]] = End
     name="files_of_purchase_order",
     method="GET",
     path=lambda args: f"/purchaseorders/{args.parent_id}/files",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file),
     response_schema="FileResponse",
 )
@@ -2283,7 +2280,7 @@ FILES_OF_QUOTE: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint(
     name="files_of_quote",
     method="GET",
     path=lambda args: f"/quotes/{args.parent_id}/files",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file),
     response_schema="FileResponse",
 )
@@ -2292,7 +2289,7 @@ FILES_OF_REPAIR: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint(
     name="files_of_repair",
     method="GET",
     path=lambda args: f"/repairs/{args.parent_id}/files",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file),
     response_schema="FileResponse",
 )
@@ -2301,7 +2298,7 @@ FILES_OF_SERIAL_NUMBER: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endp
     name="files_of_serial_number",
     method="GET",
     path=lambda args: f"/serialnumbers/{args.parent_id}/files",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file),
     response_schema="FileResponse",
 )
@@ -2310,7 +2307,7 @@ FILES_OF_SUBRENTAL: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint
     name="files_of_subrental",
     method="GET",
     path=lambda args: f"/subrentals/{args.parent_id}/files",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file),
     response_schema="FileResponse",
 )
@@ -2319,7 +2316,7 @@ FILES_OF_TIME_REGISTRATION: Endpoint[ParentCollectionArgs, RentmanPage[File]] = 
     name="files_of_time_registration",
     method="GET",
     path=lambda args: f"/timeregistration/{args.parent_id}/files",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file),
     response_schema="FileResponse",
 )
@@ -2328,7 +2325,7 @@ FILES_OF_VEHICLE: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint(
     name="files_of_vehicle",
     method="GET",
     path=lambda args: f"/vehicles/{args.parent_id}/files",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file),
     response_schema="FileResponse",
 )
@@ -2337,7 +2334,7 @@ FILES_OF_SUPPLIER: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint(
     name="files_of_supplier",
     method="GET",
     path=lambda args: f"/suppliers/{args.parent_id}/files",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file),
     response_schema="FileResponse",
 )
@@ -2346,7 +2343,7 @@ FILE_FOLDERS_OF_CONTACT_PERSON: Endpoint[ParentCollectionArgs, RentmanPage[FileF
     name="file_folders_of_contact_person",
     method="GET",
     path=lambda args: f"/contactpersons/{args.parent_id}/file_folders",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file_folder),
     response_schema="FileFolderResponse",
 )
@@ -2355,7 +2352,7 @@ FILE_FOLDERS_OF_CONTACT: Endpoint[ParentCollectionArgs, RentmanPage[FileFolder]]
     name="file_folders_of_contact",
     method="GET",
     path=lambda args: f"/contacts/{args.parent_id}/file_folders",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file_folder),
     response_schema="FileFolderResponse",
 )
@@ -2364,7 +2361,7 @@ FILE_FOLDERS_OF_CREW: Endpoint[ParentCollectionArgs, RentmanPage[FileFolder]] = 
     name="file_folders_of_crew",
     method="GET",
     path=lambda args: f"/crew/{args.parent_id}/file_folders",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file_folder),
     response_schema="FileFolderResponse",
 )
@@ -2373,7 +2370,7 @@ FILE_FOLDERS_OF_EQUIPMENT: Endpoint[ParentCollectionArgs, RentmanPage[FileFolder
     name="file_folders_of_equipment",
     method="GET",
     path=lambda args: f"/equipment/{args.parent_id}/file_folders",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file_folder),
     response_schema="FileFolderResponse",
 )
@@ -2382,7 +2379,7 @@ FILE_FOLDERS_OF_PROJECT: Endpoint[ParentCollectionArgs, RentmanPage[FileFolder]]
     name="file_folders_of_project",
     method="GET",
     path=lambda args: f"/projects/{args.parent_id}/file_folders",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file_folder),
     response_schema="FileFolderResponse",
 )
@@ -2391,7 +2388,7 @@ FILE_FOLDERS_OF_PURCHASE_ORDER: Endpoint[ParentCollectionArgs, RentmanPage[FileF
     name="file_folders_of_purchase_order",
     method="GET",
     path=lambda args: f"/purchaseorders/{args.parent_id}/file_folders",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file_folder),
     response_schema="FileFolderResponse",
 )
@@ -2400,7 +2397,7 @@ FILE_FOLDERS_OF_REPAIR: Endpoint[ParentCollectionArgs, RentmanPage[FileFolder]] 
     name="file_folders_of_repair",
     method="GET",
     path=lambda args: f"/repairs/{args.parent_id}/file_folders",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file_folder),
     response_schema="FileFolderResponse",
 )
@@ -2409,7 +2406,7 @@ FILE_FOLDERS_OF_SERIAL_NUMBER: Endpoint[ParentCollectionArgs, RentmanPage[FileFo
     name="file_folders_of_serial_number",
     method="GET",
     path=lambda args: f"/serialnumbers/{args.parent_id}/file_folders",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file_folder),
     response_schema="FileFolderResponse",
 )
@@ -2418,7 +2415,7 @@ FILE_FOLDERS_OF_SUBPROJECT: Endpoint[ParentCollectionArgs, RentmanPage[FileFolde
     name="file_folders_of_subproject",
     method="GET",
     path=lambda args: f"/subprojects/{args.parent_id}/file_folders",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file_folder),
     response_schema="FileFolderResponse",
 )
@@ -2427,7 +2424,7 @@ FILE_FOLDERS_OF_SUBRENTAL: Endpoint[ParentCollectionArgs, RentmanPage[FileFolder
     name="file_folders_of_subrental",
     method="GET",
     path=lambda args: f"/subrentals/{args.parent_id}/file_folders",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file_folder),
     response_schema="FileFolderResponse",
 )
@@ -2436,7 +2433,7 @@ FILE_FOLDERS_OF_SUPPLIER: Endpoint[ParentCollectionArgs, RentmanPage[FileFolder]
     name="file_folders_of_supplier",
     method="GET",
     path=lambda args: f"/suppliers/{args.parent_id}/file_folders",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file_folder),
     response_schema="FileFolderResponse",
 )
@@ -2445,7 +2442,7 @@ FILE_FOLDERS_OF_VEHICLE: Endpoint[ParentCollectionArgs, RentmanPage[FileFolder]]
     name="file_folders_of_vehicle",
     method="GET",
     path=lambda args: f"/vehicles/{args.parent_id}/file_folders",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file_folder),
     response_schema="FileFolderResponse",
 )
@@ -2454,7 +2451,7 @@ RATES: Endpoint[CollectionArgs, RentmanPage[Rate]] = Endpoint(
     name="rates",
     method="GET",
     path=lambda _args: "/rates",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_rate),
     response_schema="CrewRateResponse",
 )
@@ -2472,7 +2469,7 @@ RATE_FACTORS: Endpoint[CollectionArgs, RentmanPage[RateFactor]] = Endpoint(
     name="rate_factors",
     method="GET",
     path=lambda _args: "/ratefactors",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_rate_factor),
     response_schema="CrewRateFactorResponse",
 )
@@ -2490,7 +2487,7 @@ RATE_FACTORS_OF_RATE: Endpoint[ParentCollectionArgs, RentmanPage[RateFactor]] = 
     name="rate_factors_of_rate",
     method="GET",
     path=lambda args: f"/rates/{args.parent_id}/ratefactors",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_rate_factor),
     response_schema="CrewRateFactorResponse",
 )
@@ -2499,7 +2496,7 @@ FACTORS: Endpoint[CollectionArgs, RentmanPage[Factor]] = Endpoint(
     name="factors",
     method="GET",
     path=lambda _args: "/factors",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_factor),
     response_schema="FactorsResponse",
 )
@@ -2517,7 +2514,7 @@ FACTORS_OF_FACTOR_GROUP: Endpoint[ParentCollectionArgs, RentmanPage[Factor]] = E
     name="factors_of_factor_group",
     method="GET",
     path=lambda args: f"/factorgroups/{args.parent_id}/factors",
-    params=linked_collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_factor),
     response_schema="FactorsResponse",
 )
@@ -2526,7 +2523,7 @@ FACTOR_GROUPS: Endpoint[CollectionArgs, RentmanPage[FactorGroup]] = Endpoint(
     name="factor_groups",
     method="GET",
     path=lambda _args: "/factorgroups",
-    params=collection_params,
+    params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_factor_group),
     response_schema="FactorGroupsResponse",
 )
@@ -2544,10 +2541,10 @@ CREATE_APPOINTMENT: Endpoint[CreateArgs, Appointment | None] = Endpoint(
     name="create_appointment",
     method="POST",
     path=lambda _args: "/appointments",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_appointment),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_appointment),
     response_schema="AppointmentResponse",
-    body=create_body,
+    body=payload_body,
     request_schema="AppointmentRequest",
 )
 
@@ -2555,10 +2552,10 @@ CREATE_CONTACT: Endpoint[CreateArgs, Contact | None] = Endpoint(
     name="create_contact",
     method="POST",
     path=lambda _args: "/contacts",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_contact),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_contact),
     response_schema="ContactResponse",
-    body=create_body,
+    body=payload_body,
     request_schema="ContactRequest",
 )
 
@@ -2566,10 +2563,10 @@ CREATE_EQUIPMENT: Endpoint[CreateArgs, Equipment | None] = Endpoint(
     name="create_equipment",
     method="POST",
     path=lambda _args: "/equipment",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_equipment),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_equipment),
     response_schema="EquipmentResponse",
-    body=create_body,
+    body=payload_body,
     request_schema="EquipmentRequest",
 )
 
@@ -2577,10 +2574,10 @@ CREATE_FOLDER: Endpoint[CreateArgs, Folder | None] = Endpoint(
     name="create_folder",
     method="POST",
     path=lambda _args: "/folders",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_folder),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_folder),
     response_schema="FolderResponse",
-    body=create_body,
+    body=payload_body,
     request_schema="FolderRequest",
 )
 
@@ -2588,10 +2585,10 @@ CREATE_LEAVE_REQUEST: Endpoint[CreateArgs, LeaveRequest | None] = Endpoint(
     name="create_leave_request",
     method="POST",
     path=lambda _args: "/leaverequest",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_leave_request),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_leave_request),
     response_schema="LeaveRequestResponse",
-    body=create_body,
+    body=payload_body,
     request_schema="LeaveRequestRequest",
 )
 
@@ -2599,10 +2596,10 @@ CREATE_LEAVE_MUTATION: Endpoint[CreateArgs, LeaveMutation | None] = Endpoint(
     name="create_leave_mutation",
     method="POST",
     path=lambda _args: "/leavemutation",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_leave_mutation),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_leave_mutation),
     response_schema="LeaveMutationsResponse",
-    body=create_body,
+    body=payload_body,
     request_schema="LeaveMutationsRequest",
 )
 
@@ -2610,10 +2607,10 @@ CREATE_PROJECT_REQUEST: Endpoint[CreateArgs, ProjectRequest | None] = Endpoint(
     name="create_project_request",
     method="POST",
     path=lambda _args: "/projectrequests",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_request),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_request),
     response_schema="ProjectRequestResponse",
-    body=create_body,
+    body=payload_body,
     request_schema="ProjectRequestRequest",
 )
 
@@ -2621,10 +2618,10 @@ CREATE_PROJECT: Endpoint[CreateArgs, Project | None] = Endpoint(
     name="create_project",
     method="POST",
     path=lambda _args: "/projects",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_project),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project),
     response_schema="ProjectResponse",
-    body=create_body,
+    body=payload_body,
     request_schema="ProjectRequest",
 )
 
@@ -2632,10 +2629,10 @@ CREATE_TASK: Endpoint[CreateArgs, Task | None] = Endpoint(
     name="create_task",
     method="POST",
     path=lambda _args: "/tasks",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     response_schema="TaskResponse",
-    body=create_body,
+    body=payload_body,
     request_schema="TaskRequest",
 )
 
@@ -2643,10 +2640,10 @@ CREATE_TASK_STATUS: Endpoint[CreateArgs, TaskStatus | None] = Endpoint(
     name="create_task_status",
     method="POST",
     path=lambda _args: "/taskstatuses",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_task_status),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task_status),
     response_schema="TaskStatusResponse",
-    body=create_body,
+    body=payload_body,
     request_schema="TaskStatusRequest",
 )
 
@@ -2654,10 +2651,10 @@ CREATE_TIME_REGISTRATION: Endpoint[CreateArgs, TimeRegistration | None] = Endpoi
     name="create_time_registration",
     method="POST",
     path=lambda _args: "/timeregistration",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_time_registration),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_time_registration),
     response_schema="TimeRegistrationResponse",
-    body=create_body,
+    body=payload_body,
     request_schema="TimeRegistrationRequest",
 )
 
@@ -2665,10 +2662,10 @@ CREATE_VEHICLE: Endpoint[CreateArgs, Vehicle | None] = Endpoint(
     name="create_vehicle",
     method="POST",
     path=lambda _args: "/vehicles",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_vehicle),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_vehicle),
     response_schema="VehicleResponse",
-    body=create_body,
+    body=payload_body,
     request_schema="VehicleRequest",
 )
 
@@ -2677,10 +2674,10 @@ CREATE_APPOINTMENT_CREW_OF_APPOINTMENT: Endpoint[LinkedCreateArgs, AppointmentCr
         name="create_appointment_crew_of_appointment",
         method="POST",
         path=lambda args: f"/appointments/{args.parent_id}/appointmentcrew",
-        parse=lambda payload, _args: parse_envelope_item(payload, parse_appointment_crew),
         params=lambda _args: {},
+        parse=lambda payload, _args: parse_envelope_item(payload, parse_appointment_crew),
         response_schema="AppointmentCrewResponse",
-        body=linked_create_body,
+        body=payload_body,
         request_schema="AppointmentCrewRequest",
     )
 )
@@ -2689,10 +2686,10 @@ CREATE_CONTACT_PERSON_OF_CONTACT: Endpoint[LinkedCreateArgs, ContactPerson | Non
     name="create_contact_person_of_contact",
     method="POST",
     path=lambda args: f"/contacts/{args.parent_id}/contactpersons",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_contact_person),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_contact_person),
     response_schema="ContactPersonResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="ContactPersonRequest",
 )
 
@@ -2700,10 +2697,10 @@ CREATE_CREW_AVAILABILITY_OF_CREW: Endpoint[LinkedCreateArgs, CrewAvailability | 
     name="create_crew_availability_of_crew",
     method="POST",
     path=lambda args: f"/crew/{args.parent_id}/crewavailability",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_crew_availability),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_crew_availability),
     response_schema="CrewAvailabilityResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="CrewAvailabilityRequest",
 )
 
@@ -2711,10 +2708,10 @@ CREATE_ACCESSORY_OF_EQUIPMENT: Endpoint[LinkedCreateArgs, Accessory | None] = En
     name="create_accessory_of_equipment",
     method="POST",
     path=lambda args: f"/equipment/{args.parent_id}/accessories",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_accessory),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_accessory),
     response_schema="AccessoryResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="AccessoryRequest",
 )
 
@@ -2722,10 +2719,10 @@ CREATE_ALTERNATIVE_OF_EQUIPMENT: Endpoint[LinkedCreateArgs, Alternative | None] 
     name="create_alternative_of_equipment",
     method="POST",
     path=lambda args: f"/equipment/{args.parent_id}/alternatives",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_alternative),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_alternative),
     response_schema="AlternativeResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="AlternativeRequest",
 )
 
@@ -2735,10 +2732,10 @@ CREATE_EQUIPMENT_SET_CONTENT_OF_EQUIPMENT: Endpoint[
     name="create_equipment_set_content_of_equipment",
     method="POST",
     path=lambda args: f"/equipment/{args.parent_id}/equipmentsetscontent",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_equipment_set_content),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_equipment_set_content),
     response_schema="EquipmentSetContentResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="EquipmentSetContentRequest",
 )
 
@@ -2746,10 +2743,10 @@ CREATE_SERIAL_NUMBER_OF_EQUIPMENT: Endpoint[LinkedCreateArgs, SerialNumber | Non
     name="create_serial_number_of_equipment",
     method="POST",
     path=lambda args: f"/equipment/{args.parent_id}/serialnumbers",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_serial_number),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_serial_number),
     response_schema="SerialNumberResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="SerialNumberRequest",
 )
 
@@ -2757,10 +2754,10 @@ CREATE_STOCK_MOVEMENT_OF_EQUIPMENT: Endpoint[LinkedCreateArgs, StockMovement | N
     name="create_stock_movement_of_equipment",
     method="POST",
     path=lambda args: f"/equipment/{args.parent_id}/stockmovements",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_stock_movement),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_stock_movement),
     response_schema="StockMovementResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="StockMovementRequest",
 )
 
@@ -2768,10 +2765,10 @@ CREATE_SUPPLIER_OF_EQUIPMENT: Endpoint[LinkedCreateArgs, Supplier | None] = Endp
     name="create_supplier_of_equipment",
     method="POST",
     path=lambda args: f"/equipment/{args.parent_id}/suppliers",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_supplier),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_supplier),
     response_schema="SupplierResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="SupplierRequest",
 )
 
@@ -2779,10 +2776,10 @@ CREATE_PAYMENT_OF_INVOICE: Endpoint[LinkedCreateArgs, Payment | None] = Endpoint
     name="create_payment_of_invoice",
     method="POST",
     path=lambda args: f"/invoices/{args.parent_id}/payments",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_payment),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_payment),
     response_schema="PaymentResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="PaymentRequest",
 )
 
@@ -2791,10 +2788,10 @@ CREATE_TIME_REGISTRATION_OF_LEAVE_REQUEST: Endpoint[LinkedCreateArgs, TimeRegist
         name="create_time_registration_of_leave_request",
         method="POST",
         path=lambda args: f"/leaverequest/{args.parent_id}/timeregistration",
-        parse=lambda payload, _args: parse_envelope_item(payload, parse_time_registration),
         params=lambda _args: {},
+        parse=lambda payload, _args: parse_envelope_item(payload, parse_time_registration),
         response_schema="TimeRegistrationResponse",
-        body=linked_create_body,
+        body=payload_body,
         request_schema="TimeRegistrationRequest",
     )
 )
@@ -2805,10 +2802,10 @@ CREATE_PROJECT_REQUEST_EQUIPMENT_OF_PROJECT_REQUEST: Endpoint[
     name="create_project_request_equipment_of_project_request",
     method="POST",
     path=lambda args: f"/projectrequests/{args.parent_id}/projectrequestequipment",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_request_equipment),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_request_equipment),
     response_schema="ProjectRequestEquipmentResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="ProjectRequestEquipmentRequest",
 )
 
@@ -2816,10 +2813,10 @@ CREATE_PROJECT_COST_OF_PROJECT: Endpoint[LinkedCreateArgs, ProjectCost | None] =
     name="create_project_cost_of_project",
     method="POST",
     path=lambda args: f"/projects/{args.parent_id}/costs",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_cost),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_cost),
     response_schema="ProjectCostResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="ProjectCostRequest",
 )
 
@@ -2829,10 +2826,10 @@ CREATE_PROJECT_FUNCTION_GROUP_OF_PROJECT: Endpoint[
     name="create_project_function_group_of_project",
     method="POST",
     path=lambda args: f"/projects/{args.parent_id}/projectfunctiongroups",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_function_group),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_function_group),
     response_schema="ProjectFunctionGroupResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="ProjectFunctionGroupRequest",
 )
 
@@ -2840,10 +2837,10 @@ CREATE_PROJECT_FUNCTION_OF_PROJECT: Endpoint[LinkedCreateArgs, ProjectFunction |
     name="create_project_function_of_project",
     method="POST",
     path=lambda args: f"/projects/{args.parent_id}/projectfunctions",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_function),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_function),
     response_schema="ProjectFunctionResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="ProjectFunctionRequest",
 )
 
@@ -2851,10 +2848,10 @@ CREATE_SUBPROJECT_OF_PROJECT: Endpoint[LinkedCreateArgs, Subproject | None] = En
     name="create_subproject_of_project",
     method="POST",
     path=lambda args: f"/projects/{args.parent_id}/subprojects",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_subproject),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_subproject),
     response_schema="SubprojectResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="SubprojectRequest",
 )
 
@@ -2862,10 +2859,10 @@ CREATE_TASK_OF_PURCHASE_ORDER: Endpoint[LinkedCreateArgs, Task | None] = Endpoin
     name="create_task_of_purchase_order",
     method="POST",
     path=lambda args: f"/purchaseorders/{args.parent_id}/tasks",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     response_schema="TaskResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="TaskRequest",
 )
 
@@ -2873,10 +2870,10 @@ CREATE_TASK_OF_QUOTE: Endpoint[LinkedCreateArgs, Task | None] = Endpoint(
     name="create_task_of_quote",
     method="POST",
     path=lambda args: f"/quotes/{args.parent_id}/tasks",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     response_schema="TaskResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="TaskRequest",
 )
 
@@ -2884,10 +2881,10 @@ CREATE_TASK_OF_REPAIR: Endpoint[LinkedCreateArgs, Task | None] = Endpoint(
     name="create_task_of_repair",
     method="POST",
     path=lambda args: f"/repairs/{args.parent_id}/tasks",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     response_schema="TaskResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="TaskRequest",
 )
 
@@ -2895,10 +2892,10 @@ CREATE_TASK_OF_SERIAL_NUMBER: Endpoint[LinkedCreateArgs, Task | None] = Endpoint
     name="create_task_of_serial_number",
     method="POST",
     path=lambda args: f"/serialnumbers/{args.parent_id}/tasks",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     response_schema="TaskResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="TaskRequest",
 )
 
@@ -2906,10 +2903,10 @@ CREATE_VEHICLE_OF_STOCK_LOCATION: Endpoint[LinkedCreateArgs, Vehicle | None] = E
     name="create_vehicle_of_stock_location",
     method="POST",
     path=lambda args: f"/stocklocations/{args.parent_id}/vehicles",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_vehicle),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_vehicle),
     response_schema="VehicleResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="VehicleRequest",
 )
 
@@ -2917,10 +2914,10 @@ CREATE_TASK_OF_SUBRENTAL: Endpoint[LinkedCreateArgs, Task | None] = Endpoint(
     name="create_task_of_subrental",
     method="POST",
     path=lambda args: f"/subrentals/{args.parent_id}/tasks",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     response_schema="TaskResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="TaskRequest",
 )
 
@@ -2928,10 +2925,10 @@ CREATE_SUBTASK_OF_TASK: Endpoint[LinkedCreateArgs, Subtask | None] = Endpoint(
     name="create_subtask_of_task",
     method="POST",
     path=lambda args: f"/tasks/{args.parent_id}/subtasks",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_subtask),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_subtask),
     response_schema="SubtaskResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="SubtaskRequest",
 )
 
@@ -2939,10 +2936,10 @@ CREATE_TASK_ASSIGNMENT_OF_TASK: Endpoint[LinkedCreateArgs, TaskAssignment | None
     name="create_task_assignment_of_task",
     method="POST",
     path=lambda args: f"/tasks/{args.parent_id}/taskassignments",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_task_assignment),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task_assignment),
     response_schema="TaskAssignmentResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="TaskAssignmentRequest",
 )
 
@@ -2950,10 +2947,10 @@ CREATE_TASK_OF_CONTACT_PERSON: Endpoint[LinkedCreateArgs, Task | None] = Endpoin
     name="create_task_of_contact_person",
     method="POST",
     path=lambda args: f"/contactpersons/{args.parent_id}/tasks",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     response_schema="TaskResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="TaskRequest",
 )
 
@@ -2961,10 +2958,10 @@ CREATE_TASK_OF_CONTACT: Endpoint[LinkedCreateArgs, Task | None] = Endpoint(
     name="create_task_of_contact",
     method="POST",
     path=lambda args: f"/contacts/{args.parent_id}/tasks",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     response_schema="TaskResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="TaskRequest",
 )
 
@@ -2972,10 +2969,10 @@ CREATE_TASK_OF_CONTRACT: Endpoint[LinkedCreateArgs, Task | None] = Endpoint(
     name="create_task_of_contract",
     method="POST",
     path=lambda args: f"/contracts/{args.parent_id}/tasks",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     response_schema="TaskResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="TaskRequest",
 )
 
@@ -2983,10 +2980,10 @@ CREATE_TASK_OF_CREW: Endpoint[LinkedCreateArgs, Task | None] = Endpoint(
     name="create_task_of_crew",
     method="POST",
     path=lambda args: f"/crew/{args.parent_id}/tasks",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     response_schema="TaskResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="TaskRequest",
 )
 
@@ -2994,10 +2991,10 @@ CREATE_TASK_OF_EQUIPMENT: Endpoint[LinkedCreateArgs, Task | None] = Endpoint(
     name="create_task_of_equipment",
     method="POST",
     path=lambda args: f"/equipment/{args.parent_id}/tasks",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     response_schema="TaskResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="TaskRequest",
 )
 
@@ -3005,10 +3002,10 @@ CREATE_TASK_OF_INVOICE: Endpoint[LinkedCreateArgs, Task | None] = Endpoint(
     name="create_task_of_invoice",
     method="POST",
     path=lambda args: f"/invoices/{args.parent_id}/tasks",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     response_schema="TaskResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="TaskRequest",
 )
 
@@ -3016,10 +3013,10 @@ CREATE_TASK_OF_PROJECT: Endpoint[LinkedCreateArgs, Task | None] = Endpoint(
     name="create_task_of_project",
     method="POST",
     path=lambda args: f"/projects/{args.parent_id}/tasks",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     response_schema="TaskResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="TaskRequest",
 )
 
@@ -3027,10 +3024,10 @@ CREATE_TASK_OF_SUPPLIER: Endpoint[LinkedCreateArgs, Task | None] = Endpoint(
     name="create_task_of_supplier",
     method="POST",
     path=lambda args: f"/suppliers/{args.parent_id}/tasks",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     response_schema="TaskResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="TaskRequest",
 )
 
@@ -3038,10 +3035,10 @@ CREATE_TASK_OF_VEHICLE: Endpoint[LinkedCreateArgs, Task | None] = Endpoint(
     name="create_task_of_vehicle",
     method="POST",
     path=lambda args: f"/vehicles/{args.parent_id}/tasks",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     response_schema="TaskResponse",
-    body=linked_create_body,
+    body=payload_body,
     request_schema="TaskRequest",
 )
 
@@ -3049,10 +3046,10 @@ UPDATE_ACCESSORY: Endpoint[UpdateArgs, Accessory | None] = Endpoint(
     name="update_accessory",
     method="PUT",
     path=lambda args: f"/accessories/{args.item_id}",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_accessory),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_accessory),
     response_schema="AccessoryResponse",
-    body=update_body,
+    body=payload_body,
     request_schema="AccessoryRequest",
 )
 
@@ -3060,10 +3057,10 @@ UPDATE_ALTERNATIVE: Endpoint[UpdateArgs, Alternative | None] = Endpoint(
     name="update_alternative",
     method="PUT",
     path=lambda args: f"/alternatives/{args.item_id}",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_alternative),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_alternative),
     response_schema="AlternativeResponse",
-    body=update_body,
+    body=payload_body,
     request_schema="AlternativeRequest",
 )
 
@@ -3071,10 +3068,10 @@ UPDATE_APPOINTMENT_CREW: Endpoint[UpdateArgs, AppointmentCrew | None] = Endpoint
     name="update_appointment_crew",
     method="PUT",
     path=lambda args: f"/appointmentcrew/{args.item_id}",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_appointment_crew),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_appointment_crew),
     response_schema="AppointmentCrewResponse",
-    body=update_body,
+    body=payload_body,
     request_schema="AppointmentCrewRequest",
 )
 
@@ -3082,10 +3079,10 @@ UPDATE_APPOINTMENT: Endpoint[UpdateArgs, Appointment | None] = Endpoint(
     name="update_appointment",
     method="PUT",
     path=lambda args: f"/appointments/{args.item_id}",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_appointment),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_appointment),
     response_schema="AppointmentResponse",
-    body=update_body,
+    body=payload_body,
     request_schema="AppointmentRequest",
 )
 
@@ -3093,10 +3090,10 @@ UPDATE_CONTACT_PERSON: Endpoint[UpdateArgs, ContactPerson | None] = Endpoint(
     name="update_contact_person",
     method="PUT",
     path=lambda args: f"/contactpersons/{args.item_id}",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_contact_person),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_contact_person),
     response_schema="ContactPersonResponse",
-    body=update_body,
+    body=payload_body,
     request_schema="ContactPersonRequest",
 )
 
@@ -3104,10 +3101,10 @@ UPDATE_CONTACT: Endpoint[UpdateArgs, Contact | None] = Endpoint(
     name="update_contact",
     method="PUT",
     path=lambda args: f"/contacts/{args.item_id}",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_contact),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_contact),
     response_schema="ContactResponse",
-    body=update_body,
+    body=payload_body,
     request_schema="ContactRequest",
 )
 
@@ -3115,10 +3112,10 @@ UPDATE_PROJECT_COST: Endpoint[UpdateArgs, ProjectCost | None] = Endpoint(
     name="update_project_cost",
     method="PUT",
     path=lambda args: f"/costs/{args.item_id}",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_cost),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_cost),
     response_schema="ProjectCostResponse",
-    body=update_body,
+    body=payload_body,
     request_schema="ProjectCostRequest",
 )
 
@@ -3126,10 +3123,10 @@ UPDATE_CREW_AVAILABILITY: Endpoint[UpdateArgs, CrewAvailability | None] = Endpoi
     name="update_crew_availability",
     method="PUT",
     path=lambda args: f"/crewavailability/{args.item_id}",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_crew_availability),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_crew_availability),
     response_schema="CrewAvailabilityResponse",
-    body=update_body,
+    body=payload_body,
     request_schema="CrewAvailabilityRequest",
 )
 
@@ -3137,10 +3134,10 @@ UPDATE_EQUIPMENT: Endpoint[UpdateArgs, Equipment | None] = Endpoint(
     name="update_equipment",
     method="PUT",
     path=lambda args: f"/equipment/{args.item_id}",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_equipment),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_equipment),
     response_schema="EquipmentResponse",
-    body=update_body,
+    body=payload_body,
     request_schema="EquipmentRequest",
 )
 
@@ -3148,10 +3145,10 @@ UPDATE_EQUIPMENT_SET_CONTENT: Endpoint[UpdateArgs, EquipmentSetContent | None] =
     name="update_equipment_set_content",
     method="PUT",
     path=lambda args: f"/equipmentsetscontent/{args.item_id}",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_equipment_set_content),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_equipment_set_content),
     response_schema="EquipmentSetContentResponse",
-    body=update_body,
+    body=payload_body,
     request_schema="EquipmentSetContentRequest",
 )
 
@@ -3159,10 +3156,10 @@ UPDATE_FOLDER: Endpoint[UpdateArgs, Folder | None] = Endpoint(
     name="update_folder",
     method="PUT",
     path=lambda args: f"/folders/{args.item_id}",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_folder),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_folder),
     response_schema="FolderResponse",
-    body=update_body,
+    body=payload_body,
     request_schema="FolderRequest",
 )
 
@@ -3170,10 +3167,10 @@ UPDATE_LEAVE_REQUEST: Endpoint[UpdateArgs, LeaveRequest | None] = Endpoint(
     name="update_leave_request",
     method="PUT",
     path=lambda args: f"/leaverequest/{args.item_id}",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_leave_request),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_leave_request),
     response_schema="LeaveRequestResponse",
-    body=update_body,
+    body=payload_body,
     request_schema="LeaveRequestRequest",
 )
 
@@ -3181,10 +3178,10 @@ UPDATE_PAYMENT: Endpoint[UpdateArgs, Payment | None] = Endpoint(
     name="update_payment",
     method="PUT",
     path=lambda args: f"/payments/{args.item_id}",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_payment),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_payment),
     response_schema="PaymentResponse",
-    body=update_body,
+    body=payload_body,
     request_schema="PaymentRequest",
 )
 
@@ -3192,10 +3189,10 @@ UPDATE_PROJECT_REQUEST_EQUIPMENT: Endpoint[UpdateArgs, ProjectRequestEquipment |
     name="update_project_request_equipment",
     method="PUT",
     path=lambda args: f"/projectrequestequipment/{args.item_id}",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_request_equipment),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_request_equipment),
     response_schema="ProjectRequestEquipmentResponse",
-    body=update_body,
+    body=payload_body,
     request_schema="ProjectRequestEquipmentRequest",
 )
 
@@ -3203,10 +3200,10 @@ UPDATE_PROJECT_REQUEST: Endpoint[UpdateArgs, ProjectRequest | None] = Endpoint(
     name="update_project_request",
     method="PUT",
     path=lambda args: f"/projectrequests/{args.item_id}",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_request),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_project_request),
     response_schema="ProjectRequestResponse",
-    body=update_body,
+    body=payload_body,
     request_schema="ProjectRequestRequest",
 )
 
@@ -3214,10 +3211,10 @@ UPDATE_SERIAL_NUMBER: Endpoint[UpdateArgs, SerialNumber | None] = Endpoint(
     name="update_serial_number",
     method="PUT",
     path=lambda args: f"/serialnumbers/{args.item_id}",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_serial_number),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_serial_number),
     response_schema="SerialNumberResponse",
-    body=update_body,
+    body=payload_body,
     request_schema="SerialNumberRequest",
 )
 
@@ -3225,10 +3222,10 @@ UPDATE_STOCK_MOVEMENT: Endpoint[UpdateArgs, StockMovement | None] = Endpoint(
     name="update_stock_movement",
     method="PUT",
     path=lambda args: f"/stockmovements/{args.item_id}",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_stock_movement),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_stock_movement),
     response_schema="StockMovementResponse",
-    body=update_body,
+    body=payload_body,
     request_schema="StockMovementRequest",
 )
 
@@ -3236,10 +3233,10 @@ UPDATE_SUBTASK: Endpoint[UpdateArgs, Subtask | None] = Endpoint(
     name="update_subtask",
     method="PUT",
     path=lambda args: f"/subtasks/{args.item_id}",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_subtask),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_subtask),
     response_schema="SubtaskResponse",
-    body=update_body,
+    body=payload_body,
     request_schema="SubtaskRequest",
 )
 
@@ -3247,10 +3244,10 @@ UPDATE_SUPPLIER: Endpoint[UpdateArgs, Supplier | None] = Endpoint(
     name="update_supplier",
     method="PUT",
     path=lambda args: f"/suppliers/{args.item_id}",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_supplier),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_supplier),
     response_schema="SupplierResponse",
-    body=update_body,
+    body=payload_body,
     request_schema="SupplierRequest",
 )
 
@@ -3258,10 +3255,10 @@ UPDATE_TASK_ASSIGNMENT: Endpoint[UpdateArgs, TaskAssignment | None] = Endpoint(
     name="update_task_assignment",
     method="PUT",
     path=lambda args: f"/taskassignments/{args.item_id}",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_task_assignment),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task_assignment),
     response_schema="TaskAssignmentResponse",
-    body=update_body,
+    body=payload_body,
     request_schema="TaskAssignmentRequest",
 )
 
@@ -3269,10 +3266,10 @@ UPDATE_TASK: Endpoint[UpdateArgs, Task | None] = Endpoint(
     name="update_task",
     method="PUT",
     path=lambda args: f"/tasks/{args.item_id}",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task),
     response_schema="TaskResponse",
-    body=update_body,
+    body=payload_body,
     request_schema="TaskRequest",
 )
 
@@ -3280,10 +3277,10 @@ UPDATE_TASK_STATUS: Endpoint[UpdateArgs, TaskStatus | None] = Endpoint(
     name="update_task_status",
     method="PUT",
     path=lambda args: f"/taskstatuses/{args.item_id}",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_task_status),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_task_status),
     response_schema="TaskStatusResponse",
-    body=update_body,
+    body=payload_body,
     request_schema="TaskStatusRequest",
 )
 
@@ -3291,10 +3288,10 @@ UPDATE_TIME_REGISTRATION: Endpoint[UpdateArgs, TimeRegistration | None] = Endpoi
     name="update_time_registration",
     method="PUT",
     path=lambda args: f"/timeregistration/{args.item_id}",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_time_registration),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_time_registration),
     response_schema="TimeRegistrationResponse",
-    body=update_body,
+    body=payload_body,
     request_schema="TimeRegistrationRequest",
 )
 
@@ -3302,10 +3299,10 @@ UPDATE_VEHICLE: Endpoint[UpdateArgs, Vehicle | None] = Endpoint(
     name="update_vehicle",
     method="PUT",
     path=lambda args: f"/vehicles/{args.item_id}",
-    parse=lambda payload, _args: parse_envelope_item(payload, parse_vehicle),
     params=lambda _args: {},
+    parse=lambda payload, _args: parse_envelope_item(payload, parse_vehicle),
     response_schema="VehicleResponse",
-    body=update_body,
+    body=payload_body,
     request_schema="VehicleRequest",
 )
 
@@ -3313,8 +3310,8 @@ DELETE_ACCESSORY: Endpoint[DeleteArgs, None] = Endpoint(
     name="delete_accessory",
     method="DELETE",
     path=lambda args: f"/accessories/{args.item_id}",
-    parse=lambda _payload, _args: None,
     params=lambda _args: {},
+    parse=lambda _payload, _args: None,
     response_schema=None,
 )
 
@@ -3322,8 +3319,8 @@ DELETE_ALTERNATIVE: Endpoint[DeleteArgs, None] = Endpoint(
     name="delete_alternative",
     method="DELETE",
     path=lambda args: f"/alternatives/{args.item_id}",
-    parse=lambda _payload, _args: None,
     params=lambda _args: {},
+    parse=lambda _payload, _args: None,
     response_schema=None,
 )
 
@@ -3331,8 +3328,8 @@ DELETE_APPOINTMENT_CREW: Endpoint[DeleteArgs, None] = Endpoint(
     name="delete_appointment_crew",
     method="DELETE",
     path=lambda args: f"/appointmentcrew/{args.item_id}",
-    parse=lambda _payload, _args: None,
     params=lambda _args: {},
+    parse=lambda _payload, _args: None,
     response_schema=None,
 )
 
@@ -3340,8 +3337,8 @@ DELETE_APPOINTMENT: Endpoint[DeleteArgs, None] = Endpoint(
     name="delete_appointment",
     method="DELETE",
     path=lambda args: f"/appointments/{args.item_id}",
-    parse=lambda _payload, _args: None,
     params=lambda _args: {},
+    parse=lambda _payload, _args: None,
     response_schema=None,
 )
 
@@ -3349,8 +3346,8 @@ DELETE_CONTACT_PERSON: Endpoint[DeleteArgs, None] = Endpoint(
     name="delete_contact_person",
     method="DELETE",
     path=lambda args: f"/contactpersons/{args.item_id}",
-    parse=lambda _payload, _args: None,
     params=lambda _args: {},
+    parse=lambda _payload, _args: None,
     response_schema=None,
 )
 
@@ -3358,8 +3355,8 @@ DELETE_CONTACT: Endpoint[DeleteArgs, None] = Endpoint(
     name="delete_contact",
     method="DELETE",
     path=lambda args: f"/contacts/{args.item_id}",
-    parse=lambda _payload, _args: None,
     params=lambda _args: {},
+    parse=lambda _payload, _args: None,
     response_schema=None,
 )
 
@@ -3367,8 +3364,8 @@ DELETE_PROJECT_COST: Endpoint[DeleteArgs, None] = Endpoint(
     name="delete_project_cost",
     method="DELETE",
     path=lambda args: f"/costs/{args.item_id}",
-    parse=lambda _payload, _args: None,
     params=lambda _args: {},
+    parse=lambda _payload, _args: None,
     response_schema=None,
 )
 
@@ -3376,8 +3373,8 @@ DELETE_CREW_AVAILABILITY: Endpoint[DeleteArgs, None] = Endpoint(
     name="delete_crew_availability",
     method="DELETE",
     path=lambda args: f"/crewavailability/{args.item_id}",
-    parse=lambda _payload, _args: None,
     params=lambda _args: {},
+    parse=lambda _payload, _args: None,
     response_schema=None,
 )
 
@@ -3385,8 +3382,8 @@ DELETE_EQUIPMENT_SET_CONTENT: Endpoint[DeleteArgs, None] = Endpoint(
     name="delete_equipment_set_content",
     method="DELETE",
     path=lambda args: f"/equipmentsetscontent/{args.item_id}",
-    parse=lambda _payload, _args: None,
     params=lambda _args: {},
+    parse=lambda _payload, _args: None,
     response_schema=None,
 )
 
@@ -3394,8 +3391,8 @@ DELETE_PROJECT_REQUEST_EQUIPMENT: Endpoint[DeleteArgs, None] = Endpoint(
     name="delete_project_request_equipment",
     method="DELETE",
     path=lambda args: f"/projectrequestequipment/{args.item_id}",
-    parse=lambda _payload, _args: None,
     params=lambda _args: {},
+    parse=lambda _payload, _args: None,
     response_schema=None,
 )
 
@@ -3403,8 +3400,8 @@ DELETE_PROJECT_REQUEST: Endpoint[DeleteArgs, None] = Endpoint(
     name="delete_project_request",
     method="DELETE",
     path=lambda args: f"/projectrequests/{args.item_id}",
-    parse=lambda _payload, _args: None,
     params=lambda _args: {},
+    parse=lambda _payload, _args: None,
     response_schema=None,
 )
 
@@ -3412,8 +3409,8 @@ DELETE_SERIAL_NUMBER: Endpoint[DeleteArgs, None] = Endpoint(
     name="delete_serial_number",
     method="DELETE",
     path=lambda args: f"/serialnumbers/{args.item_id}",
-    parse=lambda _payload, _args: None,
     params=lambda _args: {},
+    parse=lambda _payload, _args: None,
     response_schema=None,
 )
 
@@ -3421,8 +3418,8 @@ DELETE_STOCK_MOVEMENT: Endpoint[DeleteArgs, None] = Endpoint(
     name="delete_stock_movement",
     method="DELETE",
     path=lambda args: f"/stockmovements/{args.item_id}",
-    parse=lambda _payload, _args: None,
     params=lambda _args: {},
+    parse=lambda _payload, _args: None,
     response_schema=None,
 )
 
@@ -3430,8 +3427,8 @@ DELETE_SUBTASK: Endpoint[DeleteArgs, None] = Endpoint(
     name="delete_subtask",
     method="DELETE",
     path=lambda args: f"/subtasks/{args.item_id}",
-    parse=lambda _payload, _args: None,
     params=lambda _args: {},
+    parse=lambda _payload, _args: None,
     response_schema=None,
 )
 
@@ -3439,8 +3436,8 @@ DELETE_SUPPLIER: Endpoint[DeleteArgs, None] = Endpoint(
     name="delete_supplier",
     method="DELETE",
     path=lambda args: f"/suppliers/{args.item_id}",
-    parse=lambda _payload, _args: None,
     params=lambda _args: {},
+    parse=lambda _payload, _args: None,
     response_schema=None,
 )
 
@@ -3448,8 +3445,8 @@ DELETE_TASK_ASSIGNMENT: Endpoint[DeleteArgs, None] = Endpoint(
     name="delete_task_assignment",
     method="DELETE",
     path=lambda args: f"/taskassignments/{args.item_id}",
-    parse=lambda _payload, _args: None,
     params=lambda _args: {},
+    parse=lambda _payload, _args: None,
     response_schema=None,
 )
 
@@ -3457,8 +3454,8 @@ DELETE_TASK: Endpoint[DeleteArgs, None] = Endpoint(
     name="delete_task",
     method="DELETE",
     path=lambda args: f"/tasks/{args.item_id}",
-    parse=lambda _payload, _args: None,
     params=lambda _args: {},
+    parse=lambda _payload, _args: None,
     response_schema=None,
 )
 
@@ -3466,8 +3463,8 @@ DELETE_TASK_STATUS: Endpoint[DeleteArgs, None] = Endpoint(
     name="delete_task_status",
     method="DELETE",
     path=lambda args: f"/taskstatuses/{args.item_id}",
-    parse=lambda _payload, _args: None,
     params=lambda _args: {},
+    parse=lambda _payload, _args: None,
     response_schema=None,
 )
 
@@ -3475,8 +3472,8 @@ DELETE_TIME_REGISTRATION: Endpoint[DeleteArgs, None] = Endpoint(
     name="delete_time_registration",
     method="DELETE",
     path=lambda args: f"/timeregistration/{args.item_id}",
-    parse=lambda _payload, _args: None,
     params=lambda _args: {},
+    parse=lambda _payload, _args: None,
     response_schema=None,
 )
 
@@ -3484,8 +3481,8 @@ DELETE_VEHICLE: Endpoint[DeleteArgs, None] = Endpoint(
     name="delete_vehicle",
     method="DELETE",
     path=lambda args: f"/vehicles/{args.item_id}",
-    parse=lambda _payload, _args: None,
     params=lambda _args: {},
+    parse=lambda _payload, _args: None,
     response_schema=None,
 )
 

@@ -3,7 +3,7 @@
 import pytest
 
 from aiorentman import _endpoints as endpoints_module
-from aiorentman._endpoint_types import collection_params
+from aiorentman._endpoint_types import query_params
 from aiorentman._endpoints import (
     CATALOG,
     CollectionArgs,
@@ -57,16 +57,16 @@ def test_delete_args_rejects_non_positive_ids() -> None:
         DeleteArgs(item_id=0)
 
 
-def test_collection_params_render_the_query() -> None:
+def test_query_params_render_the_query() -> None:
     query = Query(fields=("name",), limit=10)
-    assert collection_params(CollectionArgs(query=query)) == {
+    assert query_params(CollectionArgs(query=query)) == {
         "fields": "name",
         "limit": "10",
     }
 
 
-def test_collection_params_default_to_nothing() -> None:
-    assert collection_params(CollectionArgs(query=None)) == {}
+def test_query_params_default_to_nothing() -> None:
+    assert query_params(CollectionArgs(query=None)) == {}
 
 
 def test_every_catalog_row_uses_a_documented_method() -> None:

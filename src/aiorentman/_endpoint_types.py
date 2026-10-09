@@ -89,15 +89,7 @@ def no_body(_args: Any) -> dict[str, Any] | None:
     return None
 
 
-def create_body(args: CreateArgs) -> dict[str, Any] | None:
-    return to_wire(args.payload)
-
-
-def linked_create_body(args: LinkedCreateArgs) -> dict[str, Any] | None:
-    return to_wire(args.payload)
-
-
-def update_body(args: UpdateArgs) -> dict[str, Any] | None:
+def payload_body(args: CreateArgs | LinkedCreateArgs | UpdateArgs) -> dict[str, Any] | None:
     return to_wire(args.payload)
 
 
@@ -115,9 +107,5 @@ class Endpoint[ArgsT, ModelT]:
     request_schema: str | None = None
 
 
-def collection_params(args: CollectionArgs) -> dict[str, str]:
-    return {} if args.query is None else args.query.params()
-
-
-def linked_collection_params(args: ParentCollectionArgs) -> dict[str, str]:
+def query_params(args: CollectionArgs | ParentCollectionArgs) -> dict[str, str]:
     return {} if args.query is None else args.query.params()

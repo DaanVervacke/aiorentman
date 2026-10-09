@@ -431,10 +431,10 @@ from .query import Query
 class RentmanClient(ClientCore):
     """Asynchronous client for the Rentman API.
 
-    The client covers every documented read path, with create, update,
-    and delete methods for every documented write path. Every request is paced against the
-    documented rate limits unless pacing is disabled with
-    ``requests_per_second=None``.
+    The client covers the read and write paths of the pinned document.
+    Collections get a list method for one page and an iter method that
+    follows the cursor. Every request is paced against the documented rate
+    limits unless pacing is disabled with ``requests_per_second=None``.
     """
 
     async def async_list_actual_content(
