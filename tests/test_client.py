@@ -177,6 +177,9 @@ COLLECTIONS: tuple[tuple[Callable[[RentmanClient], Awaitable[RentmanPage[Any]]],
     (lambda client: client.async_list_quotes(), "/quotes"),
     (lambda client: client.async_list_quotes_of_project(128), "/projects/128/quotes"),
     (lambda client: client.async_list_invoice_lines_of_quote(1), "/quotes/1/invoicelines"),
+    (lambda client: client.async_list_invoice_lines_of_contract(1), "/contracts/1/invoicelines"),
+    (lambda client: client.async_list_tasks_of_contract(1), "/contracts/1/tasks"),
+    (lambda client: client.async_list_files_of_contract(1), "/contracts/1/files"),
     (lambda client: client.async_list_contracts(), "/contracts"),
     (lambda client: client.async_list_contracts_of_project(128), "/projects/128/contracts"),
     (lambda client: client.async_list_invoices(), "/invoices"),
@@ -685,6 +688,18 @@ ITERATORS: tuple[tuple[Callable[[RentmanClient, Query | None], Any], str], ...] 
     (
         lambda client, query: client.async_iter_invoice_lines_of_quote(1, query),
         "/quotes/1/invoicelines",
+    ),
+    (
+        lambda client, query: client.async_iter_invoice_lines_of_contract(1, query),
+        "/contracts/1/invoicelines",
+    ),
+    (
+        lambda client, query: client.async_iter_tasks_of_contract(1, query),
+        "/contracts/1/tasks",
+    ),
+    (
+        lambda client, query: client.async_iter_files_of_contract(1, query),
+        "/contracts/1/files",
     ),
     (lambda client, query: client.async_iter_contracts(query), "/contracts"),
     (

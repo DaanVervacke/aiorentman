@@ -272,6 +272,7 @@ __all__ = [
     "FILES_ITEM",
     "FILES_OF_CONTACT",
     "FILES_OF_CONTACT_PERSON",
+    "FILES_OF_CONTRACT",
     "FILES_OF_CREW",
     "FILES_OF_EQUIPMENT",
     "FILES_OF_INVOICE",
@@ -309,6 +310,7 @@ __all__ = [
     "INVOICES_ITEM",
     "INVOICE_LINES",
     "INVOICE_LINES_ITEM",
+    "INVOICE_LINES_OF_CONTRACT",
     "INVOICE_LINES_OF_INVOICE",
     "INVOICE_LINES_OF_PURCHASE_ORDER",
     "INVOICE_LINES_OF_QUOTE",
@@ -415,6 +417,7 @@ __all__ = [
     "TASKS_ITEM",
     "TASKS_OF_CONTACT",
     "TASKS_OF_CONTACT_PERSON",
+    "TASKS_OF_CONTRACT",
     "TASKS_OF_CREW",
     "TASKS_OF_EQUIPMENT",
     "TASKS_OF_INVOICE",
@@ -1325,6 +1328,15 @@ INVOICE_LINES_OF_QUOTE: Endpoint[ParentCollectionArgs, RentmanPage[InvoiceLine]]
     response_schema="InvoiceLineResponse",
 )
 
+INVOICE_LINES_OF_CONTRACT: Endpoint[ParentCollectionArgs, RentmanPage[InvoiceLine]] = Endpoint(
+    name="invoice_lines_of_contract",
+    method="GET",
+    path=lambda args: f"/contracts/{args.parent_id}/invoicelines",
+    params=query_params,
+    parse=lambda payload, _args: parse_page(payload, parse_invoice_line),
+    response_schema="InvoiceLineResponse",
+)
+
 CONTRACTS: Endpoint[CollectionArgs, RentmanPage[Contract]] = Endpoint(
     name="contracts",
     method="GET",
@@ -2168,6 +2180,15 @@ TASKS_OF_QUOTE: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = Endpoint(
     response_schema="TaskResponse",
 )
 
+TASKS_OF_CONTRACT: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = Endpoint(
+    name="tasks_of_contract",
+    method="GET",
+    path=lambda args: f"/contracts/{args.parent_id}/tasks",
+    params=query_params,
+    parse=lambda payload, _args: parse_page(payload, parse_task),
+    response_schema="TaskResponse",
+)
+
 TASKS_OF_REPAIR: Endpoint[ParentCollectionArgs, RentmanPage[Task]] = Endpoint(
     name="tasks_of_repair",
     method="GET",
@@ -2280,6 +2301,15 @@ FILES_OF_QUOTE: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint(
     name="files_of_quote",
     method="GET",
     path=lambda args: f"/quotes/{args.parent_id}/files",
+    params=query_params,
+    parse=lambda payload, _args: parse_page(payload, parse_file),
+    response_schema="FileResponse",
+)
+
+FILES_OF_CONTRACT: Endpoint[ParentCollectionArgs, RentmanPage[File]] = Endpoint(
+    name="files_of_contract",
+    method="GET",
+    path=lambda args: f"/contracts/{args.parent_id}/files",
     params=query_params,
     parse=lambda payload, _args: parse_page(payload, parse_file),
     response_schema="FileResponse",
@@ -3577,6 +3607,7 @@ CATALOG: tuple[Endpoint[Any, Any], ...] = (
     QUOTES_ITEM,
     QUOTES_OF_PROJECT,
     INVOICE_LINES_OF_QUOTE,
+    INVOICE_LINES_OF_CONTRACT,
     CONTRACTS,
     CONTRACTS_ITEM,
     CONTRACTS_OF_PROJECT,
@@ -3668,6 +3699,7 @@ CATALOG: tuple[Endpoint[Any, Any], ...] = (
     TASKS_OF_PROJECT,
     TASKS_OF_PURCHASE_ORDER,
     TASKS_OF_QUOTE,
+    TASKS_OF_CONTRACT,
     TASKS_OF_REPAIR,
     TASKS_OF_SERIAL_NUMBER,
     TASKS_OF_SUBRENTAL,
@@ -3681,6 +3713,7 @@ CATALOG: tuple[Endpoint[Any, Any], ...] = (
     FILES_OF_PROJECT,
     FILES_OF_PURCHASE_ORDER,
     FILES_OF_QUOTE,
+    FILES_OF_CONTRACT,
     FILES_OF_REPAIR,
     FILES_OF_SERIAL_NUMBER,
     FILES_OF_SUBRENTAL,

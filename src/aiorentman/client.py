@@ -137,6 +137,7 @@ from ._endpoints import (
     FILES_ITEM,
     FILES_OF_CONTACT,
     FILES_OF_CONTACT_PERSON,
+    FILES_OF_CONTRACT,
     FILES_OF_CREW,
     FILES_OF_EQUIPMENT,
     FILES_OF_INVOICE,
@@ -157,6 +158,7 @@ from ._endpoints import (
     INVITATIONS_OF_CREW,
     INVOICE_LINES,
     INVOICE_LINES_ITEM,
+    INVOICE_LINES_OF_CONTRACT,
     INVOICE_LINES_OF_INVOICE,
     INVOICE_LINES_OF_PURCHASE_ORDER,
     INVOICE_LINES_OF_QUOTE,
@@ -270,6 +272,7 @@ from ._endpoints import (
     TASKS_ITEM,
     TASKS_OF_CONTACT,
     TASKS_OF_CONTACT_PERSON,
+    TASKS_OF_CONTRACT,
     TASKS_OF_CREW,
     TASKS_OF_EQUIPMENT,
     TASKS_OF_INVOICE,
@@ -431,7 +434,7 @@ from .query import Query
 class RentmanClient(ClientCore):
     """Asynchronous client for the Rentman API.
 
-    The client covers the read and write paths of the pinned document.
+    The client covers every read and write path of the pinned document.
     Collections get a list method for one page and an iter method that
     follows the cursor. Every request is paced against the documented rate
     limits unless pacing is disabled with ``requests_per_second=None``.
@@ -1389,6 +1392,22 @@ class RentmanClient(ClientCore):
             INVOICE_LINES_OF_QUOTE, ParentCollectionArgs(parent_id=quote_id, query=query)
         )
 
+    async def async_list_invoice_lines_of_contract(
+        self, contract_id: int, query: Query | None = None
+    ) -> RentmanPage[InvoiceLine]:
+        """Fetch one page of invoice lines of one contract."""
+        return await self._call(
+            INVOICE_LINES_OF_CONTRACT, ParentCollectionArgs(parent_id=contract_id, query=query)
+        )
+
+    def async_iter_invoice_lines_of_contract(
+        self, contract_id: int, query: Query | None = None
+    ) -> AsyncIterator[InvoiceLine]:
+        """Yield every invoice line of one contract, following the cursor."""
+        return self._iter_collection(
+            INVOICE_LINES_OF_CONTRACT, ParentCollectionArgs(parent_id=contract_id, query=query)
+        )
+
     async def async_list_contracts(self, query: Query | None = None) -> RentmanPage[Contract]:
         """Fetch one page of contracts."""
         return await self._call(CONTRACTS, CollectionArgs(query=query))
@@ -2305,6 +2324,22 @@ class RentmanClient(ClientCore):
             TASKS_OF_QUOTE, ParentCollectionArgs(parent_id=quote_id, query=query)
         )
 
+    async def async_list_tasks_of_contract(
+        self, contract_id: int, query: Query | None = None
+    ) -> RentmanPage[Task]:
+        """Fetch one page of tasks of one contract."""
+        return await self._call(
+            TASKS_OF_CONTRACT, ParentCollectionArgs(parent_id=contract_id, query=query)
+        )
+
+    def async_iter_tasks_of_contract(
+        self, contract_id: int, query: Query | None = None
+    ) -> AsyncIterator[Task]:
+        """Yield every task of one contract, following the cursor."""
+        return self._iter_collection(
+            TASKS_OF_CONTRACT, ParentCollectionArgs(parent_id=contract_id, query=query)
+        )
+
     async def async_list_tasks_of_repair(
         self, repair_id: int, query: Query | None = None
     ) -> RentmanPage[Task]:
@@ -2509,6 +2544,22 @@ class RentmanClient(ClientCore):
         """Yield every file of one quote, following the cursor."""
         return self._iter_collection(
             FILES_OF_QUOTE, ParentCollectionArgs(parent_id=quote_id, query=query)
+        )
+
+    async def async_list_files_of_contract(
+        self, contract_id: int, query: Query | None = None
+    ) -> RentmanPage[File]:
+        """Fetch one page of files of one contract."""
+        return await self._call(
+            FILES_OF_CONTRACT, ParentCollectionArgs(parent_id=contract_id, query=query)
+        )
+
+    def async_iter_files_of_contract(
+        self, contract_id: int, query: Query | None = None
+    ) -> AsyncIterator[File]:
+        """Yield every file of one contract, following the cursor."""
+        return self._iter_collection(
+            FILES_OF_CONTRACT, ParentCollectionArgs(parent_id=contract_id, query=query)
         )
 
     async def async_list_files_of_repair(

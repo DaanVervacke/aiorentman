@@ -93,10 +93,10 @@ def test_every_endpoint_exists_in_the_spec(spec: dict[str, Any]) -> None:
             )
 
 
-def test_every_write_operation_has_a_catalog_row(spec: dict[str, Any]) -> None:
+def test_every_operation_has_a_catalog_row(spec: dict[str, Any]) -> None:
     catalog = {(endpoint.method, template_path(endpoint)) for endpoint in CATALOG}
     for path, operations in spec["paths"].items():
-        for method in ("post", "put", "delete"):
+        for method in ("get", "post", "put", "delete"):
             if method in operations:
                 assert (method.upper(), path) in catalog, (
                     f"no catalog row for {method.upper()} {path}"

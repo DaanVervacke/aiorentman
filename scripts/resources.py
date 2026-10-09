@@ -598,7 +598,7 @@ class EndpointSpec:
 
 CLIENT_DOC = """Asynchronous client for the Rentman API.
 
-    The client covers the read and write paths of the pinned document.
+    The client covers every read and write path of the pinned document.
     Collections get a list method for one page and an iter method that
     follows the cursor. Every request is paced against the documented rate
     limits unless pacing is disabled with ``requests_per_second=None``."""
@@ -1504,6 +1504,17 @@ ENDPOINTS: tuple[EndpointSpec, ...] = (
         param="quote_id",
     ),
     EndpointSpec(
+        const="INVOICE_LINES_OF_CONTRACT",
+        kind="linked",
+        path="/contracts/{id}/invoicelines",
+        method="invoice_lines_of_contract",
+        docs=(
+            "Fetch one page of invoice lines of one contract.",
+            "Yield every invoice line of one contract, following the cursor.",
+        ),
+        param="contract_id",
+    ),
+    EndpointSpec(
         const="CONTRACTS",
         kind="collection",
         path="/contracts",
@@ -2375,6 +2386,17 @@ ENDPOINTS: tuple[EndpointSpec, ...] = (
         param="quote_id",
     ),
     EndpointSpec(
+        const="TASKS_OF_CONTRACT",
+        kind="linked",
+        path="/contracts/{id}/tasks",
+        method="tasks_of_contract",
+        docs=(
+            "Fetch one page of tasks of one contract.",
+            "Yield every task of one contract, following the cursor.",
+        ),
+        param="contract_id",
+    ),
+    EndpointSpec(
         const="TASKS_OF_REPAIR",
         kind="linked",
         path="/repairs/{id}/tasks",
@@ -2516,6 +2538,17 @@ ENDPOINTS: tuple[EndpointSpec, ...] = (
             "Yield every file of one quote, following the cursor.",
         ),
         param="quote_id",
+    ),
+    EndpointSpec(
+        const="FILES_OF_CONTRACT",
+        kind="linked",
+        path="/contracts/{id}/files",
+        method="files_of_contract",
+        docs=(
+            "Fetch one page of files of one contract.",
+            "Yield every file of one contract, following the cursor.",
+        ),
+        param="contract_id",
     ),
     EndpointSpec(
         const="FILES_OF_REPAIR",
