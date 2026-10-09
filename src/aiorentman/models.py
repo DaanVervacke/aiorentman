@@ -1,6 +1,6 @@
 """Immutable result models mirroring the pinned Rentman API schemas."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
 
@@ -98,8 +98,8 @@ class Equipment:
     current_quantity: int | None
     quantity_in_cases: int | None
     location_in_warehouse: str
-    custom: dict[str, Any]
-    raw: dict[str, Any] | None = None
+    custom: dict[str, Any] = field(hash=False)
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -130,8 +130,8 @@ class SerialNumber:
     tags: tuple[str, ...]
     last_subproject: RentmanLink | Subproject | None
     sealed: bool
-    custom: dict[str, Any]
-    raw: dict[str, Any] | None = None
+    custom: dict[str, Any] = field(hash=False)
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -146,7 +146,7 @@ class EquipmentAssignedSerial:
     displayname: str
     combination: RentmanLink | SerialNumber
     serialnumber: RentmanLink | SerialNumber
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -163,7 +163,7 @@ class ActualContent:
     serial: RentmanLink | SerialNumber | None
     quantity: str
     combination_serial: RentmanLink | SerialNumber | None
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -182,7 +182,7 @@ class EquipmentSetContent:
     equipment: RentmanLink | Equipment
     is_fixed: str
     is_physically_connected: str
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -200,7 +200,7 @@ class Folder:
     order: str
     itemtype: str
     path: str
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -224,7 +224,7 @@ class StockLocation:
     type: str
     color: str
     in_archive: bool
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -238,7 +238,7 @@ class WarehouseStatus:
     creator: RentmanLink | None
     displayname: str
     name: str
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -252,7 +252,7 @@ class Status:
     creator: RentmanLink | None
     displayname: str
     name: str
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -274,7 +274,7 @@ class StockMovement:
     type: str
     stock_location: RentmanLink | StockLocation
     api_client: str
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -306,8 +306,8 @@ class Repair:
     repair_status: str
     unrepairable_of: RentmanLink | Repair | None
     tags: tuple[str, ...]
-    custom: dict[str, Any]
-    raw: dict[str, Any] | None = None
+    custom: dict[str, Any] = field(hash=False)
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -358,8 +358,8 @@ class Project:
     equipment_period_to: datetime | None
     purchasecosts: float | None
     volume: float | None
-    custom: dict[str, Any]
-    raw: dict[str, Any] | None = None
+    custom: dict[str, Any] = field(hash=False)
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -417,8 +417,8 @@ class Subproject:
     volume: float | None
     equipment_period_from: datetime | None
     equipment_period_to: datetime | None
-    custom: dict[str, Any]
-    raw: dict[str, Any] | None = None
+    custom: dict[str, Any] = field(hash=False)
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -457,8 +457,8 @@ class ProjectEquipment:
     warehouse_reservations: int | None
     subrent_reservations: int | None
     serial_number_ids: str
-    custom: dict[str, Any]
-    raw: dict[str, Any] | None = None
+    custom: dict[str, Any] = field(hash=False)
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -479,7 +479,7 @@ class Accessory:
     is_free: bool
     order: str
     add_as_new_line: bool
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -494,7 +494,7 @@ class Alternative:
     displayname: str
     equipment: RentmanLink | Equipment
     alternative: RentmanLink | Equipment
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -512,7 +512,7 @@ class Supplier:
     contactperson: RentmanLink | None
     price: float | None
     details: str
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -544,8 +544,8 @@ class Vehicle:
     tags: tuple[str, ...]
     distance_cost: float | None
     fixed_cost: float | None
-    custom: dict[str, Any]
-    raw: dict[str, Any] | None = None
+    custom: dict[str, Any] = field(hash=False)
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -569,7 +569,7 @@ class ExtraInputField:
     search_include: bool
     search_minlength: int | None
     is_customfield_mandatory: bool
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -583,7 +583,7 @@ class ProjectStatus:
     creator: RentmanLink | None
     displayname: str
     name: str
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -599,7 +599,7 @@ class ProjectType:
     name: str
     color: str
     type: str
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -625,7 +625,7 @@ class ProjectFunctionGroup:
     planperiod_start: datetime | None
     planperiod_end: datetime | None
     remark: str
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -694,8 +694,8 @@ class ProjectFunction:
     price_total: float | None
     costs_total: float | None
     tags: tuple[str, ...]
-    custom: dict[str, Any]
-    raw: dict[str, Any] | None = None
+    custom: dict[str, Any] = field(hash=False)
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -732,8 +732,8 @@ class ProjectCrew:
     diff_cost: float | None
     diff_hours: float | None
     activity_status: str
-    custom: dict[str, Any]
-    raw: dict[str, Any] | None = None
+    custom: dict[str, Any] = field(hash=False)
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -755,8 +755,8 @@ class ProjectVehicle:
     remark: str
     remark_planner: str
     costs: float | None
-    custom: dict[str, Any]
-    raw: dict[str, Any] | None = None
+    custom: dict[str, Any] = field(hash=False)
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -787,7 +787,7 @@ class ProjectEquipmentGroup:
     current: float | None
     volume: float | None
     total_new_price: float | None
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -813,8 +813,8 @@ class ProjectCost:
     ledger_debit: RentmanLink | None
     sale_price: float | None
     purchase_price: float | None
-    custom: dict[str, Any]
-    raw: dict[str, Any] | None = None
+    custom: dict[str, Any] = field(hash=False)
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -863,7 +863,7 @@ class ProjectRequest:
     linked_project: RentmanLink | Project | None
     source: str
     status: str
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -889,7 +889,7 @@ class ProjectRequestEquipment:
     project_request: RentmanLink | ProjectRequest
     factor: str
     order: str
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -925,7 +925,7 @@ class Quote:
     price_invat: float | None
     vat_amount: float | None
     tags: tuple[str, ...]
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -960,7 +960,7 @@ class Contract:
     price: float | None
     price_invat: float | None
     vat_amount: float | None
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1009,7 +1009,7 @@ class Invoice:
     payment_date: datetime | None
     days_after_expiry: int | None
     tags: tuple[str, ...]
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1025,7 +1025,7 @@ class LedgerCode:
     code: str
     is_credit: bool
     is_debit: bool
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1041,7 +1041,7 @@ class TaxClass:
     name: str
     code: str
     type: str
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1062,7 +1062,7 @@ class InvoiceLine:
     priceincl: float | None
     ledgercode: str
     parent_api_path: str
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1080,7 +1080,7 @@ class Payment:
     amount: float | None
     description: str
     payment_import_source: str
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1120,8 +1120,8 @@ class Subrental:
     is_internal: bool
     supplier_project: RentmanLink | Project | None
     tags: tuple[str, ...]
-    custom: dict[str, Any]
-    raw: dict[str, Any] | None = None
+    custom: dict[str, Any] = field(hash=False)
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1138,7 +1138,7 @@ class SubrentalEquipmentGroup:
     name: str
     order: str
     supplier_category: RentmanLink | None
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1166,7 +1166,7 @@ class SubrentalEquipment:
     remark: str
     lineprice: float | None
     supplier_planningmateriaal: RentmanLink | None
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1206,8 +1206,8 @@ class PurchaseOrder:
     approved_by: RentmanLink | None
     approved_at: datetime | None
     projects_json: str | None
-    custom: dict[str, Any]
-    raw: dict[str, Any] | None = None
+    custom: dict[str, Any] = field(hash=False)
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1229,7 +1229,7 @@ class PurchaseOrderCost:
     underlying_cost_amount_tax: float | None
     underlying_cost_amount_with_tax: float | None
     quantity: int | None
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1247,7 +1247,7 @@ class PurchaseOrderGlobalCost:
     unit_purchase_cost: float | None
     quantity: int | None
     taxclass: RentmanLink | TaxClass | None
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1293,8 +1293,8 @@ class Crew:
     default_warehouse: RentmanLink | StockLocation | None
     external_reference: str
     tags: tuple[str, ...]
-    custom: dict[str, Any]
-    raw: dict[str, Any] | None = None
+    custom: dict[str, Any] = field(hash=False)
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1319,7 +1319,7 @@ class CrewAvailability:
     recurrence_interval: int | None
     recurrent_group: int | None
     recurrence_weekdays: str
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1335,7 +1335,7 @@ class CrewRate:
     naam: str
     cost_rate: RentmanLink | None
     medewerker: RentmanLink | Crew
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1363,7 +1363,7 @@ class Appointment:
     recurrence_weekdays: str | None
     synchronization_id: str
     synchronisation_uri: str
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1378,7 +1378,7 @@ class AppointmentCrew:
     displayname: str
     appointment: RentmanLink | Appointment
     crew: RentmanLink | Crew
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1406,7 +1406,7 @@ class Invitation:
     location_details: str | None
     auto_reminder_date: datetime | None
     auto_reminder_sent: int | None
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1431,7 +1431,7 @@ class LeaveType:
     has_calculated_duration: bool
     can_have_activities: bool
     counts_in_totals: bool
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1449,7 +1449,7 @@ class LeaveRequest:
     requested_for: RentmanLink | Crew
     reviewed_on: datetime | None
     reviewer: RentmanLink | None
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1467,7 +1467,7 @@ class LeaveMutation:
     crewmember: RentmanLink | Crew
     leavetype: RentmanLink | LeaveType
     mutation_date: datetime | None
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1494,8 +1494,8 @@ class TimeRegistration:
     remark: str
     status: str
     break_duration_with_start_end: float | None
-    custom: dict[str, Any]
-    raw: dict[str, Any] | None = None
+    custom: dict[str, Any] = field(hash=False)
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1516,7 +1516,7 @@ class TimeRegistrationActivity:
     is_activity: bool
     from_: datetime | None
     to: datetime | None
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1595,8 +1595,8 @@ class Contact:
     discount_subrent: float | None
     image: RentmanLink | None
     tags: tuple[str, ...]
-    custom: dict[str, Any]
-    raw: dict[str, Any] | None = None
+    custom: dict[str, Any] = field(hash=False)
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1624,8 +1624,8 @@ class ContactPerson:
     mobilephone: str
     email: str
     tags: tuple[str, ...]
-    custom: dict[str, Any]
-    raw: dict[str, Any] | None = None
+    custom: dict[str, Any] = field(hash=False)
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1642,7 +1642,7 @@ class TaskStatus:
     color: str
     type: str
     order: str
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1683,8 +1683,8 @@ class Task:
     time_budget: float | None
     tags: tuple[str, ...]
     parent_api_path: str
-    custom: dict[str, Any]
-    raw: dict[str, Any] | None = None
+    custom: dict[str, Any] = field(hash=False)
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1700,7 +1700,7 @@ class Subtask:
     task: RentmanLink | Task
     title: str
     completed: bool
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1715,7 +1715,7 @@ class TaskAssignment:
     displayname: str
     task: RentmanLink | Task
     crew: RentmanLink | Crew
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1735,7 +1735,7 @@ class FileFolder:
     itemtype: str | None
     is_template: bool
     parent_api_path: str
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1774,7 +1774,7 @@ class File:
     url: str
     proxy_url: str
     parent_api_path: str
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1791,7 +1791,7 @@ class Rate:
     archived: bool
     type: str
     subtype: str
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1809,7 +1809,7 @@ class RateFactor:
     to: float | None
     variable: float | None
     fixed: float | None
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1823,7 +1823,7 @@ class FactorGroup:
     creator: RentmanLink | None
     displayname: str
     name: str
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1840,4 +1840,4 @@ class Factor:
     to_days: int | None
     factor: str
     factor_group: RentmanLink | FactorGroup
-    raw: dict[str, Any] | None = None
+    raw: dict[str, Any] | None = field(default=None, hash=False)

@@ -41,6 +41,14 @@ def test_models_are_frozen() -> None:
         equipment.name = "changed"  # type: ignore[misc]
 
 
+def test_models_are_hashable() -> None:
+    equipment = dataclasses.replace(
+        parse_minimal_equipment(), custom={"custom_1": "x"}, raw={"id": 12}
+    )
+    twin = dataclasses.replace(equipment, custom={"custom_1": "x"}, raw={"id": 12})
+    assert {equipment, twin} == {equipment}
+
+
 def test_models_are_slotted() -> None:
     equipment = parse_minimal_equipment()
     with pytest.raises(AttributeError):
