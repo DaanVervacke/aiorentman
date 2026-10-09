@@ -1289,6 +1289,15 @@ async def test_client_leaves_injected_sessions_open() -> None:
         assert not session.closed
 
 
+def test_invalid_pacing_creates_no_session(monkeypatch: pytest.MonkeyPatch) -> None:
+    def unexpected_session() -> aiohttp.ClientSession:
+        pytest.fail("a session was created before the pacing check")
+
+    monkeypatch.setattr(aiohttp, "ClientSession", unexpected_session)
+    with pytest.raises(ValueError, match="max_concurrent"):
+        RentmanClient(token=TOKEN, max_concurrent=0)
+
+
 async def test_token_comes_from_the_environment(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("RENTMAN_TOKEN", "env-token")
     client = RentmanClient(requests_per_second=None)

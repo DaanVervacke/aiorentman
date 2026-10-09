@@ -476,16 +476,16 @@ class RentmanClient:
         if not resolved:
             msg = f"A token is required: pass token or set the {TOKEN_ENV_VAR} environment variable"
             raise RentmanAuthenticationError(msg)
+        self._pacer = RequestPacer(
+            requests_per_second=requests_per_second,
+            max_concurrent=max_concurrent,
+        )
         self._owned_session = OwnedSession(
             session=aiohttp.ClientSession() if session is None else session,
             owned=session is None,
         )
         self._token = resolved
         self._request_timeout = request_timeout
-        self._pacer = RequestPacer(
-            requests_per_second=requests_per_second,
-            max_concurrent=max_concurrent,
-        )
         self._closed = False
 
     async def async_list_actual_content(
