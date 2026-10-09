@@ -26,11 +26,13 @@ Coverage measures branches in `src/` and requires `fail_under = 98`. `sphinx-bui
 
 ## Adding an endpoint
 
+`models.py`, `parsers.py`, `_endpoints.py`, and `client.py` in `src/aiorentman/` are generated. Do not edit them by hand. The generator reads the pinned OpenAPI document in `tests/fixtures/rentman_oas_1.16.0.json` and the resource table in `scripts/resources.py`, and `tests/test_generated.py` fails when a committed module differs from its output. The hand-written plumbing lives in `_base.py`, `_fields.py`, `_endpoint_types.py`, and `_core.py`.
+
 Add all of the following:
 
-- A frozen `Endpoint` row in `src/aiorentman/_endpoints.py` with the complete wire contract and its response schema name.
-- A typed `RentmanClient` method.
-- The contract test passing against the pinned OpenAPI document in `tests/fixtures/rentman_oas_1.16.0.json`, including the model field coverage for a new resource.
+- An `EndpointSpec` row in `scripts/resources.py` with the kind, the schema path, the client method name, its id parameter, and its docstrings. A new resource also needs a `ModelSpec` row, and a write endpoint with a new request schema needs a `PAYLOADS` entry and a payload class in `payloads.py`.
+- The regenerated modules from `uv run python -m scripts.generate`.
+- The contract test passing against the pinned OpenAPI document, including the model field coverage for a new resource.
 - A fixture under `tests/fixtures/` with a real or redacted payload. Do not guess fixture shapes: capture one from the live API with `scripts/capture_data.py` and redact it with `scripts/_redact.py` before committing.
 - A conventional commit, whose subject becomes the changelog entry.
 
