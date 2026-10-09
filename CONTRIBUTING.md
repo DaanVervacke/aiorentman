@@ -18,7 +18,7 @@ mypy src tests scripts
 coverage run -m pytest
 coverage report
 uv build
-uv audit
+uv audit --locked --preview-features audit-command
 ```
 
 Coverage measures branches in `src/` and requires `fail_under = 98`. `uv audit` needs network access.
@@ -35,7 +35,13 @@ Add all of the following:
 
 ## Changelog
 
-`CHANGELOG.md` is generated with git-cliff from conventional commit subjects. Never edit it by hand. `feat:`, `fix:`, `docs:`, and `chore:` subjects become the changelog entries and every other type is left out. Regenerate with `git-cliff --output CHANGELOG.md` after committing. At release, rename the Unreleased heading to `## [X.Y.Z] - YYYY-MM-DD` and add the `[X.Y.Z]:` compare link at the bottom of the file, bump the version, commit, and tag `vX.Y.Z`. The next regeneration then renders the `[Unreleased]:` link from the new tag.
+`CHANGELOG.md` is generated with git-cliff from conventional commit subjects. Never edit it by hand. `feat:`, `fix:`, `docs:`, and `chore:` subjects become the changelog entries and every other type is left out. Mark a breaking change with `!` after the type, as in `feat!:`, or with a `BREAKING CHANGE` footer in the commit body. Those commits land under Breaking Changes. Regenerate with `git-cliff --output CHANGELOG.md` after committing.
+
+At release, bump the version with `uv version X.Y.Z` and run `git-cliff --tag vX.Y.Z --output CHANGELOG.md`. That renders the Unreleased section under the new version heading with its compare link. Commit `pyproject.toml`, `uv.lock`, and `CHANGELOG.md` with a `chore: release X.Y.Z` subject, which the changelog skips, and tag that commit `vX.Y.Z`.
+
+## Validating writes
+
+The check gate never calls the live API. After changing the write surface, run `uv run python -m scripts.validate_writes` against a scratch account. It creates, updates, and deletes one task and one subtask, and records every response into `captures/`.
 
 ## Captures and confidential data
 
