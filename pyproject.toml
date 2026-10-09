@@ -84,6 +84,7 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "scripts/check.py" = ["T201", "S603"]
+"scripts/generate.py" = ["T201", "S603"]
 "scripts/capture_data.py" = ["T201", "S105"]
 "scripts/validate_writes.py" = ["T201", "S101"]
 "scripts/_redact.py" = ["T201"]
