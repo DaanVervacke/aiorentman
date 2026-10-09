@@ -31,6 +31,7 @@ Before 1.0, breaking changes ship as minor bumps.
 - Correct the scope, validation, and token claims in the guides
 - Align the release procedure and token scope with the tooling
 - Describe dropped objects, item_count, and pacing errors
+- Document the generator and mark the generated modules
 
 ### Maintenance
 
@@ -39,6 +40,8 @@ Before 1.0, breaking changes ship as minor bumps.
 - Align the changelog tooling with the library family
 - Group breaking changes in the changelog
 - Build the docs in the check gate
+- Generate the models and parsers from the pinned schema
+- Generate the endpoint catalog and client from the table
 
 ## [0.2.1] - 2026-10-02
 
