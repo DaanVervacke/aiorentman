@@ -32,6 +32,11 @@ Before 1.0, breaking changes ship as minor bumps.
 - Align the release procedure and token scope with the tooling
 - Describe dropped objects, item_count, and pacing errors
 - Document the generator and mark the generated modules
+- Point the PR checklist at the resource table
+
+### Features
+
+- List files, invoice lines, and tasks of one contract
 
 ### Maintenance
 
@@ -42,6 +47,7 @@ Before 1.0, breaking changes ship as minor bumps.
 - Build the docs in the check gate
 - Generate the models and parsers from the pinned schema
 - Generate the endpoint catalog and client from the table
+- Validate the resource table and test the generator
 
 ## [0.2.1] - 2026-10-02
 
