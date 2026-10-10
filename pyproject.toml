@@ -52,6 +52,7 @@ Homepage = "https://github.com/DaanVervacke/aiorentman"
 Repository = "https://github.com/DaanVervacke/aiorentman"
 Issues = "https://github.com/DaanVervacke/aiorentman/issues"
 Changelog = "https://github.com/DaanVervacke/aiorentman/blob/main/CHANGELOG.md"
+Documentation = "https://aiorentman.readthedocs.io/"
 
 [tool.uv]
 required-version = ">=0.12.21,<0.14"
