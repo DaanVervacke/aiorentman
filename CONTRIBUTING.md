@@ -4,7 +4,7 @@ Changes go through pull requests. Every pull request carries exactly one label f
 
 ## Setup
 
-Use Python >= 3.14 and uv >= 0.12.21 and < 0.13. `pyproject.toml` pins the uv range, so `uv sync` refuses other versions.
+Use Python >= 3.14 and uv >= 0.12.21 and < 0.14. `pyproject.toml` pins the uv range, so `uv sync` refuses other versions.
 
 ```bash
 uv sync
