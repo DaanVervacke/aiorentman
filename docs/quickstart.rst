@@ -34,5 +34,6 @@ follows ``next_page_url`` until it is exhausted.
 
 Requests are paced against the documented limits of 10 requests per second
 and 20 concurrent requests, set through ``requests_per_second`` and
-``max_concurrent``. Pass ``requests_per_second=None`` to disable pacing when
-another part of your application already throttles.
+``max_concurrent``. Pass ``requests_per_second=None`` to disable the send
+rate when another part of your application already throttles. The
+``max_concurrent`` cap stays active either way.

@@ -1,7 +1,9 @@
 """Capture live payloads from the Rentman API into the captures directory.
 
-Reads the API token from the RENTMAN_TOKEN variable in the environment or a
-.env file next to the repository root, then dumps one page of every in-scope
+Reads the API token from a RENTMAN_TOKEN line in .env in the working
+directory, then in .env at the repository root, and only then from the
+RENTMAN_TOKEN environment variable. A .env file wins over the environment.
+Then dumps one page of every in-scope
 collection into captures/. Linked collections probe the parent ids found in
 earlier captures until one parent returns items. Raw captures stay untracked.
 Run scripts/_redact.py before committing any of them as fixtures.
@@ -300,7 +302,7 @@ LINKED_COLLECTIONS: tuple[tuple[str, str, str, str], ...] = (
 
 
 def load_token() -> str:
-    """Resolve the token from the environment or the .env file."""
+    """Resolve the token from a .env file first and the environment second."""
     for source in (Path(".env"), ENV_FILE):
         if source.is_file():
             for line in source.read_text().splitlines():

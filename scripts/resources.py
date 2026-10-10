@@ -600,8 +600,9 @@ CLIENT_DOC = """Asynchronous client for the Rentman API.
 
     The client covers every read and write path of the pinned document.
     Collections get a list method for one page and an iter method that
-    follows the cursor. Every request is paced against the documented rate
-    limits unless pacing is disabled with ``requests_per_second=None``."""
+    follows the cursor. Every request holds one of ``max_concurrent`` slots
+    and waits for its send turn at the documented rate, unless
+    ``requests_per_second=None`` disables the send rate."""
 
 PAYLOADS: Mapping[str, str] = {
     "AccessoryRequest": "AccessoryPayload",

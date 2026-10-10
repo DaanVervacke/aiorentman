@@ -9,8 +9,9 @@ class RentmanLink:
 
     Linked fields hold a path string such as ``/equipment/12`` unless the
     request expanded them, in which case the parser returns the full typed
-    model instead of this link. An expanded object without a usable id
-    parses to None.
+    model when the field annotation names one. An expanded object without
+    a usable id, or on a field annotated as RentmanLink only, parses to
+    None on an optional link and to an empty link on a required one.
     """
 
     path: str

@@ -118,7 +118,10 @@ class Query:
     Field, sort, and expand names are the schema property names of the
     resource being requested, including ``custom_<number>`` names. Filters
     reject the reserved query parameter names, and filters and sorts reject
-    the generated fields, which the API can neither filter nor sort on.
+    the generated fields qrcodes, tags, and qrcodes_of_serial_numbers.
+    Other generated fields pass through unchecked.
+    ``limit`` must be between 1 and 1500 and ``offset`` must not be
+    negative. Every violation raises ValueError.
     """
 
     fields: tuple[str, ...] = ()

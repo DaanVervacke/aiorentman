@@ -1,7 +1,8 @@
 """Validate the write surface with one scripted round-trip against the live API.
 
 Creates one scratch task with one scratch subtask, updates the task with a
-partial body, deletes both, and records every response into captures/ for
+partial body, deletes both, and probes one invalid body to check the 400
+mapping. Records the create and update responses into captures/ for
 redaction. Reads the API token the same way scripts/capture_data.py does.
 This script mutates the account it runs against and never runs as part of
 the check gate. Run:

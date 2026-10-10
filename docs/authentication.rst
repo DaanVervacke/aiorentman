@@ -13,9 +13,15 @@ The client takes the token explicitly or falls back to the
 
    from aiorentman import RentmanClient
 
-   client = RentmanClient(token="your-api-token")
 
-Constructing a client without either raises
+   async def main() -> None:
+       async with RentmanClient(token="your-api-token") as client:
+           page = await client.async_list_equipment()
+
+Construct the client inside a coroutine. Without an injected session it
+creates an ``aiohttp.ClientSession``, which needs a running event loop.
+
+Constructing a client without a ``token`` argument or ``RENTMAN_TOKEN`` raises
 :class:`aiorentman.RentmanAuthenticationError`. There is no refresh flow. A rejected token surfaces as
 :class:`aiorentman.RentmanAuthenticationError` with status 401, and the only
 remedy is configuring a new token in Rentman and constructing a new client.
