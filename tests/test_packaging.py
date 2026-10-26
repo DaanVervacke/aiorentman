@@ -34,4 +34,4 @@ def test_py_typed_ships_with_the_package() -> None:
 
 def test_runtime_dependencies_stay_minimal() -> None:
     data = tomllib.loads((REPO / "pyproject.toml").read_text())
-    assert data["project"]["dependencies"] == ["aiohttp>=3.14.3"]
+    assert data["project"]["dependencies"] == ["aiohttp>=3.14.4"]
