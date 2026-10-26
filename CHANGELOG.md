@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Before 1.0, breaking changes ship as minor bumps.
 
+## [0.3.4] - 2026-10-26
+
+### Bug Fixes
+
+- Require aiohttp 3.14.4 or newer for security fixes
+
+### Maintenance
+
+- Refresh lockfile to fix aiohttp and certifi advisories
+- Regenerate lockfile with highest resolution
+- Bump the actions group across 1 directory with 4 updates (#5)
+
 ## [0.3.3] - 2026-10-10
 
 ### Documentation
@@ -100,6 +112,7 @@ Before 1.0, breaking changes ship as minor bumps.
 
 - Create the aiorentman library
 
+[0.3.4]: https://github.com/DaanVervacke/aiorentman/compare/v0.3.3...v0.3.4
 [0.3.3]: https://github.com/DaanVervacke/aiorentman/compare/v0.3.2...v0.3.3
 [0.3.2]: https://github.com/DaanVervacke/aiorentman/compare/v0.3.1...v0.3.2
 [0.3.1]: https://github.com/DaanVervacke/aiorentman/compare/v0.3.0...v0.3.1
